@@ -1,0 +1,18 @@
+{
+    "name": "nevz/dodie_coaching",
+    "description": "Mathieu Jourdan",
+    "autoload": {
+        "psr-4": {
+            "Nevz\\DodieCoaching\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mathieu JOURDAN",
+            "email": "ma.jourdan@hotmail.fr"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.0"
+    }
+}

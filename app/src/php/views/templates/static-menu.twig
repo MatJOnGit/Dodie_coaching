@@ -1,0 +1,13 @@
+<nav>
+    <ul>
+        <li class='{{ requestedPage == "presentation" ? "active-link" : "inactive-link" }}'>
+            <a href='index.php'>Présentation</a>
+        </li>
+        <li class='{{ requestedPage == "coaching" ? "active-link" : "inactive-link" }}'>
+            <a href='index.php?page=coaching'>Coaching nutrition</a>
+        </li>
+        <li class='{{ requestedPage == "programslist" ? "active-link" : "inactive-link" }}'>
+            <a href='index.php?page=programslist'>Formules</a>
+        </li>
+    </ul>
+</nav>

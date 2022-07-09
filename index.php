@@ -8,4 +8,20 @@ $twig = new \Twig\Environment($loader, [
 ]);
 $twig->addExtension(new \Twig\Extension\DebugExtension());
 
-require ('./app/src/php/controllers/presentation.php');
+require './app/src/php/views/templates/head.twig';
+
+if (!isset($_GET['page'])) {
+    $requestedPage = 'presentation';
+    require ('./app/src/php/controllers/' . $requestedPage . '.php');
+}
+
+elseif (isset($_GET['page'])) {
+    if ($_GET['page'] === 'presentation') {
+        $requestedPage = 'presentation';
+        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+    }
+    elseif ($_GET['page'] === 'coaching') {
+        $requestedPage = 'coaching';
+        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+    }
+}

@@ -24,4 +24,8 @@ elseif (isset($_GET['page'])) {
         $requestedPage = 'coaching';
         require ('./app/src/php/controllers/' . $requestedPage . '.php');
     }
+    elseif ($_GET['page'] === 'programslist') {
+        $requestedPage = 'programsList';
+        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+    }
 }

@@ -108,6 +108,58 @@ nav li {
     margin-top: 245px;
 }
 
+.programs-container {
+    margin: 245px 0 0 0;
+    padding: 0;
+}
+
+/**************************/
+/**** programs details ****/
+/**************************/
+
+.programs-container li { /*program-layer*/
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+
+.programs-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+}
+
+.program-details-layer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    color: white;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6587009803921569) 0%, rgba(133,133,179,0.5) 35%, rgba(128,128,128,0) 100%)
+}
+
+.program-details-layer h2,
+.program-details-layer p {
+    margin-left: 20px;
+}
+
+.program-details-layer h2 {
+    margin-top: 40px;
+}
+
+.program-details-layer p:first-child {
+    margin: 16px 0 5px 0;
+}
+
+.program-details-layer i {
+    margin-right: 5px;
+}
+
+/********************************/
+/**** programs details (end) ****/
+/********************************/
+
 .showcase-speech {
     width: 90%;
 }
@@ -125,7 +177,7 @@ nav li {
 }
 
 .link-to-next-page {
-    margin: 20px 0 0 0;
+    margin: 20px 0 30px 0;
     padding: 20px;
     border-radius: 30px;
     background-color: #0A7E91;
@@ -135,7 +187,7 @@ nav li {
 }
 
 footer {
-    margin: 30px 0 0 0;
+    margin: 0;
     padding: 3px 0 3px 0;
     background-color: #0A7E91;
     width: 100%;
@@ -146,6 +198,7 @@ footer {
     flex-direction: row;
     justify-content: center;
     margin: 10px 0 5px 0;
+    padding: 0;
 }
 
 .social-medias-bar li {

@@ -113,10 +113,6 @@ nav li {
     padding: 0;
 }
 
-/**************************/
-/**** programs details ****/
-/**************************/
-
 .programs-container li { /*program-layer*/
     width: 100%;
     height: 200px;
@@ -130,35 +126,55 @@ nav li {
     object-position: 50% 40%;
 }
 
-.program-details-layer {
+.program-details {
+    display: block;
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     color: white;
-    background: linear-gradient(135deg, rgba(0,0,0,0.6587009803921569) 0%, rgba(133,133,179,0.5) 35%, rgba(128,128,128,0) 100%)
+    background: linear-gradient(
+        135deg, 
+        rgba(0,0,0,0.8) 0%,
+        rgba(133,133,179,0.45) 35%,
+        rgba(128,128,128,0.2) 50%,
+        rgba(128,128,128,0) 100%);
 }
 
-.program-details-layer h2,
-.program-details-layer p {
+.program-details h2,
+.program-details p {
     margin-left: 20px;
 }
 
-.program-details-layer h2 {
+.program-details h2 {
     margin-top: 40px;
 }
 
-.program-details-layer p:first-child {
+.program-details p:first-child {
     margin: 16px 0 5px 0;
 }
 
-.program-details-layer i {
+.program-details i {
     margin-right: 5px;
 }
 
-/********************************/
-/**** programs details (end) ****/
-/********************************/
+.program-details button {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #0A7E91;
+    color: white;
+    border: none;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.program-details button i {
+    margin-left: 5px;
+    font-size: 1.5em;
+}
 
 .showcase-speech {
     width: 90%;

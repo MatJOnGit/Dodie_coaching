@@ -1,0 +1,29 @@
+<div class='showcase-content program-container'>
+    <img src={{ requestedProgram.backgroundPath}} alt={{ requestedProgram.backgroundAlt }}></img>
+    <div class='program-details'>
+        <button class='next-page-button'>
+            <a href='index.php?page=programslist'>
+                <i class="fa-solid fa-arrow-left-long"></i>
+                Retour aux formules
+            </a>
+        </button>
+
+        <span class='program-splitter'></span>
+
+        <div class='program-headers'>
+            <h2>{{ requestedProgram.title }}</h2>
+            <p><i class="fa-solid fa-clock"></i>{{ requestedProgram.duration }}</p>
+            <p>{{ requestedProgram.price }}</p>
+        </div>
+
+        <div class='program-description'>
+            {% for descriptionParagraph in requestedProgram.description %}
+                <p>{{ descriptionParagraph }}</p>
+            {% endfor %}
+        </div>
+
+        <button class='next-page-button subscription-button'>
+            <a href=''>Je m'inscris !</a>
+        </button>
+    </div>
+</div>

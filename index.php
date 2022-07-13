@@ -8,24 +8,34 @@ $twig = new \Twig\Environment($loader, [
 ]);
 $twig->addExtension(new \Twig\Extension\DebugExtension());
 
-require './app/src/php/views/templates/head.twig';
-
 if (!isset($_GET['page'])) {
-    $requestedPage = 'presentation';
-    require ('./app/src/php/controllers/' . $requestedPage . '.php');
+    require ('./app/src/php/controllers/presentation.php');
 }
 
-elseif (isset($_GET['page'])) {
+else {
     if ($_GET['page'] === 'presentation') {
-        $requestedPage = 'presentation';
-        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+        require ('./app/src/php/controllers/presentation.php');
     }
     elseif ($_GET['page'] === 'coaching') {
-        $requestedPage = 'coaching';
-        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+        require ('./app/src/php/controllers/coaching.php');
     }
     elseif ($_GET['page'] === 'programslist') {
-        $requestedPage = 'programsList';
-        require ('./app/src/php/controllers/' . $requestedPage . '.php');
+        require ('./app/src/php/controllers/programslist.php');
+    }
+    elseif ($_GET['page'] === 'programdetails') {
+        if (isset($_GET['program'])) {
+            if (in_array($_GET['program'], ['monthly', 'quarterly', 'halfyearly'])){
+                require ('./app/src/php/controllers/programdetails.php');
+            }
+            else {
+                header('Location: index.php?page=programslist');
+            }
+        }
+        else {
+            header ('Location: index.php?page=programslist');
+        }
+    }
+    else {
+        header ('Location: index.php');
     }
 }

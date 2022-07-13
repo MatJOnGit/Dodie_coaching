@@ -1,13 +1,15 @@
-<ul class='programs-container'>
+<ul class='showcase-content programslist-container'>
     {% for program in programs %}
-    <li>
-        <img src='{{ backgroundImagesPath }}{{ program.backgroundimage }}' alt='plat gastronomique' />
-        <a href='index.php' class='program-details'>
-            <h2>{{ program.title }}</h2>
-            <p><i class="fa-solid fa-clock"></i>{{ program.duration }}</p>
-            <p>{{ program.price }}</p>
-            <button><i class="fa-solid fa-plus"></i></button>
-        </a> 
-    </li>
+        <li>
+            <img src='{{ program.backgroundPath }}' alt='{{ program.backgroundAlt }}' />
+            <a href='{{ program.link }}' class='program-details'>
+                <h2>{{ program.title }}</h2>
+                <p><i class="fa-solid fa-clock"></i>{{ program.duration }}</p>
+                <p>{{ program.price }}</p>
+                <span>
+                    <i class="fa-solid fa-plus"></i>
+                </span>
+            </a> 
+        </li>
     {% endfor %}
 </ul>

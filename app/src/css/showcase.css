@@ -1,0 +1,258 @@
+
+/* showcase pages static-menu layout */
+
+#static-menu {
+    background-image: url(./../../img/header-banner.jpg);
+    width: 100%;
+    height: 150px;
+    background-size: 100% 150px, cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#static-menu ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 50px;
+}
+
+#static-menu li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    width: 33.3%;
+    height: 100%;
+
+    font-size: 0.9em;
+    font-weight: 400;
+}
+
+#static-menu a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active-link {
+    background-color: #0A7E91;
+}
+
+.active-link a {
+    color: white;
+}
+
+.inactive-link {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.inactive-link a {
+    color: black;
+}
+
+/* showcase pages content layout */
+
+.showcase-content {
+    margin: 245px 0 0 0;
+}
+
+.next-page-button {
+    margin: 20px 0 30px 0;
+    padding: 17px 30px;
+    border-radius: 30px;
+    background-color: #0A7E91;
+    color: white;
+    display: flex;
+    text-align: center;
+    border: 0;
+}
+
+.next-page-button a {
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    /*** coaching pages content layout ***/
+
+    .speech-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 245px;
+    }
+
+    .showcase-speech {
+        margin: 10px 5%;
+    }
+
+    .showcase-question {
+        margin-bottom: 0;
+        text-decoration: underline;
+        align-self: flex-start;
+    }
+
+    .speech-container img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        object-position: 50% 50%;
+    }
+
+    /*** program pages content layout ***/
+
+    .programslist-container,
+    .program-container {
+        padding: 0;
+        width: 100%;
+        height: 600px;
+    }
+    
+    .programslist-container li,
+    .program-container {
+        width: 100%;
+        position: relative;
+    }
+
+    .programslist-container li {
+        height: 200px;
+    }
+
+    .programslist-container img,
+    .program-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 40%;
+    }
+
+    .program-details {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        color: white;
+    }
+
+    .showcase-content button i {
+        margin-left: 5px;
+    }
+
+    .program-details button,
+    .program-details h2
+    {
+        margin: 20px 20px;
+    }
+
+    .program-details p {
+        margin: 5px 20px;
+    }
+
+    /* programs list content layer */
+
+    .program-container img {
+        height: 600px;
+    }
+
+    .programslist-container .program-details {
+        background: linear-gradient(
+            135deg, 
+            rgba(0,0,0,0.8) 0%,
+            rgba(133,133,179,0.45) 35%,
+            rgba(128,128,128,0.2) 50%,
+            rgba(128,128,128,0) 100%);
+    }
+
+    .programslist-container span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #0A7E91;
+        color: white;
+        border: none;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .programslist-container span i {
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+    /* program details content layer */
+
+    .program-container {
+        height: 600px;
+    }
+
+    .program-container .program-details {
+        background: linear-gradient(
+            135deg,
+            rgba(172,172,172,0.8) 0%,
+            rgba(133,133,179,0.45) 40%,
+            rgba(128,128,128, 0) 70%,
+            rgba(128,128,128,0) 100%);
+    }
+
+    .program-details button a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .program-details i {
+        margin-right: 5px;
+    }
+
+    .programslist-container button i {
+        font-size: 1.5em;
+    }
+
+    .program-splitter {
+        margin: 10px 20px;
+        display: block;
+        width: 30%;
+        height: 2px;
+        background-color: #0A7E91;
+        border-radius: 1px;
+    }
+
+    .program-description {
+        margin: 10px 15px;
+        position: absolute;
+        top: 250px;
+
+        /* En attente de validation */
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px 0;
+        border: 1px solid white;
+        border-radius: 5px;
+    }
+
+    .program-description p {
+        font-size: 1.1em;
+    }
+
+    .subscription-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }

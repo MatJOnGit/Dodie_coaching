@@ -1,5 +1,5 @@
 <div class='showcase-content program-container'>
-    <img src={{ requestedProgram.backgroundPath}} alt={{ requestedProgram.backgroundAlt }}></img>
+    <img src='app/img/program-backgrounds/{{ program.name }}-sub.jpg' alt='{{ program.background_Alt }}'></img>
     <div class='program-details'>
         <a href='index.php?page=programslist' class='prev-page-link'>
             <i class="fa-solid fa-arrow-left-long"></i>
@@ -9,16 +9,16 @@
         <span class='program-splitter'></span>
 
         <div class='program-headers'>
-            <h2>{{ requestedProgram.title }}</h2>
-            <p><i class="fa-solid fa-clock"></i>{{ requestedProgram.duration }}</p>
-            <p>{{ requestedProgram.price }}</p>
+            <h2>{{ program.french_title }}</h2>
+            <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
+            <p>{{ program.subscription_price }} €</p>
         </div>
 
+        {% if program.description != NULL %}
         <div class='program-description'>
-            {% for descriptionParagraph in requestedProgram.description %}
-                <p>{{ descriptionParagraph }}</p>
-            {% endfor %}
+            <p>{{ program.description | raw }}</p>
         </div>
+        {% endif %}
 
         <a href='' class='subscription-link next-page-link'>Je m'inscris !</a>
     </div>

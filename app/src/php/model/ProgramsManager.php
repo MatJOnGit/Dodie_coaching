@@ -6,8 +6,9 @@ class ProgramsManager extends Manager {
     public function getProgramsList() {
         $db = $this->dbConnect();
     
-        $programQuery = 'SELECT * FROM programs';
-        $programsStatement = $db->prepare($programQuery);
+        /* Réduire les datas pulled via la requête au minimum */
+        $programListQuery = 'SELECT * FROM programs';
+        $programsStatement = $db->prepare($programListQuery);
         $programsStatement->execute();
         $programs = $programsStatement->fetchAll();
     
@@ -17,8 +18,9 @@ class ProgramsManager extends Manager {
     public function getProgramDetails($requestedProgram) {
         $db = $this->dbConnect();
     
-        $programQuery = 'SELECT * FROM programs WHERE name = ?';
-        $programsStatement = $db->prepare($programQuery);
+        /* Réduire les datas pulled via la requête au minimum */
+        $programDetailsQuery = 'SELECT * FROM programs WHERE name = ?';
+        $programsStatement = $db->prepare($programDetailsQuery);
         $programsStatement->execute(array($requestedProgram));
         $programDetails = $programsStatement->fetch();
     

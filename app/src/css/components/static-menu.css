@@ -1,0 +1,34 @@
+#static-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-image: url(./../../../img/header-banner.jpg);
+    background-size: 100% 150px, cover;
+    height: 150px;
+}
+
+#static-menu ul {
+    display: flex;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+#static-menu li {
+    width: 33.3%;
+}
+
+#static-menu a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.active-link {
+    background-color: hsla(188, 87%, 30%, 1);
+}
+
+.inactive-link {
+    background-color: hsla(0, 0%, 100%, 0.5);
+}

@@ -1,0 +1,29 @@
+footer {
+    padding: 10px 0;
+}
+
+footer ul {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+footer li {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    margin: 0 3px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+footer li i {
+    font-size: 0.9em;
+}
+
+footer p  {
+    text-align: center;
+    margin: 5px 0;
+    font-size: 0.8em;
+}

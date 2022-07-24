@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'julius sans one';
+    src: url('../fonts/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'archivo narrow';
+    src: url('../fonts/Archivo_Narrow/ArchivoNarrow-VariableFont_wght.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'source sans pro';
+    src: url('../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf');
+}
+
+html, body {
+    font-family: 'source sans pro';
+}
+
+h1 {
+    font-family: 'julius sans one';
+    font-size: 1.7em;
+}
+
+h2, li, a {
+    font-family: 'archivo narrow';
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}

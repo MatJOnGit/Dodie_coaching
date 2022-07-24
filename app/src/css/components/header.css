@@ -1,0 +1,30 @@
+header {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    background-color: hsla(0, 0%, 100%, 1);
+}
+
+#title-layer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 95px;
+}
+
+h1 {
+    width: 40%;
+    margin-left: 40px;
+}
+
+#dynamic-menu-button {
+    background-color: inherit;
+    margin-right: 20px;
+    padding: 20px;
+    border: none;
+}
+
+#dynamic-menu-button i {
+    font-size: 2.5em;
+}

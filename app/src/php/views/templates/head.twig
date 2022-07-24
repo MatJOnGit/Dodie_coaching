@@ -28,9 +28,14 @@
     <link rel='stylesheet' href='app/src/fontawesome/css/all.css'/>
     <link rel='icon'  href='app/img/temporary-favicon.png' type='image/png'>
     
-    <!-- CSS and fonts -->
-    <link rel='stylesheet' href='app/src/css/normalize.css' type='text/css'>
-    <link rel='stylesheet' href='app/src/css/main.css' type='text/css'>
-    <link rel='stylesheet' href={{ stylePath }} type='text/css'>
+    <!-- global CSS -->
+    <link rel='stylesheet' href='app/src/css/globals/normalize.css' type='text/css'>
+    <link rel='stylesheet' href='app/src/css/globals/main.css' type='text/css'>
+
+    <!-- custom CSS -->
+    {% for stylePath in stylePaths %}
+    <link rel='stylesheet' href='app/src/css/{{ stylePath }}.css' type='text/css'>
+    {% endfor %}
+
 </head>
 <body>

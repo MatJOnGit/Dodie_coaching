@@ -41,7 +41,7 @@ input::placeholder {
 input[type=submit],
 .tiny-button,
 .large-button {
-    height: 65px;
+    height: 60px;
     background: linear-gradient(
         135deg, 
         hsla(261, 57%, 55%, 1) 0%,
@@ -64,6 +64,11 @@ input[type=submit],
 input[type=submit] {
     border: none;
     padding: 0;
+}
+
+form a,
+input[type=submit] {
+    white-space: normal;
 }
 
 .tiny-button {

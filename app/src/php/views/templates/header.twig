@@ -2,7 +2,7 @@
     <div id='title-layer'>
         <h1>Dodie Coaching</h1>
 
-        {% if requestedPage != 'login' %}
+        {% if requestedPage != 'connection' %}
         <button id='dynamic-menu-button'><i class='fas fa-bars'></i></button>
         {% else %}
         <a href='index.php?page=programdetails&program=monthly' class='homepage-link'><i class="fa-solid fa-house-chimney"></i></a>
@@ -10,7 +10,7 @@
         
     </div>
 
-    {% if requestedPage != 'login' %}
+    {% if requestedPage != 'connection' %}
     {% include 'templates/static-menu.twig' %}
     {% endif %}
 </header>

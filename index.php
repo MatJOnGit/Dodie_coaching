@@ -17,6 +17,7 @@ if (!isset($_GET['page'])) {
 elseif (isset($_GET['page'])) {
 
     /* Showcase page requests */
+
     if (in_array($_GET['page'], ['presentation', 'coaching', 'programslist', 'programdetails'])) {
         require('app/src/php/controllers/ShowcaseController.php');
         $showcaseController = new ShowcaseController;
@@ -48,7 +49,7 @@ elseif (isset($_GET['page'])) {
 
     /* Connection pages requests */
 
-    elseif (in_array($_GET['page'], ['login', 'registering', 'passwordretrieving'])) {
+    elseif (in_array($_GET['page'], ['login', 'registering', 'password-retrieving'])) {
         require('app/src/php/controllers/ConnectionController.php');
         $connectionController = new ConnectionController;
 
@@ -57,6 +58,9 @@ elseif (isset($_GET['page'])) {
         }
         elseif ($_GET['page'] === 'registering') {
             $connectionController->renderRegisteringPage($twig);
+        }
+        elseif ($_GET['page'] === 'password-retrieving') {
+            $connectionController->renderPasswordRetrievingPage($twig);
         }
     }
 

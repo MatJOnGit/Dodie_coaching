@@ -51,7 +51,13 @@ elseif (isset($_GET['page'])) {
     elseif (in_array($_GET['page'], ['login', 'registering', 'passwordretrieving'])) {
         require('app/src/php/controllers/ConnectionController.php');
         $connectionController = new ConnectionController;
-        $connectionController->renderLoginPage($twig);
+
+        if ($_GET['page'] === 'login') {
+            $connectionController->renderLoginPage($twig);
+        }
+        elseif ($_GET['page'] === 'registering') {
+            $connectionController->renderRegisteringPage($twig);
+        }
     }
 
 

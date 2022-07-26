@@ -1,0 +1,12 @@
+.connection-page-content {
+    width: 100%;
+    height: calc(100vh - 165px);
+    margin: 95px 0 0 0;
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 57%, 55%, 1) 0%,
+        hsla(261, 47%, 27%, 1) 50%,
+        hsla(261, 47%, 27%, 1) 100%);
+    display: flex;
+    align-items: center;
+}

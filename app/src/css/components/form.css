@@ -1,0 +1,76 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 10%;
+    padding: 25px 0 40px 0;
+    background: linear-gradient(
+        135deg, 
+        hsla(260, 68%, 41%, 1) 0%,
+        hsla(260, 68%, 41%, 1) 50%,
+        hsla(261, 83%, 18%, 1) 100%);
+}
+
+input[type=email],
+input[type=text] {
+    background-color: inherit;
+    border: none;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+    font-family: 'archivo narrow';
+    width: 70%;
+    margin: 15px 0;
+    font-size: 1.1em;
+    color: white;
+    padding: 8px 10px;
+}
+
+input::placeholder {
+    color: white;
+}
+
+.form-links {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px 0 0 0;
+}
+
+input[type=submit],
+.tiny-button,
+.large-button {
+    height: 65px;
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 57%, 55%, 1) 0%,
+        hsla(261, 47%, 27%, 1) 100%);
+    color: white;
+}
+
+.tiny-button,
+.large-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.tiny-button {
+    margin: 0 15px;
+}
+
+input[type=submit] {
+    border: none;
+    padding: 0;
+}
+
+.tiny-button {
+    width: 40%;
+}
+
+.large-button {
+    margin: 20px 15px 0 15px;
+    width: 100%;
+}

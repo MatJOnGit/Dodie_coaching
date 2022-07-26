@@ -1,7 +1,7 @@
 header {
     position: fixed;
     top: 0;
-    z-index: 100;
+    z-index: 2;
     width: 100%;
     background-color: hsla(0, 0%, 100%, 1);
 }
@@ -15,7 +15,7 @@ header {
 
 h1 {
     width: 40%;
-    margin-left: 40px;
+    margin: 0 0 0 40px;
 }
 
 #dynamic-menu-button {
@@ -25,6 +25,13 @@ h1 {
     border: none;
 }
 
-#dynamic-menu-button i {
-    font-size: 2.5em;
+.homepage-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 50%;
 }

@@ -2,7 +2,7 @@
 
 require_once('app/src/php/model/Manager.php');
 
-class ProgramsManager extends Manager {
+class ProgramManager extends Manager {
     public function getProgramsList() {
         $db = $this->dbConnect();
     

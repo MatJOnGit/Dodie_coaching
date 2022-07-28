@@ -22,7 +22,7 @@ h1 {
     font-size: 1.7em;
 }
 
-h2, li, a {
+h2, li, a, input {
     font-family: 'archivo narrow';
 }
 

@@ -13,7 +13,8 @@ form {
 }
 
 input[type=email],
-input[type=text] {
+input[type=text],
+input[type=password] {
     background-color: inherit;
     border: none;
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
@@ -21,7 +22,6 @@ input[type=text] {
     width: 70%;
     margin: 15px 0;
     font-size: 1.1em;
-    color: white;
     padding: 8px 10px;
 }
 
@@ -38,9 +38,9 @@ input::placeholder {
     margin: 20px 0 0 0;
 }
 
-input[type=submit],
 .tiny-button,
-.large-button {
+.large-button,
+input[type=submit] {
     height: 60px;
     background: linear-gradient(
         135deg, 
@@ -54,28 +54,19 @@ input[type=submit],
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-}
-
-.tiny-button {
-    margin: 0 15px;
-}
-
-input[type=submit] {
-    border: none;
-    padding: 0;
-}
-
-form a,
-input[type=submit] {
-    white-space: normal;
 }
 
 .tiny-button {
     width: 40%;
+    margin: 0 15px;
 }
 
 .large-button {
     margin: 20px 15px 0 15px;
     width: 100%;
+}
+
+input[type=submit] {
+    border: none;
+    padding: 0;
 }

@@ -8,5 +8,29 @@
         hsla(261, 47%, 27%, 1) 50%,
         hsla(261, 47%, 27%, 1) 100%);
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+}
+
+.error-container {
+    width: 80%;
+    height: 40px;
+    background: linear-gradient(
+        135deg, 
+        hsla(260, 68%, 41%, 1) 0%,
+        hsla(260, 68%, 41%, 1) 50%,
+        hsla(261, 83%, 18%, 1) 100%);
+    color: white;
+    margin-bottom: 30px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-container p {
+    text-align: center;
+    margin: 0;
+    font-size: 0.8em;
+    font-style: italic;
 }

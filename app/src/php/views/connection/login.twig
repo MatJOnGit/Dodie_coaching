@@ -1,4 +1,8 @@
 <div class='connection-page-content'>
+    <div class='error-container'>
+        <p>{{ displayableError }}</p>
+    </div>
+
     <form action='index.php?action=log-account' method='post'>
         <input type='email' name='user-email' placeholder='adresse mail' required />
         <input type='password' name='user-password' placeholder='mot de passe' required />

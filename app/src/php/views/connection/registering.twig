@@ -1,5 +1,11 @@
 <div class='connection-page-content'>
-    <form action='index.php?action=register-account' method='post' required >
+    {% if displayableError is not empty %}
+    <div class='error-container'>
+        <p>{{ displayableError }}</p>
+    </div>
+    {% endif %}
+
+    <form action='index.php?action=register-account' method='post'>
         <input type='text' name='user-first-name' placeholder='prénom' required />
         <input type='text' name='user-last-name' placeholder='nom' required />
         <input type='email' name='user-mail' placeholder='adresse mail' required />

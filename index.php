@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+// session_destroy();
+
 try {
     require_once './app/vendor/autoload.php';
     $loader = new \Twig\Loader\FilesystemLoader('./app/src/php/views');
@@ -67,6 +70,12 @@ try {
             elseif ($_GET['page'] === 'password-retrieving') {
                 $connectionController->renderPasswordRetrievingPage($twig);
             }
+        }
+
+        else if ($_GET['page'] === 'dashboard') {
+            echo 'Bienvenue sur le dashboard<br>';
+            echo 'Message suite à votre connexion : ' . $_SESSION['form-error'];
+
         }
     
         else {

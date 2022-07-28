@@ -25,8 +25,13 @@ input[type=password] {
     padding: 8px 10px;
 }
 
+input,
 input::placeholder {
     color: white;
+}
+
+input::placeholder {
+    font-style: italic;
 }
 
 .form-links {

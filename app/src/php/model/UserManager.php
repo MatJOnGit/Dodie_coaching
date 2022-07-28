@@ -20,11 +20,15 @@ class UserManager extends Manager {
 
     public function verifyUserMail($userMail) {
         $db = $this->dbConnect();
-        $userIdQuery = 'SELECT * FROM users WHERE email = ?';
-        $userIdStatement = $db->prepare($userIdQuery);
-        $userIdStatement->execute(array($userMail));
-        $userId = $userIdStatement->fetch();
-        
-        return $userId;
+        $userPasswordGetter = 'SELECT password FROM users WHERE email = ?';
+        $userPasswordStatement = $db->prepare($userPasswordGetter);
+        $userPasswordStatement->execute([$userMail]);
+        $userPassword = $userPasswordStatement->fetch();
+
+        return $userPassword;
+    }
+
+    public function updateLastLoginTime($userMail) {
+        $db = $this->dbConnect();
     }
 }

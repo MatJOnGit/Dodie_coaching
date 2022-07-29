@@ -1,7 +1,9 @@
 <div class='connection-page-content'>
+    {% if displayableError is not empty %}
     <div class='error-container'>
         <p>{{ displayableError }}</p>
     </div>
+    {% endif %}
 
     <form action='index.php?action=log-account' method='post'>
         <input type='email' name='user-email' placeholder='adresse mail' required />

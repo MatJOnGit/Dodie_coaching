@@ -52,20 +52,10 @@ try {
             $connectionController = new ConnectionController;
     
             if ($_GET['page'] === 'login') {
-                if (!isset($_SESSION['user'])) {
-                    $connectionController->renderLoginPage($twig);
-                }
-                else {
-                    echo 'vous êtes déjà connecté, ' . ($_SESSION['user']);
-                }
+                $connectionController->renderLoginPage($twig);
             }
             elseif ($_GET['page'] === 'registering') {
-                if (!isset($_SESSION['user'])) {
-                    $connectionController->renderRegisteringPage($twig);
-                }
-                else {
-                    echo 'Vous êtes déjà enregistré, ' . ($_SESSION['user']);
-                }
+                $connectionController->renderRegisteringPage($twig);
             }
             elseif ($_GET['page'] === 'password-retrieving') {
                 $connectionController->renderPasswordRetrievingPage($twig);
@@ -73,9 +63,7 @@ try {
         }
 
         else if ($_GET['page'] === 'dashboard') {
-            echo 'Bienvenue sur le dashboard<br>';
-            echo 'Message suite à votre connexion : ' . $_SESSION['form-error'];
-
+            echo 'Bienvenue sur le dashboard';
         }
     
         else {

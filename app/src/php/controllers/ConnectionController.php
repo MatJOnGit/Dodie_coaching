@@ -22,9 +22,16 @@ class ConnectionController extends MainController {
     public $userMail = '';
     public $userPassword = '';
 
+    public $loginPageURL = 'index.php?page=login';
     public $registeringPageURL = 'index.php?page=registering';
     public $dashboardPageURL = 'index.php?page=dashboard';
 
+    public $usedMailErrorMessage = "Nous sommes désolés, mais votre email est déjà pris. Merci d'utiliser une autre adresse mail.";
+    public $invalidDataErrorMessage = "Certains champs du formulaire ne sont pas valides. Merci de réessayer.";
+    public $nonExistentEmailErrorMessage = "Ce compte n'existe pas. Merci d'entrer une adresse mail valide, ou de créer un nouveau compte.";
+    public $wrongPasswordErrorMessage = "Mot de passe erroné.";
+
+    
     public function registerAccount() {
         $this->userFirstName = htmlspecialchars($_POST['user-first-name']);
         $this->userLastName = htmlspecialchars($_POST['user-last-name']);
@@ -45,18 +52,19 @@ class ConnectionController extends MainController {
                 $isRegistrationSuccessfull = $userManager->registerUser($this->userFirstName, $this->userLastName, $this->userMail, $this->userPassword);
 
                 $this->manageRegistrationResults($isRegistrationSuccessfull);
+                $_SESSION['form-error'] = '';
 
                 header("Location:{$this->dashboardPageURL}");
             }
 
             else {
-                $_SESSION['form-error'] = "Nous sommes désolés, mais votre email est déjà pris. Merci d'utiliser une autre adresse mail.";
+                $_SESSION['form-error'] = $this->usedMailErrorMessage;
                 header("Location:{$this->registeringPageURL}");
             }
         }
 
         else {
-            $_SESSION['form-error'] = "Les champs renseignés ne respectent pas les indications. Merci de réessayer.";
+            $_SESSION['form-error'] = $this->invalidDataErrorMessage;
             header("Location:{$this->registeringPageURL}");
         }
     }
@@ -64,7 +72,7 @@ class ConnectionController extends MainController {
     public function logAccount() {
         $this->userMail = htmlspecialchars($_POST['user-email']);
         $this->userPassword = htmlspecialchars($_POST['user-password']);
-
+        
         if (
             preg_match($this->emailRegex, $this->userMail) &&
             (preg_match($this->passwordRegex, $this->userPassword))
@@ -73,24 +81,25 @@ class ConnectionController extends MainController {
             $userPassword = $userManager->verifyUserMail($this->userMail);
 
             if (!$userPassword) {
-                $_SESSION['form-error'] = "Ce compte n'existe pas. Merci d'entrer une adresse mail valide, ou créer un nouveau compte.";
-                header("Location:{$this->registeringPageURL}");
+                $_SESSION['form-error'] = $this->nonExistentEmailErrorMessage;
+                header("Location:{$this->loginPageURL}");
             }
 
             elseif ($userPassword[0] === $this->userPassword) {
                 $userManager->updateUserLastLogin($this->userMail);
+                $_SESSION['form-error'] = '';
                 header("Location:{$this->dashboardPageURL}");
             }
 
             else {
-                $_SESSION['form-error'] = "Mot de passe erroné.";
-                header("Location:{$this->registeringPageURL}");
+                $_SESSION['form-error'] = $this->wrongPasswordErrorMessage;
+                header("Location:{$this->loginPageURL}");
             }
         }
 
         else {
-            $_SESSION['form-error'] = "Certaines données du formulaire ne sont pas valides.";
-            header("Location:{$this->registeringPageURL}");
+            $_SESSION['form-error'] = $this->invalidDataErrorMessage;
+            header("Location:{$this->loginPageURL}");
         }        
     }
 
@@ -104,9 +113,18 @@ class ConnectionController extends MainController {
     }
 
     public function renderLoginPage($twig) {
+        $displayableError = $this->getFormError();
+
         echo $twig->render('templates/head.twig', ['stylePaths' => $this->connectionPagesStyles]);
         echo $twig->render('templates/header.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection/login.twig');
+
+        if (isset($_SESSION['form-error'])) {
+            echo $twig->render('connection/login.twig', ['displayableError' => $displayableError]);
+        }
+        else {
+            echo $twig->render('connection/login.twig');
+        }
+
         echo $twig->render('templates/footer.twig');
     }
 

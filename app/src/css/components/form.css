@@ -94,6 +94,11 @@ input[type=submit] {
     width: 100%;
 }
 
+.tiny-button p {
+    margin: 0 10px;
+    text-align: center;
+}
+
 input[type=submit] {
     border: none;
     padding: 0;

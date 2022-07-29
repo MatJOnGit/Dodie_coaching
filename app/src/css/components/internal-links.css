@@ -1,11 +1,10 @@
 a[class$='-page-link'] {
-    
     padding: 17px 30px;
     border-radius: 30px;
 }
 
 .next-page-link {
-    margin: 20px 0 30px 0;
+    margin: 20px 20px 30px 0;
 }
 
 .next-page-link a {

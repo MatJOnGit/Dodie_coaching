@@ -26,6 +26,10 @@ h2, li, a, input {
     font-family: 'archivo narrow';
 }
 
+h2 {
+    font-size: 1.7em;
+}
+
 ul {
     list-style: none;
 }

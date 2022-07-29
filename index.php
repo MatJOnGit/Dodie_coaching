@@ -75,14 +75,14 @@ try {
         if ($_GET['action'] === 'register-account') {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
-            $connectionController->registerAccount();
+            $connectionController->verifyRegistrationForm();
         }
         
 
         elseif ($_GET['action'] === 'log-account') {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
-            $connectionController->logAccount();
+            $connectionController->verifyLoginForm();
         }
     }
 

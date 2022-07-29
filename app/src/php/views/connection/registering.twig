@@ -1,14 +1,14 @@
 <div class='connection-page-content'>
-    {% if displayableError is not empty %}
+    {% if previousFormError is not empty %}
     <div class='error-container'>
-        <p>{{ displayableError }}</p>
+        <p>{{ previousFormError }}</p>
     </div>
     {% endif %}
 
     <form action='index.php?action=register-account' method='post'>
         <input type='text' name='user-first-name' placeholder='prénom' required />
         <input type='text' name='user-last-name' placeholder='nom' required />
-        <input type='email' name='user-mail' placeholder='adresse mail' required />
+        <input type='email' name='user-email' placeholder='adresse e-mail' required />
         <input type='password' name='user-password' placeholder='mot de passe' required />
         <input type='password' name='user-confirmation-password' placeholder='mot de passe (vérification)' required />
 

@@ -1,6 +1,6 @@
 #title-layer i,
 footer i {
-    color: hsla(188, 87%, 30%, 1);
+    color: #0a7d8f;
 }
 
 .programs-list a,
@@ -27,4 +27,14 @@ footer {
 
 footer li {
     background-color: hsla(0, 0%, 100%, 1);
+}
+
+.glowy-bkgd {
+    background: linear-gradient(
+        135deg,
+        hsla(0, 0%, 33%, .1) 0%,
+        hsla(240, 23%, 61%, .45) 40%,
+        hsla(0, 0%, 50%, 0) 70%,
+        hsla(0, 0%, 50%, 0) 100%
+    );
 }

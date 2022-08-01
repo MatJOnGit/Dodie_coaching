@@ -53,12 +53,15 @@ try {
     
             if ($_GET['page'] === 'login') {
                 $connectionController->renderLoginPage($twig);
+                // $connectionController->eraseError();
             }
             elseif ($_GET['page'] === 'registering') {
                 $connectionController->renderRegisteringPage($twig);
+                // $connectionController->eraseError();
             }
             elseif ($_GET['page'] === 'password-retrieving') {
                 $connectionController->renderPasswordRetrievingPage($twig);
+                // $connectionController->eraseError();
             }
         }
 
@@ -76,6 +79,7 @@ try {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
             $connectionController->verifyRegistrationForm();
+            // $connectionController->eraseError();
         }
         
 
@@ -83,6 +87,7 @@ try {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
             $connectionController->verifyLoginForm();
+            // $connectionController->eraseError();
         }
     }
 

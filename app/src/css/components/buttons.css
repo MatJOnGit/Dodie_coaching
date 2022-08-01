@@ -1,9 +1,9 @@
 .rounded-btn {
-    padding: 17px 30px;
-    border-radius: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 17px 30px;
+    border-radius: 30px;
 }
 
 .btn {

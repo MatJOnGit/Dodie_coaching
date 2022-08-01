@@ -3,39 +3,27 @@
 }
 
 .connection-page-content {
-    width: 100%;
-    height: calc(100vh - 165px);
-    margin: 95px 0 0 0;
-    background: linear-gradient(
-        135deg, 
-        hsla(261, 57%, 55%, 1) 0%,
-        hsla(261, 47%, 27%, 1) 50%,
-        hsla(261, 47%, 27%, 1) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: calc(100vh - 165px);
+    margin: 95px 0 0 0;
 }
 
 .error-container {
-    width: 80%;
-    margin: 0 10%;
-    padding: 10px 0;
-    background: linear-gradient(
-        135deg, 
-        hsla(260, 68%, 41%, 1) 0%,
-        hsla(260, 68%, 41%, 1) 50%,
-        hsla(261, 83%, 18%, 1) 100%);
-    color: white;
-    margin-bottom: 30px;
     display:flex;
     justify-content: center;
     align-items: center;
+    width: 80%;
+    margin: 0 10%;
+    padding: 10px 0;
+    margin-bottom: 30px;
 }
 
 .error-container p {
     text-align: center;
     margin: 0 10%;
     font-size: 0.8em;
-    font-style: italic;
 }

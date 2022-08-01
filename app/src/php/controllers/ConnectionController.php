@@ -7,21 +7,25 @@ class ConnectionController extends MainController {
     public $connectionPagesStyles = [
         'pages/connection',
         'components/header',
-        'components/internal-links',
         'components/form',
+        'components/buttons',
         'components/footer',
         'themes/purple-theme'
     ];
 
-    public $userFirstName = '';
-    public $userLastName = '';
-    public $userEmail = '';
-    public $userPassword = '';
-    public $userConfirmationPassword = '';
+    public $userInfo = array(
+        'firstName' => '',
+        'lastName' => '',
+        'email' => '',
+        'password' => '',
+        'confirmationPassword' => ''
+    );
 
-    public $loginPageURL = 'index.php?page=login';
-    public $registeringPageURL = 'index.php?page=registering';
-    public $dashboardPageURL = 'index.php?page=dashboard';
+    public $connectionPagesURL = array(
+        'login' => 'index.php?page=login',
+        'registering' => 'index.php?page=registering',
+        'dashboard' => 'index.php?page=dashboard'
+    );
 
     public $usedEmailErrorMessage = "Nous sommes désolés, mais votre e-mail est déjà pris. Merci d'utiliser une autre adresse e-mail.";
     public $invalidDataErrorMessage = "Certains champs du formulaire ne sont pas valides. Merci de réessayer.";
@@ -31,82 +35,82 @@ class ConnectionController extends MainController {
 
 
     public function verifyRegistrationForm() {
-        $this->userFirstName = htmlspecialchars($_POST['user-first-name']);
-        $this->userLastName = htmlspecialchars($_POST['user-last-name']);
-        $this->userEmail = htmlspecialchars($_POST['user-email']);
-        $this->userPassword = htmlspecialchars($_POST['user-password']);
-        $this->userConfirmationPassword = htmlspecialchars($_POST['user-confirmation-password']);
+        $this->userInfo['firstName'] = htmlspecialchars($_POST['user-first-name']);
+        $this->userInfo['lastName'] = htmlspecialchars($_POST['user-last-name']);
+        $this->userInfo['email'] = htmlspecialchars($_POST['user-email']);
+        $this->userInfo['password'] = htmlspecialchars($_POST['user-password']);
+        $this->userInfo['confirmationPassword'] = htmlspecialchars($_POST['user-confirmation-password']);
         
         if (
-            (preg_match($this->usernameRegex, $this->userFirstName)) &&
-            (preg_match($this->usernameRegex, $this->userLastName)) &&
-            (preg_match($this->emailRegex, $this->userEmail)) &&
-            (preg_match($this->passwordRegex, $this->userPassword)) &&
-            (preg_match($this->passwordRegex, $this->userConfirmationPassword)) &&
-            ($this->userPassword === $this->userConfirmationPassword)
+            (preg_match($this->usernameRegex, $this->userInfo['firstName'])) &&
+            (preg_match($this->usernameRegex, $this->userInfo['lastName'])) &&
+            (preg_match($this->emailRegex, $this->userInfo['email'])) &&
+            (preg_match($this->passwordRegex, $this->userInfo['password'])) &&
+            (preg_match($this->passwordRegex, $this->userInfo['confirmationPassword'])) &&
+            ($this->userInfo['password'] === $this->userInfo['confirmationPassword'])
         ) {
             $this->verifyUserForRegistration();
         }
         else {
             $_SESSION['form-error'] = $this->invalidDataErrorMessage;
-            header("Location:{$this->registeringPageURL}");
+            header("Location:{$this->connectionPagesURL['registering']}");
         }
     }
 
     public function verifyUserForRegistration() {
         $userManager = new UserManager;
-        if (empty($userManager->getUserPasswordFromEmail($this->userEmail))) {
-            $isRegistrationSuccessful = $userManager->registerUser($this->userFirstName, $this->userLastName, $this->userEmail, $this->userPassword);
-            $this->verifyActionSuccess($isRegistrationSuccessful, $this->registeringPageURL);
+        if (empty($userManager->getUserPasswordFromEmail($this->userInfo['email']))) {
+            $isRegistrationSuccessful = $userManager->registerUser($this->userInfo['firstName'], $this->userInfo['lastName'], $this->userInfo['email'], $this->userInfo['password']);
+            $this->verifyActionSuccess($isRegistrationSuccessful, $this->connectionPagesURL['registering']);
         }
 
         else {
             $_SESSION['form-error'] = $this->usedEmailErrorMessage;
-            header("Location:{$this->registeringPageURL}");
+            header("Location:{$this->connectionPagesURL['registering']}");
         }
     }
 
     public function verifyLoginForm() {
-        $this->userEmail = htmlspecialchars($_POST['user-email']);
-        $this->userPassword = htmlspecialchars($_POST['user-password']);
+        $this->userInfo['email'] = htmlspecialchars($_POST['user-email']);
+        $this->userInfo['password'] = htmlspecialchars($_POST['user-password']);
         
         if (
-            preg_match($this->emailRegex, $this->userEmail) &&
-            (preg_match($this->passwordRegex, $this->userPassword))
+            preg_match($this->emailRegex, $this->userInfo['email']) &&
+            (preg_match($this->passwordRegex, $this->userInfo['password']))
         ) {
             $this->verifyUserForLoggin();
         }
 
         else {
             $_SESSION['form-error'] = $this->invalidDataErrorMessage;
-            header("Location:{$this->loginPageURL}");
+            header("Location:{$this->connectionPagesURL['login']}");
         }        
     }
 
     public function verifyUserForLoggin() {
-        $userManager = new UserManager;
-        $userPassword = $userManager->getUserPasswordFromEmail($this->userEmail);
 
-        if (!$userPassword) {
+        $userManager = new UserManager;
+        $dbUserPassword = $userManager->getUserPasswordFromEmail($this->userInfo['email']);
+        if (!$dbUserPassword) {
             $_SESSION['form-error'] = $this->nonExistentEmailErrorMessage;
-            header("Location:{$this->loginPageURL}");
+            header("Location:{$this->connectionPagesURL['login']}");
         }
 
-        elseif ($userPassword[0] === $this->userPassword) {
-            $isUserLastLoginUpdateSuccessful = $userManager->updateUserLastLogin($this->userEmail);
-            $this->verifyActionSuccess($isUserLastLoginUpdateSuccessful, $this->loginPageURL);
+        elseif ($dbUserPassword[0] === $this->userInfo['password']) {
+            $isUserLastLoginUpdateSuccessful = $userManager->updateUserLastLogin($this->userInfo['email']);
+            $this->verifyActionSuccess($isUserLastLoginUpdateSuccessful, $this->connectionPagesURL['login']);
         }
 
         else {
             $_SESSION['form-error'] = $this->wrongPasswordErrorMessage;
-            header("Location:{$this->loginPageURL}");
+            header("Location:{$this->connectionPagesURL['login']}");
         }
     }
 
     public function verifyActionSuccess ($isActionSucessfull, $redirectionPageURL) {
         if ($isActionSucessfull) {
             $_SESSION['form-error'] = '';
-            header("Location:{$this->dashboardPageURL}");
+            header("Location:{$this->connectionPagesURL['dashboard']}");
         }
         else {
             $_SESSION['form-error'] = $this->dbErrorMessage;
@@ -115,17 +119,19 @@ class ConnectionController extends MainController {
     }
 
     public function getFormError() {
-        $formError = '' ;
-        if (isset($_SESSION['form-error'])) {
-            $formError = $_SESSION['form-error'];
-        }
+        if (isset($_SESSION['form-error'])) { $formError = $_SESSION['form-error']; }
+        else { $formError = ''; }
 
         return $formError;
     }
 
+    public function eraseError() {
+        $_SESSION['form-error'] = '';
+    }
+
     public function renderLoginPage($twig) {
-        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('templates/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]); // ok
+        echo $twig->render('templates/header.html.twig', ['requestedPage' => 'connection']); // ok
         echo $twig->render('connection/login.html.twig', ['previousFormError' => $this->getFormError()]);
         echo $twig->render('templates/footer.html.twig');
     }

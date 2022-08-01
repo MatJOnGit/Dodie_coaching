@@ -1,13 +1,43 @@
 #title-layer a,
+.tiny-button,
+.large-button,
+input[type=submit],
 footer li {
     background: linear-gradient(
         135deg, 
         hsla(261, 57%, 55%, 1) 0%,
-        hsla(261, 47%, 27%, 1) 100%);
+        hsla(261, 47%, 27%, 1) 100%
+    );
 }
 
 .homepage-link i,
+.error-container,
+.tiny-button,
+.large-button,
+input[type=submit],
 footer i {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.light-to-dark-purple-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 57%, 55%, 1) 0%,
+        hsla(261, 47%, 27%, 1) 50%,
+        hsla(261, 47%, 27%, 1) 100%
+    );
+}
+
+.purple-to-blue-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(260, 68%, 41%, 1) 0%,
+        hsla(260, 68%, 41%, 1) 50%,
+        hsla(261, 83%, 18%, 1) 100%
+    );
+}
+
+.error-container {
     color: hsla(0, 0%, 100%, 1);
 }
 

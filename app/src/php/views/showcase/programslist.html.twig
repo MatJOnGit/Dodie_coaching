@@ -1,7 +1,7 @@
 <ul class='showcase-content programs-list'>
     {% for program in programsList %}
     <li class='{{program.name}}-program'>
-        <a href='{{ program.details_page_link }}' class='program-summary'>
+        <a href='{{ program.details_page_link }}' class='program-summary glowy-bkgd'>
             <h2>{{ program.french_title }}</h2>
             <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
             <p>{{ program.subscription_price }} €</p>

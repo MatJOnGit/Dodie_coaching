@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    height: 150px;
     background-image: url(./../../../img/header-banner.jpg);
     background-size: 100% 150px, cover;
-    height: 150px;
 }
 
 #static-menu ul {

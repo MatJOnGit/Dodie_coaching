@@ -19,9 +19,9 @@ h1 {
 }
 
 #dynamic-menu-button {
-    background-color: inherit;
     margin-right: 20px;
     padding: 20px;
+    background-color: inherit;
     border: none;
 }
 

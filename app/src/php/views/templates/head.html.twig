@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
@@ -38,7 +34,7 @@ session_start();
 
     <!-- custom CSS -->
     {% for stylePath in stylePaths %}
-    <link rel='stylesheet' href='app/src/css/{{ stylePath }}.css' type='text/css'>
+    <link rel='stylesheet' href='./app/src/css/{{ stylePath }}.css' type='text/css'>
     {% endfor %}
 
 </head>

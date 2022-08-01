@@ -1,0 +1,13 @@
+<nav id='static-menu'>
+    <ul>
+        <li class='{{ requestedPage == 'presentation' ? 'blue-btn' : 'cloudy-btn' }}'>
+            <a href='index.php'>Présentation</a>
+        </li>
+        <li class='{{ requestedPage == 'coaching' ? 'blue-btn' : 'cloudy-btn' }}'>
+            <a href='index.php?page=coaching'>Coaching nutrition</a>
+        </li>
+        <li class='{{ requestedPage in ['programslist', 'programdetails'] ? 'blue-btn' : 'cloudy-btn' }}'>
+            <a href='index.php?page=programslist'>Formules</a>
+        </li>
+    </ul>
+</nav>

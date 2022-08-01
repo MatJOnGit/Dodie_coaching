@@ -1,0 +1,12 @@
+.rounded-btn {
+    padding: 17px 30px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    width: max-content;
+    margin-bottom: 17px;
+}

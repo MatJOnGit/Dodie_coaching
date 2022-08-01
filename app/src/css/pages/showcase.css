@@ -1,13 +1,19 @@
-/***** PRESENTATION & COACHING PAGES *****/
-
-.speech-container {
+/****************************/
+/*     SHOWCASE GLOBALS     */
+/****************************/
+.showcase-content {
+    min-height: calc(100vh - 245px - 70px);
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin: 245px 0 70px 0;
 }
+/*--------------------------*/
 
-.showcase-speech {
+
+/*****************************************/
+/*     PRESENTATION & COACHING PAGES     */
+/*****************************************/
+.speech-container p {
     margin: 10px 5%;
 }
 
@@ -23,85 +29,67 @@
     margin: 20px 0;
 }
 
-/***** PROGRAMSLIST & PROGRAMDETAILS PAGES *****/
+.speech-container .btn {
+    margin-top: 10px;
+    align-self: center;
+}
+/*--------------------------------------**/
 
-.programslist-container,
-.programdetails-container {
-    width: 100%;
+
+/***********************************************/
+/*     PROGRAMSLIST & PROGRAMDETAILS PAGES     */
+/***********************************************/
+.programs-list,
+.program-details-container {
     height: calc(100vh - 245px - 70px);
+    overflow-y: scroll;
+}
+
+.programs-list li,
+.program-details-container {
+    background-size: cover;
+    background-position: 50%;
+}
+
+.monthly-program {
+    background-image: url('../../../img/program-backgrounds/monthly-sub.jpg');
+}
+
+.quarterly-program {
+    background-image: url('../../../img/program-backgrounds/quarterly-sub.jpg');
+}
+
+.halfyearly-program {
+    background-image: url('../../../img/program-backgrounds/halfyearly-sub.jpg');
+}
+
+.showcase-content i {
+    margin-right: 5px;
+}
+/*---------------------------------------------*/
+
+
+/*******************************/
+/*     PROGRAMS LIST LAYER     */
+/*******************************/
+.programs-list {
+    align-items: normal;
+    width: 100%;
     padding: 0;
 }
 
-.programslist-container,
-.programdetails-container {
-    margin: 245px 0 0 0;
-}
-
-.programslist-container li,
-.programdetails-container {
+.programs-list li {
     position: relative;
-}
-
-.programslist-container li {
     height: calc(100% / 3);
 }
 
-.program-details {
-    display: block;
+.program-summary {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 0;
     width: 100%;
     height: 100%;
-}
-
-.programslist-container img,
-.programdetails-container img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-}
-
-.showcase-content button i {
-    margin-left: 5px;
-}
-
-.program-details button,
-.program-details h2
-{
-    margin: 20px 20px;
-}
-
-.program-details p {
-    margin: 5px 20px;
-}
-
-/***** PROGRAMS LIST LAYER *****/
-
-.programslist-container span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background-color: hsla(188, 87%, 30%, 1);
-    box-shadow: 0px 5px 10px 0px hsla(0, 0%, 0%, 0.5);
-    border-radius: 50%;
-}
-
-.programslist-container span i {
-    margin: 0;
-}
-
-/***** PROGRAM DETAILS LAYER *****/
-
-.programdetails-container {
-    height: calc(100vh - 245px - 70px);
-}
-
-.program-details {
     background: linear-gradient(
         135deg,
         hsla(0, 0%, 33%, .1) 0%,
@@ -110,32 +98,69 @@
         hsla(0, 0%, 50%, 0) 100%);
 }
 
-.prev-page-link,
-.subscription-link {
-    width: max-content;
-    margin: 20px 20px 30px 20px;
+.program-summary h2 {
+    margin: 20px 20px;
 }
 
-.prev-page-link {
+.program-summary p {
+    margin: 5px 20px;
+}
+
+.programs-list span {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    box-shadow: 0px 5px 10px 0px hsla(0, 0%, 0%, 0.5);
+    border-radius: 50%;
 }
 
-.program-details i {
-    margin-right: 5px;
+.programs-list span i {
+    margin: 0;
+}
+/*-----------------------------*/
+
+
+/*********************************/
+/*     PROGRAM DETAILS LAYER     */
+/*********************************/
+.program-details-container {
+    position: relative;
+}
+
+.program-details {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(
+        135deg,
+        hsla(0, 0%, 33%, .1) 0%,
+        hsla(240, 23%, 61%, .45) 15%,
+        hsla(0, 0%, 50%, 0) 70%,
+        hsla(0, 0%, 50%, 0) 100%)
+}
+
+.program-headers h2 {
+    margin: 0 0 17px 0;
+}
+
+.program-headers p {
+    margin: 5px 0;
 }
 
 .program-description {
-    position: absolute;
-    top: 230px;
     background-color: hsla(0, 0%, 0%, 0.5);
-    margin: 10px 20px;
-    padding: 10px 0;
+    margin: 20px 20px 25px 20px;
+    padding: 15px 20px;
     border: 1px solid white;
     border-radius: 5px;
 }
 
-.subscription-link {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+.program-details a:last-child {
+    align-self: flex-end;
 }
+/*-------------------------------*/

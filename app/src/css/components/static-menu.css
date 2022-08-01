@@ -24,11 +24,3 @@
     align-items: center;
     height: 100%;
 }
-
-.active-link {
-    background-color: hsla(188, 87%, 30%, 1);
-}
-
-.inactive-link {
-    background-color: hsla(0, 0%, 100%, 0.5);
-}

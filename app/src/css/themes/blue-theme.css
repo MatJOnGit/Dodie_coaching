@@ -1,0 +1,30 @@
+#title-layer i,
+footer i {
+    color: hsla(188, 87%, 30%, 1);
+}
+
+.programs-list a,
+.program-details-container,
+.blue-btn,
+.blue-btn a,
+footer p {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.cloudy-btn {
+    background-color: hsla(0, 0%, 100%, 0.5);
+}
+
+.cloudy-btn a {
+    color: hsla(0, 0%, 0%, 1);
+}
+
+.blue-btn,
+.programs-list span,
+footer {
+    background-color: hsla(188, 87%, 30%, 1);
+}
+
+footer li {
+    background-color: hsla(0, 0%, 100%, 1);
+}

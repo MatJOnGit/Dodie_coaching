@@ -1,7 +1,6 @@
-<div class='showcase-content programdetails-container'>
-    <img src='app/img/program-backgrounds/{{ program.name }}-sub.jpg' alt='{{ program.background_Alt }}'></img>
+<div class='showcase-content program-details-container {{program.name}}-program'>
     <div class='program-details'>
-        <a href='index.php?page=programslist' class='showcase-section-link prev-page-link'>
+        <a href='index.php?page=programslist' class='btn rounded-btn blue-btn'>
             <i class="fa-solid fa-arrow-left-long"></i>
             Retour aux formules
         </a>
@@ -12,12 +11,13 @@
             <p>{{ program.subscription_price }} €</p>
         </div>
 
+        {# remove once every program description is implemented #}
         {% if program.description != NULL %}
         <div class='program-description'>
             <p>{{ program.description | raw }}</p>
         </div>
         {% endif %}
 
-        <a href='index.php?page=login' class='subscription-link next-page-link'>Je m'inscris !</a>
+        <a href='index.php?page=login' class='btn rounded-btn blue-btn'>Je m'inscris !</a>
     </div>
 </div>

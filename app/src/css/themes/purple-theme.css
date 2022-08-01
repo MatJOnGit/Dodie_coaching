@@ -1,10 +1,4 @@
-#title-layer a {
-    background: linear-gradient(
-        135deg, 
-        hsla(261, 57%, 55%, 1) 0%,
-        hsla(261, 47%, 27%, 1) 100%);
-}
-
+#title-layer a,
 footer li {
     background: linear-gradient(
         135deg, 
@@ -12,13 +6,9 @@ footer li {
         hsla(261, 47%, 27%, 1) 100%);
 }
 
-#title-layer i,
+.homepage-link i,
 footer i {
     color: hsla(0, 0%, 100%, 1);
-}
-
-#title-layer i {
-    font-size: 1.5em;
 }
 
 footer {

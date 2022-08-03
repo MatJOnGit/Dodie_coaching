@@ -27,12 +27,13 @@ class ConnectionController extends MainController {
         'dashboard' => 'index.php?page=dashboard'
     );
 
-    public $usedEmailErrorMessage = "Nous sommes désolés, mais votre e-mail est déjà pris. Merci d'utiliser une autre adresse e-mail.";
-    public $invalidDataErrorMessage = "Certains champs du formulaire ne sont pas valides. Merci de réessayer.";
-    public $nonExistentEmailErrorMessage = "Ce compte n'existe pas. Merci d'entrer une adresse e-mail valide, ou de créer un nouveau compte.";
-    public $wrongPasswordErrorMessage = "Mot de passe erroné.";
-    public $dbErrorMessage = "Votre compte n'a pas pu être créé. Merci de réessayer plus tard.";
-
+    public $errorMessage = array(
+        'usedEmail' => "Nous sommes désolés, mais votre e-mail est déjà pris. Merci d'utiliser une autre adresse e-mail.",
+        'invalidFormData' => "Certains champs du formulaire ne sont pas valides. Merci de réessayer.",
+        'unknownEmail' => "Ce compte n'existe pas. Merci d'entrer une adresse e-mail valide, ou de créer un nouveau compte.",
+        'wrongPassword' => "Mot de passe erroné.",
+        'dbError' => "Votre compte n'a pas pu être créé. Merci de réessayer plus tard."
+    );
 
     public function verifyRegistrationForm() {
         $this->userInfo['firstName'] = htmlspecialchars($_POST['user-first-name']);
@@ -52,7 +53,7 @@ class ConnectionController extends MainController {
             $this->verifyUserForRegistration();
         }
         else {
-            $_SESSION['form-error'] = $this->invalidDataErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['invalidFormData'];
             header("Location:{$this->connectionPagesURL['registering']}");
         }
     }
@@ -65,7 +66,7 @@ class ConnectionController extends MainController {
         }
 
         else {
-            $_SESSION['form-error'] = $this->usedEmailErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['usedEmail'];
             header("Location:{$this->connectionPagesURL['registering']}");
         }
     }
@@ -82,7 +83,7 @@ class ConnectionController extends MainController {
         }
 
         else {
-            $_SESSION['form-error'] = $this->invalidDataErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['invalidFormData'];
             header("Location:{$this->connectionPagesURL['login']}");
         }        
     }
@@ -92,7 +93,7 @@ class ConnectionController extends MainController {
         $userManager = new UserManager;
         $dbUserPassword = $userManager->getUserPasswordFromEmail($this->userInfo['email']);
         if (!$dbUserPassword) {
-            $_SESSION['form-error'] = $this->nonExistentEmailErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['unknownEmail'];
             header("Location:{$this->connectionPagesURL['login']}");
         }
 
@@ -102,7 +103,7 @@ class ConnectionController extends MainController {
         }
 
         else {
-            $_SESSION['form-error'] = $this->wrongPasswordErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['wrongPassword'];
             header("Location:{$this->connectionPagesURL['login']}");
         }
     }
@@ -113,7 +114,7 @@ class ConnectionController extends MainController {
             header("Location:{$this->connectionPagesURL['dashboard']}");
         }
         else {
-            $_SESSION['form-error'] = $this->dbErrorMessage;
+            $_SESSION['form-error'] = $this->errorMessage['dbError'];
             header("Location:{$redirectionPageURL}");
         }
     }
@@ -125,6 +126,7 @@ class ConnectionController extends MainController {
         return $formError;
     }
 
+    // Non-utilisée ... à utiliser lors de l'appel d'une page de formulaire différente de la précédente
     public function eraseError() {
         $_SESSION['form-error'] = '';
     }

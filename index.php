@@ -11,41 +11,51 @@ try {
         'debug' => true
     ]);
     $twig->addExtension(new \Twig\Extension\DebugExtension());
-        
+
     if (isset($_GET['page'])) {
-    
-        /* Showcase page requests */
-    
-        if (in_array($_GET['page'], ['presentation', 'coaching', 'programslist', 'programdetails'])) {
+
+        $showcasePages = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
+        if (in_array($_GET['page'], $showcasePages)) {
+
             require('app/src/php/controllers/ShowcaseController.php');
             $showcaseController = new ShowcaseController;
-    
+
             if ($_GET['page'] === 'presentation') {
                 $showcaseController->renderPresentationPage($twig);
-                
             }
             elseif ($_GET['page'] === 'coaching') {
                 $showcaseController->renderCoachingPage($twig);
             }
-            elseif ($_GET['page'] === 'programslist') {
-                $showcaseController->renderProgramsListPage($twig);
-            }
-            elseif ($_GET['page'] === 'programdetails') {
-                if (isset($_GET['program'])) {
-                    if (in_array($_GET['program'], ['monthly', 'quarterly', 'halfyearly'])){
-                        $showcaseController->renderProgramDetailsPage($twig);
+            else {
+                $programManager = new ProgramManager;
+                $isProgramsDataAvailable = (count($programManager->programs) > 0) ? true : false;
+
+                if (!$isProgramsDataAvailable) {
+                    if ($_GET['page'] === 'showcase-404') {
+                        $showcaseController->render404Page($twig);
                     }
                     else {
-                        header('Location: index.php?page=programslist');
+                        header('location:index.php?page=showcase-404');
                     }
                 }
                 else {
-                    header('Location: index.php?page=programslist');
+                    if ($_GET['page'] === 'showcase-404') {
+                        header('Location:index.php?page=programslist');
+                    }
+                    elseif ($_GET['page'] === 'programslist') {
+                        $showcaseController->renderProgramsListPage($twig);
+                    }
+                    else {
+                        if ((!isset($_GET['program'])) || (!in_array($_GET['program'], array_keys($programManager->programs)))) {
+                            header('Location:index.php?page=programslist');
+                        }
+                        else {
+                            $showcaseController->renderProgramDetailsPage($twig);
+                        }
+                    }
                 }
             }
         }
-
-        /* Connection pages requests */
 
         elseif (in_array($_GET['page'], ['login', 'registering', 'password-retrieving'])) {
             require('app/src/php/controllers/ConnectionController.php');
@@ -53,15 +63,12 @@ try {
     
             if ($_GET['page'] === 'login') {
                 $connectionController->renderLoginPage($twig);
-                // $connectionController->eraseError();
             }
             elseif ($_GET['page'] === 'registering') {
                 $connectionController->renderRegisteringPage($twig);
-                // $connectionController->eraseError();
             }
             elseif ($_GET['page'] === 'password-retrieving') {
                 $connectionController->renderPasswordRetrievingPage($twig);
-                // $connectionController->eraseError();
             }
         }
 
@@ -79,15 +86,12 @@ try {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
             $connectionController->verifyRegistrationForm();
-            // $connectionController->eraseError();
         }
-        
 
         elseif ($_GET['action'] === 'log-account') {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
             $connectionController->verifyLoginForm();
-            // $connectionController->eraseError();
         }
     }
 

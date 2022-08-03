@@ -13,17 +13,20 @@ class ShowcaseController {
         'themes/blue-theme'
     ];
 
-    public function requestProgramList() {
-        $programsManager = new ProgramManager;
-        $programsList = $programsManager->getProgramsList();
+    public function getProgramsList() {
+        $programManager = new ProgramManager;
+        $programsList = $programManager->programs;
+
         return $programsList;
     }
 
-    public function requestProgramDetails() {
-        $programsManager = new ProgramManager;
-        $programDetails = $programsManager->getProgramDetails($_GET['program']);
+    public function getProgramDetails() {
+        $programManager = new ProgramManager;
+        $programsList = $programManager->programs;
+        $programDetails = $programsList[htmlspecialchars($_GET['program'])];
+
         return $programDetails;
-    }
+    }    
 
     public function renderPresentationPage($twig) {
         echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
@@ -40,20 +43,27 @@ class ShowcaseController {
     }
     
     public function renderProgramsListPage($twig) {
-        $programsList = $this->requestProgramList();
+        $programsData = $this->getProgramsList();
 
         echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
         echo $twig->render('templates/header.html.twig', ['requestedPage' => 'programslist']);
-        echo $twig->render('showcase/programslist.html.twig', ['programsList' => $programsList]);
+        echo $twig->render('showcase/programslist.html.twig', ['programs' => $programsData]);
         echo $twig->render('templates/footer.html.twig');
     }
 
     public function renderProgramDetailsPage($twig) {
-        $programsDetails = $this->requestProgramDetails();
+        $programDetails = $this->getProgramDetails();
         
         echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
         echo $twig->render('templates/header.html.twig', ['requestedPage'=> 'programdetails']);
-        echo $twig->render('showcase/programdetails.html.twig', ['requestedPage' => 'programdetails', 'program' => $programsDetails]);
+        echo $twig->render('showcase/programdetails.html.twig', ['requestedPage' => 'programdetails', 'program' => $programDetails]);
+        echo $twig->render('templates/footer.html.twig');
+    }
+
+    public function render404Page($twig) {
+        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
+        echo $twig->render('templates/header.html.twig', ['requestedPage'=> 'showcase-404']);
+        echo $twig->render('showcase/404.html.twig');
         echo $twig->render('templates/footer.html.twig');
     }
 }

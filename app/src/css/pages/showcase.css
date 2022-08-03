@@ -11,6 +11,10 @@
 .showcase-content span i {
     font-size: 1.7em;
 }
+
+.showcase-error {
+    padding: 30px;
+}
 /*--------------------------*/
 
 
@@ -84,7 +88,7 @@
 
 .programs-list li {
     position: relative;
-    height: calc(100% / 3);
+    min-height: calc((100vh - 245px - 70px) / 3)
 }
 
 .program-summary {

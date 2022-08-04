@@ -10,7 +10,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 95px;
+    /* height: 95px; INITIAL VALUES */
+    height: 11vh;
 }
 
 h1 {

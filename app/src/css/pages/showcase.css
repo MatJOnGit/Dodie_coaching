@@ -4,8 +4,10 @@
 .showcase-content {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 245px - 70px);
-    margin: 245px 0 70px 0;
+    /* min-height: calc(100vh - 245px - 70px); INITIAL VALUES */
+    min-height: calc(100vh - 11vh - 16vh - 50px);
+    /* margin: 245px 0 70px 0; INITIAL VALUES */
+    margin: calc(11vh + 16vh) 0 70px 0;
 }
 
 .showcase-content span i {
@@ -88,7 +90,8 @@
 
 .programs-list li {
     position: relative;
-    min-height: calc((100vh - 245px - 70px) / 3)
+    /* min-height: calc((100vh - 245px - 70px) / 3) INITIAL VALUES */
+    min-height: calc((100vh - 11vh - 16vh - 50px) / 3);
 }
 
 .program-summary {

@@ -19,7 +19,8 @@ html, body {
 
 h1 {
     font-family: 'julius sans one';
-    font-size: 1.7em;
+    /* font-size: 1.7em; INITIAL VALUES */
+    font-size: 6vmin;
 }
 
 h2, li, a, input {

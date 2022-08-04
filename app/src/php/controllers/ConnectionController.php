@@ -110,7 +110,6 @@ class ConnectionController extends MainController {
 
     public function verifyActionSuccess ($isActionSucessfull, $redirectionPageURL) {
         if ($isActionSucessfull) {
-            $_SESSION['form-error'] = '';
             header("Location:{$this->connectionPagesURL['dashboard']}");
         }
         else {
@@ -120,19 +119,18 @@ class ConnectionController extends MainController {
     }
 
     public function getFormError() {
-        if (isset($_SESSION['form-error'])) { $formError = $_SESSION['form-error']; }
-        else { $formError = ''; }
+        if (isset($_SESSION['form-error'])) {
+            $formError = $_SESSION['form-error'];
+        }
+        else {
+            $formError = '';
+        }
 
         return $formError;
     }
 
-    // Non-utilisée ... à utiliser lors de l'appel d'une page de formulaire différente de la précédente
-    public function eraseError() {
-        $_SESSION['form-error'] = '';
-    }
-
     public function renderLoginPage($twig) {
-        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]); // ok
+        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
         echo $twig->render('templates/header.html.twig', ['requestedPage' => 'connection']); // ok
         echo $twig->render('connection/login.html.twig', ['previousFormError' => $this->getFormError()]);
         echo $twig->render('templates/footer.html.twig');

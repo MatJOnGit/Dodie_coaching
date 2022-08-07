@@ -19,6 +19,10 @@ footer i {
     color: hsla(0, 0%, 100%, 1);
 }
 
+#dynamic-menu-button i {
+    color: hsla(261, 57%, 55%, 1);
+}
+
 .light-to-dark-purple-bkgd {
     background: linear-gradient(
         135deg, 

@@ -1,4 +1,5 @@
 <nav id='static-menu'>
+    {% if requestedPage != 'dashboard' %}
     <ul>
         <li class='{{ requestedPage == 'presentation' ? 'blue-btn' : 'cloudy-btn' }}'>
             <a href='index.php'>Présentation</a>
@@ -10,4 +11,5 @@
             <a href='index.php?page=programslist'>Formules</a>
         </li>
     </ul>
+    {% endif %}
 </nav>

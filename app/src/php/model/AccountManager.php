@@ -2,11 +2,11 @@
 
 require_once('app/src/php/model/Manager.php');
 
-class UserManager extends Manager {
+class AccountManager extends Manager {
 
-    public function registerUser($userFirstName, $userLastName, $userEmail, $userPassword) {
+    public function registerAccount($userFirstName, $userLastName, $userEmail, $userPassword) {
         $db = $this->dbConnect();
-        $userRegistrationQuery = 'INSERT INTO users (first_name, last_name, email, password) VALUES (:firstName, :lastName, :email, :password)';
+        $userRegistrationQuery = 'INSERT INTO accounts (first_name, last_name, email, password) VALUES (:firstName, :lastName, :email, :password)';
         $userRegistrationStatement = $db->prepare($userRegistrationQuery);
         $userRegistrationSuccess = $userRegistrationStatement->execute([
             'firstName' => $userFirstName,
@@ -20,7 +20,7 @@ class UserManager extends Manager {
 
     public function getUserPasswordFromEmail($userEmail) {
         $db = $this->dbConnect();
-        $userPasswordGetterQuery = 'SELECT password FROM users WHERE email = ?';
+        $userPasswordGetterQuery = 'SELECT password FROM accounts WHERE email = ?';
         $userPasswordGetterStatement = $db->prepare($userPasswordGetterQuery);
         $userPasswordGetterStatement->execute([$userEmail]);
         $userPassword = $userPasswordGetterStatement->fetch();
@@ -30,10 +30,20 @@ class UserManager extends Manager {
 
     public function updateUserLastLogin($userEmail) {
         $db = $this->dbConnect();
-        $userLastLoginUpdaterQuery = 'UPDATE users SET last_login = NOW() WHERE email = ?';
+        $userLastLoginUpdaterQuery = 'UPDATE accounts SET last_login = NOW() WHERE email = ?';
         $userLastLoginUpdaterStatement = $db->prepare($userLastLoginUpdaterQuery);
         $userLastLoginUpdateSuccess = $userLastLoginUpdaterStatement->execute([$userEmail]);
 
         return $userLastLoginUpdateSuccess;
+    }
+
+    public function getUserStaticData($accountEmail) {
+        $db = $this->dbConnect();
+        $userStaticDataGetterQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
+        $userStaticDataGetterStatement = $db->prepare($userStaticDataGetterQuery);
+        $userStaticDataGetterStatement->execute([$accountEmail]);
+        $userStaticData = $userStaticDataGetterStatement->fetch();
+
+        return $userStaticData;
     }
 }

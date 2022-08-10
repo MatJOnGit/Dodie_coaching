@@ -18,7 +18,7 @@ class AccountManager extends Manager {
         return $userRegistrationSuccess;
      }
 
-    public function getUserPasswordFromEmail($userEmail) {
+    public function getUserPassword($userEmail) {
         $db = $this->dbConnect();
         $userPasswordGetterQuery = 'SELECT password FROM accounts WHERE email = ?';
         $userPasswordGetterStatement = $db->prepare($userPasswordGetterQuery);
@@ -42,8 +42,20 @@ class AccountManager extends Manager {
         $userStaticDataGetterQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
         $userStaticDataGetterStatement = $db->prepare($userStaticDataGetterQuery);
         $userStaticDataGetterStatement->execute([$accountEmail]);
-        $userStaticData = $userStaticDataGetterStatement->fetch();
+        $userStaticData = $userStaticDataGetterStatement->fetch(PDO::FETCH_ASSOC);
 
         return $userStaticData;
+    }
+
+    public function getMemberIdentity($accountEmail) {
+        $db = $this->dbConnect();
+        $memberIdentityGetterQuery = 'SELECT first_name, last_name FROM accounts WHERE email = ?';
+        $memberIdentityGetterStatement = $db->prepare($memberIdentityGetterQuery);
+        $memberIdentityGetterStatement->execute([$accountEmail]);
+        $memberIdentity = $memberIdentityGetterStatement->fetch();
+
+        // var_dump($memberIdentity);
+
+        return $memberIdentity;
     }
 }

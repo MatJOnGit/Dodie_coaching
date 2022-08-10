@@ -10,7 +10,6 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* height: 95px; INITIAL VALUES */
     height: 11vh;
 }
 
@@ -35,4 +34,36 @@ h1 {
     margin-right: 20px;
     padding: 20px;
     border-radius: 50%;
+}
+
+#static-menu,
+#page-name-cnn {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 16vh;
+    background-image: url(./../../../img/header-banner.jpg);
+    background-size: 100% 150px, cover;
+}
+
+#static-menu ul,
+#page-name-cnn > div {
+    display: flex;
+    height: 50px;
+}
+
+#static-menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+#static-menu li {
+    width: 33.3%;
+}
+
+#static-menu a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

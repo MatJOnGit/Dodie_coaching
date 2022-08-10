@@ -1,0 +1,18 @@
+<header>
+    <div id='title-layer'>
+        <h1>Dodie Coaching</h1>
+
+        {% if requestedPage in showcasePages %}
+        <button id='dynamic-menu-button'><i class='fas fa-bars'></i></button>
+        {% elseif requestedPage == 'connection' %}
+        <a href='index.php' class='homepage-link'><i class="fa-solid fa-house-chimney"></i></a>
+        {% else  %}
+        <a href='index.php?page=logout' class='homepage-link'><i class="fa-solid fa-right-from-bracket"></i></a>
+        {% endif %}
+        
+    </div>
+
+    {% if requestedPage in showcasePages or memberPanelPages %}
+    {% include 'components/header-layer.html.twig' %}
+    {% endif %}
+</header>

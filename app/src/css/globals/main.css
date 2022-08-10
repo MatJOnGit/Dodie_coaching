@@ -27,10 +27,6 @@ h2, li, a, input {
     font-family: 'archivo narrow';
 }
 
-h2 {
-    font-size: 1.7em;
-}
-
 ul {
     list-style: none;
 }
@@ -60,4 +56,12 @@ input::placeholder {
 
 #static-menu li {
     font-size: 0.9em;
+}
+
+.cloudy-bkgd {
+    background-color: hsla(0, 0%, 100%, 0.6);
+}
+
+.cloudy-bkgd a {
+    color: hsla(0, 0%, 0%, 1);
 }

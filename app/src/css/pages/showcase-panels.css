@@ -1,12 +1,47 @@
-/****************************/
-/*     SHOWCASE GLOBALS     */
-/****************************/
+/*********************************/
+/*             THEME             */
+/*********************************/
+
+#dynamic-menu-button i ,
+footer i {
+    color: hsla(188, 87%, 30%, 1);
+}
+
+.programs-list a,
+.program-details-container,
+.blue-bkgd,
+.blue-bkgd a,
+footer p {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.blue-bkgd,
+.programs-list span,
+footer {
+    background-color: hsla(188, 87%, 30%, 1);
+}
+
+footer li {
+    background-color: hsla(0, 0%, 100%, 1);
+}
+
+.glowy-bkgd {
+    background: linear-gradient(
+        135deg,
+        hsla(0, 0%, 33%, .1) 0%,
+        hsla(240, 23%, 61%, .45) 40%,
+        hsla(0, 0%, 50%, 0) 70%,
+        hsla(0, 0%, 50%, 0) 100%
+    );
+}
+
+/********************************/
+/*           GLOBALS            */
+/********************************/
 .showcase-content {
     display: flex;
     flex-direction: column;
-    /* min-height: calc(100vh - 245px - 70px); INITIAL VALUES */
-    min-height: calc(100vh - 11vh - 16vh - 50px);
-    /* margin: 245px 0 70px 0; INITIAL VALUES */
+    min-height: calc(100vh - 11vh - 16vh - 70px);
     margin: calc(11vh + 16vh) 0 70px 0;
 }
 
@@ -17,8 +52,6 @@
 .showcase-error {
     padding: 30px;
 }
-/*--------------------------*/
-
 
 /*****************************************/
 /*     PRESENTATION & COACHING PAGES     */
@@ -43,15 +76,13 @@
     align-self: center;
     margin-top: 10px;
 }
-/*--------------------------------------**/
-
 
 /***********************************************/
 /*     PROGRAMSLIST & PROGRAMDETAILS PAGES     */
 /***********************************************/
 .programs-list,
 .program-details-container {
-    height: calc(100vh - 245px - 70px);
+    height: calc(100vh - 245px - 70px); /* à vérifier */
     overflow-y: scroll;
 }
 
@@ -90,8 +121,7 @@
 
 .programs-list li {
     position: relative;
-    /* min-height: calc((100vh - 245px - 70px) / 3) INITIAL VALUES */
-    min-height: calc((100vh - 11vh - 16vh - 50px) / 3);
+    min-height: calc((100vh - 11vh - 16vh - 70px) / 3);
 }
 
 .program-summary {
@@ -101,6 +131,10 @@
     top: 0;
     width: 100%;
     height: 100%;
+}
+
+h2 {
+    font-size: 1.7em;
 }
 
 .program-summary h2 {

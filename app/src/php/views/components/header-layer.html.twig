@@ -1,0 +1,21 @@
+{% if requestedPage in showcasePages %}
+<nav id='static-menu'>
+    <ul>
+        <li class='{{ requestedPage == 'presentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+            <a href='index.php'>Présentation</a>
+        </li>
+        <li class='{{ requestedPage == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+            <a href='index.php?page=coaching'>Coaching nutrition</a>
+        </li>
+        <li class='{{ requestedPage in ['programslist', 'programdetails', 'showcase-404'] ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+            <a href='index.php?page=programslist'>Formules</a>
+        </li>
+    </ul>
+</nav>
+{% else %}
+<div id='page-name-cnn'>
+    <div class='cloudy-bkgd'>
+        <h2>Mon tableau de bord</h1>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,134 @@
+/*********************************/
+/*             THEME             */
+/*********************************/
+#title-layer i,
+footer i {
+    color: hsla(268, 71%, 41%, 1);
+}
+
+.dashboard-btn,
+footer {
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 71%, 64%, 1) 0%,
+        hsla(261, 71%, 20%, 1) 100%
+    );
+}
+
+footer li {
+    background-color: hsla(0, 0%, 100%, 1);
+}
+
+footer p {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+/********************************/
+/*           GLOBALS            */
+/********************************/
+
+#title-layer i {
+    font-size: 2.5em;
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    font-weight: normal;
+    margin: 0 0 0 30px;
+}
+
+.member-panel-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 84%;
+    height: calc(100vh - 11vh - 16vh - 10vh - 70px);
+    margin: calc(11vh + 16vh) 0 70px 0;
+    padding: 5vh 8%;
+    color: white;
+}
+
+.settings-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.progression-graph-cnn,
+#user-progression-graph {
+    height: 20vh;
+}
+
+.progression-graph-cnn {
+    width: 80%;
+    padding: 3vh 0;
+    position: relative;
+}
+
+#user-progression-graph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+figcaption {
+    position: absolute;
+    top: 3vh;
+    width: 100%;
+    text-align: center;
+    color: black;
+}
+
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 90%;
+    height: calc(100vh - 11vh - 16vh - 34vh - 70px);
+}
+
+.dashboard-menu ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: 20vh;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-menu li {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 45%;
+}
+
+.dashboard-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    width: 80%;
+    color: white;
+}
+
+h3 {
+    margin: 0;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+.dashboard-btn i {
+    margin-left: 5px;
+}

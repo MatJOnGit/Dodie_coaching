@@ -16,7 +16,7 @@ try {
         $page = htmlspecialchars($_GET['page']);
         $showcasePages = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
         $connectionPages = ['login', 'registering', 'password-retrieving'];
-        $memberPanelPages = ['dashboard', 'letsstart', 'meetings'];
+        $memberPanelPages = ['dashboard', 'get-to-know-you', 'meetings'];
 
         if (in_array($page, $showcasePages)) {
             require('app/src/php/controllers/ShowcaseController.php');
@@ -80,24 +80,24 @@ try {
             if (!$memberPanelController->verifyAccount()) {
                 header('location:index.php?page=login');
             }
+
             else {
-                if ($page === 'dashboard') {
-                    $userStaticData = $memberPanelController->verifyUserStaticData();
+                $userStaticData = $memberPanelController->verifyUserStaticData();
+                if (($page !== 'get-to-know-you') && (!$userStaticData)) {
+                    header('location:index.php?page=get-to-know-you');
+                }
 
-                    if (!$userStaticData) {
-                        // On créé une entrée dans la table user_Static_Data pour l'utilisateur, avec des valeurs nulle.
-                        echo "L'utilisateur dont l'email est " . $_SESSION['user-email'] . " n'a pas encore entré de données statiques pour être coaché.<br>On lui affiche le formulaire.";
-                    }
-                    else {
-                        $missingUserStaticData = $memberPanelController->getMissingUserStaticDataKey($userStaticData);
+                elseif (($page === 'get-to-know-you') && ($userStaticData)) {
+                    header('location:index.php?page=dashboard');
+                }
 
-                        if (empty($missingUserStaticData)) {
-                            $memberPanelController->renderMemberDashboard($twig);
-                        }
-                        else {
-                            echo "Il manque quelques éléments à remplir par l'utilisateur dont l'email est " . $_SESSION['user-email'] . " pour être coaché.<br>On lui affiche le formulaire.";
-                        }
-                    }
+                elseif ($page === 'dashboard') {
+                    $memberPanelController->storeMemberIdentity();
+                    $memberPanelController->renderMemberDashboard($twig);
+                }
+
+                elseif ($page === 'get-to-know-you'){
+                    $memberPanelController->renderMemberDataForm($twig);
                 }
 
                 else {

@@ -5,12 +5,11 @@ require ('app/src/php/model/AccountManager.php');
 
 class ConnectionController extends MainController {
     public $connectionPagesStyles = [
-        'pages/connection',
+        'pages/connection-panels',
         'components/header',
         'components/form',
         'components/buttons',
-        'components/footer',
-        'themes/purple-theme'
+        'components/footer'
     ];
 
     public $connectionPagesURL = array(
@@ -68,7 +67,7 @@ class ConnectionController extends MainController {
 
     public function verifyUserInDatabase() {
         $accountManager = new AccountManager;
-        $dbUserPassword = $accountManager->getUserPasswordFromEmail($this->getUserEmail());
+        $dbUserPassword = $accountManager->getUserPassword($this->getUserEmail());
 
         return $dbUserPassword;
     }
@@ -103,23 +102,23 @@ class ConnectionController extends MainController {
     }
 
     public function renderLoginPage($twig) {
-        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('templates/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
         echo $twig->render('connection/login.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('templates/footer.html.twig');
+        echo $twig->render('components/footer.html.twig');
     }
 
     public function renderRegisteringPage($twig) {
-        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('templates/header.html.twig', ['requestedPage'=> 'connection']);
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
         echo $twig->render('connection/registering.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('templates/footer.html.twig');
+        echo $twig->render('components/footer.html.twig');
     }
 
     public function renderPasswordRetrievingPage($twig) {
-        echo $twig->render('templates/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('templates/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
         echo $twig->render('connection/password-retrieving.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('templates/footer.html.twig');
+        echo $twig->render('components/footer.html.twig');
     }
 }

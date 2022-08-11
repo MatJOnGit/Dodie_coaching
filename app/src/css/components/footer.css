@@ -21,6 +21,7 @@ footer li {
     margin: 0 3px;
     padding: 3px;
     border-radius: 5px;
+    box-shadow: 3px 3px 3px 0px hsla(0, 0%, 0%, 0.5);
 }
 
 footer li i {

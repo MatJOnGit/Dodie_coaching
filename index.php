@@ -16,7 +16,7 @@ try {
         $page = htmlspecialchars($_GET['page']);
         $showcasePages = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
         $connectionPages = ['login', 'registering', 'password-retrieving'];
-        $memberPanelPages = ['dashboard', 'get-to-know-you', 'meetings'];
+        $memberPanelPages = ['dashboard', 'nutrition-program', 'progression', 'get-to-know-you', 'meetings'];
 
         if (in_array($page, $showcasePages)) {
             require('app/src/php/controllers/ShowcaseController.php');
@@ -96,6 +96,16 @@ try {
                     $memberPanelController->renderMemberDashboard($twig);
                 }
 
+                elseif ($page === 'nutrition-program') {
+                    $memberPanelController->storeMemberIdentity();
+                    $memberPanelController->renderMemberNutritionProgram($twig);
+                }
+
+                elseif ($page === 'progression') {
+                    $memberPanelController->storeMemberIdentity();
+                    $memberPanelController->renderMemberProgression($twig);
+                }
+
                 elseif ($page === 'get-to-know-you'){
                     $memberPanelController->renderMemberDataForm($twig);
                 }
@@ -171,14 +181,6 @@ try {
             }
             
         }
-
-
-
-
-
-
-
-
     }
 
     else {

@@ -42,7 +42,7 @@ p {
 input[type=email],
 input[type=text],
 input[type=password] {
-    font-size: 1.1em;
+    font-size: 3.5vmin;
 }
 
 .error-container p,

@@ -6,6 +6,23 @@ footer i {
     color: hsla(268, 71%, 41%, 1);
 }
 
+#title-layer i {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.settings-btn i {
+    font-size: 2em;
+}
+
+figcaption {
+    color: hsla(0, 0%, 0%, 1);
+}
+
 .dashboard-btn,
 footer {
     background: linear-gradient(
@@ -15,28 +32,32 @@ footer {
     );
 }
 
-footer li {
-    background-color: hsla(0, 0%, 100%, 1);
-}
-
+.dashboard-btn,
 footer p {
     color: hsla(0, 0%, 100%, 1);
+}
+
+h3 {
+    font-size: 0.75em;
+}
+
+.dashboard-btn i {
+    margin-left: 30%;
+    font-size: 1.3em;
+}
+
+footer li {
+    background-color: hsla(0, 0%, 100%, 1);
 }
 
 /********************************/
 /*           GLOBALS            */
 /********************************/
 
-#title-layer i {
-    font-size: 2.5em;
-}
-
 h2 {
     display: flex;
     align-items: center;
-    font-size: 0.9em;
-    font-weight: normal;
-    margin: 0 0 0 30px;
+    margin: 0 0 0 35px;
 }
 
 .member-panel-content {
@@ -46,16 +67,19 @@ h2 {
     justify-content: flex-start;
     align-items: center;
     width: 84%;
-    height: calc(100vh - 11vh - 16vh - 10vh - 70px);
-    margin: calc(11vh + 16vh) 0 70px 0;
+    height: calc(63vh - 70px);
+    margin: 27vh 0 70px 0;
     padding: 5vh 8%;
-    color: white;
 }
 
 .settings-btn {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.settings-btn i {
+    padding: 3vh;
 }
 
 .progression-graph-cnn,
@@ -65,7 +89,7 @@ h2 {
 
 .progression-graph-cnn {
     width: 80%;
-    padding: 3vh 0;
+    padding: 5vh 0 3vh 0;
     position: relative;
 }
 
@@ -74,16 +98,15 @@ h2 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 2px solid hsla(0, 0%, 0%, 1);
+    border-bottom: 2px solid hsla(0, 0%, 0%, 1);
 }
 
 figcaption {
     position: absolute;
-    top: 3vh;
+    top: 5vh;
     width: 100%;
     text-align: center;
-    color: black;
 }
 
 .dashboard-menu {
@@ -91,7 +114,7 @@ figcaption {
     flex-direction: column;
     justify-content: center;
     width: 90%;
-    height: calc(100vh - 11vh - 16vh - 34vh - 70px);
+    height: calc(39vh - 70px);
 }
 
 .dashboard-menu ul {
@@ -100,7 +123,7 @@ figcaption {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    height: 20vh;
+    height: 22vh;
     padding: 0;
     margin: 0;
 }
@@ -110,8 +133,8 @@ figcaption {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 0;
     width: 45%;
+    margin: 0;
 }
 
 .dashboard-btn {
@@ -119,16 +142,16 @@ figcaption {
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
-    width: 80%;
-    color: white;
+    width: 100%;
+    height: 30%;
+}
+
+h3,
+.dashboard-btn i {
+    margin: auto 0;
 }
 
 h3 {
-    margin: 0;
-    font-size: 0.7em;
     text-align: center;
-}
-
-.dashboard-btn i {
-    margin-left: 5px;
+    width: 70%;
 }

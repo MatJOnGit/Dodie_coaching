@@ -9,10 +9,10 @@ class DashboardManager extends Manager {
             'iconClass' => 'bowl-food',
             'link' => 'nutrition-program'
         ),
-        'sportProgram' => array(
-            'frenchTitle' => 'programme sportif',
+        'progression' => array(
+            'frenchTitle' => 'progression',
             'iconClass' => 'person-running',
-            'link' => 'sport-program'
+            'link' => 'progression'
         ),
         'meetings' => array(
             'frenchTitle' => 'meetings',

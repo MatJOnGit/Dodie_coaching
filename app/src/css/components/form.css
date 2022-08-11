@@ -4,15 +4,15 @@ form {
     align-items: center;
     width: 80%;
     margin: 0 10%;
-    padding: 25px 0 28px 0;
+    padding-top: 2vh;
 }
 
 input[type=email],
 input[type=text],
 input[type=password] {
     width: 70%;
-    margin: 15px 0;
-    padding: 8px 10px;
+    margin: 1.5vh 0;
+    padding: 0px 10px 8px 10px;
     background-color: inherit;
     border: none;
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
@@ -28,14 +28,15 @@ input::placeholder {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-    width: 100%;
-    margin: 20px 0 0 0;
+    width: 85%;
+    margin-top: 1.5vh;
+    padding: 0;
 }
 
 .tiny-button,
 .large-button,
 input[type=submit] {
-    height: 60px;
+    height: 8vh;
 }
 
 .tiny-button,
@@ -43,11 +44,11 @@ input[type=submit] {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .tiny-button {
-    width: 40%;
-    margin: 0 15px 20px 15px;
+    width: 45%;
 }
 
 .tiny-button p {
@@ -57,7 +58,6 @@ input[type=submit] {
 
 .large-button {
     width: 100%;
-    margin: 0px 15px 20px 15px;
 }
 
 input[type=submit] {

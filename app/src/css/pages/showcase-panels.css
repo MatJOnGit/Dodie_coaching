@@ -35,6 +35,10 @@ footer li {
     );
 }
 
+.program-description {
+    border: 1px solid white;
+}
+
 /********************************/
 /*           GLOBALS            */
 /********************************/
@@ -75,6 +79,7 @@ footer li {
 .speech-container .btn {
     align-self: center;
     margin-top: 10px;
+    margin-bottom: 17px;
 }
 
 /***********************************************/
@@ -82,7 +87,6 @@ footer li {
 /***********************************************/
 .programs-list,
 .program-details-container {
-    height: calc(100vh - 245px - 70px); /* à vérifier */
     overflow-y: scroll;
 }
 
@@ -93,15 +97,15 @@ footer li {
 }
 
 .monthly-program {
-    background-image: url('../../../img/program-backgrounds/monthly-sub.jpg');
+    background-image: url('../../../img/program_backgrounds/monthly-sub.jpg');
 }
 
 .quarterly-program {
-    background-image: url('../../../img/program-backgrounds/quarterly-sub.jpg');
+    background-image: url('../../../img/program_backgrounds/quarterly-sub.jpg');
 }
 
 .halfyearly-program {
-    background-image: url('../../../img/program-backgrounds/halfyearly-sub.jpg');
+    background-image: url('../../../img/program_backgrounds/halfyearly-sub.jpg');
 }
 
 .showcase-content i {
@@ -154,7 +158,6 @@ h2 {
     bottom: 30px;
     width: 60px;
     height: 60px;
-    box-shadow: 0px 5px 10px 0px hsla(0, 0%, 0%, 0.5);
     border-radius: 50%;
 }
 
@@ -175,12 +178,13 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-start;
     height: 100%;
     padding: 20px;
 }
 
 .program-headers h2 {
-    margin: 0 0 17px 0;
+    margin: 17px 0;
 }
 
 .program-headers p {
@@ -190,7 +194,6 @@ h2 {
 .program-description {
     margin: 20px 20px 25px 20px;
     padding: 15px 20px;
-    background-color: hsla(0, 0%, 0%, 0.5);
     border: 1px solid white;
     border-radius: 15px;
 }

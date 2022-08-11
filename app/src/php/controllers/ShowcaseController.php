@@ -11,7 +11,7 @@ class ShowcaseController {
         'components/footer'
     ];
 
-    public $showcasePages = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
+    public $showcasePanels = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
 
     public function verifyProgramsList() {
         $programManager = new ProgramManager;
@@ -44,36 +44,36 @@ class ShowcaseController {
 
     public function renderPresentationPage($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'presentation', 'showcasePages' => $this->showcasePages]);
-        echo $twig->render('showcase/presentation.html.twig');
+        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'presentation', 'showcasePanels' => $this->showcasePanels]);
+        echo $twig->render('showcase_panels/presentation.html.twig');
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderCoachingPage($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'coaching', 'showcasePages' => $this->showcasePages]);
-        echo $twig->render('showcase/coaching.html.twig');
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'coaching', 'showcasePanels' => $this->showcasePanels]);
+        echo $twig->render('showcase_panels/coaching.html.twig');
         echo $twig->render('components/footer.html.twig');
     }
     
     public function renderProgramsListPage($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programslist', 'showcasePages' => $this->showcasePages]);
-        echo $twig->render('showcase/programslist.html.twig', ['programs' => $this->getProgramsList()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programslist', 'showcasePanels' => $this->showcasePanels]);
+        echo $twig->render('showcase_panels/programs-list.html.twig', ['programs' => $this->getProgramsList()]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderProgramDetailsPage($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programdetails', 'showcasePages' => $this->showcasePages]);
-        echo $twig->render('showcase/programdetails.html.twig', ['requestedPage' => 'programdetails', 'program' => $this->getProgramDetails()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programdetails', 'showcasePanels' => $this->showcasePanels]);
+        echo $twig->render('showcase_panels/program-details.html.twig', ['requestedPage' => 'programdetails', 'program' => $this->getProgramDetails()]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function render404Page($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->showcasePagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'showcase-404', 'showcasePages' => $this->showcasePages]);
-        echo $twig->render('showcase/404.html.twig');
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'showcase-404', 'showcasePanels' => $this->showcasePanels]);
+        echo $twig->render('showcase_panels/404.html.twig');
         echo $twig->render('components/footer.html.twig');
     }
 }

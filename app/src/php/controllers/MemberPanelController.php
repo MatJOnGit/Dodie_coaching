@@ -9,11 +9,12 @@ class MemberPanelController extends MainController {
     public $memberPanelPagesStyles = [
         'pages/member-panels',
         'components/header',
+        'components/form',
         'components/buttons',
         'components/footer'
     ];
 
-    public $memberPanelsSubTitles = array(
+    public $memberPanelsSubtitles = array(
         'nutritionProgram' => 'Programme nutrition',
         'progression' => 'Progression',
         'meetings' => 'Rendez-vous',
@@ -69,8 +70,8 @@ class MemberPanelController extends MainController {
         return $dashboardMenu;
     }
 
-    public function getMemberPanelTitle($page) {
-        return $this->memberPanelsTitles[$page];
+    public function getMemberPanelSubtitles($page) {
+        return $this->memberPanelsSubtitles[$page];
     }
 
     public function storeMemberIdentity() {
@@ -79,6 +80,14 @@ class MemberPanelController extends MainController {
 
         $_SESSION['user-first-name'] = $memberIdentity['first_name'];
         $_SESSION['user-last-name'] = $memberIdentity['last_name'];
+    }
+
+    public function getProgressionHistory() {
+        $accountManager = new AccountManager;
+        $memberProgressionHistory = $accountManager->getMemberProgressionHistory($_SESSION['user-email']);
+
+        /* test à réaliser sur les données récupérées */
+        return $memberProgressionHistory;
     }
 
     public function renderMemberDataForm($twig) {
@@ -99,7 +108,7 @@ class MemberPanelController extends MainController {
         $subMenuPage = 'nutritionProgram';
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelTitle($subMenuPage)]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subtitle' => $this->getMemberPanelSubtitles($subMenuPage)]);
         echo $twig->render('member_panels/nutrition-program.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu()]);
         echo $twig->render('components/footer.html.twig');
     }
@@ -108,8 +117,8 @@ class MemberPanelController extends MainController {
         $subMenuPage = 'progression';
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelTitle($subMenuPage)]);
-        echo $twig->render('member_panels/nutrition-program.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
+        echo $twig->render('member_panels/progression.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'progressionHistory' => $this->getProgressionHistory()]);
         echo $twig->render('components/footer.html.twig');
     }
 }

@@ -10,6 +10,10 @@ footer i {
     font-size: 2.5em;
 }
 
+.back-to-dashboard-btn {
+    background-color: hsla(0, 0%, 100%, 1);
+}
+
 h2 {
     font-size: 0.9em;
     font-weight: normal;
@@ -37,12 +41,12 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-h3 {
+.btn span {
     font-size: 0.75em;
 }
 
 .dashboard-btn i {
-    margin-left: 30%;
+    /* margin-left: 30%; */
     font-size: 1.3em;
 }
 
@@ -54,10 +58,25 @@ footer li {
 /*           GLOBALS            */
 /********************************/
 
+.title-layer {
+    position: relative;
+}
+
+.back-to-dashboard-btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 51px;
+    height: 51px;
+}
+
 h2 {
     display: flex;
     align-items: center;
-    margin: 0 0 0 35px;
+    margin: 0 0 0 65px;
 }
 
 .member-panel-content {
@@ -66,10 +85,10 @@ h2 {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 84%;
-    height: calc(63vh - 70px);
+    width: 100%;
+    height: calc(73vh - 70px);
     margin: 27vh 0 70px 0;
-    padding: 5vh 8%;
+    padding: 3vh 8%;
 }
 
 .settings-btn {
@@ -89,7 +108,6 @@ h2 {
 
 .progression-graph-cnn {
     width: 80%;
-    padding: 5vh 0 3vh 0;
     position: relative;
 }
 
@@ -104,7 +122,7 @@ h2 {
 
 figcaption {
     position: absolute;
-    top: 5vh;
+    top: 0;
     width: 100%;
     text-align: center;
 }
@@ -140,18 +158,80 @@ figcaption {
 .dashboard-btn {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-content: center;
     width: 100%;
-    height: 30%;
+    height: 60px;
 }
 
-h3,
+.btn span,
 .dashboard-btn i {
     margin: auto 0;
 }
 
+.btn span {
+    width: 60%;
+}
+
+form {
+    width: 100%;
+    padding: 2.5vh 0;
+}
+
 h3 {
-    text-align: center;
-    width: 70%;
+    margin: 0;
+}
+
+input,
+select {
+    border: none;
+    border-bottom: 1px solid hsla(0, 0%, 0%, 1);
+}
+
+.form-fields {
+    width: 100%;
+    padding: 0 5%;
+}
+
+.form-fields input,
+.form-fields select {
+    height: 70%;
+}
+
+.tiny-btn,
+.large-btn,
+input[type=submit] {
+    height: 8vh;
+}
+
+.user-weight-input {
+    width: 26%;
+}
+
+select {
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    border: 0;
+    margin-top: 1vh;
+}
+
+.rounded-btn {
+    border-radius: 4vh;
+}
+
+table {
+    width: 100%;
+    padding: 2.5vh 0;
+    border-collapse: collapse;
+}
+
+tr {
+    height: 5vh;
+}
+
+.dashboard-panel h3:nth-child(3) {
+    margin-top: 2.5vh;
+    margin-bottom: 2vh;
 }

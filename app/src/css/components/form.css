@@ -2,25 +2,16 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
-    margin: 0 10%;
-    padding-top: 2vh;
 }
 
 input[type=email],
 input[type=text],
-input[type=password] {
-    width: 70%;
+input[type=password],
+input[type=number],
+select {
     margin: 1.5vh 0;
-    padding: 0px 10px 8px 10px;
+    padding: 1vh 5% 1vh 5%;
     background-color: inherit;
-    border: none;
-    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
-}
-
-input,
-input::placeholder {
-    color: white;
 }
 
 .form-links {
@@ -33,34 +24,23 @@ input::placeholder {
     padding: 0;
 }
 
-.tiny-button,
-.large-button,
-input[type=submit] {
-    height: 8vh;
-}
-
-.tiny-button,
-.large-button {
+.tiny-btn,
+.large-btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 2vh;
 }
 
-.tiny-button {
+.tiny-btn {
     width: 45%;
 }
 
-.tiny-button p {
+.tiny-btn p {
     margin: 0 10px;
     text-align: center;
 }
 
-.large-button {
+.large-btn {
     width: 100%;
-}
-
-input[type=submit] {
-    padding: 0;
-    border: none;
 }

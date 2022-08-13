@@ -14,9 +14,6 @@ footer li {
 
 .homepage-link i,
 .error-container,
-.tiny-button,
-.large-button,
-input[type=submit],
 footer i {
     color: hsla(0, 0%, 100%, 1);
 }
@@ -25,25 +22,20 @@ footer i {
     color: hsla(261, 57%, 55%, 1);
 }
 
-.light-to-dark-purple-bkgd {
-    background: linear-gradient(
-        135deg, 
-        hsla(261, 71%, 64%, 1) 0%,
-        hsla(261, 71%, 20%, 1) 100%
-    );
-}
-
-.purple-to-blue-bkgd {
-    background: linear-gradient(
-        135deg, 
-        hsla(260, 68%, 41%, 1) 0%,
-        hsla(260, 68%, 41%, 1) 50%,
-        hsla(261, 83%, 18%, 1) 100%
-    );
-}
-
-.error-container {
+h3,
+input,
+input::placeholder,
+select {
+    border: none;
     color: hsla(0, 0%, 100%, 1);
+}
+
+input[type=email],
+input[type=text],
+input[type=password],
+input[type=number],
+select {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
 }
 
 footer {
@@ -59,7 +51,7 @@ footer p {
 /********************************/
 
 .homepage-link i {
-    font-size: 1.5em;
+    font-size: 6vmin;
 }
 
 .connection-page-content {
@@ -79,11 +71,35 @@ footer p {
     width: 80%;
     margin: 0 10%;
     padding: 10px 0;
-    margin-bottom: 30px;
+    margin-bottom: 1vh;
 }
 
 .error-container p {
     text-align: center;
     margin: 0 10%;
     font-size: 0.8em;
+}
+
+form {
+    width: 80%;
+    margin: 0 10%;
+}
+
+input[type=email],
+input[type=text],
+input[type=password],
+input[type=number],
+select {
+    width: 70%;
+}
+
+input[type=submit] {
+    padding: 0;
+    border: none;
+}
+
+.tiny-btn,
+.large-btn,
+input[type=submit] {
+    height: 7vh;
 }

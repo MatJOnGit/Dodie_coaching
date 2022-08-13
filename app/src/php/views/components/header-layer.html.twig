@@ -15,7 +15,17 @@
 {% else %}
 <div id='page-name-cnn'>
     <div class='title-layer cloudy-bkgd'>
-        <h2>Mon tableau de bord</h1>
+        {% if subPanel is defined %}
+        <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        {% endif %}
+        <h2>
+            Mon tableau de bord
+        {% if subPanel is defined %}
+            > {{ subPanel }}
+        {% endif %}
+        </h2>
     </div>
 </div>
 {% endif %}

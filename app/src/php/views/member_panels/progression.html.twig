@@ -1,0 +1,29 @@
+<div class='member-panel-content dashboard-panel'>
+    <h3>Ajouter votre pesée</h3>
+    <form action='index.php?action=log-account' method='post'>
+        <div class='form-fields'>
+            <input type='number' name='user-weight' placeholder='Poids' class='user-weight-input' required />
+            <select name='report-date' id='date-selector' required>
+                <option value=''>Date de pesée</option>
+                <option value='current-weight'>A l'instant</option>
+                <option value='old-weight'>Autre date</option>
+            </select>
+        </div>
+        <input type='submit' value='Ajouter' class='btn rounded-btn purple-to-blue-bkgd' />
+    </form>
+    <h3>Vos derniers relevés</h3>
+    {% if progressionHistory is iterable %}
+    <table class='progression-logs'>
+        {% for key, progressionHistoryItem in progressionHistory %}
+        <tr>
+            <td><button>Supprimer</button></td>
+            <td>{{ progressionHistoryItem.report_date }}</td>
+            <td>{{ progressionHistoryItem.current_weight }}</td>
+            <td><button>Editer</button></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class='no-progression'>Aucune progression n'a encore été enregistrée</p>
+    {% endif %}
+</div>

@@ -45,7 +45,7 @@ footer li {
 .showcase-content {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 11vh - 16vh - 70px);
+    height: calc(73vh - 70px);
     margin: calc(11vh + 16vh) 0 70px 0;
 }
 
@@ -55,6 +55,10 @@ footer li {
 
 .showcase-error {
     padding: 30px;
+}
+
+.rounded-btn {
+    border-radius: 3.5vh;
 }
 
 /*****************************************/

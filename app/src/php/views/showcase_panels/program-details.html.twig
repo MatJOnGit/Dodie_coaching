@@ -1,4 +1,4 @@
-<div class='showcase-content program-details-container {{ program.name }}-program'>
+<div class='showcase-panel program-details-container {{ program.name }}-program'>
     <div class='program-details glowy-bkgd'>
         <a href='index.php?page=programslist' class='btn rounded-btn blue-bkgd'>
             <i class="fa-solid fa-arrow-left-long"></i>
@@ -11,7 +11,6 @@
             <p>{{ program.subscriptionPrice }} €</p>
         </div>
 
-        {# remove once every program description is implemented #}
         {% if program.description != NULL %}
         <div class='program-description'>
             <p>{{ program.description | raw }}</p>

@@ -41,10 +41,6 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-.btn span {
-    font-size: 0.75em;
-}
-
 .dashboard-btn i {
     /* margin-left: 30%; */
     font-size: 1.3em;
@@ -79,16 +75,23 @@ h2 {
     margin: 0 0 0 65px;
 }
 
-.member-panel-content {
+.member-panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
     width: 100%;
     height: calc(73vh - 70px);
     margin: 27vh 0 70px 0;
-    padding: 3vh 8%;
+    padding: 3vh 6%;
+}
+
+.dashboard-panel {
+    justify-content: center;
+}
+
+.progress-panel {
+    justify-content: flex-start;
 }
 
 .settings-btn {
@@ -162,6 +165,7 @@ figcaption {
     align-content: center;
     width: 100%;
     height: 60px;
+    text-align: center;
 }
 
 .btn span,
@@ -170,7 +174,7 @@ figcaption {
 }
 
 .btn span {
-    width: 60%;
+    width: 65%;
 }
 
 form {
@@ -190,7 +194,6 @@ select {
 
 .form-fields {
     width: 100%;
-    padding: 0 5%;
 }
 
 .form-fields input,
@@ -201,11 +204,12 @@ select {
 .tiny-btn,
 .large-btn,
 input[type=submit] {
-    height: 8vh;
+    width: 30%;
+    height: 7vh;
 }
 
 .user-weight-input {
-    width: 26%;
+    width: 25%;
 }
 
 select {
@@ -218,13 +222,12 @@ input[type=submit] {
 }
 
 .rounded-btn {
-    border-radius: 4vh;
+    border-radius: 5vh;
 }
 
 table {
     width: 100%;
     padding: 2.5vh 0;
-    border-collapse: collapse;
 }
 
 tr {
@@ -234,4 +237,23 @@ tr {
 .dashboard-panel h3:nth-child(3) {
     margin-top: 2.5vh;
     margin-bottom: 2vh;
+}
+
+.progress-btn {
+    color: white;
+    padding: 2.5vh;
+    border-radius: 50%;
+}
+
+tr {
+    border-collapse: collapse;
+}
+
+tr td:nth-child(2) {
+    width: 45%;
+}
+
+td {
+    text-align: center;
+    padding: 1vh 0;
 }

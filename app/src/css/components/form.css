@@ -29,7 +29,7 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2vh;
+    margin-bottom: 3vh;
 }
 
 .tiny-btn {

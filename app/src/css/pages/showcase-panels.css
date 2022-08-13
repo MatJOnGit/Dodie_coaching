@@ -42,14 +42,13 @@ footer li {
 /********************************/
 /*           GLOBALS            */
 /********************************/
-.showcase-content {
+.showcase-panel {
     display: flex;
     flex-direction: column;
-    height: calc(73vh - 70px);
-    margin: calc(11vh + 16vh) 0 70px 0;
+    margin: 27vh 0 70px 0;
 }
 
-.showcase-content span i {
+.showcase-panel span i {
     font-size: 1.7em;
 }
 
@@ -89,11 +88,6 @@ footer li {
 /***********************************************/
 /*     PROGRAMSLIST & PROGRAMDETAILS PAGES     */
 /***********************************************/
-.programs-list,
-.program-details-container {
-    overflow-y: scroll;
-}
-
 .programs-list li,
 .program-details-container {
     background-size: cover;
@@ -112,7 +106,7 @@ footer li {
     background-image: url('../../../img/program_backgrounds/halfyearly-sub.jpg');
 }
 
-.showcase-content i {
+.showcase-panel i {
     margin-right: 5px;
 }
 /*---------------------------------------------*/
@@ -122,8 +116,6 @@ footer li {
 /*     PROGRAMS LIST LAYER     */
 /*******************************/
 .programs-list {
-    align-items: normal;
-    width: 100%;
     padding: 0;
 }
 
@@ -183,7 +175,7 @@ h2 {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    height: 100%;
+    min-height: calc(73vh - 70px);
     padding: 20px;
 }
 
@@ -204,5 +196,9 @@ h2 {
 
 .program-details a:last-child {
     align-self: flex-end;
+}
+
+.rounded-btn {
+    padding: 17px 10%;
 }
 /*-------------------------------*/

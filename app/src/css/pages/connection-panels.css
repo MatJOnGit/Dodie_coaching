@@ -54,35 +54,34 @@ footer p {
     font-size: 6vmin;
 }
 
-.connection-page-content {
+.connection-panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
     height: calc(100vh - 11vh - 70px);
     margin: 11vh 0 70px 0;
+    padding: 0 10%;
+}
+
+.error-container,
+form {
+    width: 100%;
 }
 
 .error-container {
     display:flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    margin: 0 10%;
-    padding: 10px 0;
-    margin-bottom: 1vh;
+    width: 100%;
+    margin-bottom: 4vh;
+    padding: 2vh 10%;
 }
 
 .error-container p {
     text-align: center;
     margin: 0 10%;
-    font-size: 0.8em;
-}
-
-form {
-    width: 80%;
-    margin: 0 10%;
+    font-size: 3.5vmin;
 }
 
 input[type=email],
@@ -95,11 +94,16 @@ select {
 
 input[type=submit] {
     padding: 0;
-    border: none;
 }
 
 .tiny-btn,
 .large-btn,
 input[type=submit] {
     height: 7vh;
+}
+
+.btn span {
+    font-size: 1em;
+    text-align: center;
+    width: 90%;
 }

@@ -49,7 +49,7 @@ input[type=text],
 input[type=password],
 input[type=number],
 select {
-    font-size: 4vmin;
+    font-size: 1.2em;
 }
 
 .error-container p,

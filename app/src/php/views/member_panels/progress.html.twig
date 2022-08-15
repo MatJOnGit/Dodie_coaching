@@ -1,6 +1,6 @@
-<div class='member-panel progress-panel'>
+<div class='member-panel'>
     <h3>Ajouter votre pesée</h3>
-    <form action='index.php?action=log-account' method='post'>
+    <form action='index.php?action=add-weight-report' method='post'>
         <div class='form-fields'>
             <input type='number' name='user-weight' placeholder='Poids' class='user-weight-input' required />
             <select name='report-date' id='date-selector' required>
@@ -12,17 +12,19 @@
         <input type='submit' value='Ajouter' class='btn purple-to-blue-bkgd' />
     </form>
     <h3>Vos derniers relevés</h3>
-    {% if progressionHistory is iterable %}
+    {% if progressHistory is iterable %}
     <table class='progression-logs'>
-        {% for key, progressionHistoryItem in progressionHistory %}
+        {% for progressHistoryItem in progressHistory %}
         <tr>
             <td>
                 <button class='btn progress-btn purple-to-blue-bkgd'>
                     <i class="fa-solid fa-ban"></i>
                 </button>
             </td>
-            <td>{{ progressionHistoryItem.report_date | date('d/m/Y à h:i')}}</td>
-            <td>{{ progressionHistoryItem.current_weight }} kg</td>
+            <td>
+                {{ progressHistoryItem.report_date  | date('d/m/Y à h:i')}}<br>
+                {{ progressHistoryItem.current_weight }} kg  
+            </td>
             <td>
                 <button class='btn progress-btn purple-to-blue-bkgd'>
                     <i class="fa-solid fa-pen-to-square"></i>

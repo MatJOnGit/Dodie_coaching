@@ -57,19 +57,8 @@ class ConnectionController extends MainController {
         return $isRegistrationFormVerified;
     }
 
-    public function getUserEmail() {
-        return $_SESSION['user-email'];
-    }
-
     public function getUserPassword() {
         return $_SESSION['user-password'];
-    }
-
-    public function verifyUserInDatabase() {
-        $accountManager = new AccountManager;
-        $dbUserPassword = $accountManager->getUserPassword($this->getUserEmail());
-
-        return $dbUserPassword;
     }
 
     public function updateLoginDate() {

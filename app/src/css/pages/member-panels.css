@@ -90,10 +90,6 @@ h2 {
     justify-content: center;
 }
 
-.progress-panel {
-    justify-content: flex-start;
-}
-
 .settings-btn {
     position: absolute;
     top: 0;
@@ -104,17 +100,17 @@ h2 {
     padding: 3vh;
 }
 
-.progression-graph-cnn,
-#user-progression-graph {
+.progress-graph-cnn,
+#user-progress-graph {
     height: 20vh;
 }
 
-.progression-graph-cnn {
+.progress-graph-cnn {
     width: 80%;
     position: relative;
 }
 
-#user-progression-graph {
+#user-progress-graph {
     display: flex;
     justify-content: center;
     align-items: center;

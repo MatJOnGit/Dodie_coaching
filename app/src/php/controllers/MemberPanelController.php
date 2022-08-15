@@ -1,7 +1,6 @@
 <?php
 
 require ('app/src/php/controllers/MainController.php');
-require('app/src/php/model/ProgramManager.php');
 require('app/src/php/model/DashboardManager.php');
 require ('app/src/php/model/AccountManager.php');
 
@@ -14,14 +13,24 @@ class MemberPanelController extends MainController {
         'components/footer'
     ];
 
+    public $memberPanelsURL = array(
+        'login' => 'index.php?page=login',
+        'dashboard' => 'index.php?page=dashboard',
+        'progress' => 'index.php?page=progress',
+        'getToKnowYou' => 'index.php?page=get-to-know-you',
+        'nutritionProgram' => 'index.php?page=nutrition-program',
+        'meetings' => 'index.php?page=meetings',
+        'subscription' => 'index.php?page=subscription'
+    );
+
     public $memberPanelsSubtitles = array(
         'nutritionProgram' => 'Programme nutrition',
-        'progression' => 'Progression',
+        'progress' => 'Progression',
         'meetings' => 'Rendez-vous',
         'subscriptions' => 'Abonnement'
     );
 
-    public $memberPanels = ['dashboard', 'get-to-know-you', 'meetings'];
+    public $memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
 
     public function verifySessionData() {
         $isMemberVerified = ((isset($_SESSION['user-email'])) && (isset($_SESSION['user-password']))) ? true : false;
@@ -49,6 +58,12 @@ class MemberPanelController extends MainController {
         $userStaticData = $accountManager->getUserStaticData($_SESSION['user-email']);
 
         return $userStaticData;
+    }
+
+    public function verifyAddWeightFormData() {
+        $isWeightReportVerified = (isset($_POST['user-weight'])) && (isset($_POST['report-date'])) ? true : false;
+
+        return $isWeightReportVerified;
     }
 
     public function getMissingUserStaticDataKey($userStaticData) {
@@ -82,12 +97,28 @@ class MemberPanelController extends MainController {
         $_SESSION['user-last-name'] = $memberIdentity['last_name'];
     }
 
-    public function getProgressionHistory() {
-        $accountManager = new AccountManager;
-        $memberProgressionHistory = $accountManager->getMemberProgressionHistory($_SESSION['user-email']);
+    public function getProgressHistory() {
+        $dashboardManager = new DashboardManager;
+        $memberProgressHistory = $dashboardManager->getMemberProgressHistory($_SESSION['user-email']);
 
-        /* test à réaliser sur les données récupérées */
-        return $memberProgressionHistory;
+        return $memberProgressHistory;
+    }
+
+    public function addWeightReport() {
+        $dashboardManager = new DashboardManager;
+        date_default_timezone_set('Europe/Paris');
+        $reportDate = (!isset($_POST['report-past-date'])) ? date('Y-m-d h-i-s') : ($_POST['report-past-date']);
+        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
+
+        $dashboardManager->addNewWeightReport($userId, $_POST['user-weight'], $reportDate);
+    }
+
+    public function getReportDate() {
+        date_default_timezone_set('Europe/Paris');
+        $date = date('Y-m-d h:i:s');
+        $reportDate = ($_POST['report-date'] === 'current-weight') ? $date : false; 
+        
+        return $reportDate;
     }
 
     public function renderMemberDataForm($twig) {
@@ -113,12 +144,14 @@ class MemberPanelController extends MainController {
         echo $twig->render('components/footer.html.twig');
     }
 
-    public function renderMemberProgression($twig) {
-        $subMenuPage = 'progression';
+    public function renderMemberProgress($twig) {
+        $subMenuPage = 'progress';
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
-        echo $twig->render('member_panels/progression.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'progressionHistory' => $this->getProgressionHistory()]);
+
+        echo $twig->render('member_panels/progress.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'progressHistory' => $this->getProgressHistory()]);
+
         echo $twig->render('components/footer.html.twig');
     }
 }

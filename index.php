@@ -16,7 +16,7 @@ try {
         $page = htmlspecialchars($_GET['page']);
         $showcasePages = ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'];
         $connectionPages = ['login', 'registering', 'password-retrieving'];
-        $memberPanelPages = ['dashboard', 'nutrition-program', 'progression', 'get-to-know-you', 'meetings'];
+        $memberPanelPages = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
 
         if (in_array($page, $showcasePages)) {
             require('app/src/php/controllers/ShowcaseController.php');
@@ -101,9 +101,9 @@ try {
                     $memberPanelController->renderMemberNutritionProgram($twig);
                 }
 
-                elseif ($page === 'progression') {
+                elseif ($page === 'progress') {
                     $memberPanelController->storeMemberIdentity();
-                    $memberPanelController->renderMemberProgression($twig);
+                    $memberPanelController->renderMemberProgress($twig);
                 }
 
                 elseif ($page === 'get-to-know-you'){
@@ -127,7 +127,7 @@ try {
             $connectionController = new ConnectionController;
 
             if ($connectionController->verifyLoginFormData()) {
-                $dbUserPassword = $connectionController->verifyUserInDatabase();
+                $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
                 if (empty($dbUserPassword)) {
                     $connectionController->setFormErrorMessage('unknownEmail');
                     header("location:{$connectionController->connectionPagesURL['login']}");
@@ -157,7 +157,7 @@ try {
             require('app/src/php/controllers/ConnectionController.php');
             $connectionController = new ConnectionController;
             if ($connectionController->verifyRegisteringFormData()) {
-                $dbUserPassword = $connectionController->verifyUserInDatabase();
+                $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
 
                 if (!empty($dbUserPassword)) {
                     $connectionController->setFormErrorMessage('usedEmail');
@@ -179,7 +179,26 @@ try {
                 $connectionController->setFormErrorMessage('invalidFormData');
                 header("Location:{$connectionController->connectionPagesURL['registering']}");
             }
-            
+        }
+
+        elseif ($_GET['action'] === 'add-weight-report') {
+            require('app/src/php/controllers/MemberPanelController.php');
+            $memberPanelController = new MemberPanelController;
+
+            if ($memberPanelController->verifyAddWeightFormData()) {
+                $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+                if (empty($dbUserPassword)) {
+                    header("location:{$memberPanelController->memberPanelsURL['login']}");
+                }
+                
+                else {
+                    $memberPanelController->addWeightReport();
+                    header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                }
+            }
+            else {
+                header("location:{$memberPanelController->memberPanelsURL['progress']}");
+            }
         }
     }
 

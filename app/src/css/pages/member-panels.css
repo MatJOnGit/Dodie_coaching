@@ -1,6 +1,16 @@
 /*********************************/
 /*             THEME             */
 /*********************************/
+h2 {
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 1.3em;
+    margin: 0;
+}
+
 #title-layer i,
 footer i {
     color: hsla(268, 71%, 41%, 1);
@@ -12,11 +22,6 @@ footer i {
 
 .back-to-dashboard-btn {
     background-color: hsla(0, 0%, 100%, 1);
-}
-
-h2 {
-    font-size: 0.9em;
-    font-weight: normal;
 }
 
 .settings-btn i {
@@ -81,13 +86,13 @@ h2 {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: calc(73vh - 70px);
     margin: 27vh 0 70px 0;
-    padding: 3vh 6%;
+    padding: 3vh 10%;
 }
 
 .dashboard-panel {
     justify-content: center;
+    height: calc(73vh - 70px);
 }
 
 .settings-btn {
@@ -178,10 +183,6 @@ form {
     padding: 2.5vh 0;
 }
 
-h3 {
-    margin: 0;
-}
-
 input,
 select {
     border: none;
@@ -237,7 +238,7 @@ tr {
 
 .progress-btn {
     color: white;
-    padding: 2.5vh;
+    padding: 2vh;
     border-radius: 50%;
 }
 

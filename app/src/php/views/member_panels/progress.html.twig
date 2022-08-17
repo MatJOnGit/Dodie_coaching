@@ -2,7 +2,7 @@
     <h3>Ajouter votre pesée</h3>
     <form action='index.php?action=add-weight-report' method='post'>
         <div class='form-fields'>
-            <input type='number' name='user-weight' placeholder='Poids' class='user-weight-input' required />
+            <input type='number' step='.01' name='user-weight' placeholder='Poids' class='user-weight-input' required />
             <select name='report-date' id='date-selector' required>
                 <option value=''>Date de pesée</option>
                 <option value='current-weight'>A l'instant</option>
@@ -17,17 +17,15 @@
         {% for progressHistoryItem in progressHistory %}
         <tr>
             <td>
-                <button class='btn progress-btn purple-to-blue-bkgd'>
-                    <i class="fa-solid fa-ban"></i>
-                </button>
+                le {{ progressHistoryItem.report_date  | date('d/m/Y')}}<br>
+                {{ progressHistoryItem.report_date  | date('à H:i')}}
             </td>
             <td>
-                {{ progressHistoryItem.report_date  | date('d/m/Y à h:i')}}<br>
                 {{ progressHistoryItem.current_weight }} kg  
             </td>
             <td>
                 <button class='btn progress-btn purple-to-blue-bkgd'>
-                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-ban"></i>
                 </button>
             </td>
         </tr>

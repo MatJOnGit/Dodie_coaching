@@ -28,10 +28,10 @@ class DashboardManager extends Manager {
 
     public function addNewWeightReport ($userId, $userWeight, $reportDate) {
         $db = $this->dbConnect();
-        $weightReportSetterQuery = 'INSERT INTO users_dynamic_data (report_date, user_id, current_weight) VALUES (?, ?, ?)';
-        $weightReportSetterStatement = $db->prepare($weightReportSetterQuery);
-        $weightReportSetterStatement->execute([$reportDate, $userId, $userWeight]);
-        $isWeightReported = $weightReportSetterStatement->fetchAll();
+        $weightReporterQuery = 'INSERT INTO users_dynamic_data (report_date, user_id, current_weight) VALUES (?, ?, ?)';
+        $weightReporterStatement = $db->prepare($weightReporterQuery);
+        $weightReporterStatement->execute([$reportDate, $userId, $userWeight]);
+        $isWeightReported = $weightReporterStatement->fetchAll();
 
         return $isWeightReported;
     }

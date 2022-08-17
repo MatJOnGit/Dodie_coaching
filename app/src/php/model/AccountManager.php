@@ -56,14 +56,4 @@ class AccountManager extends Manager {
 
         return $memberIdentity;
     }
-
-    public function getMemberProgressHistory($accountEmail) {
-        $db = $this->dbConnect();
-        $memberProgressGetterQuery = "SELECT udd.report_date, udd.current_weight FROM users_dynamic_data udd INNER JOIN accounts a ON udd.user_id = a.id WHERE a.email = ? ORDER BY report_date DESC LIMIT 10";
-        $memberProgressGetterStatement = $db->prepare($memberProgressGetterQuery);
-        $memberProgressGetterStatement->execute([$accountEmail]);
-        $memberProgress = $memberProgressGetterStatement->fetchAll();
-        
-        return $memberProgress;
-    }
 }

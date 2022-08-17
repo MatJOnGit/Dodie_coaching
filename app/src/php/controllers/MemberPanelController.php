@@ -61,7 +61,12 @@ class MemberPanelController extends MainController {
     }
 
     public function verifyAddWeightFormData() {
-        $isWeightReportVerified = (isset($_POST['user-weight'])) && (isset($_POST['report-date'])) ? true : false;
+        $weightReport = floatval(htmlspecialchars($_POST['user-weight']));
+        $weightDateType = htmlspecialchars($_POST['report-date']);
+        $weightDateTypes = ["current-weight", "old-weight"];
+
+        // add a test if the weightDateType is set to 'old-weight'
+        $isWeightReportVerified = ((is_numeric($weightReport)) && ($weightReport != 0) && (in_array($weightDateType, $weightDateTypes))) ? true : false;
 
         return $isWeightReportVerified;
     }
@@ -107,10 +112,13 @@ class MemberPanelController extends MainController {
     public function addWeightReport() {
         $dashboardManager = new DashboardManager;
         date_default_timezone_set('Europe/Paris');
-        $reportDate = (!isset($_POST['report-past-date'])) ? date('Y-m-d h-i-s') : ($_POST['report-past-date']);
-        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
 
-        $dashboardManager->addNewWeightReport($userId, $_POST['user-weight'], $reportDate);
+        // add a test if the weightDateType is set to 'old-weight'
+        $reportDate = (!isset($_POST['report-past-date'])) ? date('Y-m-d H-i-s') : ($_POST['report-past-date']);
+        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
+        $userWeight = floatval(number_format($_POST['user-weight'], 2));
+
+        $dashboardManager->addNewWeightReport($userId, $userWeight, $reportDate);
     }
 
     public function getReportDate() {

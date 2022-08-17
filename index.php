@@ -187,13 +187,13 @@ try {
 
             if ($memberPanelController->verifyAddWeightFormData()) {
                 $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
-                if (empty($dbUserPassword)) {
-                    header("location:{$memberPanelController->memberPanelsURL['login']}");
+                if (!empty($dbUserPassword)) {
+                    $memberPanelController->addWeightReport();
+                    header("location:{$memberPanelController->memberPanelsURL['progress']}");
                 }
                 
                 else {
-                    $memberPanelController->addWeightReport();
-                    header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                    header("location:{$memberPanelController->memberPanelsURL['login']}");
                 }
             }
             else {

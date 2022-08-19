@@ -157,8 +157,17 @@ class MemberPanelController extends MainController {
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
-
         echo $twig->render('member_panels/progress.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'progressHistory' => $this->getProgressHistory()]);
+        echo $twig->render('components/footer.html.twig');
+    }
+
+    public function renderMeetings($twig) {
+        $subMenuPage = 'meetings';
+
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
+
+        echo $twig->render('member_panels/meetings.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu()]);
 
         echo $twig->render('components/footer.html.twig');
     }

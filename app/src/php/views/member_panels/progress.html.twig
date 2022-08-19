@@ -18,7 +18,7 @@
         <tr>
             <td>
                 le {{ progressHistoryItem.report_date  | date('d/m/Y')}}<br>
-                {{ progressHistoryItem.report_date  | date('à H:i')}}
+                {{ progressHistoryItem.report_date  | date('à H')}}h{{ progressHistoryItem.report_date  | date('i')}}
             </td>
             <td>
                 {{ progressHistoryItem.current_weight }} kg  

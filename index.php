@@ -106,13 +106,18 @@ try {
                     $memberPanelController->renderMemberProgress($twig);
                 }
 
+                elseif ($page === 'meetings'){
+                    $memberPanelController->storeMemberIdentity();
+                    $memberPanelController->renderMeetings($twig);
+                }
+
                 elseif ($page === 'get-to-know-you'){
                     $memberPanelController->renderMemberDataForm($twig);
                 }
 
-                else {
-                    echo "Le compte est bien vérifié et des données existent, mais cette page du member panel n'existe pas encore ...";
-                }
+                // else {
+                //     echo "Le compte est bien vérifié et des données existent, mais cette page du member panel n'existe pas encore ...";
+                // }
             }
         }
         
@@ -127,7 +132,7 @@ try {
             $connectionController = new ConnectionController;
 
             if ($connectionController->verifyLoginFormData()) {
-                $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
+                $dbUserPassword = $connectionController->verifyUserInDatabase($connectionController->getUserEmail());
                 if (empty($dbUserPassword)) {
                     $connectionController->setFormErrorMessage('unknownEmail');
                     header("location:{$connectionController->connectionPagesURL['login']}");

@@ -32,6 +32,12 @@ class MemberPanelController extends MainController {
 
     public $memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
 
+    public $appointmentDelay = 48;
+
+    public $weekDays = array(" Dimanche "," Lundi "," Mardi "," Mercredi "," Jeudi "," vendredi "," samedi ");
+    
+    public $months =array(1=>" janvier "," février "," mars "," avril "," mai "," juin "," juillet "," août "," septembre "," octobre "," novembre "," décembre ");
+
     public function verifySessionData() {
         $isMemberVerified = ((isset($_SESSION['user-email'])) && (isset($_SESSION['user-password']))) ? true : false;
 
@@ -109,6 +115,42 @@ class MemberPanelController extends MainController {
         return $memberProgressHistory;
     }
 
+    public function getMeetingSlots() {
+        $dashboardManager = new DashboardManager;
+        $availableMeetingSlots = $dashboardManager->getAvailableMeetingsSlots($this->appointmentDelay);
+        $meetingSlotsArray = $this->getMeetingSlotsArray($availableMeetingSlots);
+        $sortedMeetingSlotsArray = $this->getSortedMeetingSlots($meetingSlotsArray);
+
+        return $sortedMeetingSlotsArray;
+    }
+
+    public function getMeetingSlotsArray($meetings) {
+        $meetingsSlotsArray = [];
+        foreach($meetings as $meeting) {
+            array_push($meetingsSlotsArray, $meeting['slot_date']);
+        }
+
+        return $meetingsSlotsArray;
+    }
+
+    public function getSortedMeetingSlots($meetings) {
+        $sortedMeetings = [];
+
+        foreach ($meetings as $key => $meeting) {
+            $meetingDay = $this->weekDays[date('w', strtotime($meeting))] . ' ' . date('j', strtotime($meeting)) . ' ' . $this->months[date('n', strtotime($meeting))];
+            $meetingSlot = explode(' ', $meetings[$key])[1];
+
+            if (!array_key_exists($meetingDay, $sortedMeetings)) {
+                $sortedMeetings += [$meetingDay => array($meetingSlot)];
+            }
+            else {
+                array_push($sortedMeetings[$meetingDay], $meetingSlot);
+            }
+        }
+
+        return $sortedMeetings;
+    }
+
     public function addWeightReport() {
         $dashboardManager = new DashboardManager;
         date_default_timezone_set('Europe/Paris');
@@ -166,9 +208,7 @@ class MemberPanelController extends MainController {
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
-
-        echo $twig->render('member_panels/meetings.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu()]);
-
+        echo $twig->render('member_panels/meetings.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'meetingSlots' => $this->getMeetingSlots()]);
         echo $twig->render('components/footer.html.twig');
     }
 }

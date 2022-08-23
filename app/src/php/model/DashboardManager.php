@@ -51,8 +51,18 @@ class DashboardManager extends Manager {
         $memberProgressGetterQuery = "SELECT udd.report_date, udd.current_weight FROM users_dynamic_data udd INNER JOIN accounts a ON udd.user_id = a.id WHERE a.email = ? ORDER BY report_date DESC LIMIT 10";
         $memberProgressGetterStatement = $db->prepare($memberProgressGetterQuery);
         $memberProgressGetterStatement->execute([$userEmail]);
-        $memberProgress = $memberProgressGetterStatement->fetchAll(PDO::FETCH_ASSOC);
+        $memberProgress = $memberProgressGetterStatement->fetchAll();
         
         return $memberProgress;
+    }
+
+    public function getAvailableMeetingsSlots($appointmentDelay) {
+        $db = $this->dbConnect();
+        $availableMeetingSlotsGetterQuery = "SELECT slot_date FROM `schedule_slots` WHERE slot_date >= (CURRENT_TIMESTAMP + interval ? DAY_HOUR) AND slot_status = 'available' ORDER BY slot_date";
+        $availableMeetingSlotsGetterStatement = $db->prepare($availableMeetingSlotsGetterQuery);
+        $availableMeetingSlotsGetterStatement->execute([$appointmentDelay]);
+        $availableMeetingSlots = $availableMeetingSlotsGetterStatement->fetchAll();
+
+        return $availableMeetingSlots;
     }
 }

@@ -270,6 +270,10 @@ td {
     padding: 0 5% 0 0;
 }
 
+.appointment-days::-webkit-scrollbar {
+    display: none;
+}
+
 .appointment-days > li {
     min-width: 110px;
     text-align: center;

@@ -280,6 +280,11 @@ td {
     margin: 0 3%;
 }
 
+.meeting-day {
+    height: 5vh;
+    margin: 0;
+}
+
 .daily-schedule {
     display: flex;
     flex-direction: column;

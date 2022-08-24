@@ -4,70 +4,27 @@
         <input type='text' name='meeting-date' placeholder='Veuillez choisir une date' class='user-next-meeting' disabled />
         <input type='submit' value='Ajouter' class='btn purple-to-blue-bkgd' />
 
+        {% if meetingSlots is iterable %}
         <ul class='appointment-days'>
+            {% for meetingDay, dailyMeetingSlot in meetingSlots %}
             <li>
-                <h4>Lundi<br>22/08</h4>
+                <h4 class='meeting-day'>{{ meetingDay }}</h4>
+                {% if dailyMeetingSlot is iterable %}
                 <ul class='daily-schedule'>
-                    {# Javascript will listen button click event to get button id and complete the form input #}
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>16h</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>16h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>18h</button>
-                    </li>
+                    {% for meetingSlotTime in dailyMeetingSlot %}
+                        <li class='btn rounded-btn purple-to-blue-bkgd'>
+                            <button>{{ meetingSlotTime | date ('H') }}h{{ meetingSlotTime | date ('i') }}</button>
+                        </li>
+                    {% endfor %}
                 </ul>
+                {% endif %}
             </li>
-            <li>
-                <h4>Mardi<br>23/08</h4>
-                <ul class='daily-schedule'>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>18h</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>18h30</button>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h4>Mercredi<br>24/08</h4>
-                <ul class='daily-schedule'>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>18h</button>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h4>Jeudi<br>25/08</h4>
-                <ul class='daily-schedule'>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>16h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>17h30</button>
-                    </li>
-                    <li class='btn rounded-btn purple-to-blue-bkgd'>
-                        <button>18h</button>
-                    </li>
-                </ul>
-            </li>
+            {% endfor %}
         </div>
+
+        {% else %}
+        <p>Plus aucun rendez-vous n'est pour le moment disponible.</p>
+
+        {% endif %}
     </form>
 </div>

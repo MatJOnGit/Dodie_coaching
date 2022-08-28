@@ -17,4 +17,10 @@
         </ul>
         <p class='copyright-text'>2022-2026 | Copyright | ® Dodie Corp, tous droits réservés</p>
     </footer>
+
+    {% if pageScripts is iterable %}
+    {% for pageScript in pageScripts %}
+    <script src='./app/src/js/{{ pageScript }}.js'></script>
+    {% endfor %}
+    {% endif %}
 </body>

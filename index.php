@@ -205,6 +205,10 @@ try {
                 header("location:{$memberPanelController->memberPanelsURL['progress']}");
             }
         }
+
+        elseif ($_GET['action'] === 'add-new-appointment') {
+            echo "Enregistrement d'un nouveau rendez-vous le " . $_POST['meeting-date'] . ", pour l'utilisateur dont l'email est " . $_SESSION['user-email'];
+        }
     }
 
     else {

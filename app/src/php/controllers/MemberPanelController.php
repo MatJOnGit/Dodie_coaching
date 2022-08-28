@@ -13,6 +13,11 @@ class MemberPanelController extends MainController {
         'components/footer'
     ];
 
+    public $meetingScripts = [
+        'Meetings.model',
+        'meetingsApp'
+    ];
+
     public $memberPanelsURL = array(
         'login' => 'index.php?page=login',
         'dashboard' => 'index.php?page=dashboard',
@@ -32,16 +37,16 @@ class MemberPanelController extends MainController {
 
     public $memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
 
-    public $appointmentDelay = 48;
-
-    public $weekDays = array(" Dimanche "," Lundi "," Mardi "," Mercredi "," Jeudi "," vendredi "," samedi ");
-    
-    public $months =array(1=>" janvier "," février "," mars "," avril "," mai "," juin "," juillet "," août "," septembre "," octobre "," novembre "," décembre ");
+    public $appointmentDelay = 24;
 
     public function verifySessionData() {
         $isMemberVerified = ((isset($_SESSION['user-email'])) && (isset($_SESSION['user-password']))) ? true : false;
 
         return $isMemberVerified;
+    }
+
+    public function getMeetingScripts() {
+        return $this->meetingScripts;
     }
 
     public function verifyAccountPassword() {
@@ -119,9 +124,9 @@ class MemberPanelController extends MainController {
         $dashboardManager = new DashboardManager;
         $availableMeetingSlots = $dashboardManager->getAvailableMeetingsSlots($this->appointmentDelay);
         $meetingSlotsArray = $this->getMeetingSlotsArray($availableMeetingSlots);
-        $sortedMeetingSlotsArray = $this->getSortedMeetingSlots($meetingSlotsArray);
+        $sortedMeetingSlots = $this->getSortedMeetingSlots($meetingSlotsArray);
 
-        return $sortedMeetingSlotsArray;
+        return $sortedMeetingSlots;
     }
 
     public function getMeetingSlotsArray($meetings) {
@@ -137,7 +142,8 @@ class MemberPanelController extends MainController {
         $sortedMeetings = [];
 
         foreach ($meetings as $key => $meeting) {
-            $meetingDay = $this->weekDays[date('w', strtotime($meeting))] . ' ' . date('j', strtotime($meeting)) . ' ' . $this->months[date('n', strtotime($meeting))];
+            $createDate = new DateTime($meeting);
+            $meetingDay = $createDate->format('Y-m-d');
             $meetingSlot = explode(' ', $meetings[$key])[1];
 
             if (!array_key_exists($meetingDay, $sortedMeetings)) {
@@ -149,6 +155,13 @@ class MemberPanelController extends MainController {
         }
 
         return $sortedMeetings;
+    }
+
+    public function getMemberScheduledMeeting() {
+        $dashboardManager = new DashboardManager;
+        $memberScheduledMeeting = $dashboardManager->getMemberNextMeetingSlots($_SESSION['user-email']);
+
+        return (!empty($memberScheduledMeeting) ? $memberScheduledMeeting[0] : NULL);
     }
 
     public function addWeightReport() {
@@ -199,7 +212,7 @@ class MemberPanelController extends MainController {
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
-        echo $twig->render('member_panels/progress.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'progressHistory' => $this->getProgressHistory()]);
+        echo $twig->render('member_panels/progress.html.twig', ['progressHistory' => $this->getProgressHistory()]);
         echo $twig->render('components/footer.html.twig');
     }
 
@@ -208,7 +221,8 @@ class MemberPanelController extends MainController {
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
-        echo $twig->render('member_panels/meetings.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu(), 'meetingSlots' => $this->getMeetingSlots()]);
-        echo $twig->render('components/footer.html.twig');
+        echo $twig->render('member_panels/meetings.html.twig', ['meetingSlots' => $this->getMeetingSlots(), 'memberScheduledMeeting' => $this->getMemberScheduledMeeting()]);
+
+        echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getMeetingScripts()]);
     }
 }

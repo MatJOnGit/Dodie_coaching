@@ -4,7 +4,9 @@
     <div>
         <p>{{ memberScheduledMeeting.slot_date }}
     </div>
-    <button class='btn cancel-meeting-btn purple-to-blue-bkgd'>Annuler mon rendez-vous</button>
+    <div id='cancel-btn-container'>
+        <button class='btn cancel-meeting-btn purple-to-blue-bkgd'>Annuler mon rendez-vous</button>
+    </div>
 
     {% else %}
     <h3>Prendre un nouveau rendez-vous</h3>

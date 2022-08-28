@@ -141,11 +141,12 @@ class Meetings {
         if ((index >= 0) && (index <= this.getParseMeetingsData().length-2)) {
             this.setMeetingsListIndex(index);
         }
-        else if (index < 0) {
+        else if (index < 2) {
             this.setMeetingsListIndex(0);
         }
         else {
             this.setMeetingsListIndex(this.getParseMeetingsData().length-2);
+            console.log(this.getMeetingsListIndex())
         }
     }
 
@@ -181,8 +182,50 @@ class Meetings {
         this.addMeetingSlotButtonEventListeners();
     }
 
+    getCancelMeetingButton() {
+        return document.getElementsByClassName('cancel-meeting-btn')[0];
+    }
+
+    getCancelMeetingButtonContainer() {
+        return document.getElementById('cancel-btn-container');
+    }
+
+    displayCancelMeetingConfirmation() {
+        let confirmMeetingCancelationLink = document.createElement('a');
+        confirmMeetingCancelationLink.href = 'index.php?action=cancel-meeting';
+        confirmMeetingCancelationLink.classList = 'btn cancel-meeting-btn cancel-confirmation-btn red-bkgd';
+        confirmMeetingCancelationLink.textContent = 'Oui';
+
+        let meetingConcelationMessage = document.createElement('div');
+        meetingConcelationMessage.classList = 'cancelation-alert';
+        meetingConcelationMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce rendez-vous ?</p>';
+
+        let cancelMeetingCancelationButton = document.createElement('a');
+        cancelMeetingCancelationButton.href = 'index.php?page=meetings';
+        cancelMeetingCancelationButton.classList = 'btn cancel-meeting-btn cancel-confirmation-btn purple-to-blue-bkgd'
+        cancelMeetingCancelationButton.textContent = 'Non';
+
+        this.getCancelMeetingButtonContainer().innerHTML = '';
+        this.getCancelMeetingButtonContainer().appendChild(confirmMeetingCancelationLink)
+        this.getCancelMeetingButtonContainer().appendChild(meetingConcelationMessage)
+        this.getCancelMeetingButtonContainer().appendChild(cancelMeetingCancelationButton)
+
+    }
+
+    addCancelMeetingButtonEventListener() {
+        this.getCancelMeetingButton().addEventListener('click', () => {
+            this.displayCancelMeetingConfirmation();
+        })
+    }
+
     init() {
-        this.setParsedMeetingsData()
-        this.setMeetingsCalendar(0);
+        
+        if (this.getAppointmentTab()!=null) {
+            this.setParsedMeetingsData();
+            this.setMeetingsCalendar(0);
+        }
+        else if (this.getCancelMeetingButton()!=null) {
+            this.addCancelMeetingButtonEventListener();
+        }
     }
 }

@@ -1,42 +1,83 @@
 class Meetings {
     constructor() {
-        this.meetingDateInput = document.getElementById('user-next-meeting');
-        this.meetingFormSubmitButton = document.getElementById('appointment-form-submit-button');
-        this.appointmentTab = document.getElementById('appointment-tab');
-        this.scheduleNavElts = document.getElementsByClassName('schedule-days-nav')
-        this.previousDaysSchedule = this.scheduleNavElts[0];
-        this.nextDaysSchedule = this.scheduleNavElts[1];
-        this.maxDisplayedDays = 2;
-        this.parsedMeetingSlots;
-        this.meetingsListIndex;
+        this._appointmentTab = document.getElementById('appointment-tab');
+        this._meetingDateInput = document.getElementById('user-next-meeting');
+        this._meetingFormSubmitButton = document.getElementById('appointment-form-submit-button');
+        this._scheduleNavElts = document.getElementsByClassName('schedule-days-nav')
+
+        this._maxDisplayedDays = 2;
+        this._meetingsListIndex;
+        this._parsedMeetingsSlots;
+
+        this._nextDaysSchedule = this.scheduleNavElts[1];
+        this._previousDaysSchedule = this.scheduleNavElts[0];
+
+        this._displayTabNextElements = this.displayTabNextElements.bind(this)
+        this._displayTabPreviousElements = this.displayTabPreviousElements.bind(this)
     }
 
-    getMeetingsListIndex() {
-        return this.meetingsListIndex;
+    get appointmentTab() {
+        return this._appointmentTab;
     }
 
-    setMeetingsListIndex(index) {
-        this.meetingsListIndex = index;
+    get cancelMeetingButton() {
+        return document.getElementsByClassName('cancel-meeting-btn')[0];
+    }
+    
+    get cancelMeetingButtonContainer() {
+        return document.getElementById('cancel-btn-container');
     }
 
-    getParseMeetingsData() {
-        return this.parsedMeetingSlots;
+    get meetingDateInput() {
+        return this._meetingDateInput;
     }
 
-    getAppointmentTab() {
-        return this.appointmentTab;
+    get meetingFormSubmitButton() {
+        return this._meetingFormSubmitButton;
     }
 
-    setParsedMeetingsData() {
-        let meetingSlotData = document.getElementById('appointment-tab').attributes['data-meeting-slots'].textContent;
-        this.parsedMeetingSlots = Object.entries(JSON.parse(meetingSlotData));
+    get scheduleNavElts() {
+        return this._scheduleNavElts;
     }
 
-    addMeetingSlotButtonEventListeners() {
+    get maxDisplayedDays() {
+        return this._maxDisplayedDays;
+    }
+
+    get meetingsListIndex() {
+        return this._meetingsListIndex;
+    }
+
+    get parsedMeetingsSlots() {
+        return this._parsedMeetingsSlots;
+    }
+
+    get nextDaysSchedule() {
+        return this._nextDaysSchedule;
+    }
+
+    get previousDaysSchedule() {
+        return this._previousDaysSchedule;
+    }
+    
+    set meetingsListIndex(index) {
+        this._meetingsListIndex = index;
+    }
+
+    set parsedMeetingsSlots (jsonObject) {
+        this._parsedMeetingsSlots = jsonObject;
+    }
+
+    addCancelMeetingButtonEventListener() {
+        this.getCancelMeetingButton().addEventListener('click', () => {
+            this.displayCancelMeetingConfirmation();
+        })
+    }
+
+    addMeetingSlotButtonsEventListeners() {
         let meetingSlotButtons = document.querySelectorAll('.daily-schedule li button');
         meetingSlotButtons.forEach(meetingSlotButton => {
-            meetingSlotButton.addEventListener('click', event => {
-                event.preventDefault();
+            meetingSlotButton.addEventListener('click', () => {
                 let meetingSlotDate = meetingSlotButton.parentElement.parentElement.parentElement.getElementsByTagName('h4')[0].textContent;
                 let slotTime = meetingSlotButton.textContent;
                 let slotFormatedDate = meetingSlotDate.substring(meetingSlotDate.indexOf(' ') + 1);
@@ -47,41 +88,31 @@ class Meetings {
         })
     }
 
-    getFilteredMeetingArray() {
+    buildFilteredMeetingArray() {
         let meetingsArray = [];
 
         meetingsArray[0] = {
-            'date' : this.parsedMeetingSlots[this.getMeetingsListIndex()][0],
-            'slots' : this.parsedMeetingSlots[this.getMeetingsListIndex()][1]
+            'date' : this.parsedMeetingsSlots[this.meetingsListIndex][0],
+            'slots' : this.parsedMeetingsSlots[this.meetingsListIndex][1]
         };
 
-        if (this.parsedMeetingSlots.length >= 2) {
+        if (this.parsedMeetingsSlots.length >= 2) {
             meetingsArray[1] = {
-                'date' : this.parsedMeetingSlots[this.getMeetingsListIndex()+1][0],
-                'slots' : this.parsedMeetingSlots[this.getMeetingsListIndex()+1][1]
+                'date' : this.parsedMeetingsSlots[this.meetingsListIndex+1][0],
+                'slots' : this.parsedMeetingsSlots[this.meetingsListIndex+1][1]
             };
         }
 
         return meetingsArray;
     }
 
-    convertDateToFrenchDateString(dateItem) {
-        let weekday = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-        let months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-        dateItem = new Date(dateItem);
-        let day = weekday[dateItem.getDay()];
-        let month = months[dateItem.getMonth()];
-        let convertedDate = `${day} ${dateItem.getDate()} ${month}`;
-
-        return convertedDate;
-    }
-
-    convertTimeToFrenchTimeString(timeItem) {
-        let hours = timeItem.split(':')[0];
-        let minutes = timeItem.split(':')[1];
-        let convertedTime = `${hours}h${minutes}`;
-
-        return convertedTime;
+    buildMeetingsCalendar(index) {
+        this.verifyIndex(index);
+        let filteredMeetingsArray = this.buildFilteredMeetingArray();
+        this.emptyMeetingTag();
+        this.buildMeetingsTab(filteredMeetingsArray);
+        this.addMeetingSlotButtonsEventListeners();
+        this.displayMeetingsTabNavButton(filteredMeetingsArray);
     }
 
     buildMeetingsTab(meetingsArrays) {
@@ -115,8 +146,63 @@ class Meetings {
         })
     }
 
-    displayTabNavButtons(filteredMeetingsArray) {
-        if (this.parsedMeetingSlots.length <= this.maxDisplayedDays) {
+    buildParsedMeetingsData() {
+        let meetingsSlotData = document.getElementById('appointment-tab').attributes['data-meeting-slots'].textContent;
+        this.parsedMeetingsSlots = Object.entries(JSON.parse(meetingsSlotData))
+    }
+
+    convertDateToFrenchDateString(dateItem) {
+        let weekday = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        let months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        dateItem = new Date(dateItem);
+        let day = weekday[dateItem.getDay()];
+        let month = months[dateItem.getMonth()];
+        let convertedDate = `${day} ${dateItem.getDate()} ${month}`;
+
+        return convertedDate;
+    }
+
+    convertTimeToFrenchTimeString(timeItem) {
+        let hours = timeItem.split(':')[0];
+        let minutes = timeItem.split(':')[1];
+        let convertedTime = `${hours}h${minutes}`;
+
+        return convertedTime;
+    }
+
+    displayCancelMeetingConfirmation() {
+        let cancelMeetingCancelationButton = document.createElement('a');
+        cancelMeetingCancelationButton.href = 'index.php?page=meetings';
+        cancelMeetingCancelationButton.classList = 'btn cancel-meeting-btn cancel-confirmation-btn purple-to-blue-bkgd'
+        cancelMeetingCancelationButton.textContent = 'Non';
+
+        let meetingConcelationMessage = document.createElement('div');
+        meetingConcelationMessage.classList = 'cancelation-alert';
+        meetingConcelationMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce rendez-vous ?</p>';
+
+        let confirmMeetingCancelationLink = document.createElement('a');
+        confirmMeetingCancelationLink.href = 'index.php?action=cancel-meeting';
+        confirmMeetingCancelationLink.classList = 'btn cancel-meeting-btn cancel-confirmation-btn red-bkgd';
+        confirmMeetingCancelationLink.textContent = 'Oui';
+
+        this.getCancelMeetingButtonContainer().innerHTML = '';
+        this.getCancelMeetingButtonContainer().appendChild(cancelMeetingCancelationButton)
+        this.getCancelMeetingButtonContainer().appendChild(meetingConcelationMessage)
+        this.getCancelMeetingButtonContainer().appendChild(confirmMeetingCancelationLink)
+    }
+
+    displayTabNextElements() {
+        this.meetingsListIndex = this.meetingsListIndex +2;
+        this.buildMeetingsCalendar(this.meetingsListIndex);
+    }
+
+    displayTabPreviousElements() {
+        this.meetingsListIndex = this.meetingsListIndex -2;
+        this.buildMeetingsCalendar(this.meetingsListIndex);
+    }
+
+    displayMeetingsTabNavButton (filteredMeetingsArray) {
+        if (this.parsedMeetingsSlots.length <= this.maxDisplayedDays) {
             this.previousDaysSchedule.innerHTML = '';
             this.nextDaysSchedule.innerHTML = '';
         }
@@ -126,27 +212,19 @@ class Meetings {
             }
             else {
                 this.previousDaysSchedule.innerHTML = "<button class='btn previous-days-btn purple-to-blue-bkgd'><i class='fa-solid fa-angle-left'></i></button>";
+                let previousDaysScheduleBtn = this.previousDaysSchedule.getElementsByTagName('button')[0];
+                previousDaysScheduleBtn.addEventListener('click', this._displayTabPreviousElements);
             }
 
-            if (this.meetingsListIndex >= this.parsedMeetingSlots.length -2) {
+            if (this.meetingsListIndex >= this.parsedMeetingsSlots.length -2) {
                 this.nextDaysSchedule.innerHTML = '';
             }
             else {
                 this.nextDaysSchedule.innerHTML = "<button class='btn next-days-btn purple-to-blue-bkgd'><i class='fa-solid fa-angle-right'></i></button>";
-            }
-        }
-    }
+                let nextDaysScheduleBtn = this.nextDaysSchedule.getElementsByTagName('button')[0]
 
-    verifyIndex(index) {
-        if ((index >= 0) && (index <= this.getParseMeetingsData().length-2)) {
-            this.setMeetingsListIndex(index);
-        }
-        else if (index < 2) {
-            this.setMeetingsListIndex(0);
-        }
-        else {
-            this.setMeetingsListIndex(this.getParseMeetingsData().length-2);
-            console.log(this.getMeetingsListIndex())
+                nextDaysScheduleBtn.addEventListener('click', this._displayTabNextElements);
+            }
         }
     }
 
@@ -154,78 +232,25 @@ class Meetings {
         this.appointmentTab.innerHTML = '';
     }
 
-    addTabNavButtonsEventListeners() {
-        for (let scheduleNavElt of this.scheduleNavElts) {
-            if (scheduleNavElt.hasChildNodes('button')) {
-                if (scheduleNavElt.classList.contains('previous-days-nav')) {
-                    scheduleNavElt.addEventListener('click', event => {
-                        this.setMeetingsCalendar(this.meetingsListIndex-2);
-                    })
-                }
-                else if (scheduleNavElt.classList.contains('next-days-nav')) {
-                    scheduleNavElt.addEventListener('click', event => {
-                        this.setMeetingsCalendar(this.meetingsListIndex+2);
-                    })
-                }
-                
-            }
-        }
-    }
-
-    setMeetingsCalendar(index) {
-        this.verifyIndex(index);
-        let filteredMeetingsArray = this.getFilteredMeetingArray(this.getMeetingsListIndex());
-        this.emptyMeetingTag();
-        this.buildMeetingsTab(filteredMeetingsArray);
-        this.displayTabNavButtons(filteredMeetingsArray);
-        this.addTabNavButtonsEventListeners();
-        this.addMeetingSlotButtonEventListeners();
-    }
-
-    getCancelMeetingButton() {
-        return document.getElementsByClassName('cancel-meeting-btn')[0];
-    }
-
-    getCancelMeetingButtonContainer() {
-        return document.getElementById('cancel-btn-container');
-    }
-
-    displayCancelMeetingConfirmation() {
-        let confirmMeetingCancelationLink = document.createElement('a');
-        confirmMeetingCancelationLink.href = 'index.php?action=cancel-meeting';
-        confirmMeetingCancelationLink.classList = 'btn cancel-meeting-btn cancel-confirmation-btn red-bkgd';
-        confirmMeetingCancelationLink.textContent = 'Oui';
-
-        let meetingConcelationMessage = document.createElement('div');
-        meetingConcelationMessage.classList = 'cancelation-alert';
-        meetingConcelationMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce rendez-vous ?</p>';
-
-        let cancelMeetingCancelationButton = document.createElement('a');
-        cancelMeetingCancelationButton.href = 'index.php?page=meetings';
-        cancelMeetingCancelationButton.classList = 'btn cancel-meeting-btn cancel-confirmation-btn purple-to-blue-bkgd'
-        cancelMeetingCancelationButton.textContent = 'Non';
-
-        this.getCancelMeetingButtonContainer().innerHTML = '';
-        this.getCancelMeetingButtonContainer().appendChild(confirmMeetingCancelationLink)
-        this.getCancelMeetingButtonContainer().appendChild(meetingConcelationMessage)
-        this.getCancelMeetingButtonContainer().appendChild(cancelMeetingCancelationButton)
-
-    }
-
-    addCancelMeetingButtonEventListener() {
-        this.getCancelMeetingButton().addEventListener('click', () => {
-            this.displayCancelMeetingConfirmation();
-        })
-    }
-
     init() {
-        
-        if (this.getAppointmentTab()!=null) {
-            this.setParsedMeetingsData();
-            this.setMeetingsCalendar(0);
+        if (this.appointmentTab!=null) {
+            this.buildParsedMeetingsData();
+            this.buildMeetingsCalendar(0);
         }
-        else if (this.getCancelMeetingButton()!=null) {
+        if (this.cancelMeetingButton!=null) {
             this.addCancelMeetingButtonEventListener();
+        }
+    }
+
+    verifyIndex(index) {
+        if ((index >= 0) && (index <= this.parsedMeetingsSlots.length-2)) {
+            this.meetingsListIndex = index;
+        }
+        else if (index < 2) {
+            this.meetingsListIndex = 0;
+        }
+        else {
+            this.meetingsListIndex = this.parsedMeetingsSlots.length - 2;
         }
     }
 }

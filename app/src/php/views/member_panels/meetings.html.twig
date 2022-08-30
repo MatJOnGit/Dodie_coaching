@@ -2,7 +2,7 @@
     {% if memberScheduledMeeting is iterable %}
     <h3>Votre prochain rendez-vous</h3>
     <div>
-        <p>le {{ memberScheduledMeeting.slot_date | date('d/m/y \à H\\hm') }}</p>
+        <p>le {{ memberScheduledMeeting.slot_date | date('d/m/y \à H\\hi') }}</p>
     </div>
     <div id='cancel-btn-container'>
         <button class='btn cancel-meeting-btn purple-to-blue-bkgd'>Annuler mon rendez-vous</button>

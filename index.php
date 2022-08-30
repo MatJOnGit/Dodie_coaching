@@ -127,87 +127,125 @@ try {
     }
 
     elseif (isset($_GET['action'])) {
-        if ($_GET['action'] === 'log-account') {
-            require('app/src/php/controllers/ConnectionController.php');
-            $connectionController = new ConnectionController;
+        $action = htmlspecialchars($_GET['action']);
+        $memberPanelActions = ['log-account', 'register-account', 'add-weight-report', 'add-new-appointment'];
 
-            if ($connectionController->verifyLoginFormData()) {
-                $dbUserPassword = $connectionController->verifyUserInDatabase($connectionController->getUserEmail());
-                if (empty($dbUserPassword)) {
-                    $connectionController->setFormErrorMessage('unknownEmail');
-                    header("location:{$connectionController->connectionPagesURL['login']}");
-                }
-                elseif ($dbUserPassword[0] !== $connectionController->getUserPassword()) {
-                    $connectionController->setFormErrorMessage('wrongPassword');
-                    header("location:{$connectionController->connectionPagesURL['login']}");
-                }
-                else {
-                    $isLoginDateUpdated = $connectionController->updateLoginDate();
-                    if ($isLoginDateUpdated) {
-                        header("location:{$connectionController->connectionPagesURL['dashboard']}");
+        if (in_array($action, $memberPanelActions)) {
+            $connectionActions = ['log-account', 'register-account'];
+            $progressionActions = ['add-weight-report'];
+            $meetingsActions = ['add-new-appointment', 'release-user-appointment'];
+
+            if (in_array($action, $connectionActions)) {
+                require('app/src/php/controllers/ConnectionController.php');
+                $connectionController = new ConnectionController;
+
+                if ($_GET['action'] === 'log-account') {
+                    if ($connectionController->verifyLoginFormData()) {
+                        $dbUserPassword = $connectionController->verifyUserInDatabase($connectionController->getUserEmail());
+                        if (empty($dbUserPassword)) {
+                            $connectionController->setFormErrorMessage('unknownEmail');
+                            header("location:{$connectionController->connectionPagesURL['login']}");
+                        }
+                        elseif ($dbUserPassword[0] !== $connectionController->getUserPassword()) {
+                            $connectionController->setFormErrorMessage('wrongPassword');
+                            header("location:{$connectionController->connectionPagesURL['login']}");
+                        }
+                        else {
+                            $isLoginDateUpdated = $connectionController->updateLoginDate();
+                            if ($isLoginDateUpdated) {
+                                header("location:{$connectionController->connectionPagesURL['dashboard']}");
+                            }
+                            else {
+                                $connectionController->setFormErrorMessage('dbError');
+                                header("location:{$connectionController->connectionPagesURL['login']}");
+                            }
+                        }
                     }
                     else {
-                        $connectionController->setFormErrorMessage('dbError');
+                        $connectionController->setFormErrorMessage('invalidFormData');
                         header("location:{$connectionController->connectionPagesURL['login']}");
                     }
                 }
-            }
-            else {
-                $connectionController->setFormErrorMessage('invalidFormData');
-                header("location:{$connectionController->connectionPagesURL['login']}");
-            }
-        }
 
-        elseif ($_GET['action'] === 'register-account') {
-            require('app/src/php/controllers/ConnectionController.php');
-            $connectionController = new ConnectionController;
-            if ($connectionController->verifyRegisteringFormData()) {
-                $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
+                elseif ($_GET['action'] === 'register-account') {
+                    if ($connectionController->verifyRegisteringFormData()) {
+                        $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
 
-                if (!empty($dbUserPassword)) {
-                    $connectionController->setFormErrorMessage('usedEmail');
-                    header("location:{$connectionController->connectionPagesURL['registering']}");
-                }
-                else {
-                    $isAccountRegistered = $connectionController->setNewAccount();
+                        if (!empty($dbUserPassword)) {
+                            $connectionController->setFormErrorMessage('usedEmail');
+                            header("location:{$connectionController->connectionPagesURL['registering']}");
+                        }
+                        else {
+                            $isAccountRegistered = $connectionController->setNewAccount();
 
-                    if ($isAccountRegistered) {
-                        header("location:{$connectionController->connectionPagesURL['dashboard']}");
+                            if ($isAccountRegistered) {
+                                header("location:{$connectionController->connectionPagesURL['dashboard']}");
+                            }
+                            else {
+                                $connectionController->setFormErrorMessage('dbError');
+                                header("location:{$connectionController->connectionPagesURL['registering']}");
+                            }
+                        }
                     }
                     else {
-                        $connectionController->setFormErrorMessage('dbError');
-                        header("location:{$connectionController->connectionPagesURL['registering']}");
+                        $connectionController->setFormErrorMessage('invalidFormData');
+                        header("Location:{$connectionController->connectionPagesURL['registering']}");
                     }
                 }
             }
-            else {
-                $connectionController->setFormErrorMessage('invalidFormData');
-                header("Location:{$connectionController->connectionPagesURL['registering']}");
-            }
-        }
 
-        elseif ($_GET['action'] === 'add-weight-report') {
-            require('app/src/php/controllers/MemberPanelController.php');
-            $memberPanelController = new MemberPanelController;
+            elseif (in_array($action, $progressionActions)) {
+                if ($_GET['action'] === 'add-weight-report') {
+                    require('app/src/php/controllers/MemberPanelController.php');
+                    $memberPanelController = new MemberPanelController;
 
-            if ($memberPanelController->verifyAddWeightFormData()) {
-                $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
-                if (!empty($dbUserPassword)) {
-                    $memberPanelController->addWeightReport();
-                    header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                    if ($memberPanelController->verifyAddWeightFormData()) {
+                        $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+                        if (!empty($dbUserPassword)) {
+                            $memberPanelController->addWeightReport();
+                            header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                        }
+                        
+                        else {
+                            header("location:{$memberPanelController->memberPanelsURL['login']}");
+                        }
+                    }
+                    else {
+                        header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                    }
                 }
-                
-                else {
-                    header("location:{$memberPanelController->memberPanelsURL['login']}");
+            }
+
+            elseif (in_array($action, $meetingsActions)) {
+                if ($_GET['action'] === 'add-new-appointment') {
+                    require('app/src/php/controllers/MemberPanelController.php');
+                    $memberPanelController = new MemberPanelController;
+                    $requestedMeetingDate = $memberPanelController->verifyMeetingFormData();
+
+                    if (!is_null($requestedMeetingDate)) {
+                        $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+
+                        if (!empty($dbUserPassword)) {
+                            if (in_array($requestedMeetingDate, $memberPanelController->getMeetings())){
+                                $memberPanelController->addAppointment($requestedMeetingDate);
+                                header("location:{$memberPanelController->memberPanelsURL['meetings']}");
+                            }
+                            else {
+                                header("location:{$memberPanelController->memberPanelsURL['meetings']}");
+                            }
+                        }
+                        
+                        else {
+                            header("location:{$memberPanelController->memberPanelsURL['login']}");
+                        }
+
+                        
+                    }
+                    else {
+                        header("location:{$memberPanelController->memberPanelsURL['meetings']}");
+                    }
                 }
             }
-            else {
-                header("location:{$memberPanelController->memberPanelsURL['progress']}");
-            }
-        }
-
-        elseif ($_GET['action'] === 'add-new-appointment') {
-            echo "Enregistrement d'un nouveau rendez-vous le " . $_POST['meeting-date'] . ", pour l'utilisateur dont l'email est " . $_SESSION['user-email'];
         }
     }
 

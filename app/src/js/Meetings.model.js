@@ -69,7 +69,7 @@ class Meetings {
     }
 
     addCancelMeetingButtonEventListener() {
-        this.getCancelMeetingButton().addEventListener('click', () => {
+        this.cancelMeetingButton.addEventListener('click', () => {
             this.displayCancelMeetingConfirmation();
         })
     }
@@ -81,7 +81,7 @@ class Meetings {
                 let meetingSlotDate = meetingSlotButton.parentElement.parentElement.parentElement.getElementsByTagName('h4')[0].textContent;
                 let slotTime = meetingSlotButton.textContent;
                 let slotFormatedDate = meetingSlotDate.substring(meetingSlotDate.indexOf(' ') + 1);
-                this.meetingDateInput.value = `${slotFormatedDate} à ${slotTime}`;
+                this.meetingDateInput.value = `le ${slotFormatedDate} à ${slotTime}`;
                 this.meetingFormSubmitButton.removeAttribute('disabled');
                 this.meetingDateInput.removeAttribute('disabled');
             })
@@ -111,8 +111,10 @@ class Meetings {
         let filteredMeetingsArray = this.buildFilteredMeetingArray();
         this.emptyMeetingTag();
         this.buildMeetingsTab(filteredMeetingsArray);
-        this.addMeetingSlotButtonsEventListeners();
         this.displayMeetingsTabNavButton(filteredMeetingsArray);
+        if (!!this.meetingFormSubmitButton) {
+            this.addMeetingSlotButtonsEventListeners();
+        }
     }
 
     buildMeetingsTab(meetingsArrays) {
@@ -185,10 +187,10 @@ class Meetings {
         confirmMeetingCancelationLink.classList = 'btn cancel-meeting-btn cancel-confirmation-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
 
-        this.getCancelMeetingButtonContainer().innerHTML = '';
-        this.getCancelMeetingButtonContainer().appendChild(cancelMeetingCancelationButton)
-        this.getCancelMeetingButtonContainer().appendChild(meetingConcelationMessage)
-        this.getCancelMeetingButtonContainer().appendChild(confirmMeetingCancelationLink)
+        this.cancelMeetingButtonContainer.innerHTML = '';
+        this.cancelMeetingButtonContainer.appendChild(cancelMeetingCancelationButton)
+        this.cancelMeetingButtonContainer.appendChild(meetingConcelationMessage)
+        this.cancelMeetingButtonContainer.appendChild(confirmMeetingCancelationLink)
     }
 
     displayTabNextElements() {

@@ -28,6 +28,8 @@ class MemberPanelController extends MainController {
         'subscription' => 'index.php?page=subscription'
     );
 
+    public $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
     public $memberPanelsSubtitles = array(
         'nutritionProgram' => 'Programme nutrition',
         'progress' => 'Progression',
@@ -82,6 +84,43 @@ class MemberPanelController extends MainController {
         return $isWeightReportVerified;
     }
 
+    public function verifyMeetingFormData() {
+        $meetingFormInputValue = htmlspecialchars($_POST['meeting-date']);
+        $meetingDay = explode(' ', $meetingFormInputValue)[1];
+        $meetingMonth = explode(' ', $meetingFormInputValue)[2];
+        $meetingTime = explode(' ', $meetingFormInputValue)[4];
+        $meetingHour = explode('h', $meetingTime)[0];
+        $meetingMinute = explode('h', $meetingTime)[1];
+
+        if (is_numeric($meetingDay) && in_array($meetingMonth, $this->months) && is_numeric($meetingHour) && is_numeric($meetingMinute)) {
+            $meetingDate = $this->buildMeetingDateFromInputValue($meetingDay, $meetingMonth, $meetingHour, $meetingMinute);
+        }
+        else {
+            $meetingDate = NULL;
+        }
+
+        return $meetingDate;
+    }
+
+    public function morphDateValues($value) {
+        $value = $value < 10 ? str_pad($value, 2, '0', STR_PAD_LEFT) : $value;
+
+        return $value;
+    }
+
+    public function buildMeetingDateFromInputValue($meetingDay, $meetingMonth, $meetingHour, $meetingMinute) {
+        $meetingMonth = array_search($meetingMonth, $this->months)+1;
+
+        $meetingPotentialDate = date('Y') . '-' . $this->morphDateValues($meetingMonth) . '-' . $this->morphDateValues($meetingDay) . ' ' . $this->morphDateValues($meetingHour) . ':' . $this->morphDateValues($meetingMinute) . ':00';
+
+        date_default_timezone_set('Europe/Paris');
+        $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->appointmentDelay . 'hours'));
+
+        $meetingDate = $meetingPotentialDate > $bookingLimitDate ? $meetingPotentialDate : NULL;
+
+        return $meetingDate;
+    }
+
     public function getMissingUserStaticDataKey($userStaticData) {
         $missingStaticData = [];
         foreach ($userStaticData as $key => $staticDataItem)
@@ -129,6 +168,21 @@ class MemberPanelController extends MainController {
         return $sortedMeetingSlots;
     }
 
+    public function getMeetings() {
+        $dashboardManager = new DashboardManager;
+        $availableMeetings = $dashboardManager->getAvailableMeetingsSlots($this->appointmentDelay);
+
+        echo '<pre>';
+        var_dump($availableMeetings);
+        echo '</pre>';
+        
+
+
+        $meetingsArray = $this->getMeetingSlotsArray($availableMeetings);
+
+        return $meetingsArray;
+    }
+
     public function getMeetingSlotsArray($meetings) {
         $meetingsSlotsArray = [];
         foreach($meetings as $meeting) {
@@ -162,6 +216,11 @@ class MemberPanelController extends MainController {
         $memberScheduledMeeting = $dashboardManager->getMemberNextMeetingSlots($_SESSION['user-email']);
 
         return (!empty($memberScheduledMeeting) ? $memberScheduledMeeting[0] : NULL);
+    }
+
+    public function addAppointment($meetingDate) {
+        $dashboardManager = new DashboardManager;
+        $dashboardManager->bookMemberMeeting($_SESSION['user-email'], $meetingDate);
     }
 
     public function addWeightReport() {

@@ -77,4 +77,14 @@ class DashboardManager extends Manager {
 
         return $memberIncomingMeetings;
     }
+
+    public function bookMemberMeeting($memberEmail, $meetingDate) {
+        $db = $this->dbConnect();
+        $meetingBookingQuery = "UPDATE scheduled_slots sl SET sl.user_id = (SELECT id FROM accounts WHERE email = ?), sl.slot_status = 'booked' WHERE sl.slot_date = ?";
+        $meetingBookingQueryStatement = $db->prepare($meetingBookingQuery);
+        $meetingBookingQueryStatement->execute([$memberEmail, $meetingDate]);
+        $bookedMeeting = $meetingBookingQueryStatement->fetchAll();
+
+        return $bookedMeeting;
+    }
 }

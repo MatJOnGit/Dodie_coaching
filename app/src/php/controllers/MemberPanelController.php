@@ -41,6 +41,12 @@ class MemberPanelController extends MainController {
 
     public $appointmentDelay = 24;
 
+    public $timeZone = 'Europe/Paris';
+
+    public function setTimeZone() {
+        date_default_timezone_set($this->timeZone);
+    }
+
     public function verifySessionData() {
         $isMemberVerified = ((isset($_SESSION['user-email'])) && (isset($_SESSION['user-password']))) ? true : false;
 
@@ -224,9 +230,8 @@ class MemberPanelController extends MainController {
     }
 
     public function addWeightReport() {
+        $this->setTimeZone();
         $dashboardManager = new DashboardManager;
-        date_default_timezone_set('Europe/Paris');
-
         // add a test if the weightDateType is set to 'old-weight'
         $reportDate = (!isset($_POST['report-past-date'])) ? date('Y-m-d H-i-s') : ($_POST['report-past-date']);
         $userId = $dashboardManager->getUserId($_SESSION['user-email']);
@@ -235,12 +240,20 @@ class MemberPanelController extends MainController {
         $dashboardManager->addNewWeightReport($userId, $userWeight, $reportDate);
     }
 
+    
+
     public function getReportDate() {
-        date_default_timezone_set('Europe/Paris');
+        $this->setTimeZone();
         $date = date('Y-m-d h:i:s');
         $reportDate = ($_POST['report-date'] === 'current-weight') ? $date : false; 
         
         return $reportDate;
+    }
+
+    public function cancelMemberNextMeeting() {
+        $this->setTimeZone();
+        $dashboardManager = new DashboardManager;
+        $dashboardManager->releaseNextMemberMeetingSlot($_SESSION['user-email']);
     }
 
     public function renderMemberDataForm($twig) {

@@ -87,4 +87,13 @@ class DashboardManager extends Manager {
 
         return $bookedMeeting;
     }
+
+    public function releaseNextMemberMeetingSlot($email) {
+        $db = $this->dbConnect();
+        $meetingSlotReleasingQuery = "UPDATE scheduled_slots SET user_id = 0, slot_status = 'available' WHERE user_id = (SELECT id FROM accounts WHERE email = ?)";
+        $meetingSlotReleasingQueryStatement = $db->prepare($meetingSlotReleasingQuery);
+        $meetingSlotReleasingQueryStatement->execute([$email]);
+    }
 }
+
+// UPDATE scheduled_slots sl SET sl.user_id = 0, sl.slot_status = 'available' WHERE sl.slot_date = ? AND sl.user_id = (SELECT id FROM accounts WHERE email = ?)

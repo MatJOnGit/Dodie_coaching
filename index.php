@@ -128,12 +128,13 @@ try {
 
     elseif (isset($_GET['action'])) {
         $action = htmlspecialchars($_GET['action']);
-        $memberPanelActions = ['log-account', 'register-account', 'add-weight-report', 'add-new-appointment'];
+        $memberPanelActions = ['log-account', 'register-account', 'add-weight-report', 'add-new-appointment', 'cancel-meeting'];
 
         if (in_array($action, $memberPanelActions)) {
             $connectionActions = ['log-account', 'register-account'];
+            $registeredMemberActions = ['add-weight-report', 'add-new-appointment', 'cancel-meeting'];
             $progressionActions = ['add-weight-report'];
-            $meetingsActions = ['add-new-appointment', 'release-user-appointment'];
+            $meetingsActions = ['add-new-appointment', 'cancel-meeting'];
 
             if (in_array($action, $connectionActions)) {
                 require('app/src/php/controllers/ConnectionController.php');
@@ -161,13 +162,14 @@ try {
                             }
                         }
                     }
+
                     else {
                         $connectionController->setFormErrorMessage('invalidFormData');
                         header("location:{$connectionController->connectionPagesURL['login']}");
                     }
                 }
 
-                elseif ($_GET['action'] === 'register-account') {
+                elseif ($action === 'register-account') {
                     if ($connectionController->verifyRegisteringFormData()) {
                         $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
 
@@ -195,7 +197,7 @@ try {
             }
 
             elseif (in_array($action, $progressionActions)) {
-                if ($_GET['action'] === 'add-weight-report') {
+                if ($action === 'add-weight-report') {
                     require('app/src/php/controllers/MemberPanelController.php');
                     $memberPanelController = new MemberPanelController;
 
@@ -217,15 +219,15 @@ try {
             }
 
             elseif (in_array($action, $meetingsActions)) {
-                if ($_GET['action'] === 'add-new-appointment') {
-                    require('app/src/php/controllers/MemberPanelController.php');
-                    $memberPanelController = new MemberPanelController;
-                    $requestedMeetingDate = $memberPanelController->verifyMeetingFormData();
+                require('app/src/php/controllers/MemberPanelController.php');
+                $memberPanelController = new MemberPanelController;
+                $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
 
-                    if (!is_null($requestedMeetingDate)) {
-                        $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+                if (!empty($dbUserPassword)) {
+                    if ($action === 'add-new-appointment') {
+                        $requestedMeetingDate = $memberPanelController->verifyMeetingFormData();
 
-                        if (!empty($dbUserPassword)) {
+                        if (!is_null($requestedMeetingDate)) {
                             if (in_array($requestedMeetingDate, $memberPanelController->getMeetings())){
                                 $memberPanelController->addAppointment($requestedMeetingDate);
                                 header("location:{$memberPanelController->memberPanelsURL['meetings']}");
@@ -238,13 +240,20 @@ try {
                         else {
                             header("location:{$memberPanelController->memberPanelsURL['login']}");
                         }
-
-                        
                     }
-                    else {
+
+                    else if ($action === 'cancel-meeting') {
+                        $memberPanelController->cancelMemberNextMeeting();
                         header("location:{$memberPanelController->memberPanelsURL['meetings']}");
                     }
+                    
                 }
+                
+                else {
+                    header("location:{$memberPanelController->memberPanelsURL['meetings']}");
+                }
+
+                
             }
         }
     }

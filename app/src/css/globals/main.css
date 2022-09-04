@@ -44,14 +44,6 @@ p {
     margin : 0;
 }
 
-input[type=email],
-input[type=text],
-input[type=password],
-input[type=number],
-select {
-    font-size: 1.2em;
-}
-
 .error-container p,
 input::placeholder {
     font-style: italic;

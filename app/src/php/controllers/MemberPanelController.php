@@ -13,9 +13,14 @@ class MemberPanelController extends MainController {
         'components/footer'
     ];
 
-    public $meetingScripts = [
+    public $meetingsScripts = [
         'Meetings.model',
         'meetingsApp'
+    ];
+
+    public $progressScripts = [
+        'Progress.model',
+        'progressApp'
     ];
 
     public $memberPanelsURL = array(
@@ -53,8 +58,16 @@ class MemberPanelController extends MainController {
         return $isMemberVerified;
     }
 
-    public function getMeetingScripts() {
-        return $this->meetingScripts;
+    public function getMeetingsScripts() {
+        return $this->meetingsScripts;
+    }
+
+    public function buildReportDate() {
+        return htmlspecialchars($_POST['report-date']) . ' ' . htmlspecialchars($_POST['report-time']);
+    }
+
+    public function getProgressScripts() {
+        return $this->progressScripts;
     }
 
     public function verifyAccountPassword() {
@@ -79,15 +92,44 @@ class MemberPanelController extends MainController {
         return $userStaticData;
     }
 
+    public function verifyWeightReportDate($date, $format) {
+        $d = DateTime::createFromFormat($format, $date);
+
+        return $d && $d->format($format) == $date;
+    }
+
     public function verifyAddWeightFormData() {
         $weightReport = floatval(htmlspecialchars($_POST['user-weight']));
-        $weightDateType = htmlspecialchars($_POST['report-date']);
-        $weightDateTypes = ["current-weight", "old-weight"];
+        $isWeightReportValid = is_numeric($weightReport) && ($weightReport != 0);
 
-        // add a test if the weightDateType is set to 'old-weight'
-        $isWeightReportVerified = ((is_numeric($weightReport)) && ($weightReport != 0) && (in_array($weightDateType, $weightDateTypes))) ? true : false;
+        $reportDateType = htmlspecialchars($_POST['date-type']);
+        $reportDateTypes = ["current-weight", "old-weight"];
+        $isWeightDateTypeValid = in_array($reportDateType, $reportDateTypes);
+
+        if (isset($_POST['report-date']) && (isset($_POST['report-time']))) {
+            $reportDate = htmlspecialchars($_POST['report-date']) . ' ' . htmlspecialchars($_POST['report-time']);
+            $isReportDateValid = $this->verifyWeightReportDate($reportDate, 'Y-m-d H:i');
+        }
+
+        if ($reportDateType !== 'old-weight') {
+            $isWeightReportVerified = $isWeightReportValid && $isWeightDateTypeValid;
+        }
+        else {
+            $isWeightReportVerified = $isWeightReportValid && $isWeightDateTypeValid && $isReportDateValid;
+        }
 
         return $isWeightReportVerified;
+    }
+
+    public function addWeightReport() {
+        $this->setTimeZone();
+        $dashboardManager = new DashboardManager;
+        $reportDate = $this->verifyWeightReportDate($this->buildReportDate(), 'Y-m-d H:i') ? $this->buildReportDate() : date('Y-m-d H-i-s');
+
+        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
+        $userWeight = floatval(number_format($_POST['user-weight'], 2));
+
+        $dashboardManager->addNewWeightReport($userId, $userWeight, $reportDate);
     }
 
     public function verifyMeetingFormData() {
@@ -120,6 +162,8 @@ class MemberPanelController extends MainController {
         $meetingPotentialDate = date('Y') . '-' . $this->morphDateValues($meetingMonth) . '-' . $this->morphDateValues($meetingDay) . ' ' . $this->morphDateValues($meetingHour) . ':' . $this->morphDateValues($meetingMinute) . ':00';
 
         date_default_timezone_set('Europe/Paris');
+
+        // a vérifier
         $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->appointmentDelay . 'hours'));
 
         $meetingDate = $meetingPotentialDate > $bookingLimitDate ? $meetingPotentialDate : NULL;
@@ -229,22 +273,9 @@ class MemberPanelController extends MainController {
         $dashboardManager->bookMemberMeeting($_SESSION['user-email'], $meetingDate);
     }
 
-    public function addWeightReport() {
-        $this->setTimeZone();
-        $dashboardManager = new DashboardManager;
-        // add a test if the weightDateType is set to 'old-weight'
-        $reportDate = (!isset($_POST['report-past-date'])) ? date('Y-m-d H-i-s') : ($_POST['report-past-date']);
-        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
-        $userWeight = floatval(number_format($_POST['user-weight'], 2));
-
-        $dashboardManager->addNewWeightReport($userId, $userWeight, $reportDate);
-    }
-
-    
-
     public function getReportDate() {
         $this->setTimeZone();
-        $date = date('Y-m-d h:i:s');
+        $date = date('Y-m-dTh:i:s');
         $reportDate = ($_POST['report-date'] === 'current-weight') ? $date : false; 
         
         return $reportDate;
@@ -285,7 +316,7 @@ class MemberPanelController extends MainController {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
         echo $twig->render('member_panels/progress.html.twig', ['progressHistory' => $this->getProgressHistory()]);
-        echo $twig->render('components/footer.html.twig');
+        echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getProgressScripts()]);
     }
 
     public function renderMeetings($twig) {
@@ -295,6 +326,6 @@ class MemberPanelController extends MainController {
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
         echo $twig->render('member_panels/meetings.html.twig', ['meetingSlots' => $this->getMeetingSlots(), 'memberScheduledMeeting' => $this->getMemberScheduledMeeting()]);
 
-        echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getMeetingScripts()]);
+        echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getMeetingsScripts()]);
     }
 }

@@ -179,6 +179,7 @@ figcaption {
 
 .btn span {
     width: 65%;
+    text-align: start;
 }
 
 form {
@@ -191,13 +192,22 @@ select {
     border-bottom: 1px solid hsla(0, 0%, 0%, 1);
 }
 
-.form-fields {
-    width: 100%;
+.sided-fields {
+    width: 145px;
+    justify-content: space-between;
+    
 }
 
-.form-fields input,
-.form-fields select {
-    height: 70%;
+.full-length-fields {
+    width: 100%;
+
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-self: flex-start;
 }
 
 .tiny-btn,
@@ -208,11 +218,20 @@ input[type=submit] {
 }
 
 .user-weight-input {
-    width: 25%;
+    width: 50px;
 }
 
 select {
     box-sizing: border-box;
+    width: 90px;
+}
+
+.report-date {
+    width: 105px;
+}
+
+.report-time {
+    width: 75px;
 }
 
 input[type=submit] {
@@ -226,7 +245,7 @@ input[type=submit] {
 
 table {
     width: 100%;
-    padding: 2.5vh 0;
+    padding: 0;
 }
 
 tr {

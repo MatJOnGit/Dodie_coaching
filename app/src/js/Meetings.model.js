@@ -21,7 +21,7 @@ class Meetings {
     }
 
     get cancelMeetingButton() {
-        return document.getElementsByClassName('cancel-meeting-btn')[0];
+        return document.getElementById('cancel-meeting');
     }
     
     get cancelMeetingButtonContainer() {
@@ -175,7 +175,7 @@ class Meetings {
     displayCancelMeetingConfirmation() {
         let cancelMeetingCancelationButton = document.createElement('a');
         cancelMeetingCancelationButton.href = 'index.php?page=meetings';
-        cancelMeetingCancelationButton.classList = 'btn cancel-meeting-btn cancel-confirmation-btn purple-to-blue-bkgd'
+        cancelMeetingCancelationButton.classList = 'btn member-panel-rounded-btn purple-to-blue-bkgd'
         cancelMeetingCancelationButton.textContent = 'Non';
 
         let meetingConcelationMessage = document.createElement('div');
@@ -184,13 +184,13 @@ class Meetings {
 
         let confirmMeetingCancelationLink = document.createElement('a');
         confirmMeetingCancelationLink.href = 'index.php?action=cancel-meeting';
-        confirmMeetingCancelationLink.classList = 'btn cancel-meeting-btn cancel-confirmation-btn red-bkgd';
+        confirmMeetingCancelationLink.classList = 'btn member-panel-rounded-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
 
         this.cancelMeetingButtonContainer.innerHTML = '';
-        this.cancelMeetingButtonContainer.appendChild(cancelMeetingCancelationButton)
-        this.cancelMeetingButtonContainer.appendChild(meetingConcelationMessage)
-        this.cancelMeetingButtonContainer.appendChild(confirmMeetingCancelationLink)
+        this.cancelMeetingButtonContainer.appendChild(cancelMeetingCancelationButton);
+        this.cancelMeetingButtonContainer.appendChild(meetingConcelationMessage);
+        this.cancelMeetingButtonContainer.appendChild(confirmMeetingCancelationLink);
     }
 
     displayTabNextElements() {

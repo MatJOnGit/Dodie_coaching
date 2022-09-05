@@ -64,7 +64,40 @@ class Progress {
         });
     }
 
+    displayDeleteReportConfirmation(deleteReportClickedButton) {
+        let selectedReportTableRow = deleteReportClickedButton.parentNode;
+
+        let cancelReportDeletionButton = document.createElement('a');
+        cancelReportDeletionButton.href = 'index.php?page=progress';
+        cancelReportDeletionButton.classList = 'btn  member-panel-rounded-btn purple-to-blue-bkgd'
+        cancelReportDeletionButton.textContent = 'Non';
+
+        let reportDeletionMessage = document.createElement('div');
+        reportDeletionMessage.classList = 'cancelation-alert';
+        reportDeletionMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce relevé ?</p>';
+
+        let confirmReportDeletionButton = document.createElement('a');
+        confirmReportDeletionButton.href = `index.php?action=delete-weight-report&id=${selectedReportTableRow.id}`;
+        confirmReportDeletionButton.classList = 'btn member-panel-rounded-btn red-bkgd';
+        confirmReportDeletionButton.textContent = 'Oui';
+
+        selectedReportTableRow.innerHTML = '';
+        selectedReportTableRow.appendChild(cancelReportDeletionButton);
+        selectedReportTableRow.appendChild(reportDeletionMessage);
+        selectedReportTableRow.appendChild(confirmReportDeletionButton);
+    }
+
+    addDeleteReportEventListeners() {
+        let deleteReportButtons = document.querySelectorAll('.progress-item button');
+        for (let deleteReportButton of deleteReportButtons) {
+            deleteReportButton.addEventListener('click', () => {
+                this.displayDeleteReportConfirmation(deleteReportButton);
+            })
+        }
+    }
+
     init() {
         this.addSelectEventListener();
+        this.addDeleteReportEventListeners();
     }
 }

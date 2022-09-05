@@ -210,13 +210,6 @@ select {
     align-self: flex-start;
 }
 
-.tiny-btn,
-.large-btn,
-input[type=submit] {
-    width: 30%;
-    height: 7vh;
-}
-
 .user-weight-input {
     width: 50px;
 }
@@ -235,7 +228,6 @@ select {
 }
 
 input[type=submit] {
-    border: 0;
     margin-top: 1vh;
 }
 
@@ -243,55 +235,71 @@ input[type=submit] {
     border-radius: 5vh;
 }
 
-table {
-    width: 100%;
-    padding: 0;
-}
-
-tr {
-    height: 5vh;
-}
-
 .dashboard-panel h3:nth-child(3) {
     margin-top: 2.5vh;
     margin-bottom: 2vh;
 }
 
-.progress-btn {
+.delete-progress-item-btn {
     color: white;
     padding: 2vh;
     border-radius: 50%;
 }
 
-tr {
-    border-collapse: collapse;
+.progression-logs {
+    width: 100%;
+    padding: 0;
 }
 
-tr td:nth-child(2) {
+.progress-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 1vh 0;
+}
+
+.report-weight {
     width: 45%;
 }
 
-td {
-    text-align: center;
-    padding: 1vh 0;
+.cancelation-alert {
+    width: 40%;
+}
+
+#cancel-btn-container button,
+.member-panel input[type=submit],
+.member-panel-rounded-btn {
+    height: 64px;
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.member-panel-rounded-btn {
+    width: 64px;
+    border-radius: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.member-panel-large-btn {
+    width: max-content;
+    padding: 0 20px;
+    border: 0;
 }
 
 /*********************************/
 /*           MEETINGS            */
 /*********************************/
 
-.appointment-form input[type=submit],
-.cancel-meeting-btn {
-    margin-bottom: 1vh;
-    width: max-content;
-    padding: 0 20px;
-}
-
 #cancel-btn-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding-top: 3vh;
+    padding-bottom: 1vh;
 }
 
 #cancel-btn-container > div {
@@ -300,15 +308,6 @@ td {
     align-items: center;
     width: 40%;
     height: 64px;
-    margin-top: 3vh;
-    margin-bottom: 1vh;
-}
-
-.cancel-confirmation-btn {
-    display: flex;
-    align-items: center;
-    width: 64px;
-    border-radius: 32px;
 }
 
 .red-bkgd {
@@ -322,13 +321,6 @@ td {
 
 .cancelation-alert p {
     text-align: center;
-}
-
-.cancel-meeting-btn {
-    color: hsla(0, 0%, 100%, 1);
-    border: 0;
-    height: 64px;
-    margin-top: 3vh;
 }
 
 .appointment-block {

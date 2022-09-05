@@ -313,6 +313,10 @@ class MemberPanelController extends MainController {
     public function renderMemberProgress($twig) {
         $subMenuPage = 'progress';
 
+        // echo '<pre>';
+        // var_dump($this->getProgressHistory());
+        // echo '</pre>';
+
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);
         echo $twig->render('member_panels/progress.html.twig', ['progressHistory' => $this->getProgressHistory()]);

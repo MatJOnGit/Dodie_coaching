@@ -9,29 +9,30 @@
                 <option value='old-weight'>Autre date</option>
             </select>
         </div>
-        <input type='submit' value='Ajouter' class='btn purple-to-blue-bkgd' />
+        <input type='submit' value='Ajouter' class='btn member-panel-large-btn purple-to-blue-bkgd' />
     </form>
     <h3>Vos derniers relevés</h3>
+
     {% if progressHistory is iterable %}
-    <table class='progression-logs'>
+    <ul class='progression-logs'>
         {% for progressHistoryItem in progressHistory %}
-        <tr>
-            <td>
+        <li class='progress-item' id='{{ loop.index }}'>
+            <div class="report-full-date">
                 le {{ progressHistoryItem.report_date  | date('d/m/y')}}<br>
                 {{ progressHistoryItem.report_date  | date('à H')}}h{{ progressHistoryItem.report_date  | date('i')}}
-            </td>
-            <td>
+            </div>
+            <div class="report-weight">
                 {{ progressHistoryItem.current_weight }} kg  
-            </td>
-            <td>
-                <button class='btn progress-btn purple-to-blue-bkgd'>
-                    <i class="fa-solid fa-ban"></i>
-                </button>
-            </td>
-        </tr>
+            </div>
+            <button class='btn member-panel-rounded-btn purple-to-blue-bkgd'>
+                <i class="fa-solid fa-ban"></i>
+            </button>
+        </li>
         {% endfor %}
-    </table>
+    </ul>
+
     {% else %}
     <p class='no-progression'>Aucune progression n'a encore été enregistrée</p>
+
     {% endif %}
 </div>

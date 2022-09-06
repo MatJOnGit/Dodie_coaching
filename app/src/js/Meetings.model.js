@@ -21,7 +21,7 @@ class Meetings {
     }
 
     get cancelMeetingButton() {
-        return document.getElementById('cancel-meeting');
+        return document.getElementById('cancel-appointment');
     }
     
     get cancelMeetingButtonContainer() {
@@ -183,7 +183,7 @@ class Meetings {
         meetingConcelationMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce rendez-vous ?</p>';
 
         let confirmMeetingCancelationLink = document.createElement('a');
-        confirmMeetingCancelationLink.href = 'index.php?action=cancel-meeting';
+        confirmMeetingCancelationLink.href = 'index.php?action=cancel-appointment';
         confirmMeetingCancelationLink.classList = 'btn member-panel-rounded-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
 

@@ -1,5 +1,6 @@
 <div class='member-panel'>
     <h3>Ajouter votre pesée</h3>
+
     <form action='index.php?action=add-weight-report' method='post'>
         <div class='form-fields sided-fields'>
             <input type='number' step='.01' name='user-weight' placeholder='Poids' class='user-weight-input' required />
@@ -11,9 +12,10 @@
         </div>
         <input type='submit' value='Ajouter' class='btn member-panel-large-btn purple-to-blue-bkgd' />
     </form>
+
     <h3>Vos derniers relevés</h3>
 
-    {% if progressHistory is iterable %}
+    {% if (progressHistory is not empty) and (progressHistory is iterable) %}
     <ul class='progression-logs'>
         {% for progressHistoryItem in progressHistory %}
         <li class='progress-item' id='{{ loop.index }}'>

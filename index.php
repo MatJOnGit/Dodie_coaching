@@ -114,10 +114,6 @@ try {
                 elseif ($page === 'get-to-know-you'){
                     $memberPanelController->renderMemberDataForm($twig);
                 }
-
-                // else {
-                //     echo "Le compte est bien vérifié et des données existent, mais cette page du member panel n'existe pas encore ...";
-                // }
             }
         }
         
@@ -128,13 +124,14 @@ try {
 
     elseif (isset($_GET['action'])) {
         $action = htmlspecialchars($_GET['action']);
-        $memberPanelActions = ['log-account', 'register-account', 'add-weight-report', 'add-new-appointment', 'cancel-meeting'];
+        $memberPanelActions = ['log-account', 'register-account', 'add-weight-report', 'delete-weight-report', 'book-new-appointment', 'cancel-appointment'];
 
         if (in_array($action, $memberPanelActions)) {
             $connectionActions = ['log-account', 'register-account'];
-            $registeredMemberActions = ['add-weight-report', 'add-new-appointment', 'cancel-meeting'];
-            $progressionActions = ['add-weight-report'];
-            $meetingsActions = ['add-new-appointment', 'cancel-meeting'];
+            $registeredMemberActions = ['add-weight-report', 'delete-weight-report', 'book-new-appointment', 'cancel-appointment'];
+
+            $progressionActions = ['add-weight-report', 'delete-weight-report'];
+            $meetingsActions = ['book-new-appointment', 'cancel-appointment'];
 
             if (in_array($action, $connectionActions)) {
                 require('app/src/php/controllers/ConnectionController.php');
@@ -197,24 +194,28 @@ try {
             }
 
             elseif (in_array($action, $progressionActions)) {
-                if ($action === 'add-weight-report') {
-                    require('app/src/php/controllers/MemberPanelController.php');
-                    $memberPanelController = new MemberPanelController;
+                require('app/src/php/controllers/MemberPanelController.php');
+                $memberPanelController = new MemberPanelController;
+                $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
 
-                    if ($memberPanelController->verifyAddWeightFormData()) {
-                        $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
-                        if (!empty($dbUserPassword)) {
+                if (!empty($dbUserPassword)) {
+                    if ($action === 'add-weight-report') {
+                        if ($memberPanelController->verifyAddWeightFormData()) {
                             $memberPanelController->addWeightReport();
-                            header("location:{$memberPanelController->memberPanelsURL['progress']}");
-                        }
-                        
-                        else {
-                            header("location:{$memberPanelController->memberPanelsURL['login']}");
                         }
                     }
-                    else {
-                        header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                    else if ($action === 'delete-weight-report') {
+                        $progressHistory = $memberPanelController->getProgressHistory();
+
+                        if (isset($_GET['id']) && $memberPanelController->verifyWeightReportId($progressHistory)) {
+                            $reportId = htmlspecialchars($_GET['id']);
+                            $memberPanelController->deleteMemberReport($reportId, $progressHistory);
+                        }
                     }
+                    header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                }
+                else {
+                    header("location:{$memberPanelController->memberPanelsURL['login']}");
                 }
             }
 
@@ -224,36 +225,23 @@ try {
                 $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
 
                 if (!empty($dbUserPassword)) {
-                    if ($action === 'add-new-appointment') {
+                    if ($action === 'book-new-appointment') {
                         $requestedMeetingDate = $memberPanelController->verifyMeetingFormData();
 
                         if (!is_null($requestedMeetingDate)) {
                             if (in_array($requestedMeetingDate, $memberPanelController->getMeetings())){
                                 $memberPanelController->addAppointment($requestedMeetingDate);
-                                header("location:{$memberPanelController->memberPanelsURL['meetings']}");
                             }
-                            else {
-                                header("location:{$memberPanelController->memberPanelsURL['meetings']}");
-                            }
-                        }
-                        
-                        else {
-                            header("location:{$memberPanelController->memberPanelsURL['login']}");
                         }
                     }
-
-                    else if ($action === 'cancel-meeting') {
+                    else if ($action === 'cancel-appointment') {
                         $memberPanelController->cancelMemberNextMeeting();
-                        header("location:{$memberPanelController->memberPanelsURL['meetings']}");
                     }
-                    
-                }
-                
-                else {
                     header("location:{$memberPanelController->memberPanelsURL['meetings']}");
                 }
-
-                
+                else {
+                    header("location:{$memberPanelController->memberPanelsURL['login']}");
+                }
             }
         }
     }

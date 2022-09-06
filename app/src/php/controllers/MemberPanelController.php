@@ -58,6 +58,25 @@ class MemberPanelController extends MainController {
         return $isMemberVerified;
     }
 
+    public function verifyWeightReportId($progressHistory) {
+        $isIdValid = array_key_exists($this->getWeightReportId(), $progressHistory);
+
+        return $isIdValid;
+    }
+
+    public function getWeightReportId() {
+        $weightReportId = htmlspecialchars($_GET['id']);
+        $weightReportId = is_numeric($weightReportId) ? $weightReportId-1 : -1;
+
+        return $weightReportId;
+    }
+
+    public function deleteMemberReport($reportId, $progressHistory) {
+        $reportDate = $progressHistory[$reportId-1]['report_date'];
+        $dashboardManager = new DashboardManager;
+        $dashboardManager->deleteReport($reportDate, $_SESSION['user-email']);
+    }
+
     public function getMeetingsScripts() {
         return $this->meetingsScripts;
     }
@@ -312,10 +331,6 @@ class MemberPanelController extends MainController {
 
     public function renderMemberProgress($twig) {
         $subMenuPage = 'progress';
-
-        // echo '<pre>';
-        // var_dump($this->getProgressHistory());
-        // echo '</pre>';
 
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->memberPanels, 'subPanel' => $this->getMemberPanelSubtitles($subMenuPage)]);

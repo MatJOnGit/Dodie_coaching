@@ -88,6 +88,13 @@ class DashboardManager extends Manager {
         return $bookedMeeting;
     }
 
+    public function deleteReport($reportDate, $memberEmail) {
+        $db = $this->dbConnect();
+        $reportDeletionQuery = "DELETE FROM users_dynamic_data WHERE report_date = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)";
+        $reportDeletionQueryStatement = $db->prepare($reportDeletionQuery);
+        $reportDeletionQueryStatement->execute([$reportDate, $memberEmail]);
+    }
+
     public function releaseNextMemberMeetingSlot($email) {
         $db = $this->dbConnect();
         $meetingSlotReleasingQuery = "UPDATE scheduled_slots SET user_id = 0, slot_status = 'available' WHERE user_id = (SELECT id FROM accounts WHERE email = ?)";

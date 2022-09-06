@@ -21,7 +21,7 @@ class Progress {
         reportDate.type = 'date';
         reportDate.classList = 'report-date';
         reportDate.name = 'report-date';
-        reportDate.max = new Date().toLocaleDateString();
+        reportDate.max = new Date().toISOString().split('T')[0]
         reportDate.setAttribute('required', '');
 
         let reportTime = document.createElement('input');

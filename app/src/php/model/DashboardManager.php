@@ -102,5 +102,3 @@ class DashboardManager extends Manager {
         $meetingSlotReleasingQueryStatement->execute([$email]);
     }
 }
-
-// UPDATE scheduled_slots sl SET sl.user_id = 0, sl.slot_status = 'available' WHERE sl.slot_date = ? AND sl.user_id = (SELECT id FROM accounts WHERE email = ?)

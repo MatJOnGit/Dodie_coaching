@@ -1,9 +1,12 @@
 <?php
 
-require ('app/src/php/controllers/MainController.php');
-require ('app/src/php/model/AccountManager.php');
+require_once ('app/src/php/model/AccountManager.php');
 
-class ConnectionController extends MainController {
+class ConnectionController {
+    public $usernameRegex = '^[-[:alpha:] \']+$^';
+    public $emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
+    public $passwordRegex = '#^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{6,}$#';
+
     public $connectionPagesStyles = [
         'pages/connection-panels',
         'components/header',
@@ -25,6 +28,60 @@ class ConnectionController extends MainController {
         'wrongPassword' => "Mot de passe erroné.",
         'dbError' => "Votre compte n'a pas pu être créé. Merci de réessayer plus tard."
     );
+
+    public function getPreviousFormError() {
+        if (isset($_SESSION['form-error'])) {
+            $formError = $_SESSION['form-error'];
+        }
+        else {
+            $formError = '';
+        }
+
+        return $formError;
+    }
+
+    public function getUserPassword() {
+        return $_SESSION['user-password'];
+    }
+
+    public function renderLoginPage($twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('connection_panels/login.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
+        echo $twig->render('components/footer.html.twig');
+    }
+
+    public function renderRegisteringPage($twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
+        echo $twig->render('connection_panels/registering.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
+        echo $twig->render('components/footer.html.twig');
+    }
+
+    public function renderPasswordRetrievingPage($twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('connection_panels/password-retrieving.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
+        echo $twig->render('components/footer.html.twig');
+    }
+
+    public function setFormErrorMessage($errorType) {
+        $_SESSION['form-error'] = $this->errorMessage[$errorType];
+    }
+
+    public function setNewAccount() {
+        $accountManager = new AccountManager;
+        $isAccountRegistered = $accountManager->registerAccount($_SESSION['user-first-name'], $_SESSION['user-last-name'], $_SESSION['user-email'], $_SESSION['user-password']);
+
+        return $isAccountRegistered;
+    }
+
+    public function updateLoginDate() {
+        $accountManager = new AccountManager;
+        $isLoginDateUpdated = $accountManager->updateUserLastLogin($_SESSION['user-email']);
+
+        return $isLoginDateUpdated;
+    }
 
     public function verifyLoginFormData() {
         $_SESSION['user-email'] = htmlspecialchars($_POST['user-email']);
@@ -55,59 +112,5 @@ class ConnectionController extends MainController {
         ) ? true : false;
 
         return $isRegistrationFormVerified;
-    }
-
-    public function getUserPassword() {
-        return $_SESSION['user-password'];
-    }
-
-    public function updateLoginDate() {
-        $accountManager = new AccountManager;
-        $isLoginDateUpdated = $accountManager->updateUserLastLogin($this->getUserEmail());
-
-        return $isLoginDateUpdated;
-    }
-
-    public function setNewAccount() {
-        $accountManager = new AccountManager;
-        $isAccountRegistered = $accountManager->registerAccount($_SESSION['user-first-name'], $_SESSION['user-last-name'], $_SESSION['user-email'], $_SESSION['user-password']);
-
-        return $isAccountRegistered;
-    }
-
-    public function setFormErrorMessage($errorType) {
-        $_SESSION['form-error'] = $this->errorMessage[$errorType];
-    }
-
-    public function getPreviousFormError() {
-        if (isset($_SESSION['form-error'])) {
-            $formError = $_SESSION['form-error'];
-        }
-        else {
-            $formError = '';
-        }
-
-        return $formError;
-    }
-
-    public function renderLoginPage($twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/login.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('components/footer.html.twig');
-    }
-
-    public function renderRegisteringPage($twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
-        echo $twig->render('connection_panels/registering.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('components/footer.html.twig');
-    }
-
-    public function renderPasswordRetrievingPage($twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->connectionPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/password-retrieving.html.twig', ['previousFormError' => $this->getPreviousFormError()]);
-        echo $twig->render('components/footer.html.twig');
     }
 }

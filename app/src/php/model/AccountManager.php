@@ -37,7 +37,7 @@ class AccountManager extends Manager {
         return $userLastLoginUpdateSuccess;
     }
 
-    public function getUserStaticData($accountEmail) {
+    public function getMemberStaticData($accountEmail) {
         $db = $this->dbConnect();
         $userStaticDataGetterQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
         $userStaticDataGetterStatement = $db->prepare($userStaticDataGetterQuery);

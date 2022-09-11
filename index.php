@@ -16,11 +16,11 @@ try {
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving'],
-            'memberPanel' => ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription']
+            'memberPanels' => ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account'],
-            'progression' => ['add-weight-report', 'delete-weight-report'],
+            'progress' => ['add-weight-report', 'delete-weight-report'],
             'meeting' => ['book-new-appointment', 'cancel-appointment']
         ]
     ];
@@ -40,38 +40,38 @@ try {
                 $showcaseController->renderCoachingPage($twig);
             }
 
-            else {
+            elseif (($page === 'programslist') || ($page === 'programdetails')) {
                 if ($showcaseController->verifyProgramsListAvailability()) {
                     
                     if ($page === 'programslist') {
                         $showcaseController->renderProgramsListPage($twig);
                     }
 
-                    elseif (isset($_GET['program'])) {
+                    elseif (($page === 'programdetails') && (isset($_GET['program']))) {
                         $program = htmlspecialchars($_GET['program']);
 
-                        if (!is_null($program) && ($showcaseController->verifyProgramDetails($program))) {
-                            $showcaseController->renderProgramDetailsPage($twig);
+                        if (!is_null($program) && ($showcaseController->verifyProgramDetailsAvailability($program))) {
+                            $showcaseController->renderProgramDetailsPage($twig, $program);
                         }
 
                         else {
-                            header("Location:{$connectionController->showcasePanelURL['programsList']}");
+                            header("Location:{$showcaseController->getShowcasePanelsURL('programsList')}");
                         }
                     }
 
-                    elseif ($page === 'showcase-404') {
-                        header("Location:{$connectionController->showcasePanelURL['showcase404']}");
+                    else {
+                        header("Location:{$showcaseController->getShowcasePanelsURL('showcase404')}");
                     }
+                }
+            }
+
+            else {
+                if ($page === 'showcase-404') {
+                    $showcaseController->render404Page($twig);
                 }
 
                 else {
-                    if ($page === 'showcase-404') {
-                        $showcaseController->render404Page($twig);
-                    }
-
-                    else {
-                        header("Location:{$connectionController->showcasePanelURL['showcase404']}");
-                    }
+                    header("Location:{$showcaseController->getShowcasePanelsURL('showcase404')}");
                 }
             }
         }
@@ -93,53 +93,55 @@ try {
             }
         }
 
-        elseif (in_array($page, $Urls['pages']['memberPanel'])) {
-            require('app/src/php/controllers/MemberPanelController.php');
-            $memberPanelController = new MemberPanelController;
+        elseif (in_array($page, $Urls['pages']['memberPanels'])) {
+            require('app/src/php/controllers/AccountController.php');
+            $accountController = new AccountController;
 
-            if (!$memberPanelController->verifyAccount()) {
-                header('location:index.php?page=login');
-            }
+            if ($accountController->verifyAccountPasswordValidity()) {
+                $completeStaticDataAccount = $accountController->verifyMemberStaticDataCompletion();
 
-            else {
-                $userStaticData = $memberPanelController->verifyUserStaticData();
-
-                if (($page !== 'get-to-know-you') && (!$userStaticData)) {
-                    header('location:index.php?page=get-to-know-you');
-                }
-
-                elseif (($page === 'get-to-know-you') && ($userStaticData)) {
-                    header('location:index.php?page=dashboard');
-                }
-
-                elseif ($page === 'dashboard') {
-                    $memberPanelController->storeMemberIdentity();
+                if ($page === 'dashboard' && $completeStaticDataAccount) {
+                    require('app/src/php/controllers/MemberPanelsController.php');
+                    $memberPanelController = new MemberPanelsController;
                     $memberPanelController->renderMemberDashboard($twig);
                 }
 
-                elseif ($page === 'nutrition-program') {
-                    $memberPanelController->storeMemberIdentity();
-                    $memberPanelController->renderMemberNutritionProgram($twig);
+                elseif ($page === 'nutrition-program' && $completeStaticDataAccount) {
+                    require('app/src/php/controllers/NutritionProgramController.php');
+                    $nutritionProgramController = new NutritionProgramController;
+                    $nutritionProgramController->renderMemberNutritionProgram($twig);
                 }
 
-                elseif ($page === 'progress') {
-                    $memberPanelController->storeMemberIdentity();
-                    $memberPanelController->renderMemberProgress($twig);
+                elseif ($page === 'progress' && $completeStaticDataAccount) {
+                    require('app/src/php/controllers/ProgressController.php');
+                    $progressController = new ProgressController;
+                    $progressController->renderMemberProgress($twig);
                 }
 
-                elseif ($page === 'meetings'){
-                    $memberPanelController->storeMemberIdentity();
-                    $memberPanelController->renderMeetings($twig);
+                elseif ($page === 'meetings' && $completeStaticDataAccount){
+                    require('app/src/php/controllers/MeetingsController.php');
+                    $meetingsController = new MeetingsController;
+                    $meetingsController->renderMeetings($twig);
                 }
 
-                elseif ($page === 'get-to-know-you'){
+                elseif ($page === 'get-to-know-you') {
+                    require('app/src/php/controllers/MemberPanelsController.php');
+                    $memberPanelController = new MemberPanelsController;
                     $memberPanelController->renderMemberDataForm($twig);
                 }
+
+                else {
+                    header('location:index.php?page=get-to-know-you');
+                }
+            }
+
+            else {
+                header('location:index.php?page=login');
             }
         }
         
         else {
-            header('Location: index.php');
+            header('Location: index.php?page=presentation');
         }
     }
 
@@ -148,11 +150,13 @@ try {
 
         if (in_array($action, $Urls['actions']['connection'])) {
             require('app/src/php/controllers/ConnectionController.php');
+            require('app/src/php/controllers/AccountController.php');
             $connectionController = new ConnectionController;
+            $accountController = new AccountController;
 
             if ($_GET['action'] === 'log-account') {
                 if ($connectionController->verifyLoginFormData()) {
-                    $dbUserPassword = $connectionController->verifyUserInDatabase($connectionController->getUserEmail());
+                    $dbUserPassword = $accountController->verifyAccountPasswordValidity();
 
                     if (empty($dbUserPassword)) {
                         $connectionController->setFormErrorMessage('unknownEmail');
@@ -186,7 +190,7 @@ try {
 
             elseif ($action === 'register-account') {
                 if ($connectionController->verifyRegisteringFormData()) {
-                    $dbUserPassword = $connectionController->verifyUserInDatabase($this->getUserEmail());
+                    $dbUserPassword = $accountController->verifyAccountPasswordValidity();
 
                     if (!empty($dbUserPassword)) {
                         $connectionController->setFormErrorMessage('usedEmail');
@@ -214,57 +218,63 @@ try {
             }
         }
 
-        elseif (in_array($action, $Urls['actions']['progression'])) {
-            require('app/src/php/controllers/MemberPanelController.php');
-            $memberPanelController = new MemberPanelController;
-            $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+        elseif (in_array($action, $Urls['actions']['progress'])) {
+            require('app/src/php/controllers/ProgressController.php');
+            require('app/src/php/controllers/AccountController.php');
+            $progressController = new ProgressController;
+            $accountController = new AccountController;
+            $dbUserPassword = $accountController->verifyAccountPasswordValidity();
 
             if (!empty($dbUserPassword)) {
                 if ($action === 'add-weight-report') {
-                    if ($memberPanelController->verifyAddWeightFormData()) {
-                        $memberPanelController->addWeightReport();
+                    if ($progressController->verifyAddWeightFormValidity()) {
+                        $progressController->addWeightReport();
                     }
                 }
 
                 elseif ($action === 'delete-weight-report') {
-                    $progressHistory = $memberPanelController->getProgressHistory();
+                    if (isset($_GET['id'])) {
+                        $weightReportId = htmlspecialchars($_GET['id']);
+                        $progressHistory = $progressController->getMemberProgressHistory($weightReportId);
 
-                    if (isset($_GET['id']) && $memberPanelController->verifyWeightReportId($progressHistory)) {
-                        $reportId = htmlspecialchars($_GET['id']);
-                        $memberPanelController->deleteMemberReport($reportId, $progressHistory);
+                        if ($progressController->verifyWeightReportIdValidity($progressHistory, $weightReportId)) {
+                            $progressController->deleteMemberReport($progressHistory, $weightReportId);
+                        }
                     }
                 }
-                header("location:{$memberPanelController->memberPanelsURL['progress']}");
+                header("location:{$progressController->getMemberPanelsURLs('progress')}");
             }
             else {
-                header("location:{$memberPanelController->memberPanelsURL['login']}");
+                header("location:{$progressController->getMemberPanelsURLs['login']}");
             }
         }
 
         elseif (in_array($action, $Urls['actions']['meeting'])) {
-            require('app/src/php/controllers/MemberPanelController.php');
-            $memberPanelController = new MemberPanelController;
-            $dbUserPassword = $memberPanelController->verifyUserInDatabase($memberPanelController->getUserEmail());
+            require('app/src/php/controllers/MeetingsController.php');
+            require('app/src/php/controllers/AccountController.php');
+            $meetingsController = new MeetingsController;
+            $accountController = new AccountController;
+            $dbUserPassword = $accountController->verifyAccountPasswordValidity();
 
             if (!empty($dbUserPassword)) {
                 if ($action === 'book-new-appointment') {
-                    $requestedMeetingDate = $memberPanelController->verifyMeetingFormData();
+                    $requestedMeetingDate = $meetingsController->getMeetingDate();
 
                     if (!is_null($requestedMeetingDate)) {
-                        if (in_array($requestedMeetingDate, $memberPanelController->getMeetings())){
-                            $memberPanelController->addAppointment($requestedMeetingDate);
+                        if (in_array($requestedMeetingDate, $meetingsController->getMeetings())){
+                            $meetingsController->addAppointment($requestedMeetingDate);
                         }
                     }
                 }
 
                 elseif ($action === 'cancel-appointment') {
-                    $memberPanelController->cancelMemberNextMeeting();
+                    $meetingsController->cancelMemberNextMeeting();
                 }
-                header("location:{$memberPanelController->memberPanelsURL['meetings']}");
+                header("location:{$meetingsController->getMemberPanelsURLs('meetings')}");
             }
 
             else {
-                header("location:{$memberPanelController->memberPanelsURL['login']}");
+                header("location:{$meetingsController->getMemberPanelsURLs('login')}");
             }
         }
     }

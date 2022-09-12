@@ -11,7 +11,7 @@ class ShowcaseController {
     ];
 
     private $showcasePanelsURLs = array(
-        'presentation' => 'index.php',
+        'presentation' => 'index.php?page=presentation',
         'coaching' => 'index.php?page=coaching',
         'programsList' => 'index.php?page=programslist',
         'programDetails' => 'index.php?page=programdetails',
@@ -35,7 +35,7 @@ class ShowcaseController {
         return $this->showcasePanelsStyles;
     }
 
-    public function getShowcasePanelsURL($requestedPage) {
+    public function getShowcasePanelURL($requestedPage) {
         return $this->showcasePanelsURLs[$requestedPage];
     }
 

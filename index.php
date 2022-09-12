@@ -2,6 +2,7 @@
 
 session_start();
 // session_destroy();
+// echo $_SESSION['user-email'];
 
 try {
     require_once './app/vendor/autoload.php';
@@ -19,7 +20,7 @@ try {
             'memberPanels' => ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
-            'connection' => ['log-account', 'register-account'],
+            'connection' => ['log-account', 'register-account', 'log-out'],
             'progress' => ['add-weight-report', 'delete-weight-report'],
             'meeting' => ['book-new-appointment', 'cancel-appointment']
         ]
@@ -42,7 +43,6 @@ try {
 
             elseif (($page === 'programslist') || ($page === 'programdetails')) {
                 if ($showcaseController->verifyProgramsListAvailability()) {
-                    
                     if ($page === 'programslist') {
                         $showcaseController->renderProgramsListPage($twig);
                     }
@@ -50,18 +50,22 @@ try {
                     elseif (($page === 'programdetails') && (isset($_GET['program']))) {
                         $program = htmlspecialchars($_GET['program']);
 
-                        if (!is_null($program) && ($showcaseController->verifyProgramDetailsAvailability($program))) {
+                        if ($showcaseController->verifyProgramDetailsAvailability($program)) {
                             $showcaseController->renderProgramDetailsPage($twig, $program);
                         }
 
                         else {
-                            header("Location:{$showcaseController->getShowcasePanelsURL('programsList')}");
+                            header("Location:{$showcaseController->getShowcasePanelURL('programsList')}");
                         }
                     }
 
                     else {
-                        header("Location:{$showcaseController->getShowcasePanelsURL('showcase404')}");
+                        header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
                     }
+                }
+
+                else {
+                    header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
                 }
             }
 
@@ -71,25 +75,31 @@ try {
                 }
 
                 else {
-                    header("Location:{$showcaseController->getShowcasePanelsURL('showcase404')}");
+                    header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
                 }
             }
         }
 
         elseif (in_array($page, $Urls['pages']['connection'])) {
-            require('app/src/php/controllers/ConnectionController.php');
-            $connectionController = new ConnectionController;
-    
-            if ($page === 'login') {
-                $connectionController->renderLoginPage($twig);
-            }
+            require('app/src/php/controllers/AccountController.php');
+            $accountController = new AccountController;
+            $isUserLogged = $accountController->verifySessionDataValidity();
 
-            elseif ($page === 'registering') {
-                $connectionController->renderRegisteringPage($twig);
-            }
+            if (!$isUserLogged) {
+                if ($page === 'login') {
+                    $accountController->renderLoginPage($twig);
+                }
 
-            elseif ($page === 'password-retrieving') {
-                $connectionController->renderPasswordRetrievingPage($twig);
+                elseif ($page === 'registering') {
+                    $accountController->renderRegisteringPage($twig);
+                }
+
+                elseif ($page === 'password-retrieving') {
+                    $accountController->renderPasswordRetrievingPage($twig);
+                }
+            }
+            else {
+                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
             }
         }
 
@@ -97,7 +107,7 @@ try {
             require('app/src/php/controllers/AccountController.php');
             $accountController = new AccountController;
 
-            if ($accountController->verifyAccountPasswordValidity()) {
+            if ($accountController->verifySessionDataValidity()) {
                 $completeStaticDataAccount = $accountController->verifyMemberStaticDataCompletion();
 
                 if ($page === 'dashboard' && $completeStaticDataAccount) {
@@ -127,7 +137,7 @@ try {
                 elseif ($page === 'get-to-know-you') {
                     require('app/src/php/controllers/MemberPanelsController.php');
                     $memberPanelController = new MemberPanelsController;
-                    $memberPanelController->renderMemberDataForm($twig);
+                    $memberPanelController->renderUserStaticDataForm($twig);
                 }
 
                 else {
@@ -136,7 +146,8 @@ try {
             }
 
             else {
-                header('location:index.php?page=login');
+                $accountController->destroySessionData();
+                header("location:{$accountController->getConnectionPanelsURL('login')}");
             }
         }
         
@@ -146,86 +157,93 @@ try {
     }
 
     elseif (isset($_GET['action'])) {
+        require('app/src/php/controllers/AccountController.php');
+        $accountController = new AccountController;
         $action = htmlspecialchars($_GET['action']);
 
         if (in_array($action, $Urls['actions']['connection'])) {
-            require('app/src/php/controllers/ConnectionController.php');
-            require('app/src/php/controllers/AccountController.php');
-            $connectionController = new ConnectionController;
-            $accountController = new AccountController;
+            $isUserLogged = $accountController->verifySessionDataValidity();
 
-            if ($_GET['action'] === 'log-account') {
-                if ($connectionController->verifyLoginFormData()) {
-                    $dbUserPassword = $accountController->verifyAccountPasswordValidity();
+            if (!$isUserLogged) {
+                $userEmail = $accountController->getFormEmailData();
+                $userPassword = $accountController->getFormPasswordData();
 
-                    if (empty($dbUserPassword)) {
-                        $connectionController->setFormErrorMessage('unknownEmail');
-                        header("location:{$connectionController->connectionPagesURL['login']}");
-                    }
-
-                    elseif ($dbUserPassword[0] !== $connectionController->getUserPassword()) {
-                        $connectionController->setFormErrorMessage('wrongPassword');
-                        header("location:{$connectionController->connectionPagesURL['login']}");
-                    }
-
-                    else {
-                        $isLoginDateUpdated = $connectionController->updateLoginDate();
-
-                        if ($isLoginDateUpdated) {
-                            header("location:{$connectionController->connectionPagesURL['dashboard']}");
+                if ($_GET['action'] === 'log-account') {
+                    if ($accountController->verifyLoginFormDataValidity()) {
+                        $isAccountKnown = $accountController->verifyAccountValidity($userEmail, $userPassword);
+                        
+                        if ($isAccountKnown) {
+                            $isLoginDateUpdated = $accountController->updateLoginDate($userEmail);
+    
+                            if ($isLoginDateUpdated) {
+                                $accountController->setSessionData();
+                                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                            }
                         }
-
+    
                         else {
-                            $connectionController->setFormErrorMessage('dbError');
-                            header("location:{$connectionController->connectionPagesURL['login']}");
+                            $accountController->destroySessionData();
+                            header("location:{$accountController->getConnectionPanelsURL('login')}");
                         }
+                    }
+    
+                    else {
+                        $accountController->destroySessionData();
+                        header("location:{$accountController->getConnectionPanelsURL('login')}");
                     }
                 }
 
-                else {
-                    $connectionController->setFormErrorMessage('invalidFormData');
-                    header("location:{$connectionController->connectionPagesURL['login']}");
+                elseif ($action === 'register-account') {
+                    $userFirstName = $accountController->getFormFirstNameData();
+                    $userLastName = $accountController->getFormLastNameData();
+                    $userConfirmationPassword = $accountController->getFormConfirmationPasswordData();
+                    
+                    if ($accountController->verifyRegisteringFormValidity($userFirstName, $userLastName, $userEmail, $userPassword, $userConfirmationPassword)) {
+                        $isAccountKnown = $accountController->verifyAccountValidity($userEmail, $userPassword);
+    
+                        if (!$isAccountKnown) {
+                            $isAccountRegistered = $accountController->registerNewAccount($userFirstName, $userLastName, $userEmail, $userPassword);
+    
+                            if ($isAccountRegistered) {
+                                $accountController->setSessionData();
+                                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                            }
+    
+                            else {
+                                $accountController->destroySessionData();
+                                header("location:{$accountController->getConnectionPanelsURL('registering')}");
+                            }
+                        }
+    
+                        else {
+                            $accountController->destroySessionData();
+                            header("location:{$accountController->getConnectionPanelsURL('registering')}");
+                        }
+                    }
+    
+                    else {
+                        $accountController->destroySessionData();
+                        header("Location:{$accountController->getConnectionPanelsURL('registering')}");
+                    }
                 }
             }
 
-            elseif ($action === 'register-account') {
-                if ($connectionController->verifyRegisteringFormData()) {
-                    $dbUserPassword = $accountController->verifyAccountPasswordValidity();
+            elseif ($action === 'logout') {
+                $accountController->destroySessionData();
+                header("Location:index.php?page=presentation");
+            }
 
-                    if (!empty($dbUserPassword)) {
-                        $connectionController->setFormErrorMessage('usedEmail');
-                        header("location:{$connectionController->connectionPagesURL['registering']}");
-                    }
-
-                    else {
-                        $isAccountRegistered = $connectionController->setNewAccount();
-
-                        if ($isAccountRegistered) {
-                            header("location:{$connectionController->connectionPagesURL['dashboard']}");
-                        }
-
-                        else {
-                            $connectionController->setFormErrorMessage('dbError');
-                            header("location:{$connectionController->connectionPagesURL['registering']}");
-                        }
-                    }
-                }
-
-                else {
-                    $connectionController->setFormErrorMessage('invalidFormData');
-                    header("Location:{$connectionController->connectionPagesURL['registering']}");
-                }
+            else {
+                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
             }
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {
             require('app/src/php/controllers/ProgressController.php');
-            require('app/src/php/controllers/AccountController.php');
             $progressController = new ProgressController;
-            $accountController = new AccountController;
-            $dbUserPassword = $accountController->verifyAccountPasswordValidity();
+            $isUserLogged = $accountController->verifySessionDataValidity();
 
-            if (!empty($dbUserPassword)) {
+            if ($isUserLogged) {
                 if ($action === 'add-weight-report') {
                     if ($progressController->verifyAddWeightFormValidity()) {
                         $progressController->addWeightReport();
@@ -242,26 +260,26 @@ try {
                         }
                     }
                 }
-                header("location:{$progressController->getMemberPanelsURLs('progress')}");
+                header("location:{$progressController->getMemberPanelURL('progress')}");
             }
+
             else {
-                header("location:{$progressController->getMemberPanelsURLs['login']}");
+                $accountController->destroySessionData();
+                header("location:{$progressController->getMemberPanelURL('login')}");
             }
         }
 
         elseif (in_array($action, $Urls['actions']['meeting'])) {
             require('app/src/php/controllers/MeetingsController.php');
-            require('app/src/php/controllers/AccountController.php');
             $meetingsController = new MeetingsController;
-            $accountController = new AccountController;
-            $dbUserPassword = $accountController->verifyAccountPasswordValidity();
+            $isUserLogged = $accountController->verifySessionDataValidity();
 
-            if (!empty($dbUserPassword)) {
+            if ($isUserLogged) {
                 if ($action === 'book-new-appointment') {
                     $requestedMeetingDate = $meetingsController->getMeetingDate();
 
                     if (!is_null($requestedMeetingDate)) {
-                        if (in_array($requestedMeetingDate, $meetingsController->getMeetings())){
+                        if (in_array($requestedMeetingDate, $meetingsController->getMeetings())) {
                             $meetingsController->addAppointment($requestedMeetingDate);
                         }
                     }
@@ -270,12 +288,18 @@ try {
                 elseif ($action === 'cancel-appointment') {
                     $meetingsController->cancelMemberNextMeeting();
                 }
-                header("location:{$meetingsController->getMemberPanelsURLs('meetings')}");
+                header("location:{$meetingsController->getMemberPanelURL('meetings')}");
             }
 
             else {
-                header("location:{$meetingsController->getMemberPanelsURLs('login')}");
+                $accountController->destroySessionData();
+                header("location:{$meetingsController->getMemberPanelURL('login')}");
             }
+        }
+        
+        else {
+            $accountController->destroySessionData();
+            header("location:index.php?page=presentation");
         }
     }
 

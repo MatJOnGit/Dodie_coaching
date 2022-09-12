@@ -3,16 +3,19 @@
 require ('app/src/php/controllers/MemberPanelsController.php');
 
 class ProgressController extends MemberPanelsController {
+
     private $progressScripts = [
         'Progress.model',
         'progressApp'
     ];
 
+    private $subMenuPage = 'progress';
+
     public function addWeightReport() {
         $this->setTimeZone();
         $dashboardManager = new DashboardManager;
         $reportDate = $this->verifyWeightReportDateValidity($this->buildReportDate(), 'Y-m-d H:i') ? $this->buildReportDate() : date('Y-m-d H-i-s');
-        $userId = $dashboardManager->getUserId($_SESSION['user-email']);
+        $userId = $dashboardManager->getMemberId($_SESSION['user-email']);
         $userWeight = floatval(number_format($_POST['user-weight'], 2));
 
         $dashboardManager->addNewWeightReport($userId, $userWeight, $reportDate);
@@ -43,10 +46,8 @@ class ProgressController extends MemberPanelsController {
     }
 
     public function renderMemberProgress($twig) {
-        $subMenuPage = 'progress';
-
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->getmemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($subMenuPage)]);
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->getMemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($this->subMenuPage)]);
         echo $twig->render('member_panels/progress.html.twig', ['progressHistory' => $this->getMemberProgressHistory()]);
         echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getProgressScripts()]);
     }

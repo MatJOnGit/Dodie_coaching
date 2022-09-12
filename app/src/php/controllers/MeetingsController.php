@@ -3,14 +3,16 @@
 require ('app/src/php/controllers/MemberPanelsController.php');
 
 class MeetingsController extends MemberPanelsController {
-    public $appointmentDelay = 24;
+    private $appointmentDelay = 24;
 
-    public $meetingsScripts = [
+    private $meetingsScripts = [
         'Meetings.model',
         'meetingsApp'
     ];
 
-    public $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    private $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+    private $subMenuPage = 'meetings';
 
     public function addAppointment($meetingDate) {
         $dashboardManager = new DashboardManager;
@@ -19,9 +21,9 @@ class MeetingsController extends MemberPanelsController {
 
     public function buildMeetingDate($meetingDay, $meetingMonth, $meetingHour, $meetingMinute) {
         $this->setTimeZone();
-        $meetingMonth = array_search($meetingMonth, $this->months)+1;
+        $meetingMonth = array_search($meetingMonth, $this->getMonths())+1;
         $meetingPotentialDate = date('Y') . '-' . $this->getTwoDigitsNumber($meetingMonth) . '-' . $this->getTwoDigitsNumber($meetingDay) . ' ' . $this->getTwoDigitsNumber($meetingHour) . ':' . $this->getTwoDigitsNumber($meetingMinute) . ':00';
-        $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->appointmentDelay . 'hours'));
+        $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->getAppointmentDelay() . 'hours'));
         $meetingDate = $meetingPotentialDate > $bookingLimitDate ? $meetingPotentialDate : NULL;
 
         return $meetingDate;
@@ -30,7 +32,11 @@ class MeetingsController extends MemberPanelsController {
     public function cancelMemberNextMeeting() {
         $this->setTimeZone();
         $dashboardManager = new DashboardManager;
-        $dashboardManager->releaseNextMemberMeetingSlot($_SESSION['user-email']);
+        $dashboardManager->releaseMemberAppointmentMeetingSlot($_SESSION['user-email']);
+    }
+
+    private function getAppointmentDelay() {
+        return $this->appointmentDelay;
     }
 
     private function getTwoDigitsNumber($dateValue) {
@@ -49,7 +55,7 @@ class MeetingsController extends MemberPanelsController {
         $meetingHour = explode('h', $meetingTime)[0];
         $meetingMinute = explode('h', $meetingTime)[1];
 
-        if (is_numeric($meetingDay) && in_array($meetingMonth, $this->months) && is_numeric($meetingHour) && is_numeric($meetingMinute)) {
+        if (is_numeric($meetingDay) && in_array($meetingMonth, $this->getMonths()) && is_numeric($meetingHour) && is_numeric($meetingMinute)) {
             $meetingDate = $this->buildMeetingDate($meetingDay, $meetingMonth, $meetingHour, $meetingMinute);
         }
 
@@ -62,17 +68,16 @@ class MeetingsController extends MemberPanelsController {
 
     public function getMeetings() {
         $dashboardManager = new DashboardManager;
-        $availableMeetings = $dashboardManager->getAvailableMeetingsSlots($this->appointmentDelay);
-        $meetings = $this->getMeetingsSlotsArray($availableMeetings);
+        $availableMeetings = $dashboardManager->getAvailableMeetingsSlots($this->getAppointmentDelay());
 
-        return $meetings;
+        return $this->getMeetingsSlotsArray($availableMeetings);
     }
 
-    public function getMeetingsScripts() {
+    private function getMeetingsScripts() {
         return $this->meetingsScripts;
     }
 
-    public function getMeetingsSlotsArray($meetings) {
+    private function getMeetingsSlotsArray($meetings) {
         $meetingsSlotsArray = [];
         foreach($meetings as $meeting) {
             array_push($meetingsSlotsArray, $meeting['slot_date']);
@@ -88,9 +93,13 @@ class MeetingsController extends MemberPanelsController {
         return (!empty($memberScheduledMeeting) ? $memberScheduledMeeting[0] : NULL);
     }
 
-    public function getSortedMeetingsSlots() {
+    private function getMonths() {
+        return $this->months;
+    }
+
+    private function getSortedMeetingsSlots() {
         $dashboardManager = new DashboardManager;
-        $availableMeetingsSlots = $dashboardManager->getAvailableMeetingsSlots($this->appointmentDelay);
+        $availableMeetingsSlots = $dashboardManager->getAvailableMeetingsSlots($this->getAppointmentDelay());
         $meetingsSlotsArray = $this->getMeetingsSlotsArray($availableMeetingsSlots);
         $sortedMeetingsSlots = $this->sortMeetingsSlots($meetingsSlotsArray);
 
@@ -98,15 +107,13 @@ class MeetingsController extends MemberPanelsController {
     }
 
     public function renderMeetings($twig) {
-        $subMenuPage = 'meetings';
-
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->memberPanelPagesStyles]);
-        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->getmemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($subMenuPage)]);
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->getMemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($this->subMenuPage)]);
         echo $twig->render('member_panels/meetings.html.twig', ['meetingSlots' => $this->getSortedMeetingsSlots(), 'memberScheduledMeeting' => $this->getMemberScheduledMeeting()]);
         echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->getMeetingsScripts()]);
     }
 
-    public function sortMeetingsSlots($meetings) {
+    private function sortMeetingsSlots($meetings) {
         $sortedMeetingsSlots = [];
 
         foreach ($meetings as $key => $meeting) {

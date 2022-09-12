@@ -34,26 +34,4 @@ class ProgramManager extends Manager {
         //     'description' => ""
         // )
     );
-
-    // public function getProgramsList() {
-    //     $db = $this->dbConnect();
-    
-    //     $programListQuery = 'SELECT name, french_title, duration, subscription_price, details_page_link FROM programs';
-    //     $programsStatement = $db->prepare($programListQuery);
-    //     $programsStatement->execute();
-    //     $programs = $programsStatement->fetchAll();
-    
-    //     return $programs;
-    // }
-
-    // public function getProgramDetails($requestedProgram) {
-    //     $db = $this->dbConnect();
-    
-    //     $programDetailsQuery = 'SELECT * FROM programs WHERE name = ?';
-    //     $programsStatement = $db->prepare($programDetailsQuery);
-    //     $programsStatement->execute(array($requestedProgram));
-    //     $programDetails = $programsStatement->fetch();
-    
-    //     return $programDetails;
-    // }
 }

@@ -165,18 +165,17 @@ try {
             $isUserLogged = $accountController->verifySessionDataValidity();
 
             if (!$isUserLogged) {
-                $userEmail = $accountController->getFormEmailData();
-                $userPassword = $accountController->getFormPasswordData();
+                $userData = $accountController->getLoginFormData();
 
                 if ($_GET['action'] === 'log-account') {
-                    if ($accountController->verifyLoginFormDataValidity()) {
-                        $isAccountKnown = $accountController->verifyAccountValidity($userEmail, $userPassword);
-                        
+                    if ($accountController->verifyLoginFormDataValidity($userData)) {
+                        $isAccountKnown = $accountController->verifyAccountValidity($userData['email'], $userData['password']);
+
                         if ($isAccountKnown) {
-                            $isLoginDateUpdated = $accountController->updateLoginDate($userEmail);
+                            $isLoginDateUpdated = $accountController->updateLoginDate($userData['email']);
     
                             if ($isLoginDateUpdated) {
-                                $accountController->setSessionData();
+                                $accountController->setSessionData($userData);
                                 header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
                             }
                         }
@@ -194,18 +193,16 @@ try {
                 }
 
                 elseif ($action === 'register-account') {
-                    $userFirstName = $accountController->getFormFirstNameData();
-                    $userLastName = $accountController->getFormLastNameData();
-                    $userConfirmationPassword = $accountController->getFormConfirmationPasswordData();
-                    
-                    if ($accountController->verifyRegisteringFormValidity($userFirstName, $userLastName, $userEmail, $userPassword, $userConfirmationPassword)) {
-                        $isAccountKnown = $accountController->verifyAccountValidity($userEmail, $userPassword);
-    
+                    $userData = $accountController->getRegistrationFormAdditionalData($userData);
+
+                    if ($accountController->verifyRegisteringFormValidity($userData)) {
+                        $isAccountKnown = $accountController->verifyAccountValidity($userData['email'], $userData['password']);
+
                         if (!$isAccountKnown) {
-                            $isAccountRegistered = $accountController->registerNewAccount($userFirstName, $userLastName, $userEmail, $userPassword);
+                            $isAccountRegistered = $accountController->registerNewAccount($userData);
     
                             if ($isAccountRegistered) {
-                                $accountController->setSessionData();
+                                $accountController->setSessionData($userData);
                                 header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
                             }
     

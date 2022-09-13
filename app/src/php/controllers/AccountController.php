@@ -33,28 +33,27 @@ class AccountController {
         return $this->connectionPanelsURLs[$panel];
     }
     
-    public function getFormConfirmationPasswordData() {
-        return htmlspecialchars($_POST['user-confirmation-password']);
-    }
-
-    public function getFormEmailData() {
-        return htmlspecialchars($_POST['user-email']);
-    }
-
-    public function getFormFirstNameData() {
-        return htmlspecialchars($_POST['user-first-name']);
-    }
-
-    public function getFormLastNameData() {
-        return htmlspecialchars($_POST['user-last-name']);
-    }
-
-    public function getFormPasswordData() {
-        return htmlspecialchars($_POST['user-password']);
-    }
-    
     private function getEmailRegex() {
         return $this->emailRegex;
+    }
+
+    public function getLoginFormData() {
+        $userData = [
+            'email' => htmlspecialchars($_POST['user-email']),
+            'password' => htmlspecialchars($_POST['user-password'])
+        ];
+
+        return $userData;
+    }
+
+    public function getRegistrationFormAdditionalData($userData) {
+        $userData += [
+            'firstName' => htmlspecialchars($_POST['user-first-name']),
+            'lastName' => htmlspecialchars($_POST['user-last-name']),
+            'confirmationPassword' => htmlspecialchars($_POST['user-confirmation-password'])
+        ];
+
+        return $userData;
     }
 
     private function getPasswordRegex() {
@@ -65,10 +64,10 @@ class AccountController {
         return $this->usernameRegex;
     }
 
-    public function registerNewAccount($userFirstName, $userLastName, $userEmail, $userPassword) {
+    public function registerNewAccount($userData) {
         $accountManager = new AccountManager;
 
-        return $accountManager->registerAccount($userFirstName,$userLastName, $userEmail, $userPassword);
+        return $accountManager->registerAccount($userData['firstName'], $userData['lastName'], $userData['email'], $userData['password']);
     }
 
     public function renderLoginPage($twig) {
@@ -92,9 +91,9 @@ class AccountController {
         echo $twig->render('components/footer.html.twig');
     }
 
-    public function setSessionData() {
-        $_SESSION['user-email'] = htmlspecialchars($_POST['user-email']);
-        $_SESSION['user-password'] = htmlspecialchars($_POST['user-password']);
+    public function setSessionData($userData) {
+        $_SESSION['user-email'] = $userData['email'];
+        $_SESSION['user-password'] = $userData['password'];
     }
 
     public function updateLoginDate($email) {
@@ -102,21 +101,28 @@ class AccountController {
         return $accountManager->updateMemberLastLogin($email);
     }
 
-    public function verifyAccountValidity($email, $password) { //
+    public function verifyAccountValidity($email, $password) {
         $accountManager = new AccountManager;
-        $isPasswordMatching = $password === $accountManager->getAccountPassword($email)[0];
-        $isPasswordEmpty = empty($password);
+        $dbUserData = $accountManager->getAccountPassword($email);
 
-        return ($isPasswordMatching && !$isPasswordEmpty);
+        if ($dbUserData) {
+            $isPasswordMatching = $password === $dbUserData[0];
+            $isPasswordEmpty = empty($password);
+
+            $isAccountKnown = ($isPasswordMatching && !$isPasswordEmpty);
+        }
+
+        else {
+            $isAccountKnown = false;
+        }
+
+        return $isAccountKnown;
     }
 
-    public function verifyLoginFormDataValidity() {
-        $userEmail = htmlspecialchars($_POST['user-email']);
-        $userPassword = htmlspecialchars($_POST['user-password']);
-
+    public function verifyLoginFormDataValidity($userData) {
         return (
-            (preg_match($this->getEmailRegex(), $userEmail)) && 
-            (preg_match($this->getPasswordRegex(), $userPassword))
+            (preg_match($this->getEmailRegex(), $userData['email'])) && 
+            (preg_match($this->getPasswordRegex(), $userData['password']))
         );
     }
 
@@ -127,14 +133,14 @@ class AccountController {
         return (is_array($userStaticData) && !in_array(NULL, $userStaticData));
     }
 
-    public function verifyRegisteringFormValidity($userFirstName, $userLastName, $userEmail, $userPassword, $userConfirmationPassword) {
+    public function verifyRegisteringFormValidity($userData) {
         return (
-            (preg_match($this->getUsernameRegex(), $userFirstName)) &&
-            (preg_match($this->getUsernameRegex(), $userLastName)) &&
-            (preg_match($this->getEmailRegex(), $userEmail)) &&
-            (preg_match($this->getPasswordRegex(), $userPassword)) &&
-            (preg_match($this->getPasswordRegex(), $userConfirmationPassword)) &&
-            ($userPassword === $userConfirmationPassword)
+            (preg_match($this->getUsernameRegex(), $userData['firstName'])) &&
+            (preg_match($this->getUsernameRegex(), $userData['lastName'])) &&
+            (preg_match($this->getEmailRegex(), $userData['email'])) &&
+            (preg_match($this->getPasswordRegex(), $userData['password'])) &&
+            (preg_match($this->getPasswordRegex(), $userData['confirmationPassword'])) &&
+            ($userData['password'] === $userData['confirmationPassword'])
         );
     }
 

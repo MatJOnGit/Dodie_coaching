@@ -1,0 +1,24 @@
+<div class='showcase-panel program-details-container {{ program.name }}-program'>
+    <div class='program-details glowy-bkgd'>
+        <a href='index.php?page=programslist' class='btn rounded-btn blue-bkgd'>
+            <i class="fa-solid fa-arrow-left-long"></i>
+            <span>Retour aux formules</span>
+        </a>
+
+        <div class='program-headers'>
+            <h2>{{ program.frenchTitle }}</h2>
+            <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
+            <p>{{ program.subscriptionPrice }} €</p>
+        </div>
+
+        {% if program.description != NULL %}
+        <div class='program-description'>
+            <p>{{ program.description | raw }}</p>
+        </div>
+        {% endif %}
+
+        <a href='index.php?page=login' class='btn rounded-btn blue-bkgd'>
+            <span>Je m'inscris !</span>
+        </a>
+    </div>
+</div>

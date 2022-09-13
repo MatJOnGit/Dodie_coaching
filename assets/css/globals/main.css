@@ -1,0 +1,89 @@
+@font-face {
+    font-family: 'julius sans one';
+    src: url('../fonts/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'archivo narrow';
+    src: url('../fonts/Archivo_Narrow/ArchivoNarrow-VariableFont_wght.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'source sans pro';
+    src: url('../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf');
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'source sans pro';
+}
+
+h1 {
+    font-family: 'julius sans one';
+    font-size: 6vmin;
+}
+
+li, a, input, select {
+    font-family: 'archivo narrow';
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin : 0;
+}
+
+.error-container p,
+input::placeholder {
+    font-style: italic;
+}
+
+#dynamic-menu-button i {
+    font-size: 2.5em;
+}
+
+#static-menu li {
+    font-size: 0.9em;
+}
+
+.cloudy-bkgd {
+    background-color: hsla(0, 0%, 100%, 0.6);
+}
+
+.cloudy-bkgd a {
+    color: hsla(0, 0%, 0%, 1);
+}
+
+.tiny-btn,
+.large-btn,
+input[type=submit] {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.light-to-dark-purple-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 71%, 64%, 1) 0%,
+        hsla(261, 71%, 20%, 1) 100%
+    );
+}
+
+.purple-to-blue-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(260, 68%, 41%, 1) 0%,
+        hsla(260, 68%, 41%, 1) 50%,
+        hsla(261, 83%, 18%, 1) 100%
+    );
+}

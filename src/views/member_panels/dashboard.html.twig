@@ -1,0 +1,23 @@
+<div class='member-panel dashboard-panel'>
+    <a href='' class='settings-btn'>
+        <i class="fa-solid fa-gear"></i>
+    </a>
+
+    <div class='progress-graph-cnn'>
+        <canvas id="user-progress-graph"></canvas>
+        <figcaption>Objectif de poids : 86 kg</figcaption>
+    </div>
+
+    <nav class='dashboard-menu'>
+        <ul>
+            {% for dashboardMenuItem in dashboardMenuItems %}
+            <li>
+                <a href='index.php?page={{ dashboardMenuItem.link }}' class='btn dashboard-btn rounded-btn light-to-dark-purple-bkgd'>
+                    <span>{{ dashboardMenuItem.frenchTitle }}</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+</div>

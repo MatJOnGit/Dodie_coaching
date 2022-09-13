@@ -1,0 +1,109 @@
+/*********************************/
+/*             THEME             */
+/*********************************/
+
+#title-layer a,
+.purple-bkgd,
+footer li {
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 57%, 55%, 1) 0%,
+        hsla(261, 47%, 27%, 1) 100%
+    );
+}
+
+.homepage-link i,
+.error-container,
+footer i {
+    color: hsla(0, 0%, 100%, 1);
+}
+
+#dynamic-menu-button i {
+    color: hsla(261, 57%, 55%, 1);
+}
+
+h3,
+input,
+input::placeholder,
+select {
+    border: none;
+    color: hsla(0, 0%, 100%, 1);
+}
+
+input[type=email],
+input[type=text],
+input[type=password],
+input[type=number],
+select {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+footer {
+    background-color: hsla(0, 0%, 100%, 1);
+}
+
+footer p {
+    color: hsla(261, 47%, 27%, 1);
+}
+
+/********************************/
+/*           GLOBALS            */
+/********************************/
+
+.homepage-link i {
+    font-size: 6vmin;
+}
+
+.connection-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 11vh - 70px);
+    margin: 11vh 0 70px 0;
+    padding: 0 10%;
+}
+
+.error-container,
+form {
+    width: 100%;
+}
+
+.error-container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 4vh;
+    padding: 2vh 10%;
+}
+
+.error-container p {
+    text-align: center;
+    margin: 0 10%;
+    font-size: 3.5vmin;
+}
+
+input[type=email],
+input[type=text],
+input[type=password],
+input[type=number],
+select {
+    width: 70%;
+}
+
+input[type=submit] {
+    padding: 0;
+}
+
+.tiny-btn,
+.large-btn,
+input[type=submit] {
+    height: 7vh;
+}
+
+.btn span {
+    font-size: 1em;
+    text-align: center;
+    width: 90%;
+}

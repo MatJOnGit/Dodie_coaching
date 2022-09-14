@@ -1,5 +1,6 @@
-class Meetings {
+class Meetings extends MemberPanels {
     constructor() {
+        super();
         this._appointmentTab = document.getElementById('appointment-tab');
         this._meetingDateInput = document.getElementById('user-next-meeting');
         this._meetingFormSubmitButton = document.getElementById('appointment-form-submit-button');
@@ -188,9 +189,11 @@ class Meetings {
         confirmMeetingCancelationLink.textContent = 'Oui';
 
         this.cancelMeetingButtonContainer.innerHTML = '';
+        this.cancelMeetingButtonContainer.style.opacity = 0;
         this.cancelMeetingButtonContainer.appendChild(cancelMeetingCancelationButton);
         this.cancelMeetingButtonContainer.appendChild(meetingConcelationMessage);
         this.cancelMeetingButtonContainer.appendChild(confirmMeetingCancelationLink);
+        this.cancelMeetingButtonContainer.onload = this.fadeInItem(this.cancelMeetingButtonContainer, 4000);
     }
 
     displayTabNextElements() {

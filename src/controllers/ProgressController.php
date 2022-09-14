@@ -5,7 +5,8 @@ require ('./../src/controllers/MemberPanelsController.php');
 class ProgressController extends MemberPanelsController {
 
     private $progressScripts = [
-        'Progress.model',
+        'classes/MemberPanels.model',
+        'classes/Progress.model',
         'progressApp'
     ];
 

@@ -1,5 +1,6 @@
-class Progress {
+class Progress extends MemberPanels {
     constructor() {
+        super();
         this._dateTypeSelect = document.getElementById('date-selector');
         this._formFields = document.getElementsByClassName('form-fields')[0];
     }
@@ -40,11 +41,11 @@ class Progress {
     }
 
     displayDeleteReportConfirmation(deleteReportClickedButton) {
-        let selectedReportTableRow = deleteReportClickedButton.parentNode;
+        let selectedReport = deleteReportClickedButton.parentNode;
 
         let cancelReportDeletionButton = document.createElement('a');
         cancelReportDeletionButton.href = 'index.php?page=progress';
-        cancelReportDeletionButton.classList = 'btn  member-panel-rounded-btn purple-to-blue-bkgd'
+        cancelReportDeletionButton.classList = 'btn member-panel-rounded-btn purple-to-blue-bkgd'
         cancelReportDeletionButton.textContent = 'Non';
 
         let reportDeletionMessage = document.createElement('div');
@@ -52,14 +53,16 @@ class Progress {
         reportDeletionMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce relevé ?</p>';
 
         let confirmReportDeletionButton = document.createElement('a');
-        confirmReportDeletionButton.href = `index.php?action=delete-weight-report&id=${selectedReportTableRow.id}`;
+        confirmReportDeletionButton.href = `index.php?action=delete-weight-report&id=${selectedReport.id}`;
         confirmReportDeletionButton.classList = 'btn member-panel-rounded-btn red-bkgd';
         confirmReportDeletionButton.textContent = 'Oui';
 
-        selectedReportTableRow.innerHTML = '';
-        selectedReportTableRow.appendChild(cancelReportDeletionButton);
-        selectedReportTableRow.appendChild(reportDeletionMessage);
-        selectedReportTableRow.appendChild(confirmReportDeletionButton);
+        selectedReport.innerHTML = '';
+        selectedReport.style.opacity = 0;
+        selectedReport.appendChild(cancelReportDeletionButton);
+        selectedReport.appendChild(reportDeletionMessage);
+        selectedReport.appendChild(confirmReportDeletionButton);
+        selectedReport.onload = this.fadeInItem(selectedReport, 4000);
     }
 
     hideDatetimeInputs() {

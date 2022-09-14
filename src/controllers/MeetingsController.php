@@ -6,7 +6,8 @@ class MeetingsController extends MemberPanelsController {
     private $appointmentDelay = 24;
 
     private $meetingsScripts = [
-        'Meetings.model',
+        'classes/MemberPanels.model',
+        'classes/Meetings.model',
         'meetingsApp'
     ];
 

@@ -16,6 +16,8 @@ class MemberPanelsController {
 
     private $memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
 
+    public $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
     private $memberPanelsSubpanels = array(
         'nutritionProgram' => 'Programme nutritionnel',
         'progress' => 'Progression',

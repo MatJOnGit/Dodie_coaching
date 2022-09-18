@@ -119,7 +119,32 @@ try {
                 elseif ($page === 'nutrition-program' && $completeStaticDataAccount) {
                     require('./../src/controllers/NutritionProgramController.php');
                     $nutritionProgramController = new NutritionProgramController;
-                    $nutritionProgramController->renderMemberNutritionProgram($twig);
+
+                    if (!isset($_GET['day']) && !isset($_GET['meal']) && !isset($_GET['request'])) {
+                        $nutritionProgramController->renderMemberNutritionProgram($twig);
+                    }
+
+                    elseif (isset($_GET['day']) && isset($_GET['meal']) && !isset($_GET['request'])) {
+                        echo "Affichage de la page précisant le détail du repas";
+                    }
+
+                    elseif (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request'])) {
+                        if ($_GET['request'] === 'shopping-list') {
+                            echo "Affichage de la liste de courses";
+                        }
+
+                        elseif ($_GET['request'] === 'printable-program') {
+                            echo "On télécharge le programme en version PDF";
+                        }
+                        
+                        else {
+                            header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                        }
+                    }
+
+                    else {
+                        header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                    }
                 }
 
                 elseif ($page === 'progress' && $completeStaticDataAccount) {

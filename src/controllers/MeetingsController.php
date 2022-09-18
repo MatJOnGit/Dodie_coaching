@@ -11,8 +11,6 @@ class MeetingsController extends MemberPanelsController {
         'meetingsApp'
     ];
 
-    private $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
     private $subMenuPage = 'meetings';
 
     public function addAppointment($meetingDate) {

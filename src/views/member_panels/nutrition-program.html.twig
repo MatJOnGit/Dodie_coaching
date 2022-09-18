@@ -1,0 +1,30 @@
+<div class='member-panel meals-list-panel'>
+    <h3>Votre programme de la semaine</h3>
+    {% if (nextDays is not empty) and (nextDays is iterable) %}
+    <ul class='nutrition-program-days-list'>
+        {% for dayKey, day in nextDays %}
+        <li>
+            <h4>{{ day }}</h4>
+            <ul class='meals-list'>
+                {% for mealKey, mealValue in meals | keys %}
+                <li class='{{ mealValue }}-list-item'>
+                    <a href='index.php?page=nutrition-program&day={{ dayKey }}&meal={{ loop.index0 }}'><h5>{{ meals[mealValue] }}</h5></a>
+                    <div></div>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class='nutrition-program-requests'>
+        <a href='index.php?page=nutrition-program&request=shopping-list' class='btn rounded-btn purple-to-blue-bkgd'>
+            Voir la liste de courses
+        </a>
+
+        <a href='index.php?page=nutrition-program&request=printable-program' class='btn rounded-btn purple-to-blue-bkgd'>
+            <i class="fa-solid fa-download"></i>
+        </a>
+    </div>
+    {% endif %}
+</div>

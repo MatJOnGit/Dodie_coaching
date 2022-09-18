@@ -71,6 +71,10 @@ input[type=submit] {
     color: hsla(0, 0%, 100%, 1);
 }
 
+.rounded-btn {
+    border-radius: 1.5vh;
+}
+
 .light-to-dark-purple-bkgd {
     background: linear-gradient(
         135deg, 

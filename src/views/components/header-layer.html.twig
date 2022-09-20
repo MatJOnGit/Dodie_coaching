@@ -12,20 +12,27 @@
         </li>
     </ul>
 </nav>
+
 {% else %}
 <div id='page-name-cnn'>
     <div class='title-layer cloudy-bkgd'>
-        {% if subPanel is defined %}
+        {% if (subPanel is defined) and (nutritionPanel is defined) %}
+        <a href='index.php?page=nutrition-program' class='back-to-dashboard-btn'>
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <h2>
+            ... > {{ subPanel }} > Liste d'ingredients
+        </h2>
+
+        {% elseif (subPanel is defined) and (nutritionPanel is not defined) %}
         <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
             <i class="fa-solid fa-arrow-left"></i>
         </a>
-        {% endif %}
         <h2>
-            Mon tableau de bord
-        {% if subPanel is defined %}
-            > {{ subPanel }}
-        {% endif %}
+            Mon tableau de bord > {{ subPanel }}
         </h2>
+        
+        {% endif %}
     </div>
 </div>
 {% endif %}

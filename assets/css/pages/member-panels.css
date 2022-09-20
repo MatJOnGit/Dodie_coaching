@@ -407,9 +407,9 @@ input[type=submit] {
     color: white;
 }
 
-/******************************************/
-/*           NUTRITION PROGRAM            */
-/******************************************/
+/*************************************************/
+/*           NUTRITION PROGRAM (MENU)            */
+/*************************************************/
 
 .meals-list-panel {
     padding: 30px 0;
@@ -474,7 +474,13 @@ input[type=submit] {
     top: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient( 165deg, hsla(0, 0%, 33%, 1) 0%, hsla(240, 46%, 57%, .45) 40%, hsla(0, 0%, 50%, 0) 70%, hsla(0, 0%, 50%, 0) 100% );
+    background: linear-gradient(
+        162deg,
+        hsla(0, 0%, 25%, 1) 0%,
+        hsla(228, 33%, 60%, .45) 40%,
+        hsla(0, 0%, 50%, 0) 70%,
+        hsla(0, 0%, 50%, 0) 100%
+    );
 }
 
 .meals-list h5 {
@@ -498,4 +504,30 @@ input[type=submit] {
 .nutrition-program-requests a {
     padding: 17px;
     color: white;
+}
+
+/*-----------------------------------------------*/
+
+/**************************************************/
+/*           NUTRITION PROGRAM (MEALS)            */
+/**************************************************/
+
+.ingredients-list {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ingredients-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.ingredient-picture {
+    width: 150px;
+    height: 100px;
+    margin: 5px 30px 5px 0;
+    object-fit: cover;
 }

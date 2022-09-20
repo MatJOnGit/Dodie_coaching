@@ -4,11 +4,13 @@
     <ul class='nutrition-program-days-list'>
         {% for dayKey, day in nextDays %}
         <li>
-            <h4>{{ day }}</h4>
+            <h4>{{ day['frenchFullDate'] }}</h4>
             <ul class='meals-list'>
-                {% for mealKey, mealValue in meals | keys %}
-                <li class='{{ mealValue }}-list-item'>
-                    <a href='index.php?page=nutrition-program&day={{ dayKey }}&meal={{ loop.index0 }}'><h5>{{ meals[mealValue] }}</h5></a>
+                {% for mealKey in meals | keys %}
+                <li class='{{ meals[mealKey]['english'] }}-list-item'>
+                    <a href='index.php?page=nutrition-program&day={{ day['englishWeekDay'] }}&meal={{ meals[mealKey]['english'] }}'>
+                        <h5>{{ meals[mealKey]['french'] }}</h5>
+                    </a>
                     <div></div>
                 </li>
                 {% endfor %}

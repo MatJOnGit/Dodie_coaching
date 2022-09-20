@@ -49,6 +49,10 @@ class MemberPanelsController {
         return $this->memberPanels;
     }
 
+    public function getMonths() {
+        return $this->months;
+    }
+
     public function getMemberPanelsSubpanels($page) {
         return $this->memberPanelsSubpanels[$page];
     }

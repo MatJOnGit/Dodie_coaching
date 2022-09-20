@@ -120,23 +120,31 @@ try {
                     require('./../src/controllers/NutritionProgramController.php');
                     $nutritionProgramController = new NutritionProgramController;
 
-                    if (!isset($_GET['day']) && !isset($_GET['meal']) && !isset($_GET['request'])) {
+                    if ($nutritionProgramController->isMenuRequested()) {
                         $nutritionProgramController->renderMemberNutritionProgram($twig);
                     }
 
-                    elseif (isset($_GET['day']) && isset($_GET['meal']) && !isset($_GET['request'])) {
-                        echo "Affichage de la page précisant le détail du repas";
+                    elseif ($nutritionProgramController->isMealCompositionRequested()) {
+                        $mealData = $nutritionProgramController->getMealCompositionParams();
+                        if ($nutritionProgramController->areMealCompositionParamsValid($mealData)) {
+                            $nutritionProgramController->renderMealComposition($twig, $mealData);
+                        }
+                        else {
+                            header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                        }
                     }
 
                     elseif (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request'])) {
-                        if ($_GET['request'] === 'shopping-list') {
+
+                        $request = $_GET['request'];
+                        if ($request === 'shopping-list') {
                             echo "Affichage de la liste de courses";
                         }
 
-                        elseif ($_GET['request'] === 'printable-program') {
+                        elseif ($request === 'printable-program') {
                             echo "On télécharge le programme en version PDF";
                         }
-                        
+
                         else {
                             header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
                         }

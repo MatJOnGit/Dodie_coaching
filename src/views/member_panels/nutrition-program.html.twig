@@ -8,7 +8,7 @@
             <ul class='meals-list'>
                 {% for mealKey in meals | keys %}
                 <li class='{{ meals[mealKey]['english'] }}-list-item'>
-                    <a href='index.php?page=nutrition-program&day={{ day['englishWeekDay'] }}&meal={{ meals[mealKey]['english'] }}'>
+                    <a href='index.php?page=nutrition-program&meal={{ day['englishWeekDay'] }}-{{ meals[mealKey]['english'] }}'>
                         <h5>{{ meals[mealKey]['french'] }}</h5>
                     </a>
                     <div></div>

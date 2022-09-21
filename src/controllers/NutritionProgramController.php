@@ -61,18 +61,24 @@ class NutritionProgramController extends MemberPanelsController {
     }
 
     public function isMenuRequested() {
-        return (!isset($_GET['day']) && !isset($_GET['meal']) && !isset($_GET['request']));
+        return (!isset($_GET['meal']) && !isset($_GET['request']));
     }
 
-    public function isMealCompositionRequested() {
-        return (isset($_GET['day']) && isset($_GET['meal']) && !isset($_GET['request']));
+    public function isMealRequested() {
+        return (isset($_GET['meal']) && !isset($_GET['request']));
     }
 
-    public function getMealCompositionParams() {
+    public function getMealData() {
+        $meal = htmlspecialchars($_GET['meal']);
         $mealData = [
-            'day' => htmlspecialchars($_GET['day']),
-            'meal' => htmlspecialchars($_GET['meal']),
+            'day' => false,
+            'meal' => false
         ];
+        
+        if (is_string($meal) && strpos($meal, '-')) {
+            $mealData['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
+            $mealData['meal'] = explode('-', htmlspecialchars($_GET['meal']))[1];
+        }
 
         return $mealData;
     }

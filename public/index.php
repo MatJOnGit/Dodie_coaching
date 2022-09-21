@@ -108,15 +108,15 @@ try {
             $accountController = new AccountController;
 
             if ($accountController->verifySessionDataValidity()) {
-                $completeStaticDataAccount = $accountController->verifyMemberStaticDataCompletion();
+                $areAccountStaticDataCompleted = $accountController->verifyMemberStaticDataCompletion();
 
-                if ($page === 'dashboard' && $completeStaticDataAccount) {
+                if ($page === 'dashboard' && $areAccountStaticDataCompleted) {
                     require('./../src/controllers/MemberPanelsController.php');
                     $memberPanelController = new MemberPanelsController;
                     $memberPanelController->renderMemberDashboard($twig);
                 }
 
-                elseif ($page === 'nutrition-program' && $completeStaticDataAccount) {
+                elseif ($page === 'nutrition-program' && $areAccountStaticDataCompleted) {
                     require('./../src/controllers/NutritionProgramController.php');
                     $nutritionProgramController = new NutritionProgramController;
 
@@ -124,8 +124,8 @@ try {
                         $nutritionProgramController->renderMemberNutritionProgram($twig);
                     }
 
-                    elseif ($nutritionProgramController->isMealCompositionRequested()) {
-                        $mealData = $nutritionProgramController->getMealCompositionParams();
+                    elseif ($nutritionProgramController->isMealRequested()) {
+                        $mealData = $nutritionProgramController->getMealData();
                         if ($nutritionProgramController->areMealCompositionParamsValid($mealData)) {
                             $nutritionProgramController->renderMealComposition($twig, $mealData);
                         }

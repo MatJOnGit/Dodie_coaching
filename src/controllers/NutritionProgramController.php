@@ -13,7 +13,7 @@ class NutritionProgramController extends MemberPanelsController {
         ['english' => 'wednesday', 'french' => 'Mercredi'],
         ['english' => 'thursday', 'french' => 'Jeudi'],
         ['english' => 'friday', 'french' => 'Vendredi'],
-        ['english' => 'satursday', 'french' => 'Samedi'],
+        ['english' => 'saturday', 'french' => 'Samedi'],
         ['english' => 'sunday', 'french' => 'Dimanche']
     ];
 
@@ -74,7 +74,7 @@ class NutritionProgramController extends MemberPanelsController {
             'day' => false,
             'meal' => false
         ];
-        
+
         if (is_string($meal) && strpos($meal, '-')) {
             $mealData['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
             $mealData['meal'] = explode('-', htmlspecialchars($_GET['meal']))[1];
@@ -133,7 +133,13 @@ class NutritionProgramController extends MemberPanelsController {
         return $nutritionProgramManager->getMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
     }
 
-    public function renderMemberNutritionProgram($twig) {
+    public function getShoppingList() {
+        $nutritionProgramManager = new NutritionProgramManager;
+
+        return $nutritionProgramManager->getWeeklyMealsIngredients($_SESSION['user-email']);
+    }
+
+    public function renderNutritionProgramMenu($twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
         echo $twig->render('components/header.html.twig', ['memberPanels' => $this->getMemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($this->getNutritionMenuPage()), 'page' => true]);
         echo $twig->render('member_panels/nutrition-program.html.twig', ['nextDays' => $this->getNextDates(), 'meals' => $this->getMeals()]);
@@ -144,6 +150,13 @@ class NutritionProgramController extends MemberPanelsController {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
         echo $twig->render('components/header.html.twig', ['memberPanels' => $this->getMemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($this->getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
         echo $twig->render('member_panels/meal-composition.html.twig', ['meal' => $this->getTranslatedMealData($mealData), 'ingredients' => $this->getMealIngredients($mealData)]);
+        echo $twig->render('components/footer.html.twig');
+    }
+
+    public function renderShoppingList($twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->getMemberPanels(), 'subPanel' => $this->getMemberPanelsSubpanels($this->getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
+        echo $twig->render('member_panels/shopping-list.html.twig', ['shoppingList' => $this->getShoppingList()]);
         echo $twig->render('components/footer.html.twig');
     }
 }

@@ -531,3 +531,26 @@ input[type=submit] {
     margin: 5px 30px 5px 0;
     object-fit: cover;
 }
+
+.ingredient-desc {
+    width: 150px;
+}
+
+/*------------------------------------------------*/
+
+/**************************************/
+/*           SHOPPING LIST            */
+/**************************************/
+
+.shopping-list {
+    margin: 0;
+    padding: 0;
+}
+
+.shopping-list li {
+    margin: 1vh 0;
+}
+
+.shopping-list label {
+    margin-left: 10px;
+}

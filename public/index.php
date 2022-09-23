@@ -121,7 +121,7 @@ try {
                     $nutritionProgramController = new NutritionProgramController;
 
                     if ($nutritionProgramController->isMenuRequested()) {
-                        $nutritionProgramController->renderMemberNutritionProgram($twig);
+                        $nutritionProgramController->renderNutritionProgramMenu($twig);
                     }
 
                     elseif ($nutritionProgramController->isMealRequested()) {
@@ -138,7 +138,7 @@ try {
 
                         $request = $_GET['request'];
                         if ($request === 'shopping-list') {
-                            echo "Affichage de la liste de courses";
+                            $nutritionProgramController->renderShoppingList($twig);
                         }
 
                         elseif ($request === 'printable-program') {

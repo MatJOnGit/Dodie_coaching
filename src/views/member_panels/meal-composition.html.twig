@@ -7,13 +7,21 @@
         {% for ingredient in ingredients %}
         <li class='ingredients-list-item'>
             <img src="./../public/img/ingredients/{{ ingredient['type'] }}/{{ ingredient['name'] | lower }}.jpg" alt="{{ ingredient['name'] | lower }}-picture" class='ingredient-picture' />
-            <p>
-                {{ ingredient['quantity'] }}
-                {% if ingredient['measure_unit'] is not empty %}
-                    {{ ingredient['measure_unit'] }} de
-                {% endif %}
-                {{ ingredient['french_name'] | lower }}
-            </p>
+            <div class='ingredient-desc'>
+                <p>
+                    {{ ingredient['quantity'] }}
+                    
+                    {% if ingredient['measure_unit'] is not empty %}
+                        {{ ingredient['measure_unit'] }} de
+                    {% endif %}
+
+                    {{ ingredient['french_name'] }}
+
+                    {% if ingredient['cooking'] is not null %}
+                    {{ ingredient['cooking'] }}
+                    {% endif %}
+                </p>
+            </div>
         </li>
         {% endfor %}
     </ul>

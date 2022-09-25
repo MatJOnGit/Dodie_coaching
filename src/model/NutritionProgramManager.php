@@ -20,4 +20,13 @@ class NutritionProgramManager extends Manager {
 
         return $weeklyMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getNutritionFileName($memberEmail) {
+        $db = $this->dbConnect();
+        $nutritionFileNameQuery = 'SELECT nutrition_file_name FROM programs_files WHERE user_id = (SELECT id FROM accounts WHERE email = ?)';
+        $nutritionFileNameStatement = $db->prepare($nutritionFileNameQuery);
+        $nutritionFileNameStatement->execute([$memberEmail]);
+
+        return $nutritionFileNameStatement->fetch();
+    }
 }

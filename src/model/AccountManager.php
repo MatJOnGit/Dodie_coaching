@@ -5,44 +5,40 @@ require_once('./../src/model/Manager.php');
 class AccountManager extends Manager {
     public function getAccountPassword($userEmail) {
         $db = $this->dbConnect();
-        $userPasswordGetterQuery = 'SELECT password FROM accounts WHERE email = ?';
-        $userPasswordGetterStatement = $db->prepare($userPasswordGetterQuery);
-        $userPasswordGetterStatement->execute([$userEmail]);
-        $userPassword = $userPasswordGetterStatement->fetch();
+        $userPasswordQuery = 'SELECT password FROM accounts WHERE email = ?';
+        $userPasswordStatement = $db->prepare($userPasswordQuery);
+        $userPasswordStatement->execute([$userEmail]);
 
-        return $userPassword;
+        return $userPasswordStatement->fetch();
     }
 
-    public function getMemberStaticData($accountEmail) {
+    public function getMemberStaticData($userEmail) {
         $db = $this->dbConnect();
-        $userStaticDataGetterQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
-        $userStaticDataGetterStatement = $db->prepare($userStaticDataGetterQuery);
-        $userStaticDataGetterStatement->execute([$accountEmail]);
-        $userStaticData = $userStaticDataGetterStatement->fetch(PDO::FETCH_ASSOC);
+        $userStaticDataQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
+        $userStaticDataStatement = $db->prepare($userStaticDataQuery);
+        $userStaticDataStatement->execute([$userEmail]);
 
-        return $userStaticData;
+        return $userStaticDataStatement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function registerAccount($userFirstName, $userLastName, $userEmail, $userPassword) {
         $db = $this->dbConnect();
         $userRegistrationQuery = 'INSERT INTO accounts (first_name, last_name, email, password) VALUES (:firstName, :lastName, :email, :password)';
         $userRegistrationStatement = $db->prepare($userRegistrationQuery);
-        $userRegistrationSuccess = $userRegistrationStatement->execute([
+
+        return $userRegistrationStatement->execute([
             'firstName' => $userFirstName,
             'lastName' => $userLastName,
             'email' => $userEmail,
             'password' => $userPassword
         ]);
-        
-        return $userRegistrationSuccess;
     }
 
     public function updateMemberLastLogin($userEmail) {
         $db = $this->dbConnect();
         $userLastLoginUpdaterQuery = 'UPDATE accounts SET last_login = NOW() WHERE email = ?';
         $userLastLoginUpdaterStatement = $db->prepare($userLastLoginUpdaterQuery);
-        $userLastLoginUpdateSuccess = $userLastLoginUpdaterStatement->execute([$userEmail]);
 
-        return $userLastLoginUpdateSuccess;
+        return $userLastLoginUpdaterStatement->execute([$userEmail]);
     }
 }

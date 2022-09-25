@@ -126,7 +126,7 @@ try {
 
                     elseif ($nutritionProgramController->isMealRequested()) {
                         $mealData = $nutritionProgramController->getMealData();
-                        if ($nutritionProgramController->areMealCompositionParamsValid($mealData)) {
+                        if ($nutritionProgramController->areMealParamsValid($mealData)) {
                             $nutritionProgramController->renderMealComposition($twig, $mealData);
                         }
                         else {
@@ -135,14 +135,8 @@ try {
                     }
 
                     elseif (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request'])) {
-
-                        $request = $_GET['request'];
-                        if ($request === 'shopping-list') {
+                        if ($request === $_GET['request']) {
                             $nutritionProgramController->renderShoppingList($twig);
-                        }
-
-                        elseif ($request === 'printable-program') {
-                            echo "On télécharge le programme en version PDF";
                         }
 
                         else {
@@ -258,14 +252,16 @@ try {
                 }
             }
 
-            elseif ($action === 'logout') {
-                $accountController->destroySessionData();
-                header("Location:index.php?page=presentation");
-            }
-
             else {
-                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
-            }
+                if ($action === 'logout') {
+                    $accountController->destroySessionData();
+                    header("Location:index.php?page=presentation");
+                }
+    
+                else {
+                    header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                }
+            } 
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {

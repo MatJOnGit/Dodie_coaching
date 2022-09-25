@@ -46,6 +46,12 @@ class AccountController {
         return $userData;
     }
 
+    public function getMemberIdentity() {
+        $accountManager = new AccountManager;
+
+        return $accountManager->getUserIdentity($_SESSION['user-email']);
+    }
+
     public function getRegistrationFormAdditionalData($userData) {
         $userData += [
             'firstName' => htmlspecialchars($_POST['user-first-name']),

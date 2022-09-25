@@ -91,3 +91,12 @@ input[type=submit] {
         hsla(261, 83%, 18%, 1) 100%
     );
 }
+
+.greyed-out-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(201, 9%, 65%, 1) 0%,
+        hsla(201, 9%, 65%, 1) 30%,
+        hsla(215, 7%, 32%, 1) 100%
+    );
+}

@@ -1,5 +1,6 @@
 <div class='member-panel meals-list-panel'>
     <h3>Votre programme de la semaine</h3>
+
     {% if (nextDays is not empty) and (nextDays is iterable) %}
     <ul class='nutrition-program-days-list'>
         {% for dayKey, day in nextDays %}
@@ -24,9 +25,15 @@
             Voir la liste de courses
         </a>
 
-        <a href='index.php?page=nutrition-program&request=printable-program' class='btn rounded-btn purple-to-blue-bkgd'>
+        {% if programFilePath is not empty %}
+        <a href='{{ programFilePath }}' class='btn rounded-btn purple-to-blue-bkgd'  download="plan nutrition">
             <i class="fa-solid fa-download"></i>
         </a>
+        {% else %}
+        <a role='link' class='btn rounded-btn greyed-out-bkgd' aria-disabled='true'>
+            <i class="fa-solid fa-download"></i>
+        </a>
+        {% endif %}
     </div>
     {% endif %}
 </div>

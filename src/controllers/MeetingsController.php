@@ -92,10 +92,6 @@ class MeetingsController extends MemberPanelsController {
         return (!empty($memberScheduledMeeting) ? $memberScheduledMeeting[0] : NULL);
     }
 
-    private function getMonths() {
-        return $this->months;
-    }
-
     private function getSortedMeetingsSlots() {
         $dashboardManager = new DashboardManager;
         $availableMeetingsSlots = $dashboardManager->getAvailableMeetingsSlots($this->getAppointmentDelay());

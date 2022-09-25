@@ -134,8 +134,8 @@ try {
                         }
                     }
 
-                    elseif (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request'])) {
-                        if ($request === $_GET['request']) {
+                    elseif ($nutritionProgramController->isShoppingListRequested()) {
+                        if ($_GET['request'] === 'shopping-list') {
                             $nutritionProgramController->renderShoppingList($twig);
                         }
 
@@ -149,13 +149,13 @@ try {
                     }
                 }
 
-                elseif ($page === 'progress' && $completeStaticDataAccount) {
+                elseif ($page === 'progress' && $areAccountStaticDataCompleted) {
                     require('./../src/controllers/ProgressController.php');
                     $progressController = new ProgressController;
                     $progressController->renderMemberProgress($twig);
                 }
 
-                elseif ($page === 'meetings' && $completeStaticDataAccount){
+                elseif ($page === 'meetings' && $areAccountStaticDataCompleted){
                     require('./../src/controllers/MeetingsController.php');
                     $meetingsController = new MeetingsController;
                     $meetingsController->renderMeetings($twig);

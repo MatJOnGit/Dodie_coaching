@@ -28,15 +28,15 @@ footer li {
 .glowy-bkgd {
     background: linear-gradient(
         135deg,
-        hsla(0, 0%, 33%, .1) 0%,
-        hsla(240, 23%, 61%, .45) 40%,
-        hsla(0, 0%, 50%, 0) 70%,
+        hsla(0, 0%, 0%, 1) 0%,
+        hsla(200, 40%, 70%, .3) 45%,
         hsla(0, 0%, 50%, 0) 100%
     );
 }
 
 .program-description {
     border: 1px solid white;
+    background-color: hsla(0, 0%, 0%, 0.5);
 }
 
 /********************************/

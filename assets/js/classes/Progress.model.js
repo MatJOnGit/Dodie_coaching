@@ -28,7 +28,7 @@ class Progress extends MemberPanels {
 
     addSelectEventListener() {
         this.dateTypeSelect.addEventListener('change', () => {
-            let reportDateExists = (!!document.getElementsByClassName('report-date')[0]);
+            let reportDateExists = (!!document.getElementsByClassName('report-day')[0]);
             let selectedOptionIsOldWeight = (this.dateTypeSelectedOption.value === 'old-weight');
 
             if (reportDateExists && !selectedOptionIsOldWeight) {
@@ -66,7 +66,7 @@ class Progress extends MemberPanels {
     }
 
     hideDatetimeInputs() {
-        let reportDate = document.getElementsByClassName('report-date')[0];
+        let reportDate = document.getElementsByClassName('report-day')[0];
         let reportTime = document.getElementsByClassName('report-time')[0];
 
         this.formFields.classList.remove('full-length-fields');
@@ -84,8 +84,8 @@ class Progress extends MemberPanels {
     showDatetimeInputs() {
         let reportDate = document.createElement('input');
         reportDate.type = 'date';
-        reportDate.classList = 'report-date';
-        reportDate.name = 'report-date';
+        reportDate.classList = 'report-day';
+        reportDate.name = 'report-day';
         reportDate.max = new Date().toISOString().split('T')[0]
         reportDate.setAttribute('required', '');
 

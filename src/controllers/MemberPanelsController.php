@@ -1,10 +1,14 @@
 <?php
 
-require('./../src/model/DashboardManager.php');
-require_once ('./../src/model/AccountManager.php');
+namespace App\Controllers;
+
+require ('./../src/model/DashboardManager.php');
+use App\Models\DashboardManager as DashboardManager;
 
 class MemberPanelsController {
-    private $memberPanelsStyles = [
+    private $_memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
+
+    private $_memberPanelsStyles = [
         'pages/member-panels',
         'components/header',
         'components/form',
@@ -12,20 +16,14 @@ class MemberPanelsController {
         'components/footer'
     ];
 
-    private $timeZone = 'Europe/Paris';
-
-    private $memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
-
-    public $months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
-    private $memberPanelsSubpanels = array(
+    private $_memberPanelsSubpanels = [
         'nutritionProgram' => 'Programme nutritionnel',
         'progress' => 'Progression',
         'meetings' => 'Rendez-vous',
         'subscriptions' => 'Abonnement'
-    );
+    ];
 
-    private $memberPanelsURLs = array(
+    private $_memberPanelsURLs = [
         'login' => 'index.php?page=login',
         'dashboard' => 'index.php?page=dashboard',
         'progress' => 'index.php?page=progress',
@@ -33,49 +31,53 @@ class MemberPanelsController {
         'nutritionProgram' => 'index.php?page=nutrition-program',
         'meetings' => 'index.php?page=meetings',
         'subscription' => 'index.php?page=subscription'
-    );
+    ];
 
-    private function getDashboardMenu() {
-        $dashboardManager = new DashboardManager;
-        
-        return $dashboardManager->getDashboardMenuItems();
+    private $_months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+    private $_timeZone = 'Europe/Paris';
+
+    public function getMemberPanelURL(string $requestedPage) {
+        return $this->_memberPanelsURLs[$requestedPage];
     }
 
-    public function getMemberPanelsStyles() {
-        return $this->memberPanelsStyles;
-    }
-
-    public function getMemberPanels() {
-        return $this->memberPanels;
-    }
-
-    public function getMonths() {
-        return $this->months;
-    }
-
-    public function getMemberPanelsSubpanels($page) {
-        return $this->memberPanelsSubpanels[$page];
-    }
-
-    public function getMemberPanelURL($requestedPage) {
-        return $this->memberPanelsURLs[$requestedPage];
-    }
-
-    public function renderUserStaticDataForm($twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanelPages' => $this->getMemberPanels()]);
+    public function renderUserStaticDataForm(object $twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanelPages' => $this->_getMemberPanels()]);
         echo $twig->render('member_panels/personal-data-form.html.twig');
         echo $twig->render('components/footer.html.twig');
     }
 
-    public function renderMemberDashboard($twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->getMemberPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->getMemberPanels()]);
-        echo $twig->render('member_panels/dashboard.html.twig', ['dashboardMenuItems' => $this->getDashboardMenu()]);
+    public function renderMemberDashboard(object $twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'dashboard', 'memberPanels' => $this->_getMemberPanels()]);
+        echo $twig->render('member_panels/dashboard.html.twig', ['dashboardMenuItems' => $this->_getDashboardMenu()]);
         echo $twig->render('components/footer.html.twig');
     }
+
+    protected function _getMemberPanels() {
+        return $this->_memberPanels;
+    }
+
+    protected function _getMemberPanelsStyles() {
+        return $this->_memberPanelsStyles;
+    }
+
+    protected function _getMemberPanelsSubpanels(string $page) {
+        return $this->_memberPanelsSubpanels[$page];
+    }
+
+    protected function _getMonths() {
+        return $this->_months;
+    }
     
-    public function setTimeZone() {
-        date_default_timezone_set($this->timeZone);
+    protected function _setTimeZone() {
+        date_default_timezone_set($this->_timeZone);
+    }
+
+    private function _getDashboardMenu() {
+        $dashboardManager = new DashboardManager;
+        
+        return $dashboardManager->getDashboardMenuItems();
     }
 }

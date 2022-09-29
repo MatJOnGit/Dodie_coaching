@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Models;
+
 require_once ('./../src/model/Manager.php');
 
 class ProgramManager extends Manager {

@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Models;
+use PDO;
+
 class Manager {
     protected function dbConnect() {
         return new PDO(

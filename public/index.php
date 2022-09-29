@@ -13,6 +13,9 @@ try {
     ]);
     $twig->addExtension(new \Twig\Extension\DebugExtension());
 
+    // require_once('./../src/Autoloader.php');
+    // Autoloader::register();
+
     $Urls = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'],
@@ -31,7 +34,7 @@ try {
 
         if (in_array($page, $Urls['pages']['showcase'])) {
             require ('./../src/controllers/ShowcaseController.php');
-            $showcaseController = new ShowcaseController;
+            $showcaseController = new \App\Controllers\ShowcaseController;
 
             if ($page === 'presentation') {
                 $showcaseController->renderPresentationPage($twig);
@@ -42,7 +45,7 @@ try {
             }
 
             elseif (($page === 'programslist') || ($page === 'programdetails')) {
-                if ($showcaseController->verifyProgramsListAvailability()) {
+                if ($showcaseController->isProgramsListAvailable()) {
                     if ($page === 'programslist') {
                         $showcaseController->renderProgramsListPage($twig);
                     }
@@ -50,7 +53,7 @@ try {
                     elseif (($page === 'programdetails') && (isset($_GET['program']))) {
                         $program = htmlspecialchars($_GET['program']);
 
-                        if ($showcaseController->verifyProgramDetailsAvailability($program)) {
+                        if ($showcaseController->areProgramDetailsAvailable($program)) {
                             $showcaseController->renderProgramDetailsPage($twig, $program);
                         }
 
@@ -81,44 +84,44 @@ try {
         }
 
         elseif (in_array($page, $Urls['pages']['connection'])) {
-            require ('./../src/controllers/AccountController.php');
-            $accountController = new AccountController;
-            $isUserLogged = $accountController->verifySessionDataValidity();
+            require ('./../src/controllers/UserController.php');
+            $userController = new App\Controllers\UserController;
 
-            if (!$isUserLogged) {
+            if (!$userController->isUserLogged()) {
                 if ($page === 'login') {
-                    $accountController->renderLoginPage($twig);
+                    $userController->renderLoginPage($twig);
                 }
 
                 elseif ($page === 'registering') {
-                    $accountController->renderRegisteringPage($twig);
+                    $userController->renderRegisteringPage($twig);
                 }
 
                 elseif ($page === 'password-retrieving') {
-                    $accountController->renderPasswordRetrievingPage($twig);
+                    $userController->renderPasswordRetrievingPage($twig);
                 }
             }
+
             else {
-                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
             }
         }
 
         elseif (in_array($page, $Urls['pages']['memberPanels'])) {
-            require('./../src/controllers/AccountController.php');
-            $accountController = new AccountController;
+            require('./../src/controllers/UserController.php');
+            $userController = new App\Controllers\UserController;
 
-            if ($accountController->verifySessionDataValidity()) {
-                $areAccountStaticDataCompleted = $accountController->verifyMemberStaticDataCompletion();
+            if ($userController->isUserLogged()) {
+                $areUserStaticDataCompleted = $userController->areMemberStaticDataCompleted();
 
-                if ($page === 'dashboard' && $areAccountStaticDataCompleted) {
+                if ($page === 'dashboard' && $areUserStaticDataCompleted) {
                     require('./../src/controllers/MemberPanelsController.php');
-                    $memberPanelController = new MemberPanelsController;
+                    $memberPanelController = new App\Controllers\MemberPanelsController;
                     $memberPanelController->renderMemberDashboard($twig);
                 }
 
-                elseif ($page === 'nutrition-program' && $areAccountStaticDataCompleted) {
+                elseif ($page === 'nutrition-program' && $areUserStaticDataCompleted) {
                     require('./../src/controllers/NutritionProgramController.php');
-                    $nutritionProgramController = new NutritionProgramController;
+                    $nutritionProgramController = new App\Controllers\NutritionProgramController;
 
                     if ($nutritionProgramController->isMenuRequested()) {
                         $nutritionProgramController->renderNutritionProgramMenu($twig);
@@ -126,9 +129,11 @@ try {
 
                     elseif ($nutritionProgramController->isMealRequested()) {
                         $mealData = $nutritionProgramController->getMealData();
+
                         if ($nutritionProgramController->areMealParamsValid($mealData)) {
                             $nutritionProgramController->renderMealComposition($twig, $mealData);
                         }
+
                         else {
                             header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
                         }
@@ -149,21 +154,21 @@ try {
                     }
                 }
 
-                elseif ($page === 'progress' && $areAccountStaticDataCompleted) {
+                elseif ($page === 'progress' && $areUserStaticDataCompleted) {
                     require('./../src/controllers/ProgressController.php');
-                    $progressController = new ProgressController;
+                    $progressController = new App\Controllers\ProgressController;
                     $progressController->renderMemberProgress($twig);
                 }
 
-                elseif ($page === 'meetings' && $areAccountStaticDataCompleted){
+                elseif ($page === 'meetings' && $areUserStaticDataCompleted){
                     require('./../src/controllers/MeetingsController.php');
-                    $meetingsController = new MeetingsController;
+                    $meetingsController = new App\Controllers\MeetingsController;
                     $meetingsController->renderMeetings($twig);
                 }
 
                 elseif ($page === 'get-to-know-you') {
                     require('./../src/controllers/MemberPanelsController.php');
-                    $memberPanelController = new MemberPanelsController;
+                    $memberPanelController = new App\Controllers\MemberPanelsController;
                     $memberPanelController->renderUserStaticDataForm($twig);
                 }
 
@@ -173,8 +178,8 @@ try {
             }
 
             else {
-                $accountController->destroySessionData();
-                header("location:{$accountController->getConnectionPanelsURL('login')}");
+                $userController->destroySessionData();
+                header("location:{$userController->getConnectionPanelsURL('login')}");
             }
         }
         
@@ -184,123 +189,171 @@ try {
     }
 
     elseif (isset($_GET['action'])) {
-        require('./../src/controllers/AccountController.php');
-        $accountController = new AccountController;
         $action = htmlspecialchars($_GET['action']);
+        require('./../src/controllers/UserController.php');
+        $userController = new App\Controllers\UserController;
 
         if (in_array($action, $Urls['actions']['connection'])) {
-            $isUserLogged = $accountController->verifySessionDataValidity();
 
-            if (!$isUserLogged) {
-                $userData = $accountController->getLoginFormData();
+            if (!$userController->isUserLogged()) {
+                $userData = $userController->getLoginFormData();
 
                 if ($_GET['action'] === 'log-account') {
-                    if ($accountController->verifyLoginFormDataValidity($userData)) {
-                        $isAccountKnown = $accountController->verifyAccountValidity($userData['email'], $userData['password']);
+                    if ($userController->isLoginFormValid($userData)) {
+                        $isUserVerified = $userController->isAccountValid($userData['email'], $userData['password']);
 
-                        if ($isAccountKnown) {
-                            $isLoginDateUpdated = $accountController->updateLoginDate($userData['email']);
+                        if ($isUserVerified) {
+                            $isLoginDateUpdated = $userController->logUserLoginDate($userData['email']);
     
                             if ($isLoginDateUpdated) {
-                                $accountController->setSessionData($userData);
-                                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                                $userController->logUser($userData);
+                                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
                             }
                         }
     
                         else {
-                            $accountController->destroySessionData();
-                            header("location:{$accountController->getConnectionPanelsURL('login')}");
+                            $userController->destroySessionData();
+                            header("location:{$userController->getConnectionPanelsURL('login')}");
                         }
                     }
     
                     else {
-                        $accountController->destroySessionData();
-                        header("location:{$accountController->getConnectionPanelsURL('login')}");
+                        $userController->destroySessionData();
+                        header("location:{$userController->getConnectionPanelsURL('login')}");
                     }
                 }
 
                 elseif ($action === 'register-account') {
-                    $userData = $accountController->getRegistrationFormAdditionalData($userData);
+                    $userData = $userController->getRegistrationFormAdditionalData($userData);
 
-                    if ($accountController->verifyRegisteringFormValidity($userData)) {
-                        $isAccountKnown = $accountController->verifyAccountValidity($userData['email'], $userData['password']);
+                    if ($userController->isRegisteringFormValid($userData)) {
+                        $isUserVerified = $userController->isAccountValid($userData['email'], $userData['password']);
 
-                        if (!$isAccountKnown) {
-                            $isAccountRegistered = $accountController->registerNewAccount($userData);
+                        if (!$isUserVerified) {
+                            $isUserRegistered = $userController->registerAccount($userData);
     
-                            if ($isAccountRegistered) {
-                                $accountController->setSessionData($userData);
-                                header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                            if ($isUserRegistered) {
+                                $userController->logUser($userData);
+                                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
                             }
     
                             else {
-                                $accountController->destroySessionData();
-                                header("location:{$accountController->getConnectionPanelsURL('registering')}");
+                                $userController->destroySessionData();
+                                header("location:{$userController->getConnectionPanelsURL('registering')}");
                             }
                         }
     
                         else {
-                            $accountController->destroySessionData();
-                            header("location:{$accountController->getConnectionPanelsURL('registering')}");
+                            header("location:{$userController->getConnectionPanelsURL('registering')}");
                         }
                     }
     
                     else {
-                        $accountController->destroySessionData();
-                        header("Location:{$accountController->getConnectionPanelsURL('registering')}");
+                        $userController->destroySessionData();
+                        header("Location:{$userController->getConnectionPanelsURL('registering')}");
                     }
                 }
             }
 
             else {
                 if ($action === 'logout') {
-                    $accountController->destroySessionData();
+                    $userController->destroySessionData();
                     header("Location:index.php?page=presentation");
                 }
     
                 else {
-                    header("location:{$accountController->getConnectionPanelsURL('dashboard')}");
+                    header("location:{$userController->getConnectionPanelsURL('dashboard')}");
                 }
             } 
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {
             require('./../src/controllers/ProgressController.php');
-            $progressController = new ProgressController;
-            $isUserLogged = $accountController->verifySessionDataValidity();
+            $progressController = new App\Controllers\ProgressController;
 
-            if ($isUserLogged) {
+            if ($userController->isUserLogged()) {
                 if ($action === 'add-weight-report') {
-                    if ($progressController->verifyAddWeightFormValidity()) {
-                        $progressController->addWeightReport();
+                    if ($progressController->areBaseFormDataSet()) {
+                        $baseFormData = $progressController->getBaseFormData();
+
+                        if ($progressController->areBaseFormDataValid($baseFormData)) {
+                            if ($progressController->isCurrentWeightReport($baseFormData)) {
+                                $formatedFormData = $progressController->formatBaseFormData($baseFormData);
+                                $progressController->logWeightReport($formatedFormData);
+                            }
+
+                            elseif ($progressController->areExtendedFormDataSet()) {
+                                $extendedFormData = $progressController->getExtendedFormData($baseFormData);
+
+                                if ($progressController->areExtendedFormDataValid($extendedFormData)) {
+                                    $formatedFormData = $progressController->formatExtendedFormData($extendedFormData);
+                                    $progressController->logWeightReport($formatedFormData);
+                                }
+
+                                else {
+                                    throw new Exception('Le paramètre day et/ou time ne correspond pas à ce qui est attendu.');
+                                }
+                            }
+
+                            else {
+                                throw new Exception('Il manque des paramètres au niveau des données complémentaires pour un reporting différé');
+                            }
+                        }
+
+                        else {
+                            throw new Exception('Erreur au niveau des données de base de reporting');
+                        }
                     }
+
+                    else {
+                        throw new Exception('Il manque des paramètres au niveau des données de base.');
+                    }
+
+                    header("location:{$progressController->getMemberPanelURL('progress')}");
                 }
 
                 elseif ($action === 'delete-weight-report') {
-                    if (isset($_GET['id'])) {
-                        $weightReportId = $progressController->getDeleteWeightReportId();
-                        $progressHistory = $progressController->getMemberProgressHistory($weightReportId);
+                    if ($progressController->isReportIdSet()) {
+                        $reportId = $progressController->getReportId();
 
-                        if ($progressController->verifyWeightReportIdValidity($progressHistory, $weightReportId)) {
-                            $progressController->deleteMemberReport($progressHistory, $weightReportId);
+                        if ($progressController->isReportIdParamValid($reportId)) {
+                            $progressHistory = $progressController->getMemberProgressHistory();
+
+                            if ($progressController->isReportIdParamExisting($progressHistory, $reportId)) {
+                                if (!$progressController->deleteReport($progressHistory, $reportId)) {
+                                    throw new Exception ("ERROR EXECUTING REPORT DELETION IN DATABASE");
+                                }
+                            }
+
+                            else {
+                                throw new Exception("REPORT NOT FOUND IN DATABASE");
+                            }
+                        }
+
+                        else {
+                            throw new Exception("INVALID REPORT ID PARAMETER");
                         }
                     }
+
+                    else {
+                        throw new Exception("MISSING REPORT ID PARAMETER");
+                    }
                 }
+
                 header("location:{$progressController->getMemberPanelURL('progress')}");
             }
 
             else {
-                $accountController->destroySessionData();
+                $userController->destroySessionData();
                 header("location:{$progressController->getMemberPanelURL('login')}");
             }
         }
 
         elseif (in_array($action, $Urls['actions']['meeting'])) {
             require('./../src/controllers/MeetingsController.php');
-            $meetingsController = new MeetingsController;
-            $isUserLogged = $accountController->verifySessionDataValidity();
+            $meetingsController = new \App\Controllers\MeetingsController;
 
-            if ($isUserLogged) {
+            if ($userController->isUserLogged()) {
                 if ($action === 'book-new-appointment') {
                     $requestedMeetingDate = $meetingsController->getMeetingDate();
 
@@ -314,17 +367,18 @@ try {
                 elseif ($action === 'cancel-appointment') {
                     $meetingsController->cancelMemberNextMeeting();
                 }
+
                 header("location:{$meetingsController->getMemberPanelURL('meetings')}");
             }
 
             else {
-                $accountController->destroySessionData();
+                $userController->destroySessionData();
                 header("location:{$meetingsController->getMemberPanelURL('login')}");
             }
         }
         
         else {
-            $accountController->destroySessionData();
+            $userController->destroySessionData();
             header("location:index.php?page=presentation");
         }
     }

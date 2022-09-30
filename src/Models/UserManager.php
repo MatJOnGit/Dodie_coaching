@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace Dodie_Coaching\Models;
 
-require_once('./../src/model/Manager.php');
 use PDO;
 
 class UserManager extends Manager {

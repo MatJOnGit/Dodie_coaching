@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require_once ('./../src/model/NutritionProgramManager.php');
-require ('./../src/controllers/MemberPanelsController.php');
-use App\Models\NutritionProgramManager as NutritionProgramManager;
-use DatePeriod, DateTime, DateInterval;
+use Dodie_Coaching\Models\NutritionManager as NutritionManager, DatePeriod, DateTime, DateInterval;
 
-class NutritionProgramController extends MemberPanelsController {
+class NutritionController extends MemberPanelsController {
     private $_meals = [
         ['english' => 'breakfast', 'french' => 'Petit déjeuner'],
         ['english' => 'lunch', 'french' => 'Déjeuner'],
@@ -15,7 +12,7 @@ class NutritionProgramController extends MemberPanelsController {
         ['english' => 'snacks', 'french' => 'Snacks']
     ];
 
-    private $_nutritionMenuPage = 'nutritionProgram';
+    private $_nutritionMenuPage = 'nutrition';
 
     private $_programsFolderRoute = './../var/nutrition_programs/';
 
@@ -85,10 +82,10 @@ class NutritionProgramController extends MemberPanelsController {
         echo $twig->render('components/footer.html.twig');
     }
 
-    public function renderNutritionProgramMenu(object $twig) {
+    public function renderNutritionMenu(object $twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
         echo $twig->render('components/header.html.twig', ['memberPanels' => $this->_getMemberPanels(), 'subPanel' => $this->_getMemberPanelsSubpanels($this->_getNutritionMenuPage())]);
-        echo $twig->render('member_panels/nutrition-program.html.twig', ['nextDays' => $this->_getNextDates(), 'meals' => $this->_getMeals(), 'programFilePath' => $this->_getProgramsFilePath()]);
+        echo $twig->render('member_panels/nutrition.html.twig', ['nextDays' => $this->_getNextDates(), 'meals' => $this->_getMeals(), 'programFilePath' => $this->_getProgramsFilePath()]);
         echo $twig->render('components/footer.html.twig');
     }
 
@@ -112,9 +109,9 @@ class NutritionProgramController extends MemberPanelsController {
     }
 
     private function _getMealIngredients(array $mealData) {
-        $nutritionProgramManager = new NutritionProgramManager;
+        $nutritionManager = new NutritionManager;
 
-        return $nutritionProgramManager->getMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
+        return $nutritionManager->getMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
     }
 
     private function _getMeals() {
@@ -146,8 +143,8 @@ class NutritionProgramController extends MemberPanelsController {
     }
 
     private function _getProgramsFilePath() {
-        $nutritionProgramManager = new NutritionProgramManager;
-        $nutritionFileName = $nutritionProgramManager->getNutritionFileName($_SESSION['user-email']);
+        $nutritionManager = new NutritionManager;
+        $nutritionFileName = $nutritionManager->getNutritionFileName($_SESSION['user-email']);
 
         return $nutritionFileName[0] ? $this->_getProgramsFolderRoute() . $nutritionFileName[0] . '.txt' : null;
     }
@@ -157,9 +154,9 @@ class NutritionProgramController extends MemberPanelsController {
     }
 
     private function _getShoppingList() {
-        $nutritionProgramManager = new NutritionProgramManager;
+        $nutritionManager = new NutritionManager;
 
-        return $nutritionProgramManager->getWeeklyMealsIngredients($_SESSION['user-email']);
+        return $nutritionManager->getWeeklyMealsIngredients($_SESSION['user-email']);
     }
 
     private function _getTranslatedMealData(array $mealData) {

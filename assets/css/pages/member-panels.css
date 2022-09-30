@@ -407,15 +407,15 @@ input[type=submit] {
     color: white;
 }
 
-/*************************************************/
-/*           NUTRITION PROGRAM (MENU)            */
-/*************************************************/
+/*****************************************/
+/*           NUTRITION (MENU)            */
+/*****************************************/
 
 .meals-list-panel {
     padding: 30px 0;
 }
 
-.nutrition-program-days-list {
+.nutrition-days-list {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -426,7 +426,7 @@ input[type=submit] {
     font-size: 1.2em;
 }
 
-.nutrition-program-days-list > li {
+.nutrition-days-list > li {
     width: 100%;
     margin-bottom: 2vh;
 }
@@ -492,7 +492,7 @@ input[type=submit] {
     margin: 0;
 }
 
-.nutrition-program-requests {
+.nutrition-requests {
     margin-top: 3vh;
     padding: 0 5%;
     width: 100%;
@@ -501,16 +501,16 @@ input[type=submit] {
     justify-content: space-between;
 }
 
-.nutrition-program-requests a {
+.nutrition-requests a {
     padding: 17px;
     color: white;
 }
 
 /*-----------------------------------------------*/
 
-/**************************************************/
-/*           NUTRITION PROGRAM (MEALS)            */
-/**************************************************/
+/******************************************/
+/*           NUTRITION (MEALS)            */
+/******************************************/
 
 .ingredients-list {
     width: 100%;

@@ -3,7 +3,8 @@
     "description": "Mathieu Jourdan",
     "autoload": {
         "psr-4": {
-            "Nevz\\DodieCoaching\\": "src/"
+            "Nevz\\DodieCoaching\\": "src/",
+            "Dodie_Coaching\\": "src/"
         }
     },
     "authors": [

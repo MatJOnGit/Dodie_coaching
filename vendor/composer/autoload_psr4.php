@@ -10,4 +10,5 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Nevz\\DodieCoaching\\' => array($baseDir . '/src'),
+    'Dodie_Coaching\\' => array($baseDir . '/src'),
 );

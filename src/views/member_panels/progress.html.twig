@@ -20,11 +20,11 @@
         {% for progressHistoryItem in progressHistory %}
         <li class='progress-item' id='{{ loop.index }}'>
             <div class="report-full-date">
-                le {{ progressHistoryItem.report_date  | date('d/m/y')}}<br>
-                {{ progressHistoryItem.report_date  | date('à H')}}h{{ progressHistoryItem.report_date  | date('i')}}
+                le {{ progressHistoryItem.date  | date('d/m/y')}}<br>
+                {{ progressHistoryItem.date  | date('à H')}}h{{ progressHistoryItem.date  | date('i')}}
             </div>
             <div class="report-weight">
-                {{ progressHistoryItem.current_weight }} kg  
+                {{ progressHistoryItem.weight }} kg  
             </div>
             <button class='btn member-panel-rounded-btn purple-to-blue-bkgd'>
                 <i class="fa-solid fa-ban"></i>

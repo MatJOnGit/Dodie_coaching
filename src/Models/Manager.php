@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace Dodie_Coaching\Models;
+
 use PDO;
 
 class Manager {

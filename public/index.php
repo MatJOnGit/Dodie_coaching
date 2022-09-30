@@ -13,14 +13,11 @@ try {
     ]);
     $twig->addExtension(new \Twig\Extension\DebugExtension());
 
-    // require_once('./../src/Autoloader.php');
-    // Autoloader::register();
-
     $Urls = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving'],
-            'memberPanels' => ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription']
+            'memberPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'log-out'],
@@ -33,8 +30,7 @@ try {
         $page = htmlspecialchars($_GET['page']);
 
         if (in_array($page, $Urls['pages']['showcase'])) {
-            require ('./../src/controllers/ShowcaseController.php');
-            $showcaseController = new \App\Controllers\ShowcaseController;
+            $showcaseController = new Dodie_Coaching\Controllers\ShowcaseController;
 
             if ($page === 'presentation') {
                 $showcaseController->renderPresentationPage($twig);
@@ -84,8 +80,7 @@ try {
         }
 
         elseif (in_array($page, $Urls['pages']['connection'])) {
-            require ('./../src/controllers/UserController.php');
-            $userController = new App\Controllers\UserController;
+            $userController = new Dodie_Coaching\Controllers\UserController;
 
             if (!$userController->isUserLogged()) {
                 if ($page === 'login') {
@@ -107,68 +102,62 @@ try {
         }
 
         elseif (in_array($page, $Urls['pages']['memberPanels'])) {
-            require('./../src/controllers/UserController.php');
-            $userController = new App\Controllers\UserController;
+            $userController = new Dodie_Coaching\Controllers\UserController;
 
             if ($userController->isUserLogged()) {
                 $areUserStaticDataCompleted = $userController->areMemberStaticDataCompleted();
 
                 if ($page === 'dashboard' && $areUserStaticDataCompleted) {
-                    require('./../src/controllers/MemberPanelsController.php');
-                    $memberPanelController = new App\Controllers\MemberPanelsController;
+                    $memberPanelController = new Dodie_Coaching\Controllers\MemberPanelsController;
                     $memberPanelController->renderMemberDashboard($twig);
                 }
 
-                elseif ($page === 'nutrition-program' && $areUserStaticDataCompleted) {
-                    require('./../src/controllers/NutritionProgramController.php');
-                    $nutritionProgramController = new App\Controllers\NutritionProgramController;
+                elseif ($page === 'nutrition' && $areUserStaticDataCompleted) {
+                    $nutritionController = new Dodie_Coaching\Controllers\NutritionController;
 
-                    if ($nutritionProgramController->isMenuRequested()) {
-                        $nutritionProgramController->renderNutritionProgramMenu($twig);
+                    if ($nutritionController->isMenuRequested()) {
+                        $nutritionController->renderNutritionMenu($twig);
                     }
 
-                    elseif ($nutritionProgramController->isMealRequested()) {
-                        $mealData = $nutritionProgramController->getMealData();
+                    elseif ($nutritionController->isMealRequested()) {
+                        $mealData = $nutritionController->getMealData();
 
-                        if ($nutritionProgramController->areMealParamsValid($mealData)) {
-                            $nutritionProgramController->renderMealComposition($twig, $mealData);
+                        if ($nutritionController->areMealParamsValid($mealData)) {
+                            $nutritionController->renderMealComposition($twig, $mealData);
                         }
 
                         else {
-                            header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                            header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
                         }
                     }
 
-                    elseif ($nutritionProgramController->isShoppingListRequested()) {
+                    elseif ($nutritionController->isShoppingListRequested()) {
                         if ($_GET['request'] === 'shopping-list') {
-                            $nutritionProgramController->renderShoppingList($twig);
+                            $nutritionController->renderShoppingList($twig);
                         }
 
                         else {
-                            header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                            header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
                         }
                     }
 
                     else {
-                        header("location:{$nutritionProgramController->getMemberPanelURL('nutritionProgram')}");
+                        header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
                     }
                 }
 
                 elseif ($page === 'progress' && $areUserStaticDataCompleted) {
-                    require('./../src/controllers/ProgressController.php');
-                    $progressController = new App\Controllers\ProgressController;
+                    $progressController = new Dodie_Coaching\Controllers\ProgressController;
                     $progressController->renderMemberProgress($twig);
                 }
 
                 elseif ($page === 'meetings' && $areUserStaticDataCompleted){
-                    require('./../src/controllers/MeetingsController.php');
-                    $meetingsController = new App\Controllers\MeetingsController;
+                    $meetingsController = new Dodie_Coaching\Controllers\MeetingsController;
                     $meetingsController->renderMeetings($twig);
                 }
 
                 elseif ($page === 'get-to-know-you') {
-                    require('./../src/controllers/MemberPanelsController.php');
-                    $memberPanelController = new App\Controllers\MemberPanelsController;
+                    $memberPanelController = new Dodie_Coaching\Controllers\MemberPanelsController;
                     $memberPanelController->renderUserStaticDataForm($twig);
                 }
 
@@ -190,8 +179,7 @@ try {
 
     elseif (isset($_GET['action'])) {
         $action = htmlspecialchars($_GET['action']);
-        require('./../src/controllers/UserController.php');
-        $userController = new App\Controllers\UserController;
+        $userController = new Dodie_Coaching\Controllers\UserController;
 
         if (in_array($action, $Urls['actions']['connection'])) {
 
@@ -268,8 +256,7 @@ try {
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {
-            require('./../src/controllers/ProgressController.php');
-            $progressController = new App\Controllers\ProgressController;
+            $progressController = new Dodie_Coaching\Controllers\ProgressController;
 
             if ($userController->isUserLogged()) {
                 if ($action === 'add-weight-report') {
@@ -350,8 +337,7 @@ try {
         }
 
         elseif (in_array($action, $Urls['actions']['meeting'])) {
-            require('./../src/controllers/MeetingsController.php');
-            $meetingsController = new \App\Controllers\MeetingsController;
+            $meetingsController = new Dodie_Coaching\Controllers\MeetingsController;
 
             if ($userController->isUserLogged()) {
                 if ($action === 'book-new-appointment') {

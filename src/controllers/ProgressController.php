@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require ('./../src/controllers/MemberPanelsController.php');
-require_once ('./../src/model/ProgressManager.php');
-use DateTime;
-use App\Models\ProgressManager as ProgressManager;
+use Dodie_Coaching\Models\ProgressManager as ProgressManager,  DateTime;
 
 class ProgressController extends MemberPanelsController {
     private $_progressScripts = [
@@ -51,7 +48,7 @@ class ProgressController extends MemberPanelsController {
 
     public function deleteReport(array $progressHistory, int $reportId) {
         $progressManager = new ProgressManager;
-        $reportDate = $progressHistory[$reportId-1]['report_date'];
+        $reportDate = $progressHistory[$reportId-1]['date'];
 
         return $progressManager->deleteReport($reportDate, $_SESSION['user-email']);
     }

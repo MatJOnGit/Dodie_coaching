@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require_once ('./../src/model/UserManager.php');
-
-use \App\Models\UserManager;
+use Dodie_Coaching\Models\UserManager as UserManager;
 
 class UserController {
     private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';

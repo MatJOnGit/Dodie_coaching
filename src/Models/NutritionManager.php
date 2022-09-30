@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace Dodie_Coaching\Models;
+
 use PDO;
 
-require_once('./../src/model/Manager.php');
-
-class NutritionProgramManager extends Manager {
+class NutritionManager extends Manager {
     public function getMealDetails(string $day, string $meal, string $memberEmail) {
         $db = $this->dbConnect();
         $mealDetailsQuery = 'SELECT ingr.name, ingr.french_name, ingr.recipe, ingr.type, fp.quantity, ingr. measure_unit FROM food_plans fp INNER JOIN ingredients ingr ON fp.ingredient_id = ingr.id WHERE day = ? AND meal = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)';

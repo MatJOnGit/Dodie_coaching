@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Models;
-
-require_once('./../src/model/Manager.php');
+namespace Dodie_Coaching\Models;
 
 class ProgressManager extends Manager {
     public function addWeightReport(string $memberEmail, float $userWeight, string $reportDate) {
         $db = $this->dbConnect();
-        $addWeightReportQuery = 'INSERT INTO users_dynamic_data (report_date, user_id, current_weight) VALUES (?, (SELECT id FROM accounts WHERE email = ?), ?)';
+        $addWeightReportQuery = 'INSERT INTO users_weight_reports (date, user_id, weight) VALUES (?, (SELECT id FROM accounts WHERE email = ?), ?)';
         $addWeightReportStatement = $db->prepare($addWeightReportQuery);
         $addWeightReportStatement->execute([$reportDate, $memberEmail, $userWeight]);
         
@@ -17,8 +15,7 @@ class ProgressManager extends Manager {
     public function getProgressHistory(string $userEmail) {
         $db = $this->dbConnect();
         $getProgressHistoryQuery = 
-        "SELECT udd.report_date, udd.current_weight 
-        FROM users_dynamic_data udd INNER JOIN accounts a ON udd.user_id = a.id WHERE a.email = ? ORDER BY report_date DESC LIMIT 10";
+        "SELECT uwr.date, uwr.weight FROM users_weight_reports uwr INNER JOIN accounts a ON uwr.user_id = a.id WHERE a.email = ? ORDER BY date DESC LIMIT 10";
         $getProgressHistoryStatement = $db->prepare($getProgressHistoryQuery);
         $getProgressHistoryStatement->execute([$userEmail]);
 
@@ -27,7 +24,7 @@ class ProgressManager extends Manager {
 
     public function deleteReport(string $reportDate, string $memberEmail) {
         $db = $this->dbConnect();
-        $deleteReportQuery = "DELETE FROM users_dynamic_data WHERE report_date = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)";
+        $deleteReportQuery = "DELETE FROM users_weight_reports WHERE date = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)";
         $deleteReportStatement = $db->prepare($deleteReportQuery);
 
         return $deleteReportStatement->execute([$reportDate, $memberEmail]);

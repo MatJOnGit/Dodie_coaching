@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require ('./../src/model/DashboardManager.php');
-use App\Models\DashboardManager as DashboardManager;
+use Dodie_Coaching\Models\MemberPanelsManager as MemberPanelsManager;
 
 class MemberPanelsController {
-    private $_memberPanels = ['get-to-know-you', 'dashboard', 'nutrition-program', 'progress', 'meetings', 'subscription'];
+    private $_memberPanels = ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
 
     private $_memberPanelsStyles = [
         'pages/member-panels',
@@ -17,7 +16,7 @@ class MemberPanelsController {
     ];
 
     private $_memberPanelsSubpanels = [
-        'nutritionProgram' => 'Programme nutritionnel',
+        'nutrition' => 'Programme nutritionnel',
         'progress' => 'Progression',
         'meetings' => 'Rendez-vous',
         'subscriptions' => 'Abonnement'
@@ -28,7 +27,7 @@ class MemberPanelsController {
         'dashboard' => 'index.php?page=dashboard',
         'progress' => 'index.php?page=progress',
         'getToKnowYou' => 'index.php?page=get-to-know-you',
-        'nutritionProgram' => 'index.php?page=nutrition-program',
+        'nutrition' => 'index.php?page=nutrition',
         'meetings' => 'index.php?page=meetings',
         'subscription' => 'index.php?page=subscription'
     ];
@@ -76,7 +75,7 @@ class MemberPanelsController {
     }
 
     private function _getDashboardMenu() {
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MemberPanelsManager;
         
         return $dashboardManager->getDashboardMenuItems();
     }

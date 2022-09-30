@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require ('./../src/controllers/MemberPanelsController.php');
-use App\Models\DashboardManager as DashboardManager;
-use DateTime;
+use Dodie_Coaching\Models\MeetingsManager as MeetingsManager, DateTime;
 
 class MeetingsController extends MemberPanelsController {
     private $_appointmentDelay = 24;
@@ -18,13 +16,13 @@ class MeetingsController extends MemberPanelsController {
     private $_subMenuPage = 'meetings';
 
     public function addAppointment(string $meetingDate) {
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MeetingsManager;
         $dashboardManager->bookMemberMeeting($_SESSION['user-email'], $meetingDate);
     }
 
     public function cancelMemberNextMeeting() {
         $this->_setTimeZone();
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MeetingsManager;
         $dashboardManager->releaseMemberAppointmentMeetingSlot($_SESSION['user-email']);
     }
 
@@ -50,14 +48,14 @@ class MeetingsController extends MemberPanelsController {
     }
 
     public function getMeetings() {
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MeetingsManager;
         $availableMeetings = $dashboardManager->getAvailableMeetingsSlots($this->_getAppointmentDelay());
 
         return $this->_getMeetingsSlotsArray($availableMeetings);
     }
 
     public function getMemberScheduledMeeting() {
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MeetingsManager;
         $memberScheduledMeeting = $dashboardManager->getMemberNextMeetingSlots($_SESSION['user-email']);
 
         return (!empty($memberScheduledMeeting) ? $memberScheduledMeeting[0] : NULL);
@@ -98,7 +96,7 @@ class MeetingsController extends MemberPanelsController {
     }
 
     private function _getSortedMeetingsSlots() {
-        $dashboardManager = new DashboardManager;
+        $dashboardManager = new MeetingsManager;
         $availableMeetingsSlots = $dashboardManager->getAvailableMeetingsSlots($this->_getAppointmentDelay());
         $meetingsSlotsArray = $this->_getMeetingsSlotsArray($availableMeetingsSlots);
         $sortedMeetingsSlots = $this->_sortMeetingsSlots($meetingsSlotsArray);

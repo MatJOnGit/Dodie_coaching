@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace Dodie_Coaching\Controllers;
 
-require ('./../src/model/ProgramManager.php');
-use App\Models\ProgramManager as ProgramManager;
+use Dodie_Coaching\Models\ProgramManager as ProgramManager;
 
 class ShowcaseController {
     private $_showcasePanelsStyles = [

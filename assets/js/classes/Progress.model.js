@@ -1,4 +1,4 @@
-class Progress extends MemberPanels {
+class Progress extends UserPanels {
     constructor() {
         super();
         this._dateTypeSelect = document.getElementById('date-selector');
@@ -45,7 +45,7 @@ class Progress extends MemberPanels {
 
         let cancelReportDeletionButton = document.createElement('a');
         cancelReportDeletionButton.href = 'index.php?page=progress';
-        cancelReportDeletionButton.classList = 'btn member-panel-rounded-btn purple-to-blue-bkgd'
+        cancelReportDeletionButton.classList = 'btn user-panel-rounded-btn purple-to-blue-bkgd'
         cancelReportDeletionButton.textContent = 'Non';
 
         let reportDeletionMessage = document.createElement('div');
@@ -53,8 +53,8 @@ class Progress extends MemberPanels {
         reportDeletionMessage.innerHTML = '<p>Etes-vous sûr de vouloir supprimer ce relevé ?</p>';
 
         let confirmReportDeletionButton = document.createElement('a');
-        confirmReportDeletionButton.href = `index.php?action=delete-weight-report&id=${selectedReport.id}`;
-        confirmReportDeletionButton.classList = 'btn member-panel-rounded-btn red-bkgd';
+        confirmReportDeletionButton.href = `index.php?action=delete-report&id=${selectedReport.id}`;
+        confirmReportDeletionButton.classList = 'btn user-panel-rounded-btn red-bkgd';
         confirmReportDeletionButton.textContent = 'Oui';
 
         selectedReport.innerHTML = '';

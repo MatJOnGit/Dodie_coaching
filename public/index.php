@@ -1,28 +1,37 @@
 <?php
 
+declare(strict_types=1);
 session_start();
+
 // session_destroy();
 // echo $_SESSION['user-email'];
 
 try {
     require_once ('./../vendor/autoload.php');
-    $loader = new \Twig\Loader\FilesystemLoader ('./../src/views');
+    
+    $loader = new \Twig\Loader\FilesystemLoader('./../src/views');
+    
     $twig = new \Twig\Environment($loader, [
         'cache' => false,
         'debug' => true
     ]);
+
     $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+    class DB_Exception extends Exception { }
+    class URL_Exception extends Exception { }
+    class Data_Exception extends Exception { }
 
     $Urls = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving'],
-            'memberPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
+            'userPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'log-out'],
-            'progress' => ['add-weight-report', 'delete-weight-report'],
-            'meeting' => ['book-new-appointment', 'cancel-appointment']
+            'progress' => ['add-report', 'delete-report'],
+            'meeting' => ['book-appointment', 'cancel-appointment']
         ]
     ];
 
@@ -30,342 +39,369 @@ try {
         $page = htmlspecialchars($_GET['page']);
 
         if (in_array($page, $Urls['pages']['showcase'])) {
-            $showcaseController = new Dodie_Coaching\Controllers\ShowcaseController;
+            $showcase = new Dodie_Coaching\Controllers\Showcase;
 
-            if ($page === 'presentation') {
-                $showcaseController->renderPresentationPage($twig);
+            if ($showcase->isPresentationPageRequested($page)) {
+                $showcase->renderPresentationPage($twig);
             }
 
-            elseif ($page === 'coaching') {
-                $showcaseController->renderCoachingPage($twig);
+            elseif ($showcase->isCoachingPageRequested($page)) {
+                $showcase->renderCoachingPage($twig);
             }
 
-            elseif (($page === 'programslist') || ($page === 'programdetails')) {
-                if ($showcaseController->isProgramsListAvailable()) {
-                    if ($page === 'programslist') {
-                        $showcaseController->renderProgramsListPage($twig);
+            elseif ($showcase->areProgramsPagesRequested($page)) {
+                if ($showcase->isProgramsListAvailable()) {
+                    if ($showcase->isProgramsListRequested($page)) {
+                        $showcase->renderProgramsListPage($twig);
                     }
 
-                    elseif (($page === 'programdetails') && (isset($_GET['program']))) {
-                        $program = htmlspecialchars($_GET['program']);
+                    elseif ($showcase->isProgramDetailsRequested($page) && $showcase->isRequestedProgramSet()) {
+                        $requestedProgram = $showcase->getProgram();
 
-                        if ($showcaseController->areProgramDetailsAvailable($program)) {
-                            $showcaseController->renderProgramDetailsPage($twig, $program);
+                        if ($showcase->isProgramAvailable($requestedProgram)) {
+                            $showcase->renderProgramDetailsPage($twig, $requestedProgram);
                         }
 
                         else {
-                            header("Location:{$showcaseController->getShowcasePanelURL('programsList')}");
+                            throw new URL_Exception('INVALID PROGRAM PARAMETER');
+                            // $showcase->routeTo('programsList');
                         }
                     }
 
                     else {
-                        header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
+                        throw new URL_Exception('MISSING PROGRAM PARAMETER');
+                        // $showcase->routeTo('showcase404');
                     }
                 }
 
                 else {
-                    header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
+                    throw new Data_Exception('EMPTY PROGRAMS ARRAY IN SHOWCASE CONTROLLER');
+                    // $showcase->routeTo('showcase404');
                 }
             }
 
             else {
-                if ($page === 'showcase-404') {
-                    $showcaseController->render404Page($twig);
-                }
-
-                else {
-                    header("Location:{$showcaseController->getShowcasePanelURL('showcase404')}");
-                }
+                $showcase->renderShowcase404Page($twig);
             }
         }
 
         elseif (in_array($page, $Urls['pages']['connection'])) {
-            $userController = new Dodie_Coaching\Controllers\UserController;
+            $user = new Dodie_Coaching\Controllers\User;
 
-            if (!$userController->isUserLogged()) {
-                if ($page === 'login') {
-                    $userController->renderLoginPage($twig);
+            if (!$user->isLogged()) {
+                if ($user->isLoginPageRequested($page)) {
+                    $user->renderLoginPage($twig);
                 }
 
-                elseif ($page === 'registering') {
-                    $userController->renderRegisteringPage($twig);
+                elseif ($user->isRegisteringPageRequested($page)) {
+                    $user->renderRegisteringPage($twig);
                 }
 
-                elseif ($page === 'password-retrieving') {
-                    $userController->renderPasswordRetrievingPage($twig);
+                else {
+                    $user->renderPasswordRetrievingPage($twig);
                 }
             }
 
             else {
-                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
+                $user->routeTo('dashboard');
             }
         }
 
-        elseif (in_array($page, $Urls['pages']['memberPanels'])) {
-            $userController = new Dodie_Coaching\Controllers\UserController;
+        elseif (in_array($page, $Urls['pages']['userPanels'])) {
+            $user = new Dodie_Coaching\Controllers\User;
 
-            if ($userController->isUserLogged()) {
-                $areUserStaticDataCompleted = $userController->areMemberStaticDataCompleted();
+            if ($user->isLogged()) {
+                $userPanels = new Dodie_Coaching\Controllers\UserPanels;
+                $areDataCompleted = $user->areDataCompleted();
 
-                if ($page === 'dashboard' && $areUserStaticDataCompleted) {
-                    $memberPanelController = new Dodie_Coaching\Controllers\MemberPanelsController;
-                    $memberPanelController->renderMemberDashboard($twig);
+                if ($userPanels->isUserDashboardPageRequested($page) && $areDataCompleted) {
+                    $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
+                    $userDashboard->renderUserDashboardPage($twig);
                 }
 
-                elseif ($page === 'nutrition' && $areUserStaticDataCompleted) {
-                    $nutritionController = new Dodie_Coaching\Controllers\NutritionController;
+                elseif ($userPanels->isNutritionPageRequested($page) && $areDataCompleted) {
+                    $nutrition = new Dodie_Coaching\Controllers\Nutrition;
 
-                    if ($nutritionController->isMenuRequested()) {
-                        $nutritionController->renderNutritionMenu($twig);
+                    if ($nutrition->isMenuRequested()) {
+                        $nutrition->renderNutritionMenu($twig);
                     }
 
-                    elseif ($nutritionController->isMealRequested()) {
-                        $mealData = $nutritionController->getMealData();
+                    elseif ($nutrition->isMealRequested()) {
+                        $mealData = $nutrition->getMealData();
 
-                        if ($nutritionController->areMealParamsValid($mealData)) {
-                            $nutritionController->renderMealComposition($twig, $mealData);
+                        if ($nutrition->areMealParamsValid($mealData)) {
+                            $nutrition->renderMealComposition($twig, $mealData);
                         }
 
                         else {
-                            header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
+                            throw new URL_Exception('INVALID MEAL PARAMETER');
+                            // $userPanels->routeTo('nutrition');
                         }
                     }
 
-                    elseif ($nutritionController->isShoppingListRequested()) {
-                        if ($_GET['request'] === 'shopping-list') {
-                            $nutritionController->renderShoppingList($twig);
+                    elseif ($nutrition->isRequestSet()) {
+                        $request = $nutrition->getRequest();
+
+                        if ($nutrition->isShoppingListRequested($request)) {
+                            $nutrition->renderShoppingList($twig);
                         }
 
                         else {
-                            header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
+                            $userPanels->routeTo('nutrition');
                         }
                     }
 
                     else {
-                        header("location:{$nutritionController->getMemberPanelURL('nutrition')}");
+                        $userPanels->routeTo('nutrition');
                     }
                 }
 
-                elseif ($page === 'progress' && $areUserStaticDataCompleted) {
-                    $progressController = new Dodie_Coaching\Controllers\ProgressController;
-                    $progressController->renderMemberProgress($twig);
+                elseif ($userPanels->isProgressPageRequested($page) && $areDataCompleted) {
+                    $progress = new Dodie_Coaching\Controllers\Progress;
+                    $progress->renderProgress($twig);
                 }
 
-                elseif ($page === 'meetings' && $areUserStaticDataCompleted){
-                    $meetingsController = new Dodie_Coaching\Controllers\MeetingsController;
-                    $meetingsController->renderMeetings($twig);
+                elseif ($userPanels->isMeetingsPageRequested($page) && $areDataCompleted){
+                    $meetings = new Dodie_Coaching\Controllers\Meetings;
+                    $meetings->renderMeetings($twig);
                 }
 
-                elseif ($page === 'get-to-know-you') {
-                    $memberPanelController = new Dodie_Coaching\Controllers\MemberPanelsController;
-                    $memberPanelController->renderUserStaticDataForm($twig);
+                elseif ($userPanels->isSubscriptionPageRequested($page) && $areDataCompleted) {
+                    $subscription = new Dodie_Coaching\Controllers\Subscription;
+                    $subscription->renderSubscription($twig);
+                }
+
+                elseif ($userPanels->isStaticDataPageRequested($page)) {
+                    $staticDataForm = new Dodie_Coaching\Controllers\StaticDataForm;
+                    $staticDataForm->renderStaticDataForm($twig);
                 }
 
                 else {
-                    header('location:index.php?page=get-to-know-you');
+                    $userPanels->routeTo('getToKnowYou');
                 }
             }
 
             else {
-                $userController->destroySessionData();
-                header("location:{$userController->getConnectionPanelsURL('login')}");
+                throw new URL_Exception('MISSING SESSION PARAMETERS');
+                // $user->destroySessionData();
+                // $user->routeTo('login');
             }
         }
-        
+
         else {
-            header('Location: index.php?page=presentation');
+            throw new URL_Exception('INVALID PAGE PARAMETER');
+            // $user = new Dodie_Coaching\Controllers\User;
+            // $user->destroySessionData();
+            // $user->routeTo('login');
         }
     }
 
     elseif (isset($_GET['action'])) {
-        $action = htmlspecialchars($_GET['action']);
-        $userController = new Dodie_Coaching\Controllers\UserController;
-
+        $user = new Dodie_Coaching\Controllers\User;
+        $action = $user->getRequestedAction();
+        
         if (in_array($action, $Urls['actions']['connection'])) {
 
-            if (!$userController->isUserLogged()) {
-                $userData = $userController->getLoginFormData();
+            if (!$user->isLogged()) {
+                $userData = $user->getLoginFormData();
 
-                if ($_GET['action'] === 'log-account') {
-                    if ($userController->isLoginFormValid($userData)) {
-                        $isUserVerified = $userController->isAccountValid($userData['email'], $userData['password']);
+                if ($user->isLoginActionRequested($action)) {
+                    if ($user->isLoginFormValid($userData)) {
+                        if ($user->isAccountExisting($userData)) {
+                            if ($user->updateLoginData($userData)) {
+                                $user->logUser($userData);
+                                $user->routeTo('dashboard');
+                            }
 
-                        if ($isUserVerified) {
-                            $isLoginDateUpdated = $userController->logUserLoginDate($userData['email']);
-    
-                            if ($isLoginDateUpdated) {
-                                $userController->logUser($userData);
-                                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
+                            else {
+                                throw new DB_Exception('LOGGING FAILED');
+                                // $user->routeTo('login');
                             }
                         }
     
                         else {
-                            $userController->destroySessionData();
-                            header("location:{$userController->getConnectionPanelsURL('login')}");
+                            $user->destroySessionData();
+                            $user->routeTo('login');
                         }
                     }
     
                     else {
-                        $userController->destroySessionData();
-                        header("location:{$userController->getConnectionPanelsURL('login')}");
+                        $user->destroySessionData();
+                        $user->routeTo('login');
                     }
                 }
 
-                elseif ($action === 'register-account') {
-                    $userData = $userController->getRegistrationFormAdditionalData($userData);
+                elseif ($user->isRegisteringActionRequested($action)) {
+                    $userData = $user->getRegistrationFormAdditionalData($userData);
 
-                    if ($userController->isRegisteringFormValid($userData)) {
-                        $isUserVerified = $userController->isAccountValid($userData['email'], $userData['password']);
-
-                        if (!$isUserVerified) {
-                            $isUserRegistered = $userController->registerAccount($userData);
+                    if ($user->isRegisteringFormValid($userData)) {
+                        if (!$user->isAccountExisting($userData)) {
+                            $isUserRegistered = $user->registerAccount($userData);
     
                             if ($isUserRegistered) {
-                                $userController->logUser($userData);
-                                header("location:{$userController->getConnectionPanelsURL('dashboard')}");
+                                $user->createStaticData($userData);
+                                $user->logUser($userData);
+                                $user->routeTo('dashboard');
                             }
     
                             else {
-                                $userController->destroySessionData();
-                                header("location:{$userController->getConnectionPanelsURL('registering')}");
+                                throw new DB_Exception('REGISTERING FAILED');
+                                // $user->destroySessionData();
+                                // $user->routeTo('registering');
                             }
                         }
     
                         else {
-                            header("location:{$userController->getConnectionPanelsURL('registering')}");
+                            $user->routeTo('registering');
                         }
                     }
     
                     else {
-                        $userController->destroySessionData();
-                        header("Location:{$userController->getConnectionPanelsURL('registering')}");
+                        $user->destroySessionData();
+                        $user->routeTo('registering');
                     }
                 }
             }
 
             else {
-                if ($action === 'logout') {
-                    $userController->destroySessionData();
-                    header("Location:index.php?page=presentation");
-                }
-    
-                else {
-                    header("location:{$userController->getConnectionPanelsURL('dashboard')}");
+                if ($user->isLogoutActionRequested($action)) {
+                    $user->destroySessionData();
+                    $user->routeTo('presentation');
                 }
             } 
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {
-            $progressController = new Dodie_Coaching\Controllers\ProgressController;
+            $progress = new Dodie_Coaching\Controllers\Progress;
 
-            if ($userController->isUserLogged()) {
-                if ($action === 'add-weight-report') {
-                    if ($progressController->areBaseFormDataSet()) {
-                        $baseFormData = $progressController->getBaseFormData();
+            if ($user->isLogged()) {
+                if ($progress->isReportAdditionRequested($action)) {
+                    if ($progress->areBaseFormDataSet()) {
+                        $baseFormData = $progress->getBaseFormData();
 
-                        if ($progressController->areBaseFormDataValid($baseFormData)) {
-                            if ($progressController->isCurrentWeightReport($baseFormData)) {
-                                $formatedFormData = $progressController->formatBaseFormData($baseFormData);
-                                $progressController->logWeightReport($formatedFormData);
+                        if ($progress->areBaseFormDataValid($baseFormData)) {
+                            if ($progress->isCurrentWeightReport($baseFormData)) {
+                                $formatedFormData = $progress->getFormatedBaseFormData($baseFormData);
+                                
+                                if (!$progress->logProgress($formatedFormData)) {
+                                    throw new DB_Exception('FAILED TO LOG CURRENT WEIGHT REPORT');
+                                }
                             }
 
-                            elseif ($progressController->areExtendedFormDataSet()) {
-                                $extendedFormData = $progressController->getExtendedFormData($baseFormData);
+                            elseif ($progress->areExtendedFormDataSet()) {
+                                $extendedFormData = $progress->getExtendedFormData($baseFormData);
 
-                                if ($progressController->areExtendedFormDataValid($extendedFormData)) {
-                                    $formatedFormData = $progressController->formatExtendedFormData($extendedFormData);
-                                    $progressController->logWeightReport($formatedFormData);
+                                if ($progress->areExtendedFormDataValid($extendedFormData)) {
+                                    $formatedFormData = $progress->getFormatedExtendedFormData($extendedFormData);
+                                    
+                                    if (!$progress->logProgress($formatedFormData)) {
+                                        throw new DB_Exception('FAILED TO LOG OLD WEIGHT REPORT');
+                                    }
                                 }
 
                                 else {
-                                    throw new Exception('Le paramètre day et/ou time ne correspond pas à ce qui est attendu.');
+                                    throw new URL_Exception('INVALID "DAY" OR "TIME" PARAMETERS FOR OLD WEIGHT REPORT');
                                 }
                             }
 
                             else {
-                                throw new Exception('Il manque des paramètres au niveau des données complémentaires pour un reporting différé');
+                                throw new URL_Exception('MISSING "DAY" OR "TIME" PARAMETER FOR OLD WEIGHT REPORT');
                             }
                         }
 
                         else {
-                            throw new Exception('Erreur au niveau des données de base de reporting');
+                            throw new URL_Exception('INVALID "USER-WEIGHT" OR "DATE-TYPE" PARAMETERS FOR CURRENT WEIGHT REPORT');
                         }
                     }
 
                     else {
-                        throw new Exception('Il manque des paramètres au niveau des données de base.');
+                        throw new URL_Exception('MISSING "USER-WEIGHT" OR "DATE-TYPE" PARAMETER FOR CURRENT WEIGHT REPORT');
                     }
 
-                    header("location:{$progressController->getMemberPanelURL('progress')}");
+                    $progress->routeTo('progress');
                 }
 
-                elseif ($action === 'delete-weight-report') {
-                    if ($progressController->isReportIdSet()) {
-                        $reportId = $progressController->getReportId();
+                elseif ($progress->isReportDeletionRequested($action)) {
+                    if ($progress->isReportIdSet()) {
+                        $reportId = $progress->getReportId();
 
-                        if ($progressController->isReportIdParamValid($reportId)) {
-                            $progressHistory = $progressController->getMemberProgressHistory();
+                        if ($progress->isReportIdValid($reportId)) {
+                            $progressHistory = $progress->getHistory();
 
-                            if ($progressController->isReportIdParamExisting($progressHistory, $reportId)) {
-                                if (!$progressController->deleteReport($progressHistory, $reportId)) {
-                                    throw new Exception ("ERROR EXECUTING REPORT DELETION IN DATABASE");
+                            if ($progress->isReportIdExisting($progressHistory, $reportId)) {
+                                if (!$progress->eraseProgress($progressHistory, $reportId)) {
+                                    throw new DB_Exception ("FAILED TO DELETE REPORT");
                                 }
                             }
 
                             else {
-                                throw new Exception("REPORT NOT FOUND IN DATABASE");
+                                throw new Data_Exception("NO REPORT FOUND TO DELETE");
                             }
                         }
 
                         else {
-                            throw new Exception("INVALID REPORT ID PARAMETER");
+                            throw new URL_Exception("INVALID REPORT ID PARAMETER");
                         }
                     }
 
                     else {
-                        throw new Exception("MISSING REPORT ID PARAMETER");
+                        throw new URL_Exception("MISSING REPORT ID PARAMETER");
                     }
                 }
 
-                header("location:{$progressController->getMemberPanelURL('progress')}");
+                $progress->routeTo('progress');
             }
 
             else {
-                $userController->destroySessionData();
-                header("location:{$progressController->getMemberPanelURL('login')}");
+                $user->destroySessionData();
+                $user->routeTo('login');
             }
         }
 
         elseif (in_array($action, $Urls['actions']['meeting'])) {
-            $meetingsController = new Dodie_Coaching\Controllers\MeetingsController;
+            $meetings = new Dodie_Coaching\Controllers\Meetings;
 
-            if ($userController->isUserLogged()) {
-                if ($action === 'book-new-appointment') {
-                    $requestedMeetingDate = $meetingsController->getMeetingDate();
+            if ($user->isLogged()) {
+                if ($meetings->isBookingRequested($action)) {
+                    $dateData = $meetings->getDateData();
+                    
+                    if ($meetings->areDateDataValid($dateData)) {
+                        $formatedDate = $meetings->getFormatedDate($dateData);
 
-                    if (!is_null($requestedMeetingDate)) {
-                        if (in_array($requestedMeetingDate, $meetingsController->getMeetings())) {
-                            $meetingsController->addAppointment($requestedMeetingDate);
+                        if ($meetings->isMeetingsSlotAvailable($formatedDate)) {
+                            if (!$meetings->bookAppointment($formatedDate)) {
+                                throw new DB_Exception('FAILED TO BOOK APPOINTMENT');
+                            }
                         }
+
+                        else {
+                            throw new Data_Exception('UNAVAILABLE MEETING SLOT');
+                        }
+                    }
+
+                    else {
+                        throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
                 }
 
-                elseif ($action === 'cancel-appointment') {
-                    $meetingsController->cancelMemberNextMeeting();
+                elseif ($meetings->isCancellationRequested($action)) {
+                    if (!$meetings->cancelAppointment()) {
+                        throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
+                    }
                 }
 
-                header("location:{$meetingsController->getMemberPanelURL('meetings')}");
+                $meetings->routeTo('meetings');
             }
 
             else {
-                $userController->destroySessionData();
-                header("location:{$meetingsController->getMemberPanelURL('login')}");
+                $user->destroySessionData();
+                $user->routeTo('login');
             }
         }
         
         else {
-            $userController->destroySessionData();
-            header("location:index.php?page=presentation");
+            $user->destroySessionData();
+            $user->routeTo('presentation');
         }
     }
 
@@ -374,6 +410,18 @@ try {
     }
 }
 
+catch(DB_Exception $e) {
+    echo "New DATABASE exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
+}
+
+catch(URL_Exception $e) {
+    echo "New URL exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
+}
+
+catch(Data_Exception $e) {
+    echo "New DATA exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
+}
+
 catch(Exception $e) {
-    echo 'Erreur ! ' . $e->getMessage();
+    echo "New exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
 }

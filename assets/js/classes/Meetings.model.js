@@ -1,4 +1,4 @@
-class Meetings extends MemberPanels {
+class Meetings extends UserPanels {
     constructor() {
         super();
         this._appointmentTab = document.getElementById('appointment-tab');
@@ -176,7 +176,7 @@ class Meetings extends MemberPanels {
     displayCancelMeetingConfirmation() {
         let cancelMeetingCancelationButton = document.createElement('a');
         cancelMeetingCancelationButton.href = 'index.php?page=meetings';
-        cancelMeetingCancelationButton.classList = 'btn member-panel-rounded-btn purple-to-blue-bkgd'
+        cancelMeetingCancelationButton.classList = 'btn user-panel-rounded-btn purple-to-blue-bkgd'
         cancelMeetingCancelationButton.textContent = 'Non';
 
         let meetingConcelationMessage = document.createElement('div');
@@ -185,7 +185,7 @@ class Meetings extends MemberPanels {
 
         let confirmMeetingCancelationLink = document.createElement('a');
         confirmMeetingCancelationLink.href = 'index.php?action=cancel-appointment';
-        confirmMeetingCancelationLink.classList = 'btn member-panel-rounded-btn red-bkgd';
+        confirmMeetingCancelationLink.classList = 'btn user-panel-rounded-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
 
         this.cancelMeetingButtonContainer.innerHTML = '';

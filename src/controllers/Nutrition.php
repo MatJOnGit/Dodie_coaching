@@ -2,9 +2,9 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\NutritionManager as NutritionManager, DatePeriod, DateTime, DateInterval;
+use Dodie_Coaching\Models\Nutrition as NutritionModel, DatePeriod, DateTime, DateInterval;
 
-class NutritionController extends MemberPanelsController {
+class Nutrition extends UserPanels {
     private $_meals = [
         ['english' => 'breakfast', 'french' => 'Petit déjeuner'],
         ['english' => 'lunch', 'french' => 'Déjeuner'],
@@ -27,7 +27,7 @@ class NutritionController extends MemberPanelsController {
         ['english' => 'sunday', 'french' => 'Dimanche']
     ];
 
-    public function areMealParamsValid(array $mealData) {
+    public function areMealParamsValid(array $mealData): bool {
         $requestedDay = $mealData['day'];
         $requestedMeal = $mealData['meal'];
         $isDayValid = false;
@@ -48,7 +48,7 @@ class NutritionController extends MemberPanelsController {
         return ($isDayValid && $isMealValid);
     }
 
-    public function getMealData() {
+    public function getMealData(): array {
         $meal = htmlspecialchars($_GET['meal']);
         $mealData = [
             'day' => false,
@@ -63,44 +63,55 @@ class NutritionController extends MemberPanelsController {
         return $mealData;
     }
 
-    public function isMealRequested() {
+    public function isMealRequested(): bool {
         return (isset($_GET['meal']) && !isset($_GET['request']));
     }
 
-    public function isMenuRequested() {
+    public function isMenuRequested(): bool {
         return (!isset($_GET['meal']) && !isset($_GET['request']));
     }
 
-    public function isShoppingListRequested() {
+    public function isRequestSet(): bool {
         return (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request']));
     }
 
+    public function isShoppingListRequested($request): bool {
+        return $request === 'shopping-list';
+    }
+
+    public function getRequest(): string {
+        return htmlspecialchars($_GET['request']);
+    }
+
     public function renderMealComposition(object $twig, array $mealData) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->_getMemberPanels(), 'subPanel' => $this->_getMemberPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
-        echo $twig->render('member_panels/meal-composition.html.twig', ['meal' => $this->_getTranslatedMealData($mealData), 'ingredients' => $this->_getMealIngredients($mealData)]);
+        // Définition de userPanels à revoir
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
+        echo $twig->render('user_panels/meal-composition.html.twig', ['meal' => $this->_getTranslatedMealData($mealData), 'ingredients' => $this->_getMealIngredients($mealData)]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderNutritionMenu(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->_getMemberPanels(), 'subPanel' => $this->_getMemberPanelsSubpanels($this->_getNutritionMenuPage())]);
-        echo $twig->render('member_panels/nutrition.html.twig', ['nextDays' => $this->_getNextDates(), 'meals' => $this->_getMeals(), 'programFilePath' => $this->_getProgramsFilePath()]);
+        // Définition de userPanels à revoir
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage())]);
+        echo $twig->render('user_panels/nutrition.html.twig', ['nextDays' => $this->_getNextDates(), 'meals' => $this->_getMeals(), 'programFilePath' => $this->_getProgramsFilePath()]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderShoppingList(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getMemberPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['memberPanels' => $this->_getMemberPanels(), 'subPanel' => $this->_getMemberPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
-        echo $twig->render('member_panels/shopping-list.html.twig', ['shoppingList' => $this->_getShoppingList()]);
+        // Définition de userPanels à revoir
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
+        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
+        echo $twig->render('user_panels/shopping-list.html.twig', ['shoppingList' => $this->_getShoppingList()]);
         echo $twig->render('components/footer.html.twig');
     }
 
-    private function _getEnglishWeekDay(string $date) {
+    private function _getEnglishWeekDay(string $date): string {
         return $this->_getWeekDays()[explode(' ', $date)[0]]['english'];
     }
 
-    private function _getFrenchDate(string $date) {
+    private function _getFrenchDate(string $date): string {
         $frenchDateWeekDay = $this->_getWeekDays()[explode(' ', $date)[0]]['french'];
         $dateDay = explode(' ', $date)[1];
         $dateMonth = $this->_getMonths()[explode(' ',  $date)[2] -1];
@@ -109,16 +120,16 @@ class NutritionController extends MemberPanelsController {
     }
 
     private function _getMealIngredients(array $mealData) {
-        $nutritionManager = new NutritionManager;
+        $nutrition = new NutritionModel;
 
-        return $nutritionManager->getMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
+        return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
     }
 
-    private function _getMeals() {
+    private function _getMeals(): array {
         return $this->_meals;
     }
 
-    private function _getNextDates() {
+    private function _getNextDates(): array {
         $this->_setTimeZone();
         $nextDates[] = [];
 
@@ -138,28 +149,28 @@ class NutritionController extends MemberPanelsController {
         return $nextDates;
     }
 
-    private function _getNutritionMenuPage() {
+    private function _getNutritionMenuPage(): string {
         return $this->_nutritionMenuPage;
     }
 
     private function _getProgramsFilePath() {
-        $nutritionManager = new NutritionManager;
-        $nutritionFileName = $nutritionManager->getNutritionFileName($_SESSION['user-email']);
+        $nutrition = new NutritionModel;
+        $fileName = $nutrition->selectFileName($_SESSION['user-email']);
 
-        return $nutritionFileName[0] ? $this->_getProgramsFolderRoute() . $nutritionFileName[0] . '.txt' : null;
+        return $fileName[0] ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
     }
 
-    private function _getProgramsFolderRoute() {
+    private function _getProgramsFolderRoute(): string {
         return $this->_programsFolderRoute;
     }
 
     private function _getShoppingList() {
-        $nutritionManager = new NutritionManager;
+        $nutrition = new NutritionModel;
 
-        return $nutritionManager->getWeeklyMealsIngredients($_SESSION['user-email']);
+        return $nutrition->selectMealsIngredients($_SESSION['user-email']);
     }
 
-    private function _getTranslatedMealData(array $mealData) {
+    private function _getTranslatedMealData(array $mealData): array {
         foreach($this->_getNextDates() as $day) {
             if ($mealData['day'] === $day['englishWeekDay']) {
                 $mealData['day'] = $day['frenchFullDate'];
@@ -171,10 +182,11 @@ class NutritionController extends MemberPanelsController {
                 $mealData['meal'] = $meal['french'];
             }
         }
+
         return $mealData;
     }
 
-    private function _getWeekDays() {
+    private function _getWeekDays(): array {
         return $this->_weekDays;
     }
 }

@@ -1,4 +1,4 @@
-class MemberPanels {
+class UserPanels {
     fadeInItem (item, timer) {
         let fadeInDuration = timer;
 

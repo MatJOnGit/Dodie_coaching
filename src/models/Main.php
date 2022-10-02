@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class Manager {
+class Main {
     protected function dbConnect() {
         return new PDO(
             'mysql:host=localhost;port=3308;dbname=dodie;charset=utf8',

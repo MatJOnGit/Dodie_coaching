@@ -11,7 +11,7 @@ h3 {
     margin: 2.5vh 0;
 }
 
-.member-panel h3:first-child {
+.user-panel h3:first-child {
     margin-top: 0;
 }
 
@@ -83,7 +83,7 @@ h2 {
     margin: 0 0 0 65px;
 }
 
-.member-panel {
+.user-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -265,13 +265,13 @@ input[type=submit] {
 }
 
 #cancel-btn-container button,
-.member-panel input[type=submit],
-.member-panel-rounded-btn {
+.user-panel input[type=submit],
+.user-panel-rounded-btn {
     height: 64px;
     color: hsla(0, 0%, 100%, 1);
 }
 
-.member-panel-rounded-btn {
+.user-panel-rounded-btn {
     width: 64px;
     border-radius: 32px;
     display: flex;
@@ -279,7 +279,7 @@ input[type=submit] {
     align-items: center;
 }
 
-.member-panel-large-btn {
+.user-panel-large-btn {
     width: max-content;
     padding: 0 20px;
     border: 0;

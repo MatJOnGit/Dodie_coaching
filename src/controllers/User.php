@@ -2,9 +2,9 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\UserManager as UserManager;
+use Dodie_Coaching\Models\User as UserModel;
 
-class UserController {
+class User extends Main {
     private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
     
     private $_passwordRegex = '#^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{6,}$#';
@@ -19,81 +19,112 @@ class UserController {
         'components/footer'
     ];
 
-    private $_connectionPanelsURLs = [
+    protected $_routingURLs = [
+        'dashboard' => 'index.php?page=dashboard',
         'login' => 'index.php?page=login',
-        'registering' => 'index.php?page=registering',
-        'dashboard' => 'index.php?page=dashboard'
+        'presentation' => 'index.php?page=presentation',
+        'registering' => 'index.php?page=registering'
     ];
 
-    public function areMemberStaticDataCompleted() {
-        $userManager = new UserManager;
-        $userStaticData = $userManager->getMemberStaticData($_SESSION['user-email']);
-        return (is_array($userStaticData) && !in_array(NULL, $userStaticData));
+    public function areDataCompleted(): bool {
+        $user = new UserModel;
+        $staticData = $user->selectStaticData($_SESSION['user-email']);
+
+        return (!in_array(NULL, $staticData));
+    }
+
+    public function createStaticData(array $userData) {
+        $user = new UserModel;
+
+        return $user->insertStaticData($userData['email']);
     }
 
     public function destroySessionData() {
         session_destroy();
     }
 
-    public function getConnectionPanelsURL($panel) {
-        return $this->_connectionPanelsURLs[$panel];
-    }
-
-    public function getLoginFormData() {
+    public function getLoginFormData(): array {
         $userData = [
             'email' => htmlspecialchars($_POST['user-email']),
             'password' => htmlspecialchars($_POST['user-password'])
         ];
+
         return $userData;
     }
 
-    public function getRegistrationFormAdditionalData($userData) {
+    public function getRequestedAction(): string {
+        return htmlspecialchars($_GET['action']);
+    }
+
+    public function getRegistrationFormAdditionalData(array $userData): array {
         $userData += [
             'firstName' => htmlspecialchars($_POST['user-first-name']),
             'lastName' => htmlspecialchars($_POST['user-last-name']),
             'confirmationPassword' => htmlspecialchars($_POST['user-confirmation-password'])
         ];
+
         return $userData;
     }
 
-    public function isAccountValid(string $email, string $password) {
-        $userManager = new UserManager;
-        $dbUserData = $userManager->getMemberPassword($email);
+    public function isAccountExisting(array $userData): bool {
+        $user = new UserModel;
 
-        if ($dbUserData) {
-            $isPasswordMatching = $password === $dbUserData[0];
-            $isPasswordEmpty = empty($password);
+        $userRegisteredPassword = $user->selectUserPassword($userData['email']);
 
-            $isUserVerified = ($isPasswordMatching && !$isPasswordEmpty);
+        if ($userRegisteredPassword) {
+            $isPasswordMatching = $userData['password'] === $userRegisteredPassword[0];
+            $isPasswordEmpty = empty($userData['password']);
+
+            $isAccountExisting = ($isPasswordMatching && !$isPasswordEmpty);
         }
 
         else {
-            $isUserVerified = false;
+            $isAccountExisting = false;
         }
 
-        return $isUserVerified;
+        return $isAccountExisting;
     }
 
-    public function isLoginFormValid(array $userData) {
+    public function isLoginActionRequested(string $action): bool {
+        return $action === 'log-account';
+    }
+
+    public function isLogoutActionRequested(string $action): bool {
+        return $action === 'logout';
+    }
+
+    public function isLogged(): bool {
+        return isset($_SESSION['user-email']) && isset($_SESSION['user-password']);
+    }
+
+    public function isLoginFormValid(array $userData): bool {
         return (
             (preg_match($this->_getEmailRegex(), $userData['email'])) && 
             (preg_match($this->_getPasswordRegex(), $userData['password']))
         );
     }
 
-    public function isRegisteringFormValid(array $userData) {
+    public function isLoginPageRequested(string $page): bool {
+        return $page === 'login';
+    }
+
+    public function isRegisteringActionRequested(string $action): bool {
+        return $action === 'register-account';
+    }
+
+    public function isRegisteringFormValid(array $userData): bool {
         return (
-            (preg_match($this->_getUsernameRegex(), $userData['firstName'])) &&
-            (preg_match($this->_getUsernameRegex(), $userData['lastName'])) &&
-            (preg_match($this->_getEmailRegex(), $userData['email'])) &&
-            (preg_match($this->_getPasswordRegex(), $userData['password'])) &&
-            (preg_match($this->_getPasswordRegex(), $userData['confirmationPassword'])) &&
-            ($userData['password'] === $userData['confirmationPassword'])
+            preg_match($this->_getUsernameRegex(), $userData['firstName']) &&
+            preg_match($this->_getUsernameRegex(), $userData['lastName']) &&
+            preg_match($this->_getEmailRegex(), $userData['email']) &&
+            preg_match($this->_getPasswordRegex(), $userData['password']) &&
+            preg_match($this->_getPasswordRegex(), $userData['confirmationPassword']) &&
+            $userData['password'] === $userData['confirmationPassword']
         );
     }
 
-    public function isUserLogged() {
-        return (isset($_SESSION['user-email']) && isset($_SESSION['user-password']));
+    public function isRegisteringPageRequested(string $page): bool {
+        return $page === 'registering';
     }
 
     public function logUser(array $userData) {
@@ -101,14 +132,15 @@ class UserController {
         $_SESSION['user-password'] = $userData['password'];
     }
 
-    public function logUserLoginDate(string $email) {
-        $userManager = new UserManager;
-        return $userManager->updateMemberLastLogin($email);
-    }
-
     public function registerAccount(array $userData) {
-        $userManager = new UserManager;
-        return $userManager->registerUser($userData['firstName'], $userData['lastName'], $userData['email'], $userData['password']);
+        $user = new UserModel;
+
+        return $user->insertAccount(
+            $userData['firstName'],
+            $userData['lastName'],
+            $userData['email'],
+            $userData['password']
+        );
     }
 
     public function renderLoginPage(object $twig) {
@@ -130,6 +162,12 @@ class UserController {
         echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
         echo $twig->render('connection_panels/registering.html.twig');
         echo $twig->render('components/footer.html.twig');
+    }
+
+    public function updateLoginData(array $userData): bool {
+        $user = new UserModel;
+
+        return $user->updateLoginDate($userData['email']);
     }
 
     private function _getConnectionPagesStyles() {

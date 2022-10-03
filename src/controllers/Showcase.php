@@ -9,7 +9,7 @@ class Showcase extends Main {
             'frenchTitle' => 'Formule mois',
             'duration' => 30,
             'subscriptionPrice' => 219,
-            'description' => "Vous avez un mariage de prévu et vous avez besoin d'un coup de main pour rentrer dans votre robe ou votre costume ?<br/><br/>Vous souhaitez peut-être simplement tester par vous-même mes services ?<br/><br/>Ce programme vous donnera des bases solides pour commencer à prendre soin de vous, et en toute sérénité."
+            'description' => "Vous avez un mariage de prévu et vous avez besoin d'un coup de main pour rentrer dans votre robe ou votre costume ?\n\nVous souhaitez peut-être simplement tester par vous-même mes services ?\n\nCe programme vous donnera des bases solides pour commencer à prendre soin de vous, et en toute sérénité."
         ],
         'quarterly' => [
             'name' => 'quarterly',
@@ -35,6 +35,14 @@ class Showcase extends Main {
         // ]
     ];
 
+    protected $_routingURLs = [
+        'presentation' => 'index.php?page=presentation',
+        'coaching' => 'index.php?page=coaching',
+        'programsList' => 'index.php?page=programslist',
+        'programDetails' => 'index.php?page=programdetails',
+        '404' => 'index.php?page=showcase-404'
+    ];
+
     private $_showcasePanelsStyles = [
         'pages/showcase-panels',
         'components/header',
@@ -42,13 +50,7 @@ class Showcase extends Main {
         'components/footer'
     ];
 
-    protected $_routingURLs = [
-        'presentation' => 'index.php?page=presentation',
-        'coaching' => 'index.php?page=coaching',
-        'programsList' => 'index.php?page=programslist',
-        'programDetails' => 'index.php?page=programdetails',
-        'showcase404' => 'index.php?page=showcase-404'
-    ];
+    private $_templatesRoute = 'showcase_panels/';
 
     public function areProgramsPagesRequested(string $page): bool {
         return ($page === 'programslist') || ($page === 'programdetails');
@@ -85,40 +87,42 @@ class Showcase extends Main {
     public function isRequestedProgramSet() : bool {
         return isset($_GET['program']);
     }
-    
-    public function renderCoachingPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'coaching', 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render('showcase_panels/coaching.html.twig');
-        echo $twig->render('components/footer.html.twig');
-    }
 
-    public function renderPresentationPage(object $twig) {
+    public function renderShowcasePage(object $twig, string $page) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'presentation', 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render('showcase_panels/presentation.html.twig');
-        echo $twig->render('components/footer.html.twig');
-    }
-
-    public function renderProgramDetailsPage(object $twig, string $program) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programDetails', 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render('showcase_panels/program-details.html.twig', ['requestedPage' => 'programdetails', 'program' => $this->_getProgramDetails($program)]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => $page, 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
+        echo $twig->render($this->_getTemplateFileRoot($page), $this->_getTemplateData($page));
         echo $twig->render('components/footer.html.twig');
     }
     
-    public function renderProgramsListPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'programsList', 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render('showcase_panels/programs-list.html.twig', ['programs' => $this->_getProgramsList()]);
-        echo $twig->render('components/footer.html.twig');
+    private function _getTemplateData(string $page): array {        
+        switch ($page) {
+            case 'programDetails' :
+                $templateData = [
+                    'requestedPage' => $page,
+                    'program' => $this->_getProgramDetails($this->getProgram())
+                ];
+                break;
+
+            case 'programsList':
+                $templateData = [
+                    'programs' => $this->_getProgramsList()
+                ];
+                break;
+            
+            default:
+                $templateData = [];
+        }
+
+        return $templateData; 
     }
 
-    public function renderShowcase404Page(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'showcase404', 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render('showcase_panels/404.html.twig');
-        echo $twig->render('components/footer.html.twig');
+    private function _getTemplateFileRoot(string $page): string {
+        return $this->_getTemplatesRoute() . $page . '.html.twig';
+    }
+
+    private function _getTemplatesRoute(): string {
+        return $this->_templatesRoute;
     }
 
     private function _getProgramDetails(string $program): array {

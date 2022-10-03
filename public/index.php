@@ -6,6 +6,10 @@ session_start();
 // session_destroy();
 // echo $_SESSION['user-email'];
 
+class DB_Exception extends Exception { }
+class URL_Exception extends Exception { }
+class Data_Exception extends Exception { }
+
 try {
     require_once ('./../vendor/autoload.php');
     
@@ -18,9 +22,7 @@ try {
 
     $twig->addExtension(new \Twig\Extension\DebugExtension());
 
-    class DB_Exception extends Exception { }
-    class URL_Exception extends Exception { }
-    class Data_Exception extends Exception { }
+    
 
     $Urls = [
         'pages' => [
@@ -42,24 +44,24 @@ try {
             $showcase = new Dodie_Coaching\Controllers\Showcase;
 
             if ($showcase->isPresentationPageRequested($page)) {
-                $showcase->renderPresentationPage($twig);
+                $showcase->renderShowcasePage($twig, 'presentation');
             }
 
             elseif ($showcase->isCoachingPageRequested($page)) {
-                $showcase->renderCoachingPage($twig);
+                $showcase->renderShowcasePage($twig, 'coaching');
             }
 
             elseif ($showcase->areProgramsPagesRequested($page)) {
                 if ($showcase->isProgramsListAvailable()) {
                     if ($showcase->isProgramsListRequested($page)) {
-                        $showcase->renderProgramsListPage($twig);
+                        $showcase->renderShowcasePage($twig, 'programsList');
                     }
 
                     elseif ($showcase->isProgramDetailsRequested($page) && $showcase->isRequestedProgramSet()) {
                         $requestedProgram = $showcase->getProgram();
 
                         if ($showcase->isProgramAvailable($requestedProgram)) {
-                            $showcase->renderProgramDetailsPage($twig, $requestedProgram);
+                            $showcase->renderShowcasePage($twig, 'programDetails');
                         }
 
                         else {
@@ -70,18 +72,18 @@ try {
 
                     else {
                         throw new URL_Exception('MISSING PROGRAM PARAMETER');
-                        // $showcase->routeTo('showcase404');
+                        // $showcase->routeTo('404');
                     }
                 }
 
                 else {
                     throw new Data_Exception('EMPTY PROGRAMS ARRAY IN SHOWCASE CONTROLLER');
-                    // $showcase->routeTo('showcase404');
+                    // $showcase->routeTo('404');
                 }
             }
 
             else {
-                $showcase->renderShowcase404Page($twig);
+                $showcase->renderShowcasePage($twig, '404');
             }
         }
 

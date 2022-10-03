@@ -4,10 +4,13 @@
 
         {% if requestedPage in showcasePanels %}
         <button id='dynamic-menu-button'><i class='fas fa-bars'></i></button>
+
         {% elseif requestedPage == 'connection' %}
         <a href='index.php' class='homepage-link'><i class="fa-solid fa-house-chimney"></i></a>
+
         {% else  %}
         <a href='index.php?action=logout' class='homepage-link'><i class="fa-solid fa-right-from-bracket"></i></a>
+        
         {% endif %}
         
     </div>

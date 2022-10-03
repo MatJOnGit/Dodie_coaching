@@ -50,7 +50,7 @@ class Showcase extends Main {
         'components/footer'
     ];
 
-    private $_templatesRoute = 'showcase_panels/';
+    private $_templateFilesRoute = 'showcase_panels/';
 
     public function areProgramsPagesRequested(string $page): bool {
         return ($page === 'programslist') || ($page === 'programdetails');
@@ -91,11 +91,11 @@ class Showcase extends Main {
     public function renderShowcasePage(object $twig, string $page) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getShowcasePanelsStyles()]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => $page, 'showcasePanels' => array_keys($this->_getRoutingURLs())]);
-        echo $twig->render($this->_getTemplateFileRoot($page), $this->_getTemplateData($page));
+        echo $twig->render($this->_getTemplateFileRoute($page), $this->_getTemplateData($page));
         echo $twig->render('components/footer.html.twig');
     }
     
-    private function _getTemplateData(string $page): array {        
+    private function _getTemplateData(string $page): array {
         switch ($page) {
             case 'programDetails' :
                 $templateData = [
@@ -117,14 +117,6 @@ class Showcase extends Main {
         return $templateData; 
     }
 
-    private function _getTemplateFileRoot(string $page): string {
-        return $this->_getTemplatesRoute() . $page . '.html.twig';
-    }
-
-    private function _getTemplatesRoute(): string {
-        return $this->_templatesRoute;
-    }
-
     private function _getProgramDetails(string $program): array {
         return $this->programsList[$program];
     }
@@ -133,11 +125,19 @@ class Showcase extends Main {
         return $this->programsList;
     }
 
+    private function _getRoutingURLs(): array {
+        return $this->_routingURLs;
+    }
+
     private function _getShowcasePanelsStyles(): array {
         return $this->_showcasePanelsStyles;
     }
 
-    private function _getRoutingURLs(): array {
-        return $this->_routingURLs;
+    private function _getTemplateFileRoute(string $page): string {
+        return $this->_getTemplateFilesRoute() . $page . '.html.twig';
+    }
+
+    private function _getTemplateFilesRoute(): string {
+        return $this->_templateFilesRoute;
     }
 }

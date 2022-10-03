@@ -5,12 +5,6 @@ namespace Dodie_Coaching\Controllers;
 use Dodie_Coaching\Models\User as UserModel;
 
 class User extends Main {
-    private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
-    
-    private $_passwordRegex = '#^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{6,}$#';
-
-    private $_usernameRegex = '^[-[:alpha:] \']+$^';
-
     private $_connectionPagesStyles = [
         'pages/connection-panels',
         'components/header',
@@ -18,6 +12,10 @@ class User extends Main {
         'components/buttons',
         'components/footer'
     ];
+    
+    private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
+    
+    private $_passwordRegex = '#^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{6,}$#';
 
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
@@ -25,6 +23,10 @@ class User extends Main {
         'presentation' => 'index.php?page=presentation',
         'registering' => 'index.php?page=registering'
     ];
+
+    private $_templateFilesRoute = 'connection_panels/';
+
+    private $_usernameRegex = '^[-[:alpha:] \']+$^';
 
     public function areDataCompleted(): bool {
         $user = new UserModel;
@@ -104,10 +106,6 @@ class User extends Main {
         );
     }
 
-    public function isLoginPageRequested(string $page): bool {
-        return $page === 'login';
-    }
-
     public function isRegisteringActionRequested(string $action): bool {
         return $action === 'register-account';
     }
@@ -121,10 +119,6 @@ class User extends Main {
             preg_match($this->_getPasswordRegex(), $userData['confirmationPassword']) &&
             $userData['password'] === $userData['confirmationPassword']
         );
-    }
-
-    public function isRegisteringPageRequested(string $page): bool {
-        return $page === 'registering';
     }
 
     public function logUser(array $userData) {
@@ -143,25 +137,19 @@ class User extends Main {
         );
     }
 
-    public function renderLoginPage(object $twig) {
+    public function renderConnectionPage(object $twig, string $page) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/login.html.twig');
+        echo $twig->render($this->_getTemplateFileRoute($page));
         echo $twig->render('components/footer.html.twig');
     }
 
-    public function renderPasswordRetrievingPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/password-retrieving.html.twig');
-        echo $twig->render('components/footer.html.twig');
+    private function _getTemplateFileRoute(string $page): string {
+        return $this->_getTemplateFilesRoute() . $page . '.html.twig';
     }
 
-    public function renderRegisteringPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
-        echo $twig->render('connection_panels/registering.html.twig');
-        echo $twig->render('components/footer.html.twig');
+    private function _getTemplateFilesRoute(): string {
+        return $this->_templateFilesRoute;
     }
 
     public function updateLoginData(array $userData): bool {

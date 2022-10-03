@@ -91,17 +91,7 @@ try {
             $user = new Dodie_Coaching\Controllers\User;
 
             if (!$user->isLogged()) {
-                if ($user->isLoginPageRequested($page)) {
-                    $user->renderLoginPage($twig);
-                }
-
-                elseif ($user->isRegisteringPageRequested($page)) {
-                    $user->renderRegisteringPage($twig);
-                }
-
-                else {
-                    $user->renderPasswordRetrievingPage($twig);
-                }
+                $user->renderConnectionPage($twig, $page);
             }
 
             else {

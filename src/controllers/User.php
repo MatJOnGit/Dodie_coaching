@@ -24,8 +24,6 @@ class User extends Main {
         'registering' => 'index.php?page=registering'
     ];
 
-    private $_templateFilesRoute = 'connection_panels/';
-
     private $_usernameRegex = '^[-[:alpha:] \']+$^';
 
     public function areDataCompleted(): bool {
@@ -105,6 +103,10 @@ class User extends Main {
             (preg_match($this->_getPasswordRegex(), $userData['password']))
         );
     }
+    
+    public function isLoginPageRequested(string $page): bool {
+        return $page === 'login';
+    }
 
     public function isRegisteringActionRequested(string $action): bool {
         return $action === 'register-account';
@@ -119,6 +121,10 @@ class User extends Main {
             preg_match($this->_getPasswordRegex(), $userData['confirmationPassword']) &&
             $userData['password'] === $userData['confirmationPassword']
         );
+    }
+
+    public function isRegisteringPageRequested(string $page): bool {
+        return $page === 'registering';
     }
 
     public function logUser(array $userData) {
@@ -137,19 +143,25 @@ class User extends Main {
         );
     }
 
-    public function renderConnectionPage(object $twig, string $page) {
+    public function renderLoginPage(object $twig) {
         echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
         echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render($this->_getTemplateFileRoute($page));
+        echo $twig->render('connection_panels/login.html.twig');
         echo $twig->render('components/footer.html.twig');
     }
 
-    private function _getTemplateFileRoute(string $page): string {
-        return $this->_getTemplateFilesRoute() . $page . '.html.twig';
+    public function renderPasswordRetrievingPage(object $twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
+        echo $twig->render('connection_panels/password-retrieving.html.twig');
+        echo $twig->render('components/footer.html.twig');
     }
 
-    private function _getTemplateFilesRoute(): string {
-        return $this->_templateFilesRoute;
+    public function renderRegisteringPage(object $twig) {
+        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
+        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
+        echo $twig->render('connection_panels/registering.html.twig');
+        echo $twig->render('components/footer.html.twig');
     }
 
     public function updateLoginData(array $userData): bool {

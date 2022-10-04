@@ -13,6 +13,11 @@ class Nutrition extends UserPanels {
     ];
 
     private $_nutritionMenuPage = 'nutrition';
+    
+    private $_panelFrenchName = [
+        'mealDetails' => "Liste d'ingrédients",
+        'shoppingList' => "Liste de courses"
+    ];
 
     private $_programsFolderRoute = './../var/nutrition_programs/';
 
@@ -83,27 +88,49 @@ class Nutrition extends UserPanels {
         return htmlspecialchars($_GET['request']);
     }
 
-    public function renderMealComposition(object $twig, array $mealData) {
-        // Définition de userPanels à revoir
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
-        echo $twig->render('user_panels/meal-composition.html.twig', ['meal' => $this->_getTranslatedMealData($mealData), 'ingredients' => $this->_getMealIngredients($mealData)]);
+    public function renderMealIngredients(object $twig, array $mealData) {
+        echo $twig->render('components/head.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles()
+        ]);
+        echo $twig->render('components/header.html.twig', [
+            'userPanels' => $this->_getUserPanels(),
+            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()),
+            'nutritionPanel' => $this->_getPanelFrenchName('mealDetails')
+        ]);
+        echo $twig->render('user_panels/meal-details.html.twig', [
+            'meal' => $this->_getTranslatedMealData($mealData),
+            'ingredients' => $this->_getMealIngredients($mealData)
+        ]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderNutritionMenu(object $twig) {
-        // Définition de userPanels à revoir
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage())]);
-        echo $twig->render('user_panels/nutrition.html.twig', ['nextDays' => $this->_getNextDates(), 'meals' => $this->_getMeals(), 'programFilePath' => $this->_getProgramsFilePath()]);
+        echo $twig->render('components/head.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles()
+        ]);
+        echo $twig->render('components/header.html.twig', [
+            'userPanels' => $this->_getUserPanels(),
+            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage())]);
+        echo $twig->render('user_panels/nutrition.html.twig', [
+            'nextDays' => $this->_getNextDates(),
+            'meals' => $this->_getMeals(),
+            'programFilePath' => $this->_getProgramsFilePath()
+        ]);
         echo $twig->render('components/footer.html.twig');
     }
 
     public function renderShoppingList(object $twig) {
-        // Définition de userPanels à revoir
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()), 'nutritionPanel' => 'mealPage']);
-        echo $twig->render('user_panels/shopping-list.html.twig', ['shoppingList' => $this->_getShoppingList()]);
+        echo $twig->render('components/head.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles()
+        ]);
+        echo $twig->render('components/header.html.twig', [
+            'userPanels' => $this->_getUserPanels(),
+            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()),
+            'nutritionPanel' => $this->_getPanelFrenchName('shoppingList')
+        ]);
+        echo $twig->render('user_panels/shopping-list.html.twig', [
+            'shoppingList' => $this->_getShoppingList()
+        ]);
         echo $twig->render('components/footer.html.twig');
     }
 
@@ -151,6 +178,10 @@ class Nutrition extends UserPanels {
 
     private function _getNutritionMenuPage(): string {
         return $this->_nutritionMenuPage;
+    }
+
+    private function _getPanelFrenchName($page) {
+        return $this->_panelFrenchName[$page];
     }
 
     private function _getProgramsFilePath() {

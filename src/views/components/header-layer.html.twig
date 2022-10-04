@@ -7,8 +7,8 @@
         <li class='{{ requestedPage == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
             <a href='index.php?page=coaching'>Coaching nutrition</a>
         </li>
-        <li class='{{ requestedPage in ['programsList', 'programDetails', '404'] ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-            <a href='index.php?page=programslist'>Formules</a>
+        <li class='{{ requestedPage in ['programs-list', 'program-details', '404'] ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+            <a href='index.php?page=programs-list'>Formules</a>
         </li>
     </ul>
 </nav>
@@ -21,7 +21,7 @@
             <i class="fa-solid fa-arrow-left"></i>
         </a>
         <h2>
-            ... > {{ subPanel }} > Liste d'ingredients
+            ... > {{ subPanel }} > {{ nutritionPanel }}
         </h2>
 
         {% elseif (subPanel is defined) and (nutritionPanel is not defined) %}

@@ -99,10 +99,20 @@ class Meetings extends UserPanels {
 
     public function renderMeetings(object $twig) {
         // Définition de userPanels à revoir
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getUserPanelsStyles()]);
-        echo $twig->render('components/header.html.twig', ['userPanels' => $this->_getUserPanels(), 'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage)]);
-        echo $twig->render('user_panels/meetings.html.twig', ['meetingSlots' => $this->_getSortedMeetingsSlots(), 'scheduledMeetingDate' => $this->_getBookedMeetingDate()]);
-        echo $twig->render('components/footer.html.twig', ['pageScripts' => $this->_getMeetingsScripts()]);
+        echo $twig->render('components/head.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles()
+        ]);
+        echo $twig->render('components/header.html.twig', [
+            'userPanels' => $this->_getUserPanels(),
+            'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage)
+        ]);
+        echo $twig->render('user_panels/meetings.html.twig', [
+            'meetingSlots' => $this->_getSortedMeetingsSlots(),
+            'scheduledMeetingDate' => $this->_getBookedMeetingDate()
+        ]);
+        echo $twig->render('components/footer.html.twig', [
+            'pageScripts' => $this->_getMeetingsScripts()
+        ]);
     }
 
     private function _getAppointmentDelay(): int {

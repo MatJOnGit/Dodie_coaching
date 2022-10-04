@@ -26,7 +26,7 @@ try {
 
     $Urls = [
         'pages' => [
-            'showcase' => ['presentation', 'coaching', 'programslist', 'programdetails', 'showcase-404'],
+            'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving'],
             'userPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
@@ -44,24 +44,24 @@ try {
             $showcase = new Dodie_Coaching\Controllers\Showcase;
 
             if ($showcase->isPresentationPageRequested($page)) {
-                $showcase->renderShowcasePage($twig, 'presentation');
+                $showcase->renderPresentationPage($twig);
             }
 
             elseif ($showcase->isCoachingPageRequested($page)) {
-                $showcase->renderShowcasePage($twig, 'coaching');
+                $showcase->renderCoachingPage($twig);
             }
 
             elseif ($showcase->areProgramsPagesRequested($page)) {
                 if ($showcase->isProgramsListAvailable()) {
                     if ($showcase->isProgramsListRequested($page)) {
-                        $showcase->renderShowcasePage($twig, 'programsList');
+                        $showcase->renderProgramsListPage($twig);
                     }
 
                     elseif ($showcase->isProgramDetailsRequested($page) && $showcase->isRequestedProgramSet()) {
                         $requestedProgram = $showcase->getProgram();
 
                         if ($showcase->isProgramAvailable($requestedProgram)) {
-                            $showcase->renderShowcasePage($twig, 'programDetails');
+                            $showcase->renderProgramDetailsPage($twig, $requestedProgram);
                         }
 
                         else {
@@ -83,7 +83,7 @@ try {
             }
 
             else {
-                $showcase->renderShowcasePage($twig, '404');
+                $showcase->renderShowcase404Page($twig);
             }
         }
 
@@ -91,7 +91,17 @@ try {
             $user = new Dodie_Coaching\Controllers\User;
 
             if (!$user->isLogged()) {
-                $user->renderConnectionPage($twig, $page);
+                if ($user->isLoginPageRequested($page)) {
+                    $user->renderLoginPage($twig);
+                }
+
+                elseif ($user->isRegisteringPageRequested($page)) {
+                    $user->renderRegisteringPage($twig);
+                }
+
+                else {
+                    $user->renderPasswordRetrievingPage($twig);
+                }
             }
 
             else {
@@ -122,7 +132,7 @@ try {
                         $mealData = $nutrition->getMealData();
 
                         if ($nutrition->areMealParamsValid($mealData)) {
-                            $nutrition->renderMealComposition($twig, $mealData);
+                            $nutrition->renderMealIngredients($twig, $mealData);
                         }
 
                         else {

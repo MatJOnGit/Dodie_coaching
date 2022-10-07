@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ frenchTitle | capitalize }}
+{% endblock title %}
+
+{% block styles %}
+    {% for stylePath in stylePaths %}
+        <link rel='stylesheet' href='./../assets/css/{{ stylePath }}.css' type='text/css'>
+    {% endfor %}
+{% endblock styles %}
+
+{% block header %}
+    {% include 'components/header.html.twig' %}
+{% endblock header %}
+
+{% block headerLayer %}
+    {% include 'components/header-layer.html.twig' %}
+{% endblock headerLayer %}
+
+{% block pageContent %}
+    <div class='showcase-panel speech-container'>
+        <p>
+            Vous avez déjà testé ces régimes dont on vous vante les mérites sur Internet ?
+        </p>
+        <p>
+            Nous sommes d'accord : ça ne marche jamais bien longtemps. Vous reprenez très souvent le poids que vous avez perdu, vous ne vous sentez pas dans votre assiette, vous sentez des baisses de moral ...
+        </p>
+        <p>
+            En bref : votre corps vous fait savoir qu'il n'apprécie pas du tout ce que vous lui infligez !
+        </p>
+
+        <img src='./../public/img/showcase_pictures/desperate-man.jpg' alt='desperate-man' />
+
+        <p>
+            Et si je vous disais qu'il existe des méthodes bien plus saines pour arriver à vos fins, et sans vous affamer ?
+        </p>
+        <p>
+            C'est ce que je vous propose de découvrir au travers de séances de coaching en appel visio.
+        </p>
+
+        <a href='index.php?page=coaching' alt='découvrez le coaching nutritionnel' class='btn rounded-btn blue-bkgd'>
+            <span>Découvrez le coaching nutritionnel</span>
+        </a>
+    </div>
+{% endblock pageContent %}
+
+{% block footer %}
+    {% include 'components/footer.html.twig' %}
+{% endblock footer %}

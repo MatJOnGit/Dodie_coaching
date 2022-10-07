@@ -125,19 +125,13 @@ class Progress extends UserPanels {
     }
 
     public function renderProgress(object $twig) {
-        // Définition de userPanels à revoir
-        echo $twig->render('components/head.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles()
-        ]);
-        echo $twig->render('components/header.html.twig', [
-            'requestedPage' => 'dashboard',
-            'userPanels' => $this->_getUserPanels(),
-            'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage)
-        ]);
         echo $twig->render('user_panels/progress.html.twig', [
-            'progressHistory' => $this->getHistory()
-        ]);
-        echo $twig->render('components/footer.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles(),
+            'frenchTitle' => 'progression',
+            'appSection' => 'userPanels',
+            'userPanel' => 'progression',
+            'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage),
+            'progressHistory' => $this->getHistory(),
             'pageScripts' => $this->_getProgressScripts()
         ]);
     }

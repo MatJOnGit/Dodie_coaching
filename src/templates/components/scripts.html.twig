@@ -1,0 +1,9 @@
+{% if pageScripts is iterable %}
+
+    {% for pageScript in pageScripts %}
+
+        <script src='./../assets/js/{{ pageScript }}.js'></script>
+
+    {% endfor %}
+
+{% endif %}

@@ -13,7 +13,7 @@ class Data_Exception extends Exception { }
 try {
     require_once ('./../vendor/autoload.php');
     
-    $loader = new \Twig\Loader\FilesystemLoader('./../src/views');
+    $loader = new \Twig\Loader\FilesystemLoader('./../src/templates/');
     
     $twig = new \Twig\Environment($loader, [
         'cache' => false,
@@ -21,8 +21,6 @@ try {
     ]);
 
     $twig->addExtension(new \Twig\Extension\DebugExtension());
-
-    
 
     $Urls = [
         'pages' => [
@@ -132,7 +130,7 @@ try {
                         $mealData = $nutrition->getMealData();
 
                         if ($nutrition->areMealParamsValid($mealData)) {
-                            $nutrition->renderMealIngredients($twig, $mealData);
+                            $nutrition->renderMealDetails($twig, $mealData);
                         }
 
                         else {
@@ -169,8 +167,8 @@ try {
                 }
 
                 elseif ($userPanels->isSubscriptionPageRequested($page) && $areDataCompleted) {
-                    $subscription = new Dodie_Coaching\Controllers\Subscription;
-                    $subscription->renderSubscription($twig);
+                    $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
+                    $subscriptions->renderSubscriptions($twig);
                 }
 
                 elseif ($userPanels->isStaticDataPageRequested($page)) {

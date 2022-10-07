@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ frenchTitle | capitalize }}
+{% endblock title %}
+
+{% block styles %}
+    {% for stylePath in stylePaths %}
+        <link rel='stylesheet' href='./../assets/css/{{ stylePath }}.css' type='text/css'>
+    {% endfor %}
+{% endblock styles %}
+
+{% block header %}
+    {% include 'components/header.html.twig' %}
+{% endblock header %}
+
+{% block headerLayer %}
+    {% include 'components/header-layer.html.twig' %}
+{% endblock headerLayer %}
+
+{% block pageContent %}
+    <div class='showcase-panel speech-container'>
+        <p class='showcase-question'>
+            Question : A qui s'adresse mes programmes ?
+        </p>
+        <p>
+            Simplement ... à tout le monde. La visio nous permet d'échanger en toute simplicité où que vous soyez.
+        </p>
+
+        <img src='./../public/img/showcase_pictures/coffee-break.jpg' alt='coffee' />
+
+        <p class='showcase-question'>
+            Question : Comment ça marche ?
+        </p>
+        <p>
+            Après vous être inscrit(e) sur le site, il vous suffit de compléter le formulaire sur votre espace afin d'être recontacter.<br/>
+            Nous conviendrons alors de la date de notre premier suivi au cours duquel nous évaluerons ensemble votre objectif et votre besoin.
+        </p>
+        <p class='showcase-speech'>
+            Par la suite, un programme nutritionnel personnalisé vous sera envoyé.<br/>
+            A chaque nouvelle séance, celui-ci sera révisé afin de convenir au mieux à vos progrès.
+        </p>
+
+        <a href='index.php?page=programs-list' alt='découvrez mes programmes nutritionnels' class='btn rounded-btn blue-bkgd'>
+            <span>Mes programmes de suivi</span>
+        </a>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer.html.twig' %}
+{% endblock footer %}

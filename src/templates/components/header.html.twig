@@ -1,0 +1,13 @@
+{% if appSection == 'showcasePanels' %}
+
+    <button id='dynamic-menu-button'><i class='fas fa-bars'></i></button>
+
+{% elseif appSection == 'connectionPanels' %}
+
+    <a href='index.php' class='homepage-link'><i class="fa-solid fa-house-chimney"></i></a>
+
+{% elseif appSection in ['userPanels', 'adminPanels'] %}
+
+    <a href='index.php?action=logout' class='homepage-link'><i class="fa-solid fa-right-from-bracket"></i></a>
+
+{% endif %}

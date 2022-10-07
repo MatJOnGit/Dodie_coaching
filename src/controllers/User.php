@@ -144,24 +144,27 @@ class User extends Main {
     }
 
     public function renderLoginPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/login.html.twig');
-        echo $twig->render('components/footer.html.twig');
+        echo $twig->render('connection_panels/login.html.twig', [
+            'frenchTitle' => 'connection',
+            'appSection' => 'connectionPanels',
+            'stylePaths' => $this->_getConnectionPagesStyles()
+        ]);
     }
 
     public function renderPasswordRetrievingPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage' => 'connection']);
-        echo $twig->render('connection_panels/password-retrieving.html.twig');
-        echo $twig->render('components/footer.html.twig');
+        echo $twig->render('connection_panels/password-retrieving.html.twig', [
+            'frenchTitle' => 'mot de passe perdu',
+            'appSection' => 'connectionPanels',
+            'stylePaths' => $this->_getConnectionPagesStyles()
+        ]);
     }
 
     public function renderRegisteringPage(object $twig) {
-        echo $twig->render('components/head.html.twig', ['stylePaths' => $this->_getConnectionPagesStyles()]);
-        echo $twig->render('components/header.html.twig', ['requestedPage'=> 'connection']);
-        echo $twig->render('connection_panels/registering.html.twig');
-        echo $twig->render('components/footer.html.twig');
+        echo $twig->render('connection_panels/registering.html.twig', [
+            'frenchTitle' => 'création de compte',
+            'appSection' => 'connectionPanels',
+            'stylePaths' => $this->_getConnectionPagesStyles()
+        ]);
     }
 
     public function updateLoginData(array $userData): bool {

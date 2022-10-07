@@ -12,13 +12,6 @@ class Nutrition extends UserPanels {
         ['english' => 'snacks', 'french' => 'Snacks']
     ];
 
-    private $_nutritionMenuPage = 'nutrition';
-    
-    private $_panelFrenchName = [
-        'mealDetails' => "Liste d'ingrédients",
-        'shoppingList' => "Liste de courses"
-    ];
-
     private $_programsFolderRoute = './../var/nutrition_programs/';
 
     private $_weekDays = [
@@ -88,50 +81,39 @@ class Nutrition extends UserPanels {
         return htmlspecialchars($_GET['request']);
     }
 
-    public function renderMealIngredients(object $twig, array $mealData) {
-        echo $twig->render('components/head.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles()
-        ]);
-        echo $twig->render('components/header.html.twig', [
-            'userPanels' => $this->_getUserPanels(),
-            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()),
-            'nutritionPanel' => $this->_getPanelFrenchName('mealDetails')
-        ]);
+    public function renderMealDetails(object $twig, array $mealData) {
         echo $twig->render('user_panels/meal-details.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles(),
+            'frenchTitle' => 'Nutrition',
+            'appSection' => 'userPanels',
+            'userPanel' => 'Nutrition',
+            'userSubPanel' => 'Composition du repas',
             'meal' => $this->_getTranslatedMealData($mealData),
-            'ingredients' => $this->_getMealIngredients($mealData)
+            'ingredients' => $this->_getMealDetails($mealData)
         ]);
-        echo $twig->render('components/footer.html.twig');
     }
 
     public function renderNutritionMenu(object $twig) {
-        echo $twig->render('components/head.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles()
-        ]);
-        echo $twig->render('components/header.html.twig', [
-            'userPanels' => $this->_getUserPanels(),
-            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage())]);
         echo $twig->render('user_panels/nutrition.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles(),
+            'frenchTitle' => 'Nutrition',
+            'appSection' => 'userPanels',
+            'userPanel' => 'Nutrition',
             'nextDays' => $this->_getNextDates(),
             'meals' => $this->_getMeals(),
             'programFilePath' => $this->_getProgramsFilePath()
         ]);
-        echo $twig->render('components/footer.html.twig');
     }
 
     public function renderShoppingList(object $twig) {
-        echo $twig->render('components/head.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles()
-        ]);
-        echo $twig->render('components/header.html.twig', [
-            'userPanels' => $this->_getUserPanels(),
-            'subPanel' => $this->_getUserPanelsSubpanels($this->_getNutritionMenuPage()),
-            'nutritionPanel' => $this->_getPanelFrenchName('shoppingList')
-        ]);
         echo $twig->render('user_panels/shopping-list.html.twig', [
+            'stylePaths' => $this->_getUserPanelsStyles(),
+            'frenchTitle' => 'shopping list',
+            'appSection' => 'userPanels',
+            'userPanel' => 'Nutrition',
+            'userSubPanel' => 'Liste de courses',
             'shoppingList' => $this->_getShoppingList()
         ]);
-        echo $twig->render('components/footer.html.twig');
     }
 
     private function _getEnglishWeekDay(string $date): string {
@@ -146,7 +128,7 @@ class Nutrition extends UserPanels {
         return "{$frenchDateWeekDay} {$dateDay} {$dateMonth}";
     }
 
-    private function _getMealIngredients(array $mealData) {
+    private function _getMealDetails(array $mealData) {
         $nutrition = new NutritionModel;
 
         return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
@@ -174,14 +156,6 @@ class Nutrition extends UserPanels {
         }
 
         return $nextDates;
-    }
-
-    private function _getNutritionMenuPage(): string {
-        return $this->_nutritionMenuPage;
-    }
-
-    private function _getPanelFrenchName($page) {
-        return $this->_panelFrenchName[$page];
     }
 
     private function _getProgramsFilePath() {

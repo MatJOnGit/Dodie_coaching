@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ frenchTitle | capitalize }}
+{% endblock title %}
+
+{% block styles %}
+    {% for stylePath in stylePaths %}
+        <link rel='stylesheet' href='./../assets/css/{{ stylePath }}.css' type='text/css'>
+    {% endfor %}
+{% endblock styles %}
+
+{% block header %}
+    {% include 'components/header.html.twig' %}
+{% endblock header %}
+
+{% block headerLayer %}
+    {% include 'components/header-layer.html.twig' %}
+{% endblock headerLayer %}
+
+{% block pageContent %}
+    <div class='user-panel'>
+        <h3>Liste de courses</h3>
+
+        {% if shoppingList is iterable %}
+        <ul class='shopping-list'>
+            {% for shoppingListItem in shoppingList %}
+            <li>
+                <input type='checkbox' id={{ shoppingListItem ['french_name'] }} />
+
+                <label>
+                    {{ shoppingListItem['french_name'] }}
+                    (
+                        {{ shoppingListItem['ingredient_quantity'] }}
+                        {% if shoppingListItem['measure_unit'] is not null %}{{ shoppingListItem['measure_unit'] }}{% endif %}
+                    )
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+{% endblock pageContent %}
+
+{% block footer %}
+    {% include 'components/footer.html.twig' %}
+{% endblock footer %}

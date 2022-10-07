@@ -1,0 +1,52 @@
+{% if appSection == 'showcasePanels' %}
+
+    <nav id='static-menu'>
+        {% if frenchTitle != '404' %}
+        <ul>
+            <li class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                <a href='{{ showcasePanels['presentation'] }}'>Présentation</a>
+            </li>
+            <li class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                <a href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
+            </li>
+            <li class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                <a href='{{ showcasePanels['programs-list'] }}'>Formules</a>
+            </li>
+        </ul>
+        {% endif %}
+    </nav>
+
+{% elseif appSection == 'userPanels' %}
+
+    <div id='page-name-cnn'>
+        <div class='title-layer cloudy-bkgd'>
+
+            {% if (userPanel is defined) and (userSubPanel is defined) %}
+
+                <a href='index.php?page=nutrition' class='back-to-dashboard-btn'>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <h2>
+                    ... > {{ userPanel }} > {{ userSubPanel }}
+                </h2>
+
+            {% elseif (userPanel is defined) and (userSubPanel is not defined) %}
+
+                <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <h2>
+                    Mon tableau de bord > {{ userPanel | capitalize }}
+                </h2>
+
+            {% elseif userPanelLandingPage is defined %}
+
+                <h2>
+                    {{ userPanelLandingPage | capitalize }}
+                </h2>
+
+            {% endif %}
+            
+        </div>
+    </div>
+{% endif %}

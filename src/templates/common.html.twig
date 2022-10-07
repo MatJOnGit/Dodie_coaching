@@ -1,13 +1,11 @@
-{% extends 'common.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}
     {{ frenchTitle | capitalize }}
 {% endblock title %}
 
 {% block styles %}
-    {% for stylePath in stylePaths %}
-        <link rel='stylesheet' href='./../assets/css/{{ stylePath }}.css' type='text/css'>
-    {% endfor %}
+    {% include 'components/styles.html.twig'%}
 {% endblock styles %}
 
 {% block header %}
@@ -17,11 +15,6 @@
 {% block headerLayer %}
     {% include 'components/header-layer.html.twig' %}
 {% endblock headerLayer %}
-
-{% block pageContent %}
-    <div class='user-panel-content light-to-dark-purple-bkgd'>
-    </div>
-{% endblock pageContent %}
 
 {% block footer %}
     {% include 'components/footer.html.twig' %}

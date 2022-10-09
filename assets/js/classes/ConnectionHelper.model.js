@@ -1,0 +1,133 @@
+class ConnectionHelper {
+    constructor() {
+        this._emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        // valid password must have between 10 and 50 characters, with at least one small cap character, one capital letter, one number and one special character
+        this._passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/;
+
+
+        this._usernameRegex = /^(?=.{5,20}$)[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/;
+
+        this._containsDomainNameRegex = /@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        this._containsSmallCapRegex = /[a-z]/;
+        this._containsCapitalLetterRegex = /[A-Z]/;
+        this._containsNumberRegex = /\d/;
+        this._containsSpecialCharRegex = /[@$!%*?&]/;
+
+        this._inputErrors = {
+            'email' : {
+                'at-symbol' : "Votre email doit contenir un arobase",
+                'domain' : "Le domaine de votre email n'est pas valide",
+                'unknown' : "Votre adresse mail n'est pas valide"
+            },
+            'password' : {
+                'short' : "Votre mot de passe est trop court",
+                'long' : "Votre mot de passe est trop long",
+                'number' : "Votre mot de passe doit contenir au moins un chiffre",
+                'small-cap' : "Votre mot de passe doit contenir au moins une lettre minuscule",
+                'capital-letter' : "Votre mot de passe doit contenir au moins une lettre majuscule",
+                'special-char' : "Votre mot de passe doit contenir au moins un caractère spécial",
+                'unknown' : "Votre mot de passe n'est pas valide"
+            }
+        };
+    }
+
+    get containsDomainNameRegex() {
+        return this._containsDomainNameRegex;
+    }
+
+    get containsNumberRegex() {
+        return this._containsNumberRegex;
+    }
+
+    get containsSmallCapRegex() {
+        return this._containsSmallCapRegex;
+    }
+
+    get containsCapitalLetterRegex() {
+        return this._containsCapitalLetterRegex;
+    }
+
+    get containsSpecialCharRegex() {
+        return this._containsSpecialCharRegex;
+    }
+
+    get emailRegex() {
+        return this._emailRegex;
+    }
+
+    get inputError() {
+        return this._inputErrors;
+    }
+
+    get passwordRegex() {
+        return this._passwordRegex;
+    }
+
+    get usernameRegex() {
+        return this._usernameRegex;
+    }
+
+    getAlertMessage (inputType, inputValue) {
+        let alert = '';
+
+        if (inputType === 'password') {
+            alert = this.getPasswordErrorMessage(inputType, inputValue);
+        }
+        else if (inputType === 'email') {
+            alert = this.getEmailErrorMessage(inputType, inputValue);
+        }
+
+        return alert;
+    }
+
+    getEmailErrorMessage(inputType, inputValue) {
+        let emailAlert = '';
+
+        if (!inputValue.includes('@')) {
+            emailAlert = this.inputError[inputType]['at-symbol'];
+        }
+        else if (!this.containsDomainNameRegex.test(inputValue)) {
+            emailAlert = this.inputError[inputType]['domain'];
+        }
+        else {
+            emailAlert = this.inputError[inputType]['unknown'];
+        }
+
+        // return emailAlert;
+    }
+
+    getPasswordErrorMessage(inputType, inputValue) {
+        let passwordAlert = '';
+
+        if (inputValue.length < 10) {
+            passwordAlert = this.inputError[inputType]['short'];
+        }
+
+        else if (inputValue.length > 50) {
+            passwordAlert = this.inputError[inputType]['long'];
+        }
+
+        else if (!this.containsNumberRegex.test(inputValue)) {
+            passwordAlert = this.inputError[inputType]['number'];
+        }
+
+        else if (!this.containsSmallCapRegex.test(inputValue)) {
+            passwordAlert = this.inputError[inputType]['small-cap'];
+        }
+
+        else if (!this.containsCapitalLetterRegex.test(inputValue)) {
+            passwordAlert = this.inputError[inputType]['capital-letter']
+        }
+
+        else if (!this.containsSpecialCharRegex.test(inputValue)) {
+            passwordAlert = this.inputError[inputType]['special-char']
+        }
+
+        else {
+            passwordAlert = this.inputError[inputType]['unknown'];
+        }
+
+        return passwordAlert;
+    }
+}

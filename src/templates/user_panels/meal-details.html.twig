@@ -10,6 +10,7 @@
             {% for ingredient in ingredients %}
             <li class='ingredients-list-item'>
                 <img src="./../public/img/ingredients/{{ ingredient['type'] }}/{{ ingredient['name'] | lower }}.jpg" alt="{{ ingredient['name'] | lower }}-picture" class='ingredient-picture' />
+                
                 <div class='ingredient-desc'>
                     <p>
                         {{ ingredient['quantity'] }}

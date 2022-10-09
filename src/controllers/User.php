@@ -12,6 +12,24 @@ class User extends Main {
         'components/buttons',
         'components/footer'
     ];
+
+    private $_pageScripts = [
+        'login' => [
+            'classes/ConnectionHelper.model',
+            'classes/LoginHelper.model',
+            'loginAlert'
+        ],
+        'registering' => [
+            'classes/ConnectionHelper.model',
+            'classes/RegisteringHelper.model',
+            'registeringAlert'
+        ],
+        'pwdRetrieving' => [
+            'classes/ConnectionHelper.model',
+            'classes/PwdRetrievingHelper.model',
+            'pwdRetrievingApp'
+        ]
+    ];
     
     private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
     
@@ -145,25 +163,28 @@ class User extends Main {
 
     public function renderLoginPage(object $twig) {
         echo $twig->render('connection_panels/login.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
             'frenchTitle' => 'connection',
             'appSection' => 'connectionPanels',
-            'stylePaths' => $this->_getConnectionPagesStyles()
+            'pageScripts' => $this->_getPageScripts('login')
         ]);
     }
 
     public function renderPasswordRetrievingPage(object $twig) {
         echo $twig->render('connection_panels/password-retrieving.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
             'frenchTitle' => 'mot de passe perdu',
             'appSection' => 'connectionPanels',
-            'stylePaths' => $this->_getConnectionPagesStyles()
+            'pageScripts' => $this->_getPageScripts('pwdRetrieving')
         ]);
     }
 
     public function renderRegisteringPage(object $twig) {
         echo $twig->render('connection_panels/registering.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
             'frenchTitle' => 'création de compte',
             'appSection' => 'connectionPanels',
-            'stylePaths' => $this->_getConnectionPagesStyles()
+            'pageScripts' => $this->_getPageScripts('registering')
         ]);
     }
 
@@ -179,6 +200,10 @@ class User extends Main {
     
     private function _getEmailRegex() {
         return $this->_emailRegex;
+    }
+
+    private function _getPageScripts($page) {
+        return $this->_pageScripts[$page];
     }
 
     private function _getPasswordRegex() {

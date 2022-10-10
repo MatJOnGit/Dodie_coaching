@@ -15,16 +15,19 @@ class User extends Main {
 
     private $_pageScripts = [
         'login' => [
+            'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/LoginHelper.model',
             'loginAlert'
         ],
         'registering' => [
+            'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/RegisteringHelper.model',
             'registeringAlert'
         ],
         'pwdRetrieving' => [
+            'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/PwdRetrievingHelper.model',
             'pwdRetrievingApp'

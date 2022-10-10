@@ -61,17 +61,53 @@ class LoginHelper extends ConnectionHelper {
 
     sendAlert(inputType, inputValue) {
         const alertBox = this.buildAlertBox(inputType, inputValue);
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+
+        if (this.isAlertBoxExisting(inputType)) {
+            this.removeOutdatedAlert(inputType);
+        }
+
+        connectionPanel.insertAdjacentElement('afterbegin', alertBox);
+        this.fadeInItem(alertBox, 2000);
+    }
+
+    isAlertBoxExisting(inputType) {
+        const alertBox = document.getElementById(`${inputType}-alert`);
+        let isAlertBoxExisting;
+
+        if (!alertBox) {
+            isAlertBoxExisting = false;
+        }
+
+        else {
+            isAlertBoxExisting = true;
+        }
+
+        return isAlertBoxExisting;
+    }
+
+    removeOutdatedAlert(inputType) {
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+        const outdatedAlertBox = document.getElementById(`${inputType}-alert`);
+        connectionPanel.removeChild(outdatedAlertBox);
     }
 
     buildAlertBox(inputType, inputValue) {
-        const alertMessage = document.createElement('p');
         const alertBox = document.createElement('div');
+        const alertMessage = document.createElement('p');
+        const dismissAlertBtn = document.createElement('button');
+        const crossAlertIcon = document.createElement('i')
 
-        // this.getAlertMessage(inputType, inputValue)
+        alertBox.id = `${inputType}-alert`;
+        alertMessage.textContent = this.getAlert(inputType, inputValue);
+        dismissAlertBtn.className = `dismiss-${inputType}-alert-btn`;
+        crossAlertIcon.className = 'fa-solid fa-xmark';
 
-        console.log(this.getAlertMessage(inputType, inputValue));
+        dismissAlertBtn.appendChild(crossAlertIcon);        
+        alertBox.appendChild(alertMessage);
+        alertBox.appendChild(dismissAlertBtn);
 
-        // alertMessage.textContent = this.getAlertMessage(inputType, inputValue);
+        return alertBox;
     }
     
     testBlurredInput(inputElt) {
@@ -84,6 +120,9 @@ class LoginHelper extends ConnectionHelper {
             if (!this.isEmailValid) {
                 this.sendAlert(inputType, inputValue);
             }
+            else if (this.isAlertBoxExisting(inputType)) {
+                this.removeOutdatedAlert(inputType);
+            }
         }
 
         else if (inputType === 'password' && inputValue !== '') {
@@ -91,6 +130,9 @@ class LoginHelper extends ConnectionHelper {
 
             if (!this.isPasswordValid) {
                 this.sendAlert(inputType, inputValue);
+            }
+            else if (this.isAlertBoxExisting(inputType)) {
+                this.removeOutdatedAlert(inputType);
             }
         }
     }

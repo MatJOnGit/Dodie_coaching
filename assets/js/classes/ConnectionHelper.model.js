@@ -1,5 +1,7 @@
-class ConnectionHelper {
+class ConnectionHelper extends UserPanels{
     constructor() {
+        super();
+
         this._emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
         // valid password must have between 10 and 50 characters, with at least one small cap character, one capital letter, one number and one special character
@@ -16,13 +18,13 @@ class ConnectionHelper {
 
         this._inputErrors = {
             'email' : {
-                'at-symbol' : "Votre email doit contenir un arobase",
+                'at-symbol' : "Votre email doit contenir une arobase",
                 'domain' : "Le domaine de votre email n'est pas valide",
                 'unknown' : "Votre adresse mail n'est pas valide"
             },
             'password' : {
                 'short' : "Votre mot de passe est trop court",
-                'long' : "Votre mot de passe est trop long",
+                'long' : "Votre mot de passe est trop long (mini. 7 caractères)",
                 'number' : "Votre mot de passe doit contenir au moins un chiffre",
                 'small-cap' : "Votre mot de passe doit contenir au moins une lettre minuscule",
                 'capital-letter' : "Votre mot de passe doit contenir au moins une lettre majuscule",
@@ -68,20 +70,20 @@ class ConnectionHelper {
         return this._usernameRegex;
     }
 
-    getAlertMessage (inputType, inputValue) {
+    getAlert (inputType, inputValue) {
         let alert = '';
 
         if (inputType === 'password') {
-            alert = this.getPasswordErrorMessage(inputType, inputValue);
+            alert = this.getPasswordAlert(inputType, inputValue);
         }
         else if (inputType === 'email') {
-            alert = this.getEmailErrorMessage(inputType, inputValue);
+            alert = this.getEmailAlert(inputType, inputValue);
         }
 
         return alert;
     }
 
-    getEmailErrorMessage(inputType, inputValue) {
+    getEmailAlert(inputType, inputValue) {
         let emailAlert = '';
 
         if (!inputValue.includes('@')) {
@@ -94,10 +96,10 @@ class ConnectionHelper {
             emailAlert = this.inputError[inputType]['unknown'];
         }
 
-        // return emailAlert;
+        return emailAlert;
     }
 
-    getPasswordErrorMessage(inputType, inputValue) {
+    getPasswordAlert(inputType, inputValue) {
         let passwordAlert = '';
 
         if (inputValue.length < 10) {

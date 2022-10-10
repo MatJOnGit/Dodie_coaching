@@ -1,6 +1,7 @@
 class Meetings extends UserPanels {
     constructor() {
         super();
+        
         this._appointmentTab = document.getElementById('appointment-tab');
         this._meetingDateInput = document.getElementById('user-next-meeting');
         this._meetingFormSubmitButton = document.getElementById('appointment-form-submit-button');

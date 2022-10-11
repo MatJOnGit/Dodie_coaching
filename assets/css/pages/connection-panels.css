@@ -85,6 +85,28 @@ form {
     font-size: 3.5vmin;
 }
 
+div[class$='-input-container'] {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.input-info,
+.input-helper {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: inherit;
+    color: white;
+}
+
+.input-info {
+    border: solid 1px white;
+    margin: 0 3% 2vh 0;
+}
+
 input[type=email],
 input[type=text],
 input[type=password],
@@ -95,6 +117,18 @@ select {
 
 input[type=submit] {
     padding: 0;
+}
+
+.input-helper {
+    margin: 0 0 1vh 3%;
+}
+
+.wrong {
+    color: red;
+}
+
+.correct {
+    color: green;
 }
 
 .tiny-btn,
@@ -109,8 +143,7 @@ input[type=submit] {
     width: 90%;
 }
 
-#password-alert,
-#email-alert {
+#input-alert {
     position: absolute;
     font-weight: 600;
     font-size: 0.9em;
@@ -126,13 +159,12 @@ input[type=submit] {
     border-radius: 3px;
 }
 
-#password-alert p,
-#email-alert p {
+#input-alert p {
     display: inline-block;
     max-width: 80%;
 }
 
-button[class$='-alert-btn'] {
+.dismiss-alert-btn {
     border-radius: 50%;
     font-size: 0.8em;
     width: 30px;
@@ -141,4 +173,7 @@ button[class$='-alert-btn'] {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: inherit;
+    color: hsla(46, 92%, 35%, 1);
+    border-color: hsla(46, 92%, 35%, 1);
 }

@@ -37,103 +37,120 @@ class LoginHelper extends ConnectionHelper {
         this._isPasswordValid = boolean;
     }
 
-    addInputsListeners() {
-        this.inputElts.forEach(input => {
-            input.addEventListener('blur', () => {
-                this.testBlurredInput(input);
+    addInputsEventListeners() {
+        this.inputElts.forEach(inputElt => {
+            inputElt.addEventListener('blur', () => {
+                this.updateInputHelper(inputElt);
             });
         });
     }
 
-    addSubmitButtonListener() {
-        this._form.addEventListener('submit', (event) => {
-            if (!this.isEmailValid || !this.isPasswordValid) {
-                event.preventDefault();
-                if (!this.isEmailValid) {
-                    this.sendEmailAlert()
-                }
-                else if (!this.isPasswordValid) {
-                    this.sendPasswordAlert()
-                }
-            }
-        })
-    }
+    updateInputHelper(inputElt) {
+        const inputEltContainer = document.getElementsByClassName(`${inputElt.type}-input-container`)[0];
+        const inputEltHelper = inputEltContainer.getElementsByClassName('input-helper')[0];
 
-    sendAlert(inputType, inputValue) {
-        const alertBox = this.buildAlertBox(inputType, inputValue);
-        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+        const isInputValid = this.isBlurredInputValid(inputElt);
+        const isInputEmpty = this.isInputEmpty(inputElt);
 
-        if (this.isAlertBoxExisting(inputType)) {
-            this.removeOutdatedAlert(inputType);
+        if (isInputValid) {
+            inputEltHelper.innerHTML = '<i class="fa-solid fa-check correct"></i>';
         }
 
-        connectionPanel.insertAdjacentElement('afterbegin', alertBox);
-        this.fadeInItem(alertBox, 2000);
-    }
-
-    isAlertBoxExisting(inputType) {
-        const alertBox = document.getElementById(`${inputType}-alert`);
-        let isAlertBoxExisting;
-
-        if (!alertBox) {
-            isAlertBoxExisting = false;
+        else if (isInputEmpty) {
+            inputEltHelper.innerHTML = '';
         }
-
+        
         else {
-            isAlertBoxExisting = true;
+            inputEltHelper.innerHTML = '<i class="fa-solid fa-xmark wrong"></i>';
         }
-
-        return isAlertBoxExisting;
-    }
-
-    removeOutdatedAlert(inputType) {
-        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
-        const outdatedAlertBox = document.getElementById(`${inputType}-alert`);
-        connectionPanel.removeChild(outdatedAlertBox);
-    }
-
-    buildAlertBox(inputType, inputValue) {
-        const alertBox = document.createElement('div');
-        const alertMessage = document.createElement('p');
-        const dismissAlertBtn = document.createElement('button');
-        const crossAlertIcon = document.createElement('i')
-
-        alertBox.id = `${inputType}-alert`;
-        alertMessage.textContent = this.getAlert(inputType, inputValue);
-        dismissAlertBtn.className = `dismiss-${inputType}-alert-btn`;
-        crossAlertIcon.className = 'fa-solid fa-xmark';
-
-        dismissAlertBtn.appendChild(crossAlertIcon);        
-        alertBox.appendChild(alertMessage);
-        alertBox.appendChild(dismissAlertBtn);
-
-        return alertBox;
     }
     
-    testBlurredInput(inputElt) {
+    isBlurredInputValid(inputElt) {
         const inputType = inputElt.type;
         const inputValue = inputElt.value;
+        let isBlurredInputValid;
 
-        if (inputType === 'email' && inputValue !== '') {
+        if (inputType === 'email' && !this.isInputEmpty(inputElt)) {
             this.isEmailValid = this.emailRegex.test(inputValue);
-
-            if (!this.isEmailValid) {
-                this.sendAlert(inputType, inputValue);
-            }
-            else if (this.isAlertBoxExisting(inputType)) {
-                this.removeOutdatedAlert(inputType);
-            }
+            isBlurredInputValid = this.isEmailValid;
         }
 
-        else if (inputType === 'password' && inputValue !== '') {
+        else if (inputType === 'password' && !this.isInputEmpty(inputElt)) {
             this.isPasswordValid = this.passwordRegex.test(inputValue);
-
-            if (!this.isPasswordValid) {
-                this.sendAlert(inputType, inputValue);
-            }
-            else if (this.isAlertBoxExisting(inputType)) {
-                this.removeOutdatedAlert(inputType);
-            }
+            isBlurredInputValid = this.isPasswordValid;
         }
+
+        return isBlurredInputValid;
     }
+
+    isInputEmpty(inputElt) {
+        return inputElt.value === '';
+    }
+
+    // sendAlert(inputType, inputValue) {
+    //     const alertBox = this.buildAlertBox(inputType, inputValue);
+    //     const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+
+    //     if (this.isAlertBoxExisting(inputType)) {
+    //         this.removeOutdatedAlert(inputType);
+    //     }
+
+    //     connectionPanel.insertAdjacentElement('afterbegin', alertBox);
+    //     this.fadeInItem(alertBox, 2000);
+    // }
+
+    // isAlertBoxExisting(inputType) {
+    //     const alertBox = document.getElementById(`input-alert`);
+    //     let isAlertBoxExisting;
+
+    //     if (!alertBox) {
+    //         isAlertBoxExisting = false;
+    //     }
+
+    //     else {
+    //         isAlertBoxExisting = true;
+    //     }
+
+    //     return isAlertBoxExisting;
+    // }
+
+    // removeOutdatedAlert(inputType) {
+    //     const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+    //     const outdatedAlertBox = document.getElementById(`input-alert`);
+    //     connectionPanel.removeChild(outdatedAlertBox);
+    // }
+
+    // buildAlertBox(inputType, inputValue) {
+    //     const alertBox = document.createElement('div');
+    //     const alertMessage = document.createElement('p');
+    //     const dismissAlertBtn = document.createElement('button');
+    //     const crossAlertIcon = document.createElement('i')
+
+    //     alertBox.id = 'input-alert';
+    //     alertMessage.textContent = this.getAlert(inputType, inputValue);
+    //     dismissAlertBtn.className = `dismiss-alert-btn`;
+    //     crossAlertIcon.className = 'fa-solid fa-xmark';
+
+    //     dismissAlertBtn.appendChild(crossAlertIcon);        
+    //     alertBox.appendChild(alertMessage);
+    //     alertBox.appendChild(dismissAlertBtn);
+
+    //     return alertBox;
+    // }
+
+    // addSubmitButtonListener() {
+    //     this._form.addEventListener('submit', (event) => {
+    //         if (!this.isEmailValid || !this.isPasswordValid) {
+    //             event.preventDefault();
+    //             if (!this.isEmailValid) {
+    //                 this.sendEmailAlert()
+    //             }
+    //             else if (!this.isPasswordValid) {
+    //                 this.sendPasswordAlert()
+    //             }
+    //         }
+    //     })
+    // }
+    
+
 }

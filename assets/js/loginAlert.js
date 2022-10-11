@@ -1,3 +1,3 @@
 loginHelper = new LoginHelper;
-loginHelper.addInputsListeners();
-loginHelper.addSubmitButtonListener()
+loginHelper.addInputsEventListeners();
+// loginHelper.addSubmitButtonListener()

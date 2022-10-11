@@ -23,12 +23,12 @@ class ConnectionHelper extends UserPanels{
                 'unknown' : "Votre adresse mail n'est pas valide"
             },
             'password' : {
-                'short' : "Votre mot de passe est trop court",
-                'long' : "Votre mot de passe est trop long (mini. 7 caractères)",
+                'short' : "Votre mot de passe est trop court (mini. 7 caractères)",
+                'long' : "Votre mot de passe est trop long (max. 50 caractères)",
                 'number' : "Votre mot de passe doit contenir au moins un chiffre",
                 'small-cap' : "Votre mot de passe doit contenir au moins une lettre minuscule",
                 'capital-letter' : "Votre mot de passe doit contenir au moins une lettre majuscule",
-                'special-char' : "Votre mot de passe doit contenir au moins un caractère spécial",
+                'special-char' : "Votre mot de passe doit contenir au moins un caractère spécial (@,$,!,%,*,?,&)",
                 'unknown' : "Votre mot de passe n'est pas valide"
             }
         };

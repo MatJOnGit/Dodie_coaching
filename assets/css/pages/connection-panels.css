@@ -143,7 +143,7 @@ input[type=submit] {
     width: 90%;
 }
 
-#input-alert {
+#input-textual-help {
     position: absolute;
     font-weight: 600;
     font-size: 0.9em;
@@ -159,12 +159,12 @@ input[type=submit] {
     border-radius: 3px;
 }
 
-#input-alert p {
+#input-textual-help p {
     display: inline-block;
     max-width: 80%;
 }
 
-.dismiss-alert-btn {
+.textual-help-dismiss-btn {
     border-radius: 50%;
     font-size: 0.8em;
     width: 30px;

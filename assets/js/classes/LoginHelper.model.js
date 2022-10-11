@@ -6,6 +6,8 @@ class LoginHelper extends ConnectionHelper {
         this._passwordInputElt = document.getElementById('user-password');
         this._inputElts = [this._emailInputElt, this._passwordInputElt];
 
+        this._infoBtnElts = document.getElementsByClassName('input-info');
+
         this._form = document.getElementsByTagName('form')[0];
 
         this._isFormValid = false;
@@ -15,6 +17,10 @@ class LoginHelper extends ConnectionHelper {
 
     get inputElts() {
         return this._inputElts;
+    }
+
+    get infoBtnElts() {
+        return this._infoBtnElts;
     }
 
     get form() {
@@ -87,56 +93,83 @@ class LoginHelper extends ConnectionHelper {
         return inputElt.value === '';
     }
 
-    // sendAlert(inputType, inputValue) {
-    //     const alertBox = this.buildAlertBox(inputType, inputValue);
-    //     const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+    addInfoButtonsListeners() {
+        for (let infoBtnElt of this.infoBtnElts) {
+            infoBtnElt.addEventListener('click', (e) => {
+                e.preventDefault();
+                const inputElt = this.getInfoButtonBindedValue(infoBtnElt);
+                this.showTextualHelper(inputElt.type, inputElt.value)
+            })
+        }
+    }
 
-    //     if (this.isAlertBoxExisting(inputType)) {
-    //         this.removeOutdatedAlert(inputType);
-    //     }
+    getInfoButtonBindedValue(infoBtnElt) {
+        return infoBtnElt.parentElement.getElementsByTagName('input')[0];
+    }
 
-    //     connectionPanel.insertAdjacentElement('afterbegin', alertBox);
-    //     this.fadeInItem(alertBox, 2000);
-    // }
+    showTextualHelper(inputType, inputValue) {
+        const inputHelper = this.buildInputHelper(inputType, inputValue);
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
 
-    // isAlertBoxExisting(inputType) {
-    //     const alertBox = document.getElementById(`input-alert`);
-    //     let isAlertBoxExisting;
+        if (this.isInputTextualHelpExisting(inputType)) {
+            this.removePreviousHelper(inputType);
+        }
 
-    //     if (!alertBox) {
-    //         isAlertBoxExisting = false;
-    //     }
+        connectionPanel.insertAdjacentElement('afterbegin', inputHelper);
+        this.fadeInItem(inputHelper, 2000);
+        this.addHelperDismissButtonListener(inputHelper);
+    }
 
-    //     else {
-    //         isAlertBoxExisting = true;
-    //     }
+    isInputTextualHelpExisting(inputType) {
+        const inputHelper = document.getElementById('input-textual-help');
+        let isInputHelperExisting;
 
-    //     return isAlertBoxExisting;
-    // }
+        if (!inputHelper) {
+            isInputHelperExisting = false;
+        }
 
-    // removeOutdatedAlert(inputType) {
-    //     const connectionPanel = document.getElementsByClassName('connection-panel')[0];
-    //     const outdatedAlertBox = document.getElementById(`input-alert`);
-    //     connectionPanel.removeChild(outdatedAlertBox);
-    // }
+        else {
+            isInputHelperExisting = true;
+        }
 
-    // buildAlertBox(inputType, inputValue) {
-    //     const alertBox = document.createElement('div');
-    //     const alertMessage = document.createElement('p');
-    //     const dismissAlertBtn = document.createElement('button');
-    //     const crossAlertIcon = document.createElement('i')
+        return isInputHelperExisting;
+    }
 
-    //     alertBox.id = 'input-alert';
-    //     alertMessage.textContent = this.getAlert(inputType, inputValue);
-    //     dismissAlertBtn.className = `dismiss-alert-btn`;
-    //     crossAlertIcon.className = 'fa-solid fa-xmark';
+    removePreviousHelper(inputType) {
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+        const previousHelper = document.getElementById('input-textual-help');
+        connectionPanel.removeChild(previousHelper);
+    }
 
-    //     dismissAlertBtn.appendChild(crossAlertIcon);        
-    //     alertBox.appendChild(alertMessage);
-    //     alertBox.appendChild(dismissAlertBtn);
+    buildInputHelper(inputType, inputValue) {
+        const inputHelper = document.createElement('div');
+        const helperMessage = document.createElement('p');
+        const textualHelpDismissBtn = document.createElement('button');
+        const crossIcon = document.createElement('i')
 
-    //     return alertBox;
-    // }
+        inputHelper.id = 'input-textual-help';
+        helperMessage.textContent = this.getAlert(inputType, inputValue);
+        helperMessage.className = `${inputType}-message`;
+        textualHelpDismissBtn.className = 'textual-help-dismiss-btn';
+        crossIcon.className = 'fa-solid fa-xmark';
+
+        textualHelpDismissBtn.appendChild(crossIcon);        
+        inputHelper.appendChild(helperMessage);
+        inputHelper.appendChild(textualHelpDismissBtn);
+
+        return inputHelper;
+    }
+
+    addHelperDismissButtonListener(inputHelper) {
+        console.log(inputHelper)
+        const helperDismissBtn = inputHelper.getElementsByTagName('button')[0];
+        const helperTypeMessage = inputHelper.getElementsByTagName('p')[0].className;
+        const helperType = helperTypeMessage.split('-')[0];
+
+        helperDismissBtn.addEventListener('click', () => {
+            this.removePreviousHelper(helperType);
+        })
+    }
 
     // addSubmitButtonListener() {
     //     this._form.addEventListener('submit', (event) => {

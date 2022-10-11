@@ -18,12 +18,15 @@ class ConnectionHelper extends UserPanels{
 
         this._inputErrors = {
             'email' : {
+                'valid' : "Votre adresse mail est valide",
                 'at-symbol' : "Votre email doit contenir une arobase",
                 'domain' : "Le domaine de votre email n'est pas valide",
                 'unknown' : "Votre adresse mail n'est pas valide"
+                
             },
             'password' : {
-                'short' : "Votre mot de passe est trop court (mini. 7 caractères)",
+                'valid' : "Votre mot de passe est valide",
+                'short' : "Votre mot de passe est trop court (mini. 10 caractères)",
                 'long' : "Votre mot de passe est trop long (max. 50 caractères)",
                 'number' : "Votre mot de passe doit contenir au moins un chiffre",
                 'small-cap' : "Votre mot de passe doit contenir au moins une lettre minuscule",
@@ -86,7 +89,11 @@ class ConnectionHelper extends UserPanels{
     getEmailAlert(inputType, inputValue) {
         let emailAlert = '';
 
-        if (!inputValue.includes('@')) {
+        if (this.emailRegex.test(inputValue)) {
+            emailAlert = this.inputError[inputType]['valid'];
+        }
+
+        else if (!inputValue.includes('@')) {
             emailAlert = this.inputError[inputType]['at-symbol'];
         }
         else if (!this.containsDomainNameRegex.test(inputValue)) {
@@ -102,7 +109,11 @@ class ConnectionHelper extends UserPanels{
     getPasswordAlert(inputType, inputValue) {
         let passwordAlert = '';
 
-        if (inputValue.length < 10) {
+        if (this.passwordRegex.test(inputValue)) {
+            passwordAlert = this.inputError[inputType]['valid'];
+        }
+
+        else if (inputValue.length < 10) {
             passwordAlert = this.inputError[inputType]['short'];
         }
 

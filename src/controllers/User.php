@@ -18,19 +18,19 @@ class User extends Main {
             'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/LoginHelper.model',
-            'loginAlert'
+            'loginHelper'
         ],
         'registering' => [
             'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/RegisteringHelper.model',
-            'registeringAlert'
+            'registeringHelper'
         ],
         'pwdRetrieving' => [
             'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
             'classes/PwdRetrievingHelper.model',
-            'pwdRetrievingApp'
+            'pwdRetrievingHelper'
         ]
     ];
     

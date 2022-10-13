@@ -93,7 +93,7 @@ div[class$='-input-container'] {
     align-items: flex-end;
 }
 
-.input-info,
+.show-input-helper-btn,
 .input-helper {
     width: 25px;
     height: 25px;
@@ -102,8 +102,8 @@ div[class$='-input-container'] {
     color: white;
 }
 
-.input-info {
-    border: solid 1px white;
+.show-input-helper-btn {
+    border: solid 2px white;
     margin: 0 3% 2vh 0;
 }
 
@@ -143,7 +143,7 @@ input[type=submit] {
     width: 90%;
 }
 
-#input-textual-help {
+#input-helper-container {
     position: absolute;
     font-weight: 600;
     font-size: 0.9em;
@@ -159,12 +159,12 @@ input[type=submit] {
     border-radius: 3px;
 }
 
-#input-textual-help p {
+#input-helper-container p {
     display: inline-block;
     max-width: 80%;
 }
 
-.textual-help-dismiss-btn {
+.input-helper-dismiss-btn {
     border-radius: 50%;
     font-size: 0.8em;
     width: 30px;

@@ -7,8 +7,7 @@ class ConnectionHelper extends UserPanels{
         // valid password must have between 10 and 50 characters, with at least one small cap character, one capital letter, one number and one special character
         this._passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/;
 
-
-        this._usernameRegex = /^(?=.{5,20}$)[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/;
+        this._usernameRegex = /^[a-zA-Zàâçéèêñ '.-]+$/;
 
         this._containsDomainNameRegex = /@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         this._containsSmallCapRegex = /[a-z]/;
@@ -16,7 +15,9 @@ class ConnectionHelper extends UserPanels{
         this._containsNumberRegex = /\d/;
         this._containsSpecialCharRegex = /[@$!%*?&]/;
 
-        this._inputErrors = {
+        this._showInputHelperBtns = document.getElementsByClassName('show-input-helper-btn');
+
+        this._inputAlerts = {
             'email' : {
                 'valid' : "Votre adresse mail est valide",
                 'at-symbol' : "Votre email doit contenir une arobase",
@@ -61,16 +62,16 @@ class ConnectionHelper extends UserPanels{
         return this._emailRegex;
     }
 
-    get inputError() {
-        return this._inputErrors;
+    get inputAlerts() {
+        return this._inputAlerts;
     }
 
     get passwordRegex() {
         return this._passwordRegex;
     }
 
-    get usernameRegex() {
-        return this._usernameRegex;
+    get showInputHelperBtns() {
+        return this._showInputHelperBtns;
     }
 
     getAlert (inputType, inputValue) {
@@ -90,17 +91,17 @@ class ConnectionHelper extends UserPanels{
         let emailAlert = '';
 
         if (this.emailRegex.test(inputValue)) {
-            emailAlert = this.inputError[inputType]['valid'];
+            emailAlert = this.inputAlerts[inputType]['valid'];
         }
 
         else if (!inputValue.includes('@')) {
-            emailAlert = this.inputError[inputType]['at-symbol'];
+            emailAlert = this.inputAlerts[inputType]['at-symbol'];
         }
         else if (!this.containsDomainNameRegex.test(inputValue)) {
-            emailAlert = this.inputError[inputType]['domain'];
+            emailAlert = this.inputAlerts[inputType]['domain'];
         }
         else {
-            emailAlert = this.inputError[inputType]['unknown'];
+            emailAlert = this.inputAlerts[inputType]['unknown'];
         }
 
         return emailAlert;
@@ -110,37 +111,50 @@ class ConnectionHelper extends UserPanels{
         let passwordAlert = '';
 
         if (this.passwordRegex.test(inputValue)) {
-            passwordAlert = this.inputError[inputType]['valid'];
+            passwordAlert = this.inputAlerts[inputType]['valid'];
         }
 
         else if (inputValue.length < 10) {
-            passwordAlert = this.inputError[inputType]['short'];
+            passwordAlert = this.inputAlerts[inputType]['short'];
         }
 
         else if (inputValue.length > 50) {
-            passwordAlert = this.inputError[inputType]['long'];
+            passwordAlert = this.inputAlerts[inputType]['long'];
         }
 
         else if (!this.containsNumberRegex.test(inputValue)) {
-            passwordAlert = this.inputError[inputType]['number'];
+            passwordAlert = this.inputAlerts[inputType]['number'];
         }
 
         else if (!this.containsSmallCapRegex.test(inputValue)) {
-            passwordAlert = this.inputError[inputType]['small-cap'];
+            passwordAlert = this.inputAlerts[inputType]['small-cap'];
         }
 
         else if (!this.containsCapitalLetterRegex.test(inputValue)) {
-            passwordAlert = this.inputError[inputType]['capital-letter']
+            passwordAlert = this.inputAlerts[inputType]['capital-letter']
         }
 
         else if (!this.containsSpecialCharRegex.test(inputValue)) {
-            passwordAlert = this.inputError[inputType]['special-char']
+            passwordAlert = this.inputAlerts[inputType]['special-char']
         }
 
         else {
-            passwordAlert = this.inputError[inputType]['unknown'];
+            passwordAlert = this.inputAlerts[inputType]['unknown'];
         }
 
         return passwordAlert;
+    }
+
+    removePreviousInputHelper(inputType) {
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+        const previousInputHelper = document.getElementById('input-helper-container');
+
+        if (previousInputHelper) {
+            connectionPanel.removeChild(previousInputHelper);
+        }
+    }
+
+    isInputEmpty(inputElt) {
+        return inputElt.value === '';
     }
 }

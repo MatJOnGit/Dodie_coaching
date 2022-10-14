@@ -3,10 +3,7 @@ class ConnectionHelper extends UserPanels{
         super();
 
         this._emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-        // valid password must have between 10 and 50 characters, with at least one small cap character, one capital letter, one number and one special character
         this._passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/;
-
         this._usernameRegex = /^[a-zA-Zàâçéèêñ '.-]+$/;
 
         this._containsDomainNameRegex = /@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -15,7 +12,12 @@ class ConnectionHelper extends UserPanels{
         this._containsNumberRegex = /\d/;
         this._containsSpecialCharRegex = /[@$!%*?&]/;
 
+        this._emailInputElt = document.getElementById('user-email');
+        this._form = document.getElementsByTagName('form')[0];
+
         this._showInputHelperBtns = document.getElementsByClassName('show-input-helper-btn');
+
+        this._isEmailValid = false;
 
         this._inputAlerts = {
             'email' : {
@@ -36,6 +38,14 @@ class ConnectionHelper extends UserPanels{
                 'unknown' : "Votre mot de passe n'est pas valide"
             }
         };
+    }
+
+    get isEmailValid() {
+        return this._isEmailValid;
+    }
+
+    set isEmailValid(boolean) {
+        this._isEmailValid = boolean;
     }
 
     get containsDomainNameRegex() {
@@ -72,6 +82,10 @@ class ConnectionHelper extends UserPanels{
 
     get showInputHelperBtns() {
         return this._showInputHelperBtns;
+    }
+
+    get form() {
+        return this._form;
     }
 
     getAlert (inputType, inputValue) {
@@ -144,6 +158,63 @@ class ConnectionHelper extends UserPanels{
 
         return passwordAlert;
     }
+    
+    showInputHelper(inputType, inputValue) {
+        const inputHelper = this.buildHelper(inputType, inputValue);
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+
+        if (this.isInputHelperExisting(inputType)) {
+            this.removePreviousInputHelper(inputType);
+        }
+
+        connectionPanel.insertAdjacentElement('afterbegin', inputHelper);
+        this.fadeInItem(inputHelper, 2000);
+        this.addHelperDismissButtonListener(inputHelper);
+    }
+
+    getInfoButtonBindedValue(showHelperBtn) {
+        return showHelperBtn.parentElement.getElementsByTagName('input')[0];
+    }
+
+    updateInputChecker(inputElt) {
+        const inputContainerElt = inputElt.parentElement;
+        const inputCheckerElt = inputContainerElt.getElementsByClassName('input-helper')[0];
+
+        const isInputEmpty = this.isInputEmpty(inputElt);
+        const isInputValid = this.isBlurredInputValid(inputElt, isInputEmpty);
+
+        if (isInputValid) {
+            inputCheckerElt.innerHTML = '<i class="fa-solid fa-check correct"></i>';
+            this.removePreviousInputHelper(inputElt.type)
+        }
+
+        else if (isInputEmpty) {
+            inputCheckerElt.innerHTML = '';
+        }
+        
+        else {
+            inputCheckerElt.innerHTML = '<i class="fa-solid fa-xmark wrong"></i>';
+        }
+    }
+
+    buildHelper(inputType, inputValue) {
+        const inputHelper = document.createElement('div');
+        const helperMessage = document.createElement('p');
+        const textualHelpDismissBtn = document.createElement('button');
+        const crossIcon = document.createElement('i')
+
+        inputHelper.id = 'input-helper-container';
+        helperMessage.textContent = this.getAlert(inputType, inputValue);
+        helperMessage.className = `${inputType}-message`;
+        textualHelpDismissBtn.className = 'input-helper-dismiss-btn';
+        crossIcon.className = 'fa-solid fa-xmark';
+
+        textualHelpDismissBtn.appendChild(crossIcon);        
+        inputHelper.appendChild(helperMessage);
+        inputHelper.appendChild(textualHelpDismissBtn);
+
+        return inputHelper;
+    }
 
     removePreviousInputHelper(inputType) {
         const connectionPanel = document.getElementsByClassName('connection-panel')[0];
@@ -156,5 +227,15 @@ class ConnectionHelper extends UserPanels{
 
     isInputEmpty(inputElt) {
         return inputElt.value === '';
+    }
+
+    addHelperDismissButtonListener(inputHelper) {
+        const inputHelperDismissBtn = inputHelper.getElementsByTagName('button')[0];
+        const inputHelperMessageType = inputHelper.getElementsByTagName('p')[0].className;
+        const inputHelperType = inputHelperMessageType.split('-')[0];
+
+        inputHelperDismissBtn.addEventListener('click', () => {
+            this.removePreviousInputHelper(inputHelperType);
+        })
     }
 }

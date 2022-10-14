@@ -22,6 +22,12 @@ footer i {
     color: hsla(261, 57%, 55%, 1);
 }
 
+h2 {
+    color: white;
+    text-align: center;
+    margin: 2vh 2% 5vh 2%;
+}
+
 h3,
 input,
 input::placeholder,

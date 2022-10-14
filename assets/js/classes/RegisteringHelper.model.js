@@ -1,9 +1,9 @@
 class RegisteringHelper extends ConnectionHelper {
     constructor() {
         super();
-
-        this._emailInputElt = document.getElementById('user-email');
+        
         this._passwordInputElt = document.getElementById('user-password');
+
         this._confirmationPasswordInputElt = document.getElementById('user-confirmation-password')
         this._inputElts = [
             this._emailInputElt,
@@ -11,9 +11,6 @@ class RegisteringHelper extends ConnectionHelper {
             this._confirmationPasswordInputElt
         ];
 
-        this._form = document.getElementsByTagName('form')[0];
-
-        this._isEmailValid = false;
         this._isPasswordValid = false;
         this._isConfirmationPasswordValid = false;
         this._arePasswordIdentical = false;
@@ -23,8 +20,16 @@ class RegisteringHelper extends ConnectionHelper {
         return this._inputElts;
     }
 
+    get isPasswordValid() {
+        return this._isPasswordValid;
+    }
+
     get arePasswordIdentical() {
         return this._arePasswordIdentical;
+    }
+
+    set isPasswordValid(boolean) {
+        this._isPasswordValid = boolean;
     }
 
     set arePasswordIdentical(boolean) {
@@ -37,42 +42,6 @@ class RegisteringHelper extends ConnectionHelper {
                 this.updateInputChecker(inputElt);
             });
         });
-    }
-
-    getInfoButtonBindedValue(showHelperBtn) {
-        return showHelperBtn.parentElement.getElementsByTagName('input')[0];
-    }
-
-    showInputHelper(inputType, inputValue) {
-        const inputHelper = this.buildHelper(inputType, inputValue);
-        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
-
-        if (this.isInputHelperExisting(inputType)) {
-            this.removePreviousInputHelper(inputType);
-        }
-
-        connectionPanel.insertAdjacentElement('afterbegin', inputHelper);
-        this.fadeInItem(inputHelper, 2000);
-        this.addHelperDismissButtonListener(inputHelper);
-    }
-
-    buildHelper(inputType, inputValue) {
-        const inputHelper = document.createElement('div');
-        const helperMessage = document.createElement('p');
-        const textualHelpDismissBtn = document.createElement('button');
-        const crossIcon = document.createElement('i')
-
-        inputHelper.id = 'input-helper-container';
-        helperMessage.textContent = this.getAlert(inputType, inputValue);
-        helperMessage.className = `${inputType}-message`;
-        textualHelpDismissBtn.className = 'input-helper-dismiss-btn';
-        crossIcon.className = 'fa-solid fa-xmark';
-
-        textualHelpDismissBtn.appendChild(crossIcon);        
-        inputHelper.appendChild(helperMessage);
-        inputHelper.appendChild(textualHelpDismissBtn);
-
-        return inputHelper;
     }
 
     isInputHelperExisting(inputType) {
@@ -88,27 +57,6 @@ class RegisteringHelper extends ConnectionHelper {
         }
 
         return isInputHelperExisting;
-    }
-
-    updateInputChecker(inputElt) {
-        const inputContainerElt = inputElt.parentElement;
-        const inputCheckerElt = inputContainerElt.getElementsByClassName('input-helper')[0];
-
-        const isInputEmpty = this.isInputEmpty(inputElt);
-        const isInputValid = this.isBlurredInputValid(inputElt, isInputEmpty);
-
-        if (isInputValid) {
-            inputCheckerElt.innerHTML = '<i class="fa-solid fa-check correct"></i>';
-            this.removePreviousInputHelper(inputElt.type)
-        }
-
-        else if (isInputEmpty) {
-            inputCheckerElt.innerHTML = '';
-        }
-        
-        else {
-            inputCheckerElt.innerHTML = '<i class="fa-solid fa-xmark wrong"></i>';
-        }
     }
 
     isBlurredInputValid(inputElt, isInputEmpty) {
@@ -148,16 +96,6 @@ class RegisteringHelper extends ConnectionHelper {
                 this.showInputHelper(inputElt.type, inputElt.value)
             })
         }
-    }
-
-    addHelperDismissButtonListener(inputHelper) {
-        const inputHelperDismissBtn = inputHelper.getElementsByTagName('button')[0];
-        const inputHelperMessageType = inputHelper.getElementsByTagName('p')[0].className;
-        const inputHelperType = inputHelperMessageType.split('-')[0];
-
-        inputHelperDismissBtn.addEventListener('click', () => {
-            this.removePreviousInputHelper(inputHelperType);
-        })
     }
 
     addSubmitButtonListener() {

@@ -23,14 +23,12 @@ class User extends Main {
         return $selectStaticDataStatement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insertAccount(string $userFirstName, string $userLastName, string $userEmail, string $userPassword) {
+    public function insertAccount(string $userEmail, string $userPassword) {
         $db = $this->dbConnect();
-        $insertAccountQuery = 'INSERT INTO accounts (first_name, last_name, email, password) VALUES (:firstName, :lastName, :email, :password)';
+        $insertAccountQuery = 'INSERT INTO accounts (email, password) VALUES (:email, :password)';
         $insertAccountStatement = $db->prepare($insertAccountQuery);
 
         return $insertAccountStatement->execute([
-            'firstName' => $userFirstName,
-            'lastName' => $userLastName,
             'email' => $userEmail,
             'password' => $userPassword
         ]);

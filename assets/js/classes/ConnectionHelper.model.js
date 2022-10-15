@@ -14,7 +14,6 @@ class ConnectionHelper extends UserPanels{
 
         this._emailInputElt = document.getElementById('user-email');
         this._form = document.getElementsByTagName('form')[0];
-
         this._showInputHelperBtns = document.getElementsByClassName('show-input-helper-btn');
 
         this._isEmailValid = false;
@@ -40,12 +39,8 @@ class ConnectionHelper extends UserPanels{
         };
     }
 
-    get isEmailValid() {
-        return this._isEmailValid;
-    }
-
-    set isEmailValid(boolean) {
-        this._isEmailValid = boolean;
+    get containsCapitalLetterRegex() {
+        return this._containsCapitalLetterRegex;
     }
 
     get containsDomainNameRegex() {
@@ -60,10 +55,6 @@ class ConnectionHelper extends UserPanels{
         return this._containsSmallCapRegex;
     }
 
-    get containsCapitalLetterRegex() {
-        return this._containsCapitalLetterRegex;
-    }
-
     get containsSpecialCharRegex() {
         return this._containsSpecialCharRegex;
     }
@@ -72,8 +63,20 @@ class ConnectionHelper extends UserPanels{
         return this._emailRegex;
     }
 
+    get form() {
+        return this._form;
+    }
+
     get inputAlerts() {
         return this._inputAlerts;
+    }
+
+    get inputElts() {
+        return this._inputElts;
+    }
+
+    get isEmailValid() {
+        return this._isEmailValid;
     }
 
     get passwordRegex() {
@@ -84,8 +87,55 @@ class ConnectionHelper extends UserPanels{
         return this._showInputHelperBtns;
     }
 
-    get form() {
-        return this._form;
+    set isEmailValid(boolean) {
+        this._isEmailValid = boolean;
+    }
+
+    addHelperDismissButtonListener(inputHelper) {
+        const inputHelperDismissBtn = inputHelper.getElementsByTagName('button')[0];
+        const inputHelperMessageType = inputHelper.getElementsByTagName('p')[0].className;
+        const inputHelperType = inputHelperMessageType.split('-')[0];
+
+        inputHelperDismissBtn.addEventListener('click', () => {
+            this.removePreviousInputHelper(inputHelperType);
+        })
+    }
+
+    addInputsListeners() {
+        this.inputElts.forEach(inputElt => {
+            inputElt.addEventListener('blur', () => {
+                this.updateInputChecker(inputElt);
+            });
+        });
+    }
+
+    addShowHelperButtonsListeners() {
+        for (let showHelperBtn of this.showInputHelperBtns) {
+            showHelperBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const inputElt = this.getInfoButtonBoundValue(showHelperBtn);
+                this.showInputHelper(inputElt.type, inputElt.value)
+            })
+        }
+    }
+
+    buildHelper(inputType, inputValue) {
+        const inputHelper = document.createElement('div');
+        const helperMessage = document.createElement('p');
+        const textualHelpDismissBtn = document.createElement('button');
+        const crossIcon = document.createElement('i')
+
+        inputHelper.id = 'input-helper-container';
+        helperMessage.textContent = this.getAlert(inputType, inputValue);
+        helperMessage.className = `${inputType}-message`;
+        textualHelpDismissBtn.className = 'input-helper-dismiss-btn';
+        crossIcon.className = 'fa-solid fa-xmark';
+
+        textualHelpDismissBtn.appendChild(crossIcon);        
+        inputHelper.appendChild(helperMessage);
+        inputHelper.appendChild(textualHelpDismissBtn);
+
+        return inputHelper;
     }
 
     getAlert (inputType, inputValue) {
@@ -119,6 +169,10 @@ class ConnectionHelper extends UserPanels{
         }
 
         return emailAlert;
+    }
+
+    getInfoButtonBoundValue(showHelperBtn) {
+        return showHelperBtn.parentElement.getElementsByTagName('input')[0];
     }
 
     getPasswordAlert(inputType, inputValue) {
@@ -158,6 +212,34 @@ class ConnectionHelper extends UserPanels{
 
         return passwordAlert;
     }
+
+    isInputEmpty(inputElt) {
+        return inputElt.value === '';
+    }
+
+    isInputHelperExisting(inputType) {
+        const inputHelper = document.getElementById('input-helper-container');
+        let isInputHelperExisting;
+
+        if (!inputHelper) {
+            isInputHelperExisting = false;
+        }
+
+        else {
+            isInputHelperExisting = true;
+        }
+
+        return isInputHelperExisting;
+    }
+
+    removePreviousInputHelper(inputType) {
+        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
+        const previousInputHelper = document.getElementById('input-helper-container');
+
+        if (previousInputHelper) {
+            connectionPanel.removeChild(previousInputHelper);
+        }
+    }
     
     showInputHelper(inputType, inputValue) {
         const inputHelper = this.buildHelper(inputType, inputValue);
@@ -170,10 +252,6 @@ class ConnectionHelper extends UserPanels{
         connectionPanel.insertAdjacentElement('afterbegin', inputHelper);
         this.fadeInItem(inputHelper, 2000);
         this.addHelperDismissButtonListener(inputHelper);
-    }
-
-    getInfoButtonBindedValue(showHelperBtn) {
-        return showHelperBtn.parentElement.getElementsByTagName('input')[0];
     }
 
     updateInputChecker(inputElt) {
@@ -195,47 +273,5 @@ class ConnectionHelper extends UserPanels{
         else {
             inputCheckerElt.innerHTML = '<i class="fa-solid fa-xmark wrong"></i>';
         }
-    }
-
-    buildHelper(inputType, inputValue) {
-        const inputHelper = document.createElement('div');
-        const helperMessage = document.createElement('p');
-        const textualHelpDismissBtn = document.createElement('button');
-        const crossIcon = document.createElement('i')
-
-        inputHelper.id = 'input-helper-container';
-        helperMessage.textContent = this.getAlert(inputType, inputValue);
-        helperMessage.className = `${inputType}-message`;
-        textualHelpDismissBtn.className = 'input-helper-dismiss-btn';
-        crossIcon.className = 'fa-solid fa-xmark';
-
-        textualHelpDismissBtn.appendChild(crossIcon);        
-        inputHelper.appendChild(helperMessage);
-        inputHelper.appendChild(textualHelpDismissBtn);
-
-        return inputHelper;
-    }
-
-    removePreviousInputHelper(inputType) {
-        const connectionPanel = document.getElementsByClassName('connection-panel')[0];
-        const previousInputHelper = document.getElementById('input-helper-container');
-
-        if (previousInputHelper) {
-            connectionPanel.removeChild(previousInputHelper);
-        }
-    }
-
-    isInputEmpty(inputElt) {
-        return inputElt.value === '';
-    }
-
-    addHelperDismissButtonListener(inputHelper) {
-        const inputHelperDismissBtn = inputHelper.getElementsByTagName('button')[0];
-        const inputHelperMessageType = inputHelper.getElementsByTagName('p')[0].className;
-        const inputHelperType = inputHelperMessageType.split('-')[0];
-
-        inputHelperDismissBtn.addEventListener('click', () => {
-            this.removePreviousInputHelper(inputHelperType);
-        })
     }
 }

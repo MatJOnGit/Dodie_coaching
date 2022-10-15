@@ -3,60 +3,49 @@ class RegisteringHelper extends ConnectionHelper {
         super();
         
         this._passwordInputElt = document.getElementById('user-password');
-
         this._confirmationPasswordInputElt = document.getElementById('user-confirmation-password')
+
         this._inputElts = [
             this._emailInputElt,
             this._passwordInputElt,
             this._confirmationPasswordInputElt
         ];
 
-        this._isPasswordValid = false;
-        this._isConfirmationPasswordValid = false;
         this._arePasswordIdentical = false;
-    }
-
-    get inputElts() {
-        return this._inputElts;
-    }
-
-    get isPasswordValid() {
-        return this._isPasswordValid;
+        this._isConfirmationPasswordValid = false;
+        this._isPasswordValid = false;
     }
 
     get arePasswordIdentical() {
         return this._arePasswordIdentical;
     }
 
-    set isPasswordValid(boolean) {
-        this._isPasswordValid = boolean;
+    get isConfirmationPasswordValid() {
+        return this._isConfirmationPasswordValid;
+    }
+
+    get isPasswordValid() {
+        return this._isPasswordValid;
     }
 
     set arePasswordIdentical(boolean) {
         this._arePasswordIdentical = boolean;
     }
 
-    addInputsListeners() {
-        this.inputElts.forEach(inputElt => {
-            inputElt.addEventListener('blur', () => {
-                this.updateInputChecker(inputElt);
-            });
-        });
+    set isConfirmationPasswordValid(boolean) {
+        this._isConfirmationPasswordValid = boolean;
     }
 
-    isInputHelperExisting(inputType) {
-        const inputHelper = document.getElementById('input-helper-container');
-        let isInputHelperExisting;
+    set isPasswordValid(boolean) {
+        this._isPasswordValid = boolean;
+    }
 
-        if (!inputHelper) {
-            isInputHelperExisting = false;
-        }
-
-        else {
-            isInputHelperExisting = true;
-        }
-
-        return isInputHelperExisting;
+    addSubmitButtonListener() {
+        this._form.addEventListener('submit', (e) => {
+            if (!this.isEmailValid || !this.isPasswordValid || !this.isConfirmationPasswordValid || !this.arePasswordIdentical) {
+                e.preventDefault();
+            }
+        })
     }
 
     isBlurredInputValid(inputElt, isInputEmpty) {
@@ -86,23 +75,5 @@ class RegisteringHelper extends ConnectionHelper {
         }
 
         return isBlurredInputValid;
-    }
-
-    addShowHelperButtonsListeners() {
-        for (let showHelperBtn of this.showInputHelperBtns) {
-            showHelperBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const inputElt = this.getInfoButtonBindedValue(showHelperBtn);
-                this.showInputHelper(inputElt.type, inputElt.value)
-            })
-        }
-    }
-
-    addSubmitButtonListener() {
-        this._form.addEventListener('submit', (e) => {
-            if (!this.isEmailValid || !this.isPasswordValid || !this.isConfirmationPasswordValid || !this.arePasswordIdentical) {
-                e.preventDefault();
-            }
-        })
     }
 }

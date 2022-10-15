@@ -34,9 +34,9 @@ class User extends Main {
         ]
     ];
     
-    private $_emailRegex = '#^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$#';
+    private $_emailRegex = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     
-    private $_passwordRegex = '#^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{6,}$#';
+    private $_passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
 
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
@@ -44,8 +44,6 @@ class User extends Main {
         'presentation' => 'index.php?page=presentation',
         'registering' => 'index.php?page=registering'
     ];
-
-    private $_usernameRegex = '^[-[:alpha:] \']+$^';
 
     public function areDataCompleted(): bool {
         $user = new UserModel;
@@ -79,8 +77,6 @@ class User extends Main {
 
     public function getRegistrationFormAdditionalData(array $userData): array {
         $userData += [
-            'firstName' => htmlspecialchars($_POST['user-first-name']),
-            'lastName' => htmlspecialchars($_POST['user-last-name']),
             'confirmationPassword' => htmlspecialchars($_POST['user-confirmation-password'])
         ];
 
@@ -135,8 +131,6 @@ class User extends Main {
 
     public function isRegisteringFormValid(array $userData): bool {
         return (
-            preg_match($this->_getUsernameRegex(), $userData['firstName']) &&
-            preg_match($this->_getUsernameRegex(), $userData['lastName']) &&
             preg_match($this->_getEmailRegex(), $userData['email']) &&
             preg_match($this->_getPasswordRegex(), $userData['password']) &&
             preg_match($this->_getPasswordRegex(), $userData['confirmationPassword']) &&
@@ -157,8 +151,6 @@ class User extends Main {
         $user = new UserModel;
 
         return $user->insertAccount(
-            $userData['firstName'],
-            $userData['lastName'],
             $userData['email'],
             $userData['password']
         );

@@ -213,6 +213,12 @@ class ConnectionHelper extends UserPanels{
         return passwordAlert;
     }
 
+    init() {
+        this.addInputsListeners();
+        this.addShowHelperButtonsListeners();
+        this.addSubmitButtonListener()
+    }
+
     isInputEmpty(inputElt) {
         return inputElt.value === '';
     }

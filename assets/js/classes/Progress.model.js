@@ -1,23 +1,40 @@
 class Progress extends UserPanels {
     constructor() {
         super();
+
+        this._weightRegex = /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,3}$/;
+
         this._dateTypeSelect = document.getElementById('date-selector');
         this._formFields = document.getElementsByClassName('form-fields')[0];
+        this._submitButton = document.getElementById('submit-btn');
+        this._weightInput = document.getElementById('user-weight');
     }
 
     get dateTypeSelect() {
         return this._dateTypeSelect;
     }
 
+    get selectedOptionValue() {
+        return this.dateTypeSelect.options[this.dateTypeSelect.selectedIndex].value;
+    }
+
     get formFields() {
         return this._formFields;
     }
 
-    get dateTypeSelectedOption() {
-        return this.dateTypeSelect.options[this.dateTypeSelect.selectedIndex];
+    get weightInput() {
+        return this._weightInput;
     }
 
-    addDeleteReportEventListeners() {
+    get weightRegex() {
+        return this._weightRegex;
+    }
+
+    get submitButton() {
+        return this._submitButton;
+    }
+
+    addDeleteReportListeners() {
         let deleteReportButtons = document.querySelectorAll('.progress-item button');
         for (let deleteReportButton of deleteReportButtons) {
             deleteReportButton.addEventListener('click', () => {
@@ -26,10 +43,10 @@ class Progress extends UserPanels {
         }
     }
 
-    addSelectEventListener() {
+    addSelectListener() {
         this.dateTypeSelect.addEventListener('change', () => {
             let reportDateExists = (!!document.getElementsByClassName('report-day')[0]);
-            let selectedOptionIsOldWeight = (this.dateTypeSelectedOption.value === 'old-weight');
+            let selectedOptionIsOldWeight = (this.selectedOptionValue === 'old-weight');
 
             if (reportDateExists && !selectedOptionIsOldWeight) {
                 this.hideDatetimeInputs();
@@ -38,6 +55,10 @@ class Progress extends UserPanels {
                 this.showDatetimeInputs();
             }
         });
+    }
+
+    isWeightValueValid() {
+        return this.weightRegex.test(this.weightInput.value);
     }
 
     displayDeleteReportConfirmation(deleteReportClickedButton) {
@@ -77,8 +98,9 @@ class Progress extends UserPanels {
     }
 
     init() {
-        this.addSelectEventListener();
-        this.addDeleteReportEventListeners();
+        this.addSelectListener();
+        this.addDeleteReportListeners();
+        this.addSubmitButtonListener();
     }
 
     showDatetimeInputs() {
@@ -101,5 +123,13 @@ class Progress extends UserPanels {
 
         this.formFields.appendChild(reportDate);
         this.formFields.appendChild(reportTime);
+    }
+
+    addSubmitButtonListener() {
+        this.submitButton.addEventListener('click', (e) => {
+            if (!this.isWeightValueValid || this.selectedOptionValue === '') {
+                e.preventDefault();
+            }
+        })
     }
 }

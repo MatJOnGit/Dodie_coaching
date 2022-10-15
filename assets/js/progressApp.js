@@ -1,2 +1,2 @@
-const progressItem = new Progress();
-progressItem.init();
+const progress = new Progress();
+progress.init();

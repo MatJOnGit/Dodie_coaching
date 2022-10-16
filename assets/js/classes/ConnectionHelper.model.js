@@ -1,4 +1,4 @@
-class ConnectionHelper extends UserPanels{
+class ConnectionHelper extends UserPanels {
     constructor() {
         super();
 

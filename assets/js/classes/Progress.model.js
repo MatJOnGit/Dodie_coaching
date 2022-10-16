@@ -14,12 +14,16 @@ class Progress extends UserPanels {
         return this._dateTypeSelect;
     }
 
+    get formFields() {
+        return this._formFields;
+    }
+
     get selectedOptionValue() {
         return this.dateTypeSelect.options[this.dateTypeSelect.selectedIndex].value;
     }
 
-    get formFields() {
-        return this._formFields;
+    get submitButton() {
+        return this._submitButton;
     }
 
     get weightInput() {
@@ -28,10 +32,6 @@ class Progress extends UserPanels {
 
     get weightRegex() {
         return this._weightRegex;
-    }
-
-    get submitButton() {
-        return this._submitButton;
     }
 
     addDeleteReportListeners() {
@@ -57,8 +57,12 @@ class Progress extends UserPanels {
         });
     }
 
-    isWeightValueValid() {
-        return this.weightRegex.test(this.weightInput.value);
+    addSubmitButtonListener() {
+        this.submitButton.addEventListener('click', (e) => {
+            if (!this.isWeightValueValid || this.selectedOptionValue === '') {
+                e.preventDefault();
+            }
+        })
     }
 
     displayDeleteReportConfirmation(deleteReportClickedButton) {
@@ -103,6 +107,10 @@ class Progress extends UserPanels {
         this.addSubmitButtonListener();
     }
 
+    isWeightValueValid() {
+        return this.weightRegex.test(this.weightInput.value);
+    }
+
     showDatetimeInputs() {
         let reportDate = document.createElement('input');
         reportDate.type = 'date';
@@ -123,13 +131,5 @@ class Progress extends UserPanels {
 
         this.formFields.appendChild(reportDate);
         this.formFields.appendChild(reportTime);
-    }
-
-    addSubmitButtonListener() {
-        this.submitButton.addEventListener('click', (e) => {
-            if (!this.isWeightValueValid || this.selectedOptionValue === '') {
-                e.preventDefault();
-            }
-        })
     }
 }

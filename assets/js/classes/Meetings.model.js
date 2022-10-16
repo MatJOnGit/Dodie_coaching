@@ -1,14 +1,15 @@
 class Meetings extends UserPanels {
     constructor() {
         super();
-        
-        this._appointmentTab = document.getElementById('appointment-tab');
+
         this._meetingDateInput = document.getElementById('user-next-meeting');
-        this._meetingFormSubmitButton = document.getElementById('appointment-form-submit-button');
+        this._submitButton = document.getElementById('submit-button');
+
+        this._appointmentTab = document.getElementById('appointment-tab');
         this._scheduleNavElts = document.getElementsByClassName('schedule-days-nav')
 
         this._maxDisplayedDays = 2;
-        this._meetingsListIndex;
+        this._listIndex;
         this._parsedMeetingsSlots;
 
         this._nextDaysSchedule = this.scheduleNavElts[1];
@@ -34,8 +35,8 @@ class Meetings extends UserPanels {
         return this._meetingDateInput;
     }
 
-    get meetingFormSubmitButton() {
-        return this._meetingFormSubmitButton;
+    get submitButton() {
+        return this._submitButton;
     }
 
     get scheduleNavElts() {
@@ -46,8 +47,8 @@ class Meetings extends UserPanels {
         return this._maxDisplayedDays;
     }
 
-    get meetingsListIndex() {
-        return this._meetingsListIndex;
+    get listIndex() {
+        return this._listIndex;
     }
 
     get parsedMeetingsSlots() {
@@ -62,8 +63,8 @@ class Meetings extends UserPanels {
         return this._previousDaysSchedule;
     }
     
-    set meetingsListIndex(index) {
-        this._meetingsListIndex = index;
+    set listIndex(index) {
+        this._listIndex = index;
     }
 
     set parsedMeetingsSlots (jsonObject) {
@@ -84,7 +85,7 @@ class Meetings extends UserPanels {
                 let slotTime = meetingSlotButton.textContent;
                 let slotFormatedDate = meetingSlotDate.substring(meetingSlotDate.indexOf(' ') + 1);
                 this.meetingDateInput.value = `le ${slotFormatedDate} à ${slotTime}`;
-                this.meetingFormSubmitButton.removeAttribute('disabled');
+                this.submitButton.removeAttribute('disabled');
                 this.meetingDateInput.removeAttribute('disabled');
             })
         })
@@ -94,14 +95,14 @@ class Meetings extends UserPanels {
         let meetingsArray = [];
 
         meetingsArray[0] = {
-            'date' : this.parsedMeetingsSlots[this.meetingsListIndex][0],
-            'slots' : this.parsedMeetingsSlots[this.meetingsListIndex][1]
+            'date' : this.parsedMeetingsSlots[this.listIndex][0],
+            'slots' : this.parsedMeetingsSlots[this.listIndex][1]
         };
 
         if (this.parsedMeetingsSlots.length >= 2) {
             meetingsArray[1] = {
-                'date' : this.parsedMeetingsSlots[this.meetingsListIndex+1][0],
-                'slots' : this.parsedMeetingsSlots[this.meetingsListIndex+1][1]
+                'date' : this.parsedMeetingsSlots[this.listIndex+1][0],
+                'slots' : this.parsedMeetingsSlots[this.listIndex+1][1]
             };
         }
 
@@ -109,12 +110,12 @@ class Meetings extends UserPanels {
     }
 
     buildMeetingsCalendar(index) {
-        this.verifyIndex(index);
+        this.setListIndex(index);
         let filteredMeetingsArray = this.buildFilteredMeetingArray();
         this.emptyMeetingTag();
         this.buildMeetingsTab(filteredMeetingsArray);
         this.displayMeetingsTabNavButton(filteredMeetingsArray);
-        if (!!this.meetingFormSubmitButton) {
+        if (this.submitButton) {
             this.addMeetingSlotButtonsEventListeners();
         }
     }
@@ -198,13 +199,13 @@ class Meetings extends UserPanels {
     }
 
     displayTabNextElements() {
-        this.meetingsListIndex = this.meetingsListIndex +2;
-        this.buildMeetingsCalendar(this.meetingsListIndex);
+        this.listIndex = this.listIndex +2;
+        this.buildMeetingsCalendar(this.listIndex);
     }
 
     displayTabPreviousElements() {
-        this.meetingsListIndex = this.meetingsListIndex -2;
-        this.buildMeetingsCalendar(this.meetingsListIndex);
+        this.listIndex = this.listIndex -2;
+        this.buildMeetingsCalendar(this.listIndex);
     }
 
     displayMeetingsTabNavButton (filteredMeetingsArray) {
@@ -213,7 +214,7 @@ class Meetings extends UserPanels {
             this.nextDaysSchedule.innerHTML = '';
         }
         else {
-            if (this.meetingsListIndex === 0 ) {
+            if (this.listIndex === 0 ) {
                 this.previousDaysSchedule.innerHTML = '';
             }
             else {
@@ -222,7 +223,7 @@ class Meetings extends UserPanels {
                 previousDaysScheduleBtn.addEventListener('click', this._displayTabPreviousElements);
             }
 
-            if (this.meetingsListIndex >= this.parsedMeetingsSlots.length -2) {
+            if (this.listIndex >= this.parsedMeetingsSlots.length -2) {
                 this.nextDaysSchedule.innerHTML = '';
             }
             else {
@@ -239,24 +240,25 @@ class Meetings extends UserPanels {
     }
 
     init() {
-        if (this.appointmentTab!=null) {
+        if (this.appointmentTab) {
             this.buildParsedMeetingsData();
             this.buildMeetingsCalendar(0);
         }
-        if (this.cancelMeetingButton!=null) {
+
+        if (this.cancelMeetingButton) {
             this.addCancelMeetingButtonEventListener();
         }
     }
 
-    verifyIndex(index) {
+    setListIndex(index) {
         if ((index >= 0) && (index <= this.parsedMeetingsSlots.length-2)) {
-            this.meetingsListIndex = index;
+            this.listIndex = index;
         }
         else if (index < 2) {
-            this.meetingsListIndex = 0;
+            this.listIndex = 0;
         }
         else {
-            this.meetingsListIndex = this.parsedMeetingsSlots.length - 2;
+            this.listIndex = this.parsedMeetingsSlots.length - 2;
         }
     }
 }

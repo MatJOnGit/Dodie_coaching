@@ -2,14 +2,13 @@ class Meetings extends UserPanels {
     constructor() {
         super();
 
+        this._appointmentTab = document.getElementById('appointment-tab');
         this._meetingDateInput = document.getElementById('user-next-meeting');
+        this._scheduleNavElts = document.getElementsByClassName('schedule-days-nav')
         this._submitButton = document.getElementById('submit-button');
 
-        this._appointmentTab = document.getElementById('appointment-tab');
-        this._scheduleNavElts = document.getElementsByClassName('schedule-days-nav')
-
-        this._maxDisplayedDays = 2;
         this._listIndex;
+        this._maxDisplayedDays = 2;
         this._parsedMeetingsSlots;
 
         this._nextDaysSchedule = this.scheduleNavElts[1];

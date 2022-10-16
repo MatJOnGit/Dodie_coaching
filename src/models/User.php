@@ -30,7 +30,7 @@ class User extends Main {
 
         return $insertAccountStatement->execute([
             'email' => $userEmail,
-            'password' => $userPassword
+            'password' => password_hash($userPassword, PASSWORD_DEFAULT)
         ]);
     }
 

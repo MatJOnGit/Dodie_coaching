@@ -444,9 +444,9 @@ input[type=submit] {
 }
 
 .meals-list li {
-    width: 49%;
+    width: 48%;
     height: 49%;
-    margin: 2px 2px 2px 2px;
+    margin: 2px 1% 2px 1%;
     background-size: cover;
     background-position: 50%;
     position: relative;

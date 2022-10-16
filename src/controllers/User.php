@@ -89,7 +89,7 @@ class User extends Main {
         $userRegisteredPassword = $user->selectUserPassword($userData['email']);
 
         if ($userRegisteredPassword) {
-            $isPasswordMatching = $userData['password'] === $userRegisteredPassword[0];
+            $isPasswordMatching = password_verify($userData['password'], $userRegisteredPassword[0]);
             $isPasswordEmpty = empty($userData['password']);
 
             $isAccountExisting = ($isPasswordMatching && !$isPasswordEmpty);
@@ -203,9 +203,5 @@ class User extends Main {
 
     private function _getPasswordRegex() {
         return $this->_passwordRegex;
-    }
-
-    private function _getUsernameRegex() {
-        return $this->_usernameRegex;
     }
 }

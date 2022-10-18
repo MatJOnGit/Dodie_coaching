@@ -25,11 +25,11 @@ try {
     $Urls = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
-            'connection' => ['login', 'registering', 'password-retrieving'],
+            'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing'],
             'userPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
-            'connection' => ['log-account', 'register-account', 'log-out'],
+            'connection' => ['log-account', 'register-account', 'log-out', 'send-token'],
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment']
         ]
@@ -95,6 +95,14 @@ try {
 
                 elseif ($user->isRegisteringPageRequested($page)) {
                     $user->renderRegisteringPage($twig);
+                }
+
+                elseif ($user->isMailNotificationPageRequested($page)) {
+                    $user->renderMailNotificationPage($twig);
+                }
+
+                elseif ($user->isTokenSigningRequested($page)) {
+                    $user->renderTokenSigningPage($twig);
                 }
 
                 else {
@@ -203,64 +211,88 @@ try {
         if (in_array($action, $Urls['actions']['connection'])) {
 
             if (!$user->isLogged()) {
-                $userData = $user->getLoginFormData();
+                if ($user->isPasswordProvided() && $user->isEmailProvided()) {
+                    $userData = $user->getLoginFormData();
 
-                if ($user->isLoginActionRequested($action)) {
-                    if ($user->isLoginFormValid($userData)) {
-                        if ($user->isAccountExisting($userData)) {
-                            if ($user->updateLoginData($userData)) {
-                                $user->logUser($userData);
-                                $user->routeTo('dashboard');
+                    if ($user->isLoginActionRequested($action)) {
+                        if ($user->isLoginFormValid($userData)) {
+                            if ($user->isAccountExisting($userData)) {
+                                if ($user->updateLoginData($userData)) {
+                                    $user->logUser($userData);
+                                    $user->routeTo('dashboard');
+                                }
+    
+                                else {
+                                    throw new DB_Exception('LOGGING FAILED');
+                                    // $user->routeTo('login');
+                                }
                             }
-
+        
                             else {
-                                throw new DB_Exception('LOGGING FAILED');
-                                // $user->routeTo('login');
+                                $user->destroySessionData();
+                                $user->routeTo('login');
                             }
                         }
-    
+        
                         else {
                             $user->destroySessionData();
                             $user->routeTo('login');
                         }
                     }
-    
-                    else {
-                        $user->destroySessionData();
-                        $user->routeTo('login');
-                    }
-                }
 
-                elseif ($user->isRegisteringActionRequested($action)) {
-                    $userData = $user->getRegistrationFormAdditionalData($userData);
-
-                    if ($user->isRegisteringFormValid($userData)) {
-                        if (!$user->isAccountExisting($userData)) {
-                            $isUserRegistered = $user->registerAccount($userData);
+                    elseif ($user->isRegisteringActionRequested($action)) {
+                        $userData = $user->getRegistrationFormAdditionalData($userData);
     
-                            if ($isUserRegistered) {
-                                $user->createStaticData($userData);
-                                $user->logUser($userData);
-                                $user->routeTo('dashboard');
+                        if ($user->isRegisteringFormValid($userData)) {
+                            if (!$user->isAccountExisting($userData)) {
+                                $isUserRegistered = $user->registerAccount($userData);
+        
+                                if ($isUserRegistered) {
+                                    $user->createStaticData($userData);
+                                    $user->logUser($userData);
+                                    $user->routeTo('dashboard');
+                                }
+        
+                                else {
+                                    throw new DB_Exception('REGISTERING FAILED');
+                                    // $user->routeTo('registering');
+                                }
                             }
-    
+        
                             else {
-                                throw new DB_Exception('REGISTERING FAILED');
-                                // $user->destroySessionData();
-                                // $user->routeTo('registering');
+                                $user->routeTo('registering');
                             }
                         }
-    
+        
                         else {
+                            $user->destroySessionData();
                             $user->routeTo('registering');
                         }
                     }
-    
+                }
+                
+                else if ($user->isEmailProvided() && $user->isSendTokenActionRequested($action)) {
+                    $token = $user->generateToken();
+                    $email = $user->getEmail();
+
+                    if ($user->storeToken($token, $email)) {
+                        $mailer = new Dodie_Coaching\Services\Mailer;
+
+                        if ($mailer->sendToken($token, $email)) {
+                            $user->routeTo('mail-notification');
+                        }
+
+                        else {
+                            $user->routeTo('pwd-retrieving');
+                        }
+                    }
+
                     else {
-                        $user->destroySessionData();
-                        $user->routeTo('registering');
+                        throw new DB_Exception('TOKEN ADDING FAILED');
+                        // $user->routeTo('login');
                     }
                 }
+                
             }
 
             else {

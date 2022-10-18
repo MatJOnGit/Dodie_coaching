@@ -183,3 +183,39 @@ input[type=submit] {
     color: hsla(46, 92%, 35%, 1);
     border-color: hsla(46, 92%, 35%, 1);
 }
+
+/*******************************/
+/*        NOTIFICATIONS        */
+/*******************************/
+
+.notification-box {
+    padding: 5vh 5% 2vh 5%;
+}
+
+.notification-box p {
+    text-align: center;
+    margin: 0 1%;
+    color: white;
+}
+
+.notification-box .btn {
+    margin-top: 5vh;
+}
+
+/****************************/
+/*        TOKEN FORM        */
+/****************************/
+
+.token-input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 3vh;
+    color: white;
+}
+
+#user-token {
+    margin: 1.5vh 0 3vh 0;
+}

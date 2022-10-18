@@ -1,0 +1,11 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='connection-panel light-to-dark-purple-bkgd'>
+        <form action='index.php?action=register-account' method='post' class='purple-to-blue-bkgd'>
+            <h2>Réinitialisation de mot de passe</h2>
+            <label for='user-token'>Code de réinitialisation :</label>
+            <input type='text' name='user-token' id='user-token' required />
+        </form>
+    </div>
+{% endblock pageContent %}

@@ -42,7 +42,9 @@ class User extends Main {
         'dashboard' => 'index.php?page=dashboard',
         'login' => 'index.php?page=login',
         'presentation' => 'index.php?page=presentation',
-        'registering' => 'index.php?page=registering'
+        'registering' => 'index.php?page=registering',
+        'pwd-retrieving' => 'index.php?page=password-retrieving',
+        'mail-notification' => 'index.php?page=mail-notification'
     ];
 
     public function areDataCompleted(): bool {
@@ -60,6 +62,14 @@ class User extends Main {
 
     public function destroySessionData() {
         session_destroy();
+    }
+
+    public function generateToken() {
+        return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
+    }
+
+    public function getEmail(): string {
+        return $_POST['user-email'];
     }
 
     public function getLoginFormData(): array {
@@ -102,8 +112,12 @@ class User extends Main {
         return $isAccountExisting;
     }
 
-    public function isLoginActionRequested(string $action): bool {
-        return $action === 'log-account';
+    public function isTokenSigningRequested(string $page): bool {
+        return $page === 'token-signing';
+    }
+
+    public function isLoginActionRequested(string $page): bool {
+        return $page === 'log-account';
     }
 
     public function isLogoutActionRequested(string $action): bool {
@@ -125,6 +139,18 @@ class User extends Main {
         return $page === 'login';
     }
 
+    public function isMailNotificationPageRequested(string $page): bool {
+        return $page === 'mail-notification';
+    }
+
+    public function isPasswordProvided() {
+        return isset($_POST['user-password']);
+    }
+
+    public function isEmailProvided() {
+        return isset($_POST['user-email']);
+    }
+
     public function isRegisteringActionRequested(string $action): bool {
         return $action === 'register-account';
     }
@@ -142,6 +168,10 @@ class User extends Main {
         return $page === 'registering';
     }
 
+    public function isSendTokenActionRequested(string $action): bool {
+        return $action === 'send-token';
+    }
+
     public function logUser(array $userData) {
         $_SESSION['user-email'] = $userData['email'];
         $_SESSION['user-password'] = $userData['password'];
@@ -152,7 +182,7 @@ class User extends Main {
 
         return $user->insertAccount(
             $userData['email'],
-            $userData['password']
+            password_hash($userData['password'], PASSWORD_DEFAULT)
         );
     }
 
@@ -162,6 +192,14 @@ class User extends Main {
             'frenchTitle' => 'connection',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_getPageScripts('login')
+        ]);
+    }
+
+    public function renderMailNotificationPage(object $twig) {
+        echo $twig->render('connection_panels/mail-notification.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'frenchTitle' => "Notification d'email",
+            'appSection' => 'connectionPanels'
         ]);
     }
 
@@ -181,6 +219,23 @@ class User extends Main {
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_getPageScripts('registering')
         ]);
+    }
+
+    public function renderTokenSigningPage(object $twig) {
+        echo $twig->render('connection_panels/token-signing.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'frenchTitle' => 'réinitialisation de mot de passe',
+            'appSection' => 'connectionPanels'
+        ]);
+    }
+
+    public function storeToken(string $token, string $email) {
+        $user = new UserModel;
+
+        return $user->insertToken(
+            password_hash($token, PASSWORD_DEFAULT),
+            $email
+        );
     }
 
     public function updateLoginData(array $userData): bool {

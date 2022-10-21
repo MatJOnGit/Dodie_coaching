@@ -31,6 +31,12 @@ class User extends Main {
             'classes/ConnectionHelper.model',
             'classes/PwdRetrievingHelper.model',
             'pwdRetrievingHelper'
+        ],
+        'tokenSigning' => [
+            'classes/UserPanels.model',
+            'classes/ConnectionHelper.model',
+            'classes/TokenSigningHelper.model',
+            'tokenSigningHelper'
         ]
     ];
     
@@ -38,18 +44,22 @@ class User extends Main {
     
     private $_passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
 
+    private $_tokenGeneratorTimeOut = 3600; // 3600s (1 hour time out)
+
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
         'login' => 'index.php?page=login',
         'presentation' => 'index.php?page=presentation',
         'registering' => 'index.php?page=registering',
         'pwd-retrieving' => 'index.php?page=password-retrieving',
-        'mail-notification' => 'index.php?page=mail-notification'
+        'mail-notification' => 'index.php?page=mail-notification',
+        'send-token' => 'index.php?action=send-token',
+        'token-signing' => 'index.php?page=token-signing'
     ];
 
     public function areDataCompleted(): bool {
         $user = new UserModel;
-        $staticData = $user->selectStaticData($_SESSION['user-email']);
+        $staticData = $user->selectStaticData($_SESSION['email']);
 
         return (!in_array(NULL, $staticData));
     }
@@ -64,12 +74,29 @@ class User extends Main {
         session_destroy();
     }
 
+    public function eraseToken(string $email) {
+        $user = new UserModel;
+
+        return $user->deleteToken($email);
+    }
+
     public function generateToken() {
         return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
     }
 
     public function getEmail(): string {
-        return $_POST['user-email'];
+        $email = '';
+
+        if (isset($_SESSION['email'])) {
+            $email = $_SESSION['email'];
+        }
+
+        else if (isset($_POST['user-email'])) {
+            $_SESSION['email'] = htmlspecialchars($_POST['user-email']);
+            $email = $_SESSION['email'];
+        }
+
+        return $email;
     }
 
     public function getLoginFormData(): array {
@@ -96,7 +123,7 @@ class User extends Main {
     public function isAccountExisting(array $userData): bool {
         $user = new UserModel;
 
-        $userRegisteredPassword = $user->selectUserPassword($userData['email']);
+        $userRegisteredPassword = $user->selectPassword($userData['email']);
 
         if ($userRegisteredPassword) {
             $isPasswordMatching = password_verify($userData['password'], $userRegisteredPassword[0]);
@@ -112,8 +139,47 @@ class User extends Main {
         return $isAccountExisting;
     }
 
+    public function isEmailExisting(string $email) {
+        $user = new UserModel;
+
+        return $user->selectEmail($email);
+    }
+
+    public function isEmailSet(): bool {
+        return isset($_SESSION['email']);
+    }
+
     public function isTokenSigningRequested(string $page): bool {
         return $page === 'token-signing';
+    }
+
+    public function isLastTokenOld(array $token) {
+        date_default_timezone_set('Europe/Paris');
+        $isLastTokenOld = false;
+
+        $tokenGenerationDate = $token['generation_date'];
+        $currentDate = date("Y-m-d H:i:s");
+        $newTokenGenerationDate = date('Y-m-d H:i:s', strtotime($tokenGenerationDate) + $this->_getTokenGeneratorTimeOut());
+        
+        if ($currentDate > $newTokenGenerationDate) {
+            $isLastTokenOld = true;
+        }
+
+        return $isLastTokenOld;
+    }
+
+    public function areLastTokenAttemptsNull(array $tokenData) {
+        return (int)$tokenData['remaining_atpt'] < 1;
+    }
+
+    public function getTokenDate(string $email) {
+        $user = new UserModel;
+
+        return $user->selectTokenDate($email);
+    }
+
+    public function isEmailValid(string $email): bool {
+        return preg_match($this->_getEmailRegex(), $email);
     }
 
     public function isLoginActionRequested(string $page): bool {
@@ -125,7 +191,7 @@ class User extends Main {
     }
 
     public function isLogged(): bool {
-        return isset($_SESSION['user-email']) && isset($_SESSION['user-password']);
+        return isset($_SESSION['email']) && isset($_SESSION['password']);
     }
 
     public function isLoginFormValid(array $userData): bool {
@@ -145,10 +211,6 @@ class User extends Main {
 
     public function isPasswordProvided() {
         return isset($_POST['user-password']);
-    }
-
-    public function isEmailProvided() {
-        return isset($_POST['user-email']);
     }
 
     public function isRegisteringActionRequested(string $action): bool {
@@ -173,8 +235,8 @@ class User extends Main {
     }
 
     public function logUser(array $userData) {
-        $_SESSION['user-email'] = $userData['email'];
-        $_SESSION['user-password'] = $userData['password'];
+        $_SESSION['email'] = $userData['email'];
+        $_SESSION['password'] = $userData['password'];
     }
 
     public function registerAccount(array $userData) {
@@ -225,11 +287,17 @@ class User extends Main {
         echo $twig->render('connection_panels/token-signing.html.twig', [
             'stylePaths' => $this->_getConnectionPagesStyles(),
             'frenchTitle' => 'réinitialisation de mot de passe',
-            'appSection' => 'connectionPanels'
+            'appSection' => 'connectionPanels',
+            'remainingAttempts' => $this->_getTokenSigningRemainingAttempts(),
+            'pageScripts' => $this->_getPageScripts('tokenSigning')
         ]);
     }
 
-    public function storeToken(string $token, string $email) {
+    public function storeEmail(string $email) {
+        $_SESSION['email'] = $email;
+    }
+
+    public function registerToken(string $token, string $email) {
         $user = new UserModel;
 
         return $user->insertToken(
@@ -258,5 +326,15 @@ class User extends Main {
 
     private function _getPasswordRegex() {
         return $this->_passwordRegex;
+    }
+
+    private function _getTokenSigningRemainingAttempts() {
+        $user = new UserModel;
+
+        return $user->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
+    }
+
+    private function _getTokenGeneratorTimeOut() {
+        return $this->_tokenGeneratorTimeOut;
     }
 }

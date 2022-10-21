@@ -45,7 +45,7 @@ class Progress extends UserPanels {
         $progress = new ProgressModel;
         $reportDate = $progressHistory[$reportId - 1]['date'];
 
-        return $progress->deleteReport($reportDate, $_SESSION['user-email']);
+        return $progress->deleteReport($reportDate, $_SESSION['email']);
     }
 
     public function getBaseFormData(): array {
@@ -85,7 +85,7 @@ class Progress extends UserPanels {
     public function getHistory(): array {
         $progress = new ProgressModel;
 
-        return $progress->selectReports($_SESSION['user-email']);
+        return $progress->selectReports($_SESSION['email']);
     }
 
     public function getReportId(): int {
@@ -121,7 +121,7 @@ class Progress extends UserPanels {
         $userWeight = $formatedFormData['formatedUserWeight'];
         $reportDate = $formatedFormData['formatedDate'];
 
-        return $progress->insertReport($_SESSION['user-email'], $userWeight, $reportDate);
+        return $progress->insertReport($_SESSION['email'], $userWeight, $reportDate);
     }
 
     public function renderProgress(object $twig) {

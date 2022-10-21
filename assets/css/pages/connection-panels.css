@@ -206,16 +206,7 @@ input[type=submit] {
 /*        TOKEN FORM        */
 /****************************/
 
-.token-input-container {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-top: 3vh;
+#token-signing-form p {
+    margin: 2vh 10% 2vh 10%;
     color: white;
-}
-
-#user-token {
-    margin: 1.5vh 0 3vh 0;
 }

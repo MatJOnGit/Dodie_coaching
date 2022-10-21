@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+use Dodie_Coaching\Services\Mailer;
+
 session_start();
 
 // session_destroy();
@@ -9,6 +12,7 @@ session_start();
 class DB_Exception extends Exception { }
 class URL_Exception extends Exception { }
 class Data_Exception extends Exception { }
+class Mailer_Exception extends Exception { }
 
 try {
     require_once ('./../vendor/autoload.php');
@@ -211,7 +215,9 @@ try {
         if (in_array($action, $Urls['actions']['connection'])) {
 
             if (!$user->isLogged()) {
-                if ($user->isPasswordProvided() && $user->isEmailProvided()) {
+                $email = $user->getEmail();
+
+                if ($user->isPasswordProvided() && $user->isEmailSet()) {
                     $userData = $user->getLoginFormData();
 
                     if ($user->isLoginActionRequested($action)) {
@@ -271,28 +277,56 @@ try {
                     }
                 }
                 
-                else if ($user->isEmailProvided() && $user->isSendTokenActionRequested($action)) {
-                    $token = $user->generateToken();
-                    $email = $user->getEmail();
+                else if ($user->isSendTokenActionRequested($action)) {
+                    if ($user->isEmailValid($email)) {
+                        
+                        if ($user->isEmailExisting($email)) {
+                            $token = $user->getTokenDate($email);
 
-                    if ($user->storeToken($token, $email)) {
-                        $mailer = new Dodie_Coaching\Services\Mailer;
+                            if ($token) {
+                                if ($user->isLastTokenOld($token)) {
+                                    if ($user->eraseToken($email)) {
+                                        $user->routeTo('send-token');
+                                    }
 
-                        if ($mailer->sendToken($token, $email)) {
-                            $user->routeTo('mail-notification');
-                        }
+                                    else {
+                                        throw new DB_Exception('FAILED TO DELETE LAST TOKEN');
+                                        // $user->routeTo('pwd-retrieving');
+                                    }
+                                }
 
-                        else {
-                            $user->routeTo('pwd-retrieving');
+                                else {
+                                    $user->routeTo('mail-notification');
+                                }
+                            }
+
+                            else {
+                                $newToken = $user->generateToken();
+                                        
+                                if ($user->registerToken($newToken, $email)) {
+                                    $mailer = new \Dodie_Coaching\Services\Mailer;
+
+                                    if (!$mailer->sendToken($newToken, $email)) {
+                                        throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
+                                    }
+                                    
+                                    $user->routeTo('mail-notification');
+                                }
+
+                                else {
+                                    throw new DB_Exception('FAILED TO INSERT A NEW TOKEN');
+                                }
+                            }
                         }
                     }
 
                     else {
-                        throw new DB_Exception('TOKEN ADDING FAILED');
-                        // $user->routeTo('login');
+                        throw new Data_Exception('INVALID EMAIL');
+                        // $user->destroySessionData();
+                        // $user->routeTo('pwd-retrieving');
                     }
+                    
                 }
-                
             }
 
             else {
@@ -440,6 +474,10 @@ try {
     else {
         header("location:index.php?page=presentation");
     }
+}
+
+catch(Mailer_Exception $e) {
+    echo "New MAILER exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
 }
 
 catch(DB_Exception $e) {

@@ -29,13 +29,13 @@ class Meetings extends UserPanels {
     public function cancelAppointment(): bool {
         $dashboard = new MeetingsModel;
 
-        return $dashboard->updateBookedMeeting($_SESSION['user-email']);
+        return $dashboard->updateBookedMeeting($_SESSION['email']);
     }
 
     public function bookAppointment(string $meetingDate): bool {
         $dashboard = new MeetingsModel;
 
-        return $dashboard->updateAvailableMeeting($_SESSION['user-email'], $meetingDate);
+        return $dashboard->updateAvailableMeeting($_SESSION['email'], $meetingDate);
     }
 
     public function getDateData(): array {
@@ -125,7 +125,7 @@ class Meetings extends UserPanels {
     private function _getBookedMeetingDate() {
         $dashboard = new MeetingsModel;
 
-        $userScheduledMeeting = $dashboard->selectScheduledMeeting($_SESSION['user-email']);
+        $userScheduledMeeting = $dashboard->selectScheduledMeeting($_SESSION['email']);
 
         return (!empty($userScheduledMeeting) ? $userScheduledMeeting[0] : NULL);
     }

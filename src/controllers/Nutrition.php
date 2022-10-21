@@ -131,7 +131,7 @@ class Nutrition extends UserPanels {
     private function _getMealDetails(array $mealData) {
         $nutrition = new NutritionModel;
 
-        return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['user-email']);
+        return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['email']);
     }
 
     private function _getMeals(): array {
@@ -160,7 +160,7 @@ class Nutrition extends UserPanels {
 
     private function _getProgramsFilePath() {
         $nutrition = new NutritionModel;
-        $fileName = $nutrition->selectFileName($_SESSION['user-email']);
+        $fileName = $nutrition->selectFileName($_SESSION['email']);
 
         return $fileName[0] ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
     }
@@ -172,7 +172,7 @@ class Nutrition extends UserPanels {
     private function _getShoppingList() {
         $nutrition = new NutritionModel;
 
-        return $nutrition->selectMealsIngredients($_SESSION['user-email']);
+        return $nutrition->selectMealsIngredients($_SESSION['email']);
     }
 
     private function _getTranslatedMealData(array $mealData): array {

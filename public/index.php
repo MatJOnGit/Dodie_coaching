@@ -290,7 +290,7 @@ try {
             }
 
             else if ($user->isSendTokenActionRequested($action) && !$user->isLogged()) {
-                if ($user->isDataPosted('email')) {
+                if ($user->areDataPosted(['email'])) {
                     $userData = $user->getFormData(['email']);
 
                     if ($user->areFormDataValid($userData)) {

@@ -52,7 +52,7 @@ class User extends Main {
 
     private $_tokenRegex = '/^[A-Z0-9]{6}$/';
 
-    private $_tokenGeneratorTimeOut = 3600; // 3600s (1 hour time out)
+    private $_tokenGeneratorTimeOut = 3600;
 
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
@@ -71,6 +71,33 @@ class User extends Main {
         $staticData = $user->selectStaticData($_SESSION['email']);
 
         return (!in_array(NULL, $staticData));
+    }
+
+    public function areDataPosted(array $postedData) {
+        $areDataPosted = true;
+
+        foreach($postedData as $postedDataItem) {
+            if (!isset($_POST["user-$postedDataItem"])) {
+                $areDataPosted = false;
+            }
+        }
+        
+        return $areDataPosted;
+    }
+
+    public function areFormDataValid(array $userData) {
+        $areFormDataValid = true;
+
+        forEach ($userData as $userDataItemKey => $userDataItemValue) {
+            if (($userDataItemKey === 'email' && !preg_match($this->_getEmailRegex(), $userData['email']))
+            || ($userDataItemKey === 'password' && !preg_match($this->_getPasswordRegex(), $userData['password']))
+            || ($userDataItemKey === 'confirmation-password' && $userData['password'] !== $userData['confirmation-password'])
+            || ($userDataItemKey === 'token' && !preg_match($this->_getTokenRegex(), $userData['token']))) {
+                $areFormDataValid = false;
+            }
+        }
+
+        return $areFormDataValid;
     }
 
     public function createStaticData(array $userData) {
@@ -93,48 +120,6 @@ class User extends Main {
         return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
     }
 
-    public function getEmail(): string {
-        $email = '';
-
-        if (isset($_SESSION['email'])) {
-            $email = $_SESSION['email'];
-        }
-
-        else if (isset($_POST['user-email'])) {
-            $_SESSION['email'] = htmlspecialchars($_POST['user-email']);
-            $email = $_SESSION['email'];
-        }
-
-        return $email;
-    }
-
-    public function isTokenExisting(string $email) {
-        $user = new UserModel;
-
-        return $user->selectToken($email);
-    }
-
-    public function isDataSessionized(string $data) {
-        return isset($_SESSION[$data]);
-    }
-
-    public function getToken() {
-        return strtoupper(htmlspecialchars($_POST['token']));
-    }
-
-    public function isTokenValid(string $token): bool {
-        return preg_match($this->_getTokenRegex(), $token);
-    }
-
-    public function isTokenMatching() {
-        $user = new UserModel;
-
-        $correctToken = $user->selectToken($_SESSION['email']);
-        $postedToken = htmlspecialchars($_POST['user-token']);
-
-        return password_verify($postedToken, $correctToken['token']);
-    }
-
     public function getFormData(array $formFields): array {
         $userData = [];
         
@@ -145,49 +130,18 @@ class User extends Main {
         return $userData;
     }
 
-    public function areFormDataValid(array $userData) {
-        $areFormDataValid = true;
-
-        forEach ($userData as $userDataItemKey => $userDataItemValue) {
-            if (($userDataItemKey === 'email' && !preg_match($this->_getEmailRegex(), $userData['email']))
-            || ($userDataItemKey === 'password' && !preg_match($this->_getPasswordRegex(), $userData['password']))
-            || ($userDataItemKey === 'confirmation-password' && $userData['password'] !== $userData['confirmation-password'])
-            || ($userDataItemKey === 'token' && !preg_match($this->_getTokenRegex(), $userData['token']))) {
-                $areFormDataValid = false;
-            }
-        }
-
-        return $areFormDataValid;
-    }
-
-    public function subtractTokenAttempt() {
-        $user = new UserModel;
-
-        return $user->updateRemainingAttempts($_SESSION['email']);
-    }
-
-    public function unsessionizeData(array $sessionData) {
-        forEach ($sessionData as $sessionDataItem) {
-            unset($_SESSION[$sessionDataItem]);
-        }
-    }
-
-    public function sessionize(array $userData, array $formData) {
-        foreach($formData as $formDataItem) {
-            $_SESSION[$formDataItem] = $userData[$formDataItem];
-        }
-    }
-
     public function getRequestedAction(): string {
         return htmlspecialchars($_GET['action']);
     }
 
-    public function getRegistrationFormAdditionalData(array $userData): array {
-        $userData += [
-            'confirmationPassword' => htmlspecialchars($_POST['user-confirmation-password'])
-        ];
+    public function getToken() {
+        return strtoupper(htmlspecialchars($_POST['token']));
+    }
 
-        return $userData;
+    public function getTokenDate(string $email) {
+        $user = new UserModel;
+
+        return $user->selectTokenDate($email);
     }
 
     public function isAccountExisting(array $userData): bool {
@@ -203,30 +157,14 @@ class User extends Main {
         return $isAccountExisting;
     }
 
+    public function isDataSessionized(string $data) {
+        return isset($_SESSION[$data]);
+    }
+
     public function isEmailExisting(string $email) {
         $user = new UserModel;
 
         return $user->selectEmail($email);
-    }
-
-    public function isEmailSet(): bool {
-        return isset($_SESSION['email']);
-    }
-
-    public function isTokenSigningRequested(string $page): bool {
-        return $page === 'token-signing';
-    }
-
-    public function isPasswordRetrievingRequested(string $page): bool {
-        return $page === 'password-retrieving';
-    }
-
-    public function isRetrievedPasswordRequested(string $page): bool {
-        return $page === 'retrieved-password';
-    }
-
-    public function isPasswordEditingRequested(string $page): bool {
-        return $page === 'password-editing';
     }
 
     public function isLastTokenOld(array $token) {
@@ -244,30 +182,12 @@ class User extends Main {
         return $isLastTokenOld;
     }
 
-    public function areLastTokenAttemptsNull(array $tokenData) {
-        return (int)$tokenData['remaining_atpt'] < 1;
-    }
-
-    public function getTokenDate(string $email) {
-        $user = new UserModel;
-
-        return $user->selectTokenDate($email);
-    }
-
-    public function isEmailValid(string $email): bool {
-        return preg_match($this->_getEmailRegex(), $email);
+    public function isLogged(): bool {
+        return isset($_SESSION['email']) && isset($_SESSION['password']);
     }
 
     public function isLoginActionRequested(string $page): bool {
         return $page === 'log-account';
-    }
-
-    public function isLogoutActionRequested(string $action): bool {
-        return $action === 'logout';
-    }
-
-    public function isLogged(): bool {
-        return isset($_SESSION['email']) && isset($_SESSION['password']);
     }
 
     public function isLoginFormValid(array $userData): bool {
@@ -277,24 +197,75 @@ class User extends Main {
         );
     }
 
-    public function isVerifyTokenActionRequested(string $action): bool {
-        return $action === 'verify-token';
-    }
-
-    public function isRegisterPasswordRequested(string $action): bool {
-        return $action === 'register-password';
-    }
-    
     public function isLoginPageRequested(string $page): bool {
         return $page === 'login';
+    }
+
+    public function isLogoutActionRequested(string $action): bool {
+        return $action === 'logout';
     }
 
     public function isMailNotificationPageRequested(string $page): bool {
         return $page === 'mail-notification';
     }
 
-    public function isDataPosted(string $data) {
-        return isset($_POST["user-$data"]);
+    public function isPasswordEditingPageRequested(string $page): bool {
+        return $page === 'password-editing';
+    }
+
+    public function isPasswordRetrievingPageRequested(string $page): bool {
+        return $page === 'password-retrieving';
+    }
+
+    public function isRegisterActionRequested(string $action): bool {
+        return $action === 'register-account';
+    }
+
+    public function isRegisteringPageRequested(string $page): bool {
+        return $page === 'registering';
+    }
+
+    public function isRegisterPasswordActionRequested(string $action): bool {
+        return $action === 'register-password';
+    }
+
+    public function isRetrievedPasswordPageRequested(string $page): bool {
+        return $page === 'retrieved-password';
+    }
+
+    public function isSendTokenActionRequested(string $action): bool {
+        return $action === 'send-token';
+    }
+
+    public function isTokenMatching() {
+        $user = new UserModel;
+
+        $correctToken = $user->selectToken($_SESSION['email']);
+        $postedToken = htmlspecialchars($_POST['user-token']);
+
+        return password_verify($postedToken, $correctToken['token']);
+    }
+
+    public function isTokenSigningPageRequested(string $page): bool {
+        return $page === 'token-signing';
+    }
+
+    public function isVerifyTokenActionRequested(string $action): bool {
+        return $action === 'verify-token';
+    }
+
+    public function logUser(array $userData) {
+        $_SESSION['email'] = $userData['email'];
+        $_SESSION['password'] = $userData['password'];
+    }
+    
+    public function registerAccount(array $userData) {
+        $user = new UserModel;
+
+        return $user->insertAccount(
+            $userData['email'],
+            password_hash($userData['password'], PASSWORD_DEFAULT)
+        );
     }
 
     public function registerPassword(array $userData) {
@@ -306,38 +277,12 @@ class User extends Main {
         );
     }
 
-    public function isRegisteringActionRequested(string $action): bool {
-        return $action === 'register-account';
-    }
-
-    public function isRegisteringFormValid(array $userData): bool {
-        return (
-            preg_match($this->_getEmailRegex(), $userData['email']) &&
-            preg_match($this->_getPasswordRegex(), $userData['password']) &&
-            preg_match($this->_getPasswordRegex(), $userData['confirmationPassword']) &&
-            $userData['password'] === $userData['confirmationPassword']
-        );
-    }
-
-    public function isRegisteringPageRequested(string $page): bool {
-        return $page === 'registering';
-    }
-
-    public function isSendTokenActionRequested(string $action): bool {
-        return $action === 'send-token';
-    }
-
-    public function logUser(array $userData) {
-        $_SESSION['email'] = $userData['email'];
-        $_SESSION['password'] = $userData['password'];
-    }
-
-    public function registerAccount(array $userData) {
+    public function registerToken(string $token) {
         $user = new UserModel;
 
-        return $user->insertAccount(
-            $userData['email'],
-            password_hash($userData['password'], PASSWORD_DEFAULT)
+        return $user->insertToken(
+            password_hash($token, PASSWORD_DEFAULT),
+            $_SESSION['email']
         );
     }
 
@@ -350,17 +295,6 @@ class User extends Main {
         ]);
     }
 
-    public function renderPasswordEditingPage(object $twig) {
-        // $_SESSION['token'] = '2KKCKO';
-        // $_SESSION['email'] = 'ma.jourdan@hotmail.fr';
-        echo $twig->render('connection_panels/password-edition.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
-            'frenchTitle' => 'Edition de votre mot de passe',
-            'appSection' => 'connectionPanels',
-            'pageScripts' => $this->_getPageScripts('pwdEditing')
-        ]);
-    }
-
     public function renderMailNotificationPage(object $twig) {
         echo $twig->render('connection_panels/mail-notification.html.twig', [
             'stylePaths' => $this->_getConnectionPagesStyles(),
@@ -369,11 +303,12 @@ class User extends Main {
         ]);
     }
 
-    public function renderRetrievedPasswordPage(object $twig) {
-        echo $twig->render('connection_panels/retrieved-password.html.twig', [
+    public function renderPasswordEditingPage(object $twig) {
+        echo $twig->render('connection_panels/password-edition.html.twig', [
             'stylePaths' => $this->_getConnectionPagesStyles(),
-            'frenchTitle' => "Mot de passe modifié",
-            'passSection' => 'connectionPanels'
+            'frenchTitle' => 'Edition de votre mot de passe',
+            'appSection' => 'connectionPanels',
+            'pageScripts' => $this->_getPageScripts('pwdEditing')
         ]);
     }
 
@@ -395,6 +330,14 @@ class User extends Main {
         ]);
     }
 
+    public function renderRetrievedPasswordPage(object $twig) {
+        echo $twig->render('connection_panels/retrieved-password.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'frenchTitle' => "Mot de passe modifié",
+            'passSection' => 'connectionPanels'
+        ]);
+    }
+
     public function renderTokenSigningPage(object $twig) {
         echo $twig->render('connection_panels/token-signing.html.twig', [
             'stylePaths' => $this->_getConnectionPagesStyles(),
@@ -405,17 +348,22 @@ class User extends Main {
         ]);
     }
 
-    public function storeEmail(string $email) {
-        $_SESSION['email'] = $email;
+    public function sessionize(array $userData, array $formData) {
+        foreach($formData as $formDataItem) {
+            $_SESSION[$formDataItem] = $userData[$formDataItem];
+        }
     }
 
-    public function registerToken(string $token) {
+    public function subtractTokenAttempt() {
         $user = new UserModel;
 
-        return $user->insertToken(
-            password_hash($token, PASSWORD_DEFAULT),
-            $_SESSION['email']
-        );
+        return $user->updateRemainingAttempts($_SESSION['email']);
+    }
+
+    public function unsessionizeData(array $sessionData) {
+        forEach ($sessionData as $sessionDataItem) {
+            unset($_SESSION[$sessionDataItem]);
+        }
     }
 
     public function updateLoginData(array $userData): bool {
@@ -440,17 +388,17 @@ class User extends Main {
         return $this->_passwordRegex;
     }
 
-    private function _getTokenSigningRemainingAttempts() {
-        $user = new UserModel;
-
-        return $user->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
-    }
-
     private function _getTokenGeneratorTimeOut() {
         return $this->_tokenGeneratorTimeOut;
     }
 
     public function _getTokenRegex() {
         return $this->_tokenRegex;
+    }
+
+    private function _getTokenSigningRemainingAttempts() {
+        $user = new UserModel;
+
+        return $user->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
     }
 }

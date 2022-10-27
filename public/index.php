@@ -105,21 +105,21 @@ try {
                     $user->renderMailNotificationPage($twig);
                 }
 
-                elseif ($user->isTokenSigningRequested($page)) {
+                elseif ($user->isTokenSigningPageRequested($page)) {
                     $user->renderTokenSigningPage($twig);
                 }
 
-                elseif ($user->isPasswordRetrievingRequested($page)) {
+                elseif ($user->isPasswordRetrievingPageRequested($page)) {
                     $user->renderPasswordRetrievingPage($twig);
                 }
 
-                elseif ($user->isPasswordEditingRequested($page)) {
+                elseif ($user->isPasswordEditingPageRequested($page)) {
                     $user->renderPasswordEditingPage($twig);
                 }
             }
 
             else {
-                if ($user->isRetrievedPasswordRequested($page)) {
+                if ($user->isRetrievedPasswordPageRequested($page)) {
                     $user->renderRetrievedPasswordPage($twig);
                 }
 
@@ -225,7 +225,7 @@ try {
         if (in_array($action, $Urls['actions']['connection'])) {
 
             if ($user->isLoginActionRequested($action) && !$user->isLogged()) {
-                if ($user->isDataPosted('email') && $user->isDataPosted('password')) {
+                if ($user->areDataPosted(['email', 'password'])) {
                     $userData = $user->getFormData(['email', 'password']);
 
                     if ($user->areFormDataValid($userData)) {
@@ -256,8 +256,8 @@ try {
                 }
             }
 
-            elseif ($user->isRegisteringActionRequested($action) && !$user->isLogged()) {
-                if ($user->isDataPosted('email') && $user->isDataPosted('password') && $user->isDataPosted('confirmation-password')) {
+            elseif ($user->isRegisterActionRequested($action) && !$user->isLogged()) {
+                if ($user->areDataPosted(['email', 'password', 'confirmation-password'])) {
                     $userData = $user->getFormData(['email', 'password', 'confirmation-password']);
 
                     if ($user->areFormDataValid($userData)) {
@@ -300,7 +300,7 @@ try {
                             if ($token) {
                                 if ($user->isLastTokenOld($token)) {
                                     if ($user->eraseToken($userData['email'])) {
-                                        $user->sessionize($userData, ['email']);
+                                        $user->logUser($userData);
                                         $user->routeTo('send-token');
                                     }
                                     
@@ -357,7 +357,7 @@ try {
             }
 
             else if ($user->isVerifyTokenActionRequested($action) && !$user->isLogged()) {
-                if ($user->isDataSessionized('email') && $user->isDataPosted('token')) {
+                if ($user->isDataSessionized('email') && $user->areDataPosted(['token'])) {
                     $userData = $user->getFormData(['token']);
 
                     if ($user->areFormDataValid(['token'])) {
@@ -386,8 +386,8 @@ try {
                 }
             }
 
-            else if ($user->isRegisterPasswordRequested($action) && !$user->isLogged()) {
-                if ($user->isDataPosted('password') && $user->isDataPosted('confirmation-password')) {
+            else if ($user->isRegisterPasswordActionRequested($action) && !$user->isLogged()) {
+                if ($user->areDataPosted(['password', 'confirmation-password'])) {
                     $userData = $user->getFormData(['password', 'confirmation-password']);
 
                     if ($user->areFormDataValid($userData)) {

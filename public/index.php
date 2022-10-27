@@ -29,11 +29,11 @@ try {
     $Urls = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
-            'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing'],
+            'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
-            'connection' => ['log-account', 'register-account', 'log-out', 'send-token'],
+            'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment']
         ]
@@ -109,13 +109,23 @@ try {
                     $user->renderTokenSigningPage($twig);
                 }
 
-                else {
+                elseif ($user->isPasswordRetrievingRequested($page)) {
                     $user->renderPasswordRetrievingPage($twig);
+                }
+
+                elseif ($user->isPasswordEditingRequested($page)) {
+                    $user->renderPasswordEditingPage($twig);
                 }
             }
 
             else {
-                $user->routeTo('dashboard');
+                if ($user->isRetrievedPasswordRequested($page)) {
+                    $user->renderRetrievedPasswordPage($twig);
+                }
+
+                else {
+                    $user->routeTo('dashboard');
+                }
             }
         }
 
@@ -214,127 +224,203 @@ try {
         
         if (in_array($action, $Urls['actions']['connection'])) {
 
-            if (!$user->isLogged()) {
-                $email = $user->getEmail();
+            if ($user->isLoginActionRequested($action) && !$user->isLogged()) {
+                if ($user->isDataPosted('email') && $user->isDataPosted('password')) {
+                    $userData = $user->getFormData(['email', 'password']);
 
-                if ($user->isPasswordProvided() && $user->isEmailSet()) {
-                    $userData = $user->getLoginFormData();
-
-                    if ($user->isLoginActionRequested($action)) {
-                        if ($user->isLoginFormValid($userData)) {
-                            if ($user->isAccountExisting($userData)) {
-                                if ($user->updateLoginData($userData)) {
-                                    $user->logUser($userData);
-                                    $user->routeTo('dashboard');
-                                }
-    
-                                else {
-                                    throw new DB_Exception('LOGGING FAILED');
-                                    // $user->routeTo('login');
-                                }
+                    if ($user->areFormDataValid($userData)) {
+                        if ($user->isAccountExisting($userData)) {
+                            if ($user->updateLoginData($userData)) {
+                                $user->logUser($userData);
+                                $user->routeTo('dashboard');
                             }
-        
+
                             else {
-                                $user->destroySessionData();
-                                $user->routeTo('login');
+                                throw new DB_Exception('FAILED TO UPDATE LOGGING DATE');
+                                // $user->routeTo('login');
                             }
                         }
-        
+                        
                         else {
-                            $user->destroySessionData();
                             $user->routeTo('login');
                         }
                     }
 
-                    elseif ($user->isRegisteringActionRequested($action)) {
-                        $userData = $user->getRegistrationFormAdditionalData($userData);
-    
-                        if ($user->isRegisteringFormValid($userData)) {
-                            if (!$user->isAccountExisting($userData)) {
-                                $isUserRegistered = $user->registerAccount($userData);
-        
-                                if ($isUserRegistered) {
-                                    $user->createStaticData($userData);
-                                    $user->logUser($userData);
-                                    $user->routeTo('dashboard');
-                                }
-        
-                                else {
-                                    throw new DB_Exception('REGISTERING FAILED');
-                                    // $user->routeTo('registering');
-                                }
-                            }
-        
-                            else {
-                                $user->routeTo('registering');
-                            }
-                        }
-        
-                        else {
-                            $user->destroySessionData();
-                            $user->routeTo('registering');
-                        }
+                    else {
+                        throw new Data_Exception('INVALID EMAIL AND/OR PASSWORD PARAMETERS');
                     }
                 }
-                
-                else if ($user->isSendTokenActionRequested($action)) {
-                    if ($user->isEmailValid($email)) {
-                        
-                        if ($user->isEmailExisting($email)) {
-                            $token = $user->getTokenDate($email);
 
-                            if ($token) {
-                                if ($user->isLastTokenOld($token)) {
-                                    if ($user->eraseToken($email)) {
-                                        $user->routeTo('send-token');
-                                    }
+                else {
+                    throw new Data_Exception('MISSING EMAIL AND/OR PASSWORD PARAMETERS');
+                }
+            }
 
-                                    else {
-                                        throw new DB_Exception('FAILED TO DELETE LAST TOKEN');
-                                        // $user->routeTo('pwd-retrieving');
-                                    }
-                                }
+            elseif ($user->isRegisteringActionRequested($action) && !$user->isLogged()) {
+                if ($user->isDataPosted('email') && $user->isDataPosted('password') && $user->isDataPosted('confirmation-password')) {
+                    $userData = $user->getFormData(['email', 'password', 'confirmation-password']);
 
-                                else {
-                                    $user->routeTo('mail-notification');
-                                }
+                    if ($user->areFormDataValid($userData)) {
+                        if (!$user->isEmailExisting($userData['email'])) {            
+                            if ($user->registerAccount($userData)) {
+                                $user->createStaticData($userData);
+                                $user->logUser($userData);
+                                $user->routeTo('dashboard');
                             }
-
+    
                             else {
-                                $newToken = $user->generateToken();
-                                        
-                                if ($user->registerToken($newToken, $email)) {
-                                    $mailer = new \Dodie_Coaching\Services\Mailer;
-
-                                    if (!$mailer->sendToken($newToken, $email)) {
-                                        throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
-                                    }
-                                    
-                                    $user->routeTo('mail-notification');
-                                }
-
-                                else {
-                                    throw new DB_Exception('FAILED TO INSERT A NEW TOKEN');
-                                }
+                                throw new DB_Exception('FAILED TO REGISTER ACCOUNT');
+                                // $user->routeTo('registering');
                             }
+                        }
+
+                        else {
+                            $user->routeTo('registering');
                         }
                     }
 
                     else {
-                        throw new Data_Exception('INVALID EMAIL');
-                        // $user->destroySessionData();
-                        // $user->routeTo('pwd-retrieving');
+                        throw new Data_Exception('INVALID EMAIL AND/OR PASSWORD PARAMETERS');
                     }
-                    
+                }
+
+                else {
+                    throw new Data_Exception('MISSING EMAIL AND/OR PASSWORD AND OR CONFIRMATION-PASSWORD PARAMETERS');
                 }
             }
 
-            else {
-                if ($user->isLogoutActionRequested($action)) {
-                    $user->destroySessionData();
-                    $user->routeTo('presentation');
+            else if ($user->isSendTokenActionRequested($action) && !$user->isLogged()) {
+                if ($user->isDataPosted('email')) {
+                    $userData = $user->getFormData(['email']);
+
+                    if ($user->areFormDataValid($userData)) {
+                        if ($user->isEmailExisting($userData['email'])) {
+                            $token = $user->getTokenDate($userData['email']);
+
+                            if ($token) {
+                                if ($user->isLastTokenOld($token)) {
+                                    if ($user->eraseToken($userData['email'])) {
+                                        $user->sessionize($userData, ['email']);
+                                        $user->routeTo('send-token');
+                                    }
+                                    
+                                    else {
+                                        throw new DB_Exception('FAILED TO DELETE PREVIOUS TOKEN');
+                                        // $user->routeTo('mail-notification');
+                                    }
+                                }
+
+                                else {
+                                    $user->routeTo('mail-notification');
+                                }
+                            }
+
+                            else {
+                                $user->sessionize($userData, ['email']);
+                                $user->routeTo('send-token');
+                            }
+                        }
+                        
+                        else {
+                            $user->routeTo('mail-notification');
+                        }
+                    }
+
+                    else {
+                        throw new Data_Exception('INVALID FORM DATA');
+                    }
                 }
-            } 
+
+                else if ($user->isDataSessionized('email')) {
+                    $newToken = $user->generateToken();
+
+                    if ($user->registerToken($newToken)) {
+                        $mailer = new \Dodie_Coaching\Services\Mailer;
+            
+                        if ($mailer->sendToken($newToken)) {
+                            $user->routeTo('mail-notification');
+                        }
+
+                        else {
+                            throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
+                        }
+                    }
+            
+                    else {
+                        throw new DB_Exception('FAILED TO INSERT A NEW TOKEN');
+                    }
+                }
+                
+                else {
+                    throw new Data_Exception('MISSING EMAIL PARAMETER');
+                }
+            }
+
+            else if ($user->isVerifyTokenActionRequested($action) && !$user->isLogged()) {
+                if ($user->isDataSessionized('email') && $user->isDataPosted('token')) {
+                    $userData = $user->getFormData(['token']);
+
+                    if ($user->areFormDataValid(['token'])) {
+                        if ($user->isTokenMatching()) {
+                            $user->sessionize($userData, ['token']);
+                            $user->routeTo('edit-password');
+                        }
+
+                        else {
+                            if (!$user->subtractTokenAttempt()) {
+                                throw new DB_Exception('FAILED TO SUBTRACT A TOKEN ATTEMPT');                                
+                            }
+
+                            $user->routeTo('token-signing');
+                        }
+                    }
+
+                    else {
+                        throw new Data_Exception('INVALID TOKEN DATA IN FORM');
+                    }
+
+                }
+
+                else {
+                    throw new Data_Exception('MISSING EMAIL IN SESSION AND/OR TOKEN IN POST');
+                }
+            }
+
+            else if ($user->isRegisterPasswordRequested($action) && !$user->isLogged()) {
+                if ($user->isDataPosted('password') && $user->isDataPosted('confirmation-password')) {
+                    $userData = $user->getFormData(['password', 'confirmation-password']);
+
+                    if ($user->areFormDataValid($userData)) {
+                        if ($user->registerPassword($userData)) {
+                            if ($user->eraseToken($_SESSION['email'])) {
+                                $user->unsessionizeData(['token']);
+                                $user->sessionize($userData, ['password']);
+                                $user->routeTo('retrieved-password');
+                            }
+
+                            else {
+                                throw new DB_Exception('FAILED TO REMOVE TOKEN');
+                            }
+                        }
+                        
+                        else {
+                            throw new DB_Exception('FAILED TO REGISTER NEW PASSWORD');
+                        }
+                    }
+
+                    else {
+                        throw new Data_Exception('INVALID PASSWORD AND/OR CONFIRMATION PASSWORD PARAMETERS');
+                    }
+                }
+                else {
+                    throw new Data_Exception('MISSING PASSWORD AND/OR CONFIRMATION PASSWORD DATA');
+                }
+            }
+
+            else if ($user->isLogoutActionRequested($action) && $user->isLogged()) {
+                $user->destroySessionData();
+                $user->routeTo('login');
+            }
         }
 
         elseif (in_array($action, $Urls['actions']['progress'])) {

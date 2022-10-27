@@ -37,12 +37,20 @@ class User extends Main {
             'classes/ConnectionHelper.model',
             'classes/TokenSigningHelper.model',
             'tokenSigningHelper'
+        ],
+        'pwdEditing' => [
+            'classes/UserPanels.model',
+            'classes/ConnectionHelper.model',
+            'classes/PasswordEditingHelper.model',
+            'passwordEditingHelper'
         ]
     ];
     
     private $_emailRegex = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     
     private $_passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
+
+    private $_tokenRegex = '/^[A-Z0-9]{6}$/';
 
     private $_tokenGeneratorTimeOut = 3600; // 3600s (1 hour time out)
 
@@ -51,10 +59,11 @@ class User extends Main {
         'login' => 'index.php?page=login',
         'presentation' => 'index.php?page=presentation',
         'registering' => 'index.php?page=registering',
-        'pwd-retrieving' => 'index.php?page=password-retrieving',
         'mail-notification' => 'index.php?page=mail-notification',
+        'edit-password' => 'index.php?page=password-editing',
+        'retrieved-password' => 'index.php?page=retrieved-password',
         'send-token' => 'index.php?action=send-token',
-        'token-signing' => 'index.php?page=token-signing'
+        'token-signing' => 'index.php?page=token-signing',
     ];
 
     public function areDataCompleted(): bool {
@@ -99,13 +108,74 @@ class User extends Main {
         return $email;
     }
 
-    public function getLoginFormData(): array {
-        $userData = [
-            'email' => htmlspecialchars($_POST['user-email']),
-            'password' => htmlspecialchars($_POST['user-password'])
-        ];
+    public function isTokenExisting(string $email) {
+        $user = new UserModel;
 
+        return $user->selectToken($email);
+    }
+
+    public function isDataSessionized(string $data) {
+        return isset($_SESSION[$data]);
+    }
+
+    public function getToken() {
+        return strtoupper(htmlspecialchars($_POST['token']));
+    }
+
+    public function isTokenValid(string $token): bool {
+        return preg_match($this->_getTokenRegex(), $token);
+    }
+
+    public function isTokenMatching() {
+        $user = new UserModel;
+
+        $correctToken = $user->selectToken($_SESSION['email']);
+        $postedToken = htmlspecialchars($_POST['user-token']);
+
+        return password_verify($postedToken, $correctToken['token']);
+    }
+
+    public function getFormData(array $formFields): array {
+        $userData = [];
+        
+        forEach ($formFields as $formField) {
+            $userData += [$formField => htmlspecialchars($_POST['user-' . $formField])];
+        }
+        
         return $userData;
+    }
+
+    public function areFormDataValid(array $userData) {
+        $areFormDataValid = true;
+
+        forEach ($userData as $userDataItemKey => $userDataItemValue) {
+            if (($userDataItemKey === 'email' && !preg_match($this->_getEmailRegex(), $userData['email']))
+            || ($userDataItemKey === 'password' && !preg_match($this->_getPasswordRegex(), $userData['password']))
+            || ($userDataItemKey === 'confirmation-password' && $userData['password'] !== $userData['confirmation-password'])
+            || ($userDataItemKey === 'token' && !preg_match($this->_getTokenRegex(), $userData['token']))) {
+                $areFormDataValid = false;
+            }
+        }
+
+        return $areFormDataValid;
+    }
+
+    public function subtractTokenAttempt() {
+        $user = new UserModel;
+
+        return $user->updateRemainingAttempts($_SESSION['email']);
+    }
+
+    public function unsessionizeData(array $sessionData) {
+        forEach ($sessionData as $sessionDataItem) {
+            unset($_SESSION[$sessionDataItem]);
+        }
+    }
+
+    public function sessionize(array $userData, array $formData) {
+        foreach($formData as $formDataItem) {
+            $_SESSION[$formDataItem] = $userData[$formDataItem];
+        }
     }
 
     public function getRequestedAction(): string {
@@ -123,17 +193,11 @@ class User extends Main {
     public function isAccountExisting(array $userData): bool {
         $user = new UserModel;
 
-        $userRegisteredPassword = $user->selectPassword($userData['email']);
+        $accountPassword = $user->selectAccountPassword($userData['email']);
+        $isAccountExisting = false;
 
-        if ($userRegisteredPassword) {
-            $isPasswordMatching = password_verify($userData['password'], $userRegisteredPassword[0]);
-            $isPasswordEmpty = empty($userData['password']);
-
-            $isAccountExisting = ($isPasswordMatching && !$isPasswordEmpty);
-        }
-
-        else {
-            $isAccountExisting = false;
+        if ($accountPassword) {
+            $isAccountExisting = password_verify($userData['password'], $accountPassword[0]);
         }
 
         return $isAccountExisting;
@@ -151,6 +215,18 @@ class User extends Main {
 
     public function isTokenSigningRequested(string $page): bool {
         return $page === 'token-signing';
+    }
+
+    public function isPasswordRetrievingRequested(string $page): bool {
+        return $page === 'password-retrieving';
+    }
+
+    public function isRetrievedPasswordRequested(string $page): bool {
+        return $page === 'retrieved-password';
+    }
+
+    public function isPasswordEditingRequested(string $page): bool {
+        return $page === 'password-editing';
     }
 
     public function isLastTokenOld(array $token) {
@@ -200,6 +276,14 @@ class User extends Main {
             (preg_match($this->_getPasswordRegex(), $userData['password']))
         );
     }
+
+    public function isVerifyTokenActionRequested(string $action): bool {
+        return $action === 'verify-token';
+    }
+
+    public function isRegisterPasswordRequested(string $action): bool {
+        return $action === 'register-password';
+    }
     
     public function isLoginPageRequested(string $page): bool {
         return $page === 'login';
@@ -209,8 +293,17 @@ class User extends Main {
         return $page === 'mail-notification';
     }
 
-    public function isPasswordProvided() {
-        return isset($_POST['user-password']);
+    public function isDataPosted(string $data) {
+        return isset($_POST["user-$data"]);
+    }
+
+    public function registerPassword(array $userData) {
+        $user = new UserModel;
+
+        return $user->updatePassword(
+            $_SESSION['email'],
+            password_hash($userData['password'], PASSWORD_DEFAULT)
+        );
     }
 
     public function isRegisteringActionRequested(string $action): bool {
@@ -257,11 +350,30 @@ class User extends Main {
         ]);
     }
 
+    public function renderPasswordEditingPage(object $twig) {
+        // $_SESSION['token'] = '2KKCKO';
+        // $_SESSION['email'] = 'ma.jourdan@hotmail.fr';
+        echo $twig->render('connection_panels/password-edition.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'frenchTitle' => 'Edition de votre mot de passe',
+            'appSection' => 'connectionPanels',
+            'pageScripts' => $this->_getPageScripts('pwdEditing')
+        ]);
+    }
+
     public function renderMailNotificationPage(object $twig) {
         echo $twig->render('connection_panels/mail-notification.html.twig', [
             'stylePaths' => $this->_getConnectionPagesStyles(),
             'frenchTitle' => "Notification d'email",
             'appSection' => 'connectionPanels'
+        ]);
+    }
+
+    public function renderRetrievedPasswordPage(object $twig) {
+        echo $twig->render('connection_panels/retrieved-password.html.twig', [
+            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'frenchTitle' => "Mot de passe modifié",
+            'passSection' => 'connectionPanels'
         ]);
     }
 
@@ -297,12 +409,12 @@ class User extends Main {
         $_SESSION['email'] = $email;
     }
 
-    public function registerToken(string $token, string $email) {
+    public function registerToken(string $token) {
         $user = new UserModel;
 
         return $user->insertToken(
             password_hash($token, PASSWORD_DEFAULT),
-            $email
+            $_SESSION['email']
         );
     }
 
@@ -336,5 +448,9 @@ class User extends Main {
 
     private function _getTokenGeneratorTimeOut() {
         return $this->_tokenGeneratorTimeOut;
+    }
+
+    public function _getTokenRegex() {
+        return $this->_tokenRegex;
     }
 }

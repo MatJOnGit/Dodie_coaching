@@ -3,8 +3,8 @@
 namespace Dodie_Coaching\Services;
 
 class Mailer {
-    public function sendToken(string $token, string $email) {
-        $to = $email;
+    public function sendToken(string $token) {
+        $to = $_SESSION['email'];
         $subject = 'Récupération de votre mot de passe';
         $message = "
             <p>Bonjour.</p>

@@ -22,13 +22,13 @@ class User extends Main {
         return $selectEmailStatement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function selectPassword(string $email) {
+    public function selectAccountPassword (string $email) {
         $db = $this->dbConnect();
-        $selectUserPasswordQuery = 'SELECT password FROM accounts WHERE email = ?';
-        $selectUserPasswordStatement = $db->prepare($selectUserPasswordQuery);
-        $selectUserPasswordStatement->execute([$email]);
+        $selectAccountPasswordQuery = 'SELECT password FROM accounts WHERE email = ?';
+        $selectAccountPasswordStatement = $db->prepare($selectAccountPasswordQuery);
+        $selectAccountPasswordStatement->execute([$email]);
 
-        return $selectUserPasswordStatement->fetch();
+        return $selectAccountPasswordStatement->fetch();
     }
 
     public function selectRemainingAttempts(string $email) {
@@ -51,11 +51,20 @@ class User extends Main {
 
     public function selectTokenDate(string $email) {
         $db = $this->dbConnect();
-        $selectTokenDataQuery = 'SELECT generation_date FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
-        $selectTokenDataStatement = $db->prepare($selectTokenDataQuery);
-        $selectTokenDataStatement->execute([$email]);
+        $selectTokenDateQuery = 'SELECT generation_date FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
+        $selectTokenDateStatement = $db->prepare($selectTokenDateQuery);
+        $selectTokenDateStatement->execute([$email]);
 
-        return $selectTokenDataStatement->fetch(PDO::FETCH_ASSOC);
+        return $selectTokenDateStatement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function selectToken(string $email) {
+        $db = $this->dbConnect();
+        $selectTokenQuery = 'SELECT token FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
+        $selectTokenStatement = $db->prepare($selectTokenQuery);
+        $selectTokenStatement->execute([$email]);
+
+        return $selectTokenStatement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function selectLastTokenData(string $email) {
@@ -67,14 +76,14 @@ class User extends Main {
         return $selectLastTokenDateStatement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insertAccount(string $email, string $userPassword) {
+    public function insertAccount(string $email, string $hashedPassword) {
         $db = $this->dbConnect();
         $insertAccountQuery = 'INSERT INTO accounts (email, password) VALUES (:email, :password)';
         $insertAccountStatement = $db->prepare($insertAccountQuery);
 
         return $insertAccountStatement->execute([
             'email' => $email,
-            'password' => $userPassword
+            'password' => $hashedPassword
         ]);
     }
 
@@ -94,11 +103,27 @@ class User extends Main {
         return $insertStaticDataStatement->execute([$email]);
     }
 
-    public function updateLoginDate(string $userEmail): bool {
+    public function updateLoginDate(string $email): bool {
         $db = $this->dbConnect();
         $updateLoginDateQuery = 'UPDATE accounts SET last_login = NOW() WHERE email = ?';
         $updateLoginDateStatement = $db->prepare($updateLoginDateQuery);
 
-        return $updateLoginDateStatement->execute([$userEmail]);
+        return $updateLoginDateStatement->execute([$email]);
+    }
+
+    public function updateRemainingAttempts(string $email) {
+        $db = $this->dbConnect();
+        $updateRemainingAtptQuery = 'UPDATE reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id SET rt.remaining_atpt = rt.remaining_atpt - 1 WHERE a.email = ?';
+        $updateRemainingAtptStatement = $db->prepare($updateRemainingAtptQuery);
+
+        return $updateRemainingAtptStatement->execute([$email]);
+    }
+
+    public function updatePassword($email, $hashedPassword) {
+        $db = $this->dbConnect();
+        $updatePasswordQuery = 'UPDATE accounts SET password = ? WHERE email = ?';
+        $updatePasswordStatement = $db->prepare($updatePasswordQuery);
+
+        return $updatePasswordStatement->execute([$hashedPassword, $email]);
     }
 }

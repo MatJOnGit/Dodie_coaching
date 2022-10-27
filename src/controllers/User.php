@@ -66,13 +66,6 @@ class User extends Main {
         'token-signing' => 'index.php?page=token-signing',
     ];
 
-    public function areDataCompleted(): bool {
-        $user = new UserModel;
-        $staticData = $user->selectStaticData($_SESSION['email']);
-
-        return (!in_array(NULL, $staticData));
-    }
-
     public function areDataPosted(array $postedData) {
         $areDataPosted = true;
 
@@ -120,11 +113,11 @@ class User extends Main {
         return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
     }
 
-    public function getFormData(array $formFields): array {
+    public function getFormData(array $formData): array {
         $userData = [];
         
-        forEach ($formFields as $formField) {
-            $userData += [$formField => htmlspecialchars($_POST['user-' . $formField])];
+        forEach ($formData as $formDataItem) {
+            $userData += [$formDataItem => htmlspecialchars($_POST['user-' . $formDataItem])];
         }
         
         return $userData;
@@ -132,10 +125,6 @@ class User extends Main {
 
     public function getRequestedAction(): string {
         return htmlspecialchars($_GET['action']);
-    }
-
-    public function getToken() {
-        return strtoupper(htmlspecialchars($_POST['token']));
     }
 
     public function getTokenDate(string $email) {
@@ -243,7 +232,7 @@ class User extends Main {
         $correctToken = $user->selectToken($_SESSION['email']);
         $postedToken = htmlspecialchars($_POST['user-token']);
 
-        return password_verify($postedToken, $correctToken['token']);
+        return password_verify(strtoupper($postedToken), $correctToken['token']);
     }
 
     public function isTokenSigningPageRequested(string $page): bool {

@@ -162,7 +162,7 @@ class Nutrition extends UserPanels {
         $nutrition = new NutritionModel;
         $fileName = $nutrition->selectFileName($_SESSION['email']);
 
-        return $fileName[0] ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
+        return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
     }
 
     private function _getProgramsFolderRoute(): string {

@@ -30,7 +30,7 @@ try {
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
-            'userPanels' => ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
+            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -134,14 +134,13 @@ try {
 
             if ($user->isLogged()) {
                 $userPanels = new Dodie_Coaching\Controllers\UserPanels;
-                $areDataCompleted = $user->areDataCompleted();
 
-                if ($userPanels->isUserDashboardPageRequested($page) && $areDataCompleted) {
+                if ($userPanels->isUserDashboardPageRequested($page)) {
                     $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
                     $userDashboard->renderUserDashboardPage($twig);
                 }
 
-                elseif ($userPanels->isNutritionPageRequested($page) && $areDataCompleted) {
+                elseif ($userPanels->isNutritionPageRequested($page)) {
                     $nutrition = new Dodie_Coaching\Controllers\Nutrition;
 
                     if ($nutrition->isMenuRequested()) {
@@ -178,28 +177,23 @@ try {
                     }
                 }
 
-                elseif ($userPanels->isProgressPageRequested($page) && $areDataCompleted) {
+                elseif ($userPanels->isProgressPageRequested($page)) {
                     $progress = new Dodie_Coaching\Controllers\Progress;
                     $progress->renderProgress($twig);
                 }
 
-                elseif ($userPanels->isMeetingsPageRequested($page) && $areDataCompleted){
+                elseif ($userPanels->isMeetingsPageRequested($page)){
                     $meetings = new Dodie_Coaching\Controllers\Meetings;
                     $meetings->renderMeetings($twig);
                 }
 
-                elseif ($userPanels->isSubscriptionPageRequested($page) && $areDataCompleted) {
+                elseif ($userPanels->isSubscriptionPageRequested($page)) {
                     $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
                     $subscriptions->renderSubscriptions($twig);
                 }
 
-                elseif ($userPanels->isStaticDataPageRequested($page)) {
-                    $staticDataForm = new Dodie_Coaching\Controllers\StaticDataForm;
-                    $staticDataForm->renderStaticDataForm($twig);
-                }
-
                 else {
-                    $userPanels->routeTo('getToKnowYou');
+                    throw new Exception('UNKNOWN PAGE REQUESTED');
                 }
             }
 
@@ -289,7 +283,7 @@ try {
                 }
             }
 
-            else if ($user->isSendTokenActionRequested($action) && !$user->isLogged()) {
+            elseif ($user->isSendTokenActionRequested($action) && !$user->isLogged()) {
                 if ($user->areDataPosted(['email'])) {
                     $userData = $user->getFormData(['email']);
 
@@ -331,7 +325,7 @@ try {
                     }
                 }
 
-                else if ($user->isDataSessionized('email')) {
+                elseif ($user->isDataSessionized('email')) {
                     $newToken = $user->generateToken();
 
                     if ($user->registerToken($newToken)) {
@@ -356,11 +350,11 @@ try {
                 }
             }
 
-            else if ($user->isVerifyTokenActionRequested($action) && !$user->isLogged()) {
+            elseif ($user->isVerifyTokenActionRequested($action) && !$user->isLogged()) {
                 if ($user->isDataSessionized('email') && $user->areDataPosted(['token'])) {
                     $userData = $user->getFormData(['token']);
 
-                    if ($user->areFormDataValid(['token'])) {
+                    if ($user->areFormDataValid($userData)) {
                         if ($user->isTokenMatching()) {
                             $user->sessionize($userData, ['token']);
                             $user->routeTo('edit-password');
@@ -386,7 +380,7 @@ try {
                 }
             }
 
-            else if ($user->isRegisterPasswordActionRequested($action) && !$user->isLogged()) {
+            elseif ($user->isRegisterPasswordActionRequested($action) && !$user->isLogged()) {
                 if ($user->areDataPosted(['password', 'confirmation-password'])) {
                     $userData = $user->getFormData(['password', 'confirmation-password']);
 
@@ -412,12 +406,13 @@ try {
                         throw new Data_Exception('INVALID PASSWORD AND/OR CONFIRMATION PASSWORD PARAMETERS');
                     }
                 }
+
                 else {
                     throw new Data_Exception('MISSING PASSWORD AND/OR CONFIRMATION PASSWORD DATA');
                 }
             }
 
-            else if ($user->isLogoutActionRequested($action) && $user->isLogged()) {
+            elseif ($user->isLogoutActionRequested($action) && $user->isLogged()) {
                 $user->destroySessionData();
                 $user->routeTo('login');
             }

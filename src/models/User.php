@@ -40,15 +40,6 @@ class User extends Main {
         return $selectRemainingAttemptsStatement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function selectStaticData(string $email) {
-        $db = $this->dbConnect();
-        $selectStaticDataQuery = 'SELECT usd.* FROM users_static_data usd INNER JOIN accounts a ON usd.user_id = a.id WHERE a.email = ?';
-        $selectStaticDataStatement = $db->prepare($selectStaticDataQuery);
-        $selectStaticDataStatement->execute([$email]);
-
-        return $selectStaticDataStatement->fetch(PDO::FETCH_ASSOC);
-    }
-
     public function selectTokenDate(string $email) {
         $db = $this->dbConnect();
         $selectTokenDateQuery = 'SELECT generation_date FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
@@ -65,15 +56,6 @@ class User extends Main {
         $selectTokenStatement->execute([$email]);
 
         return $selectTokenStatement->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function selectLastTokenData(string $email) {
-        $db = $this->dbConnect();
-        $selectLastTokenDateQuery = 'SELECT generation_date FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
-        $selectLastTokenDateStatement = $db->prepare($selectLastTokenDateQuery);
-        $selectLastTokenDateStatement->execute([$email]);
-
-        return $selectLastTokenDateStatement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function insertAccount(string $email, string $hashedPassword) {

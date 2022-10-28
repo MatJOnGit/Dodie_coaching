@@ -8,7 +8,6 @@ class UserPanels extends Main {
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
         'progress' => 'index.php?page=progress',
-        'getToKnowYou' => 'index.php?page=get-to-know-you',
         'nutrition' => 'index.php?page=nutrition',
         'meetings' => 'index.php?page=meetings',
         'subscription' => 'index.php?page=subscription'
@@ -16,7 +15,7 @@ class UserPanels extends Main {
 
     private $_timeZone = 'Europe/Paris';
 
-    private $_userPanels = ['get-to-know-you', 'dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
+    private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
     
     protected $_userPanelsStyles = [
         'pages/user-panels',
@@ -45,15 +44,11 @@ class UserPanels extends Main {
         return $page === 'progress';
     }
 
-    public function isStaticDataPageRequested($page): bool {
-        return $page === 'get-to-know-you';
-    }
-
     public function isSubscriptionPageRequested($page): bool {
         return $page === 'subscription';
     }
 
-    public function isUserDashboardPageRequested($page): bool {
+    public function isDashboardPageRequested($page): bool {
         return $page === 'dashboard';
     }
 

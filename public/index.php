@@ -30,7 +30,8 @@ try {
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
-            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription']
+            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
+            'adminPanels' => ['admin-dashboard']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -133,38 +134,46 @@ try {
             $user = new Dodie_Coaching\Controllers\User;
 
             if ($user->isLogged()) {
-                $userPanels = new Dodie_Coaching\Controllers\UserPanels;
+                $userRole = $user->getRole();
 
-                if ($userPanels->isUserDashboardPageRequested($page)) {
-                    $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
-                    $userDashboard->renderUserDashboardPage($twig);
-                }
+                if ($userRole && $user->isCustomer($userRole)) {
+                    $userPanels = new Dodie_Coaching\Controllers\UserPanels;
 
-                elseif ($userPanels->isNutritionPageRequested($page)) {
-                    $nutrition = new Dodie_Coaching\Controllers\Nutrition;
-
-                    if ($nutrition->isMenuRequested()) {
-                        $nutrition->renderNutritionMenu($twig);
+                    if ($userPanels->isDashboardPageRequested($page)) {
+                        $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
+                        $userDashboard->renderUserDashboardPage($twig);
                     }
 
-                    elseif ($nutrition->isMealRequested()) {
-                        $mealData = $nutrition->getMealData();
+                    elseif ($userPanels->isNutritionPageRequested($page)) {
+                        $nutrition = new Dodie_Coaching\Controllers\Nutrition;
 
-                        if ($nutrition->areMealParamsValid($mealData)) {
-                            $nutrition->renderMealDetails($twig, $mealData);
+                        if ($nutrition->isMenuRequested()) {
+                            $nutrition->renderNutritionMenu($twig);
                         }
 
-                        else {
-                            throw new URL_Exception('INVALID MEAL PARAMETER');
-                            // $userPanels->routeTo('nutrition');
+                        elseif ($nutrition->isMealRequested()) {
+                            $mealData = $nutrition->getMealData();
+
+                            if ($nutrition->areMealParamsValid($mealData)) {
+                                $nutrition->renderMealDetails($twig, $mealData);
+                            }
+
+                            else {
+                                throw new URL_Exception('INVALID MEAL PARAMETER');
+                                // $userPanels->routeTo('nutrition');
+                            }
                         }
-                    }
 
-                    elseif ($nutrition->isRequestSet()) {
-                        $request = $nutrition->getRequest();
+                        elseif ($nutrition->isRequestSet()) {
+                            $request = $nutrition->getRequest();
 
-                        if ($nutrition->isShoppingListRequested($request)) {
-                            $nutrition->renderShoppingList($twig);
+                            if ($nutrition->isShoppingListRequested($request)) {
+                                $nutrition->renderShoppingList($twig);
+                            }
+
+                            else {
+                                $userPanels->routeTo('nutrition');
+                            }
                         }
 
                         else {
@@ -172,43 +181,69 @@ try {
                         }
                     }
 
+                    elseif ($userPanels->isProgressPageRequested($page)) {
+                        $progress = new Dodie_Coaching\Controllers\Progress;
+                        $progress->renderProgress($twig);
+                    }
+
+                    elseif ($userPanels->isMeetingsPageRequested($page)){
+                        $meetings = new Dodie_Coaching\Controllers\Meetings;
+                        $meetings->renderMeetings($twig);
+                    }
+
+                    elseif ($userPanels->isSubscriptionPageRequested($page)) {
+                        $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
+                        $subscriptions->renderSubscriptions($twig);
+                    }
+
                     else {
-                        $userPanels->routeTo('nutrition');
+                        throw new Exception('UNKNOWN PAGE REQUESTED');
                     }
                 }
 
-                elseif ($userPanels->isProgressPageRequested($page)) {
-                    $progress = new Dodie_Coaching\Controllers\Progress;
-                    $progress->renderProgress($twig);
-                }
-
-                elseif ($userPanels->isMeetingsPageRequested($page)){
-                    $meetings = new Dodie_Coaching\Controllers\Meetings;
-                    $meetings->renderMeetings($twig);
-                }
-
-                elseif ($userPanels->isSubscriptionPageRequested($page)) {
-                    $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
-                    $subscriptions->renderSubscriptions($twig);
+                elseif ($userRole && $user->isAdmin($userRole)) {
+                    $user->routeTo('admin-dashboard');
                 }
 
                 else {
-                    throw new Exception('UNKNOWN PAGE REQUESTED');
+                    throw new Data_Exception('MISSING USER ROLE');
                 }
             }
 
             else {
-                throw new URL_Exception('MISSING SESSION PARAMETERS');
-                // $user->destroySessionData();
-                // $user->routeTo('login');
+                $user->logoutUser();
+            }
+        }
+
+        elseif (in_array($page, $Urls['pages']['adminPanels'])) {
+            $user = new Dodie_Coaching\Controllers\User;
+
+            if ($user->isLogged()) {
+                $userRole = $user->getRole();
+
+                if ($userRole && $user->isAdmin($userRole)) {
+                    $adminPanels = new Dodie_Coaching\Controllers\AdminPanels;
+
+                    if ($adminPanels->isDashboardPageRequested($page)) {
+                        $adminDashboard = new Dodie_Coaching\Controllers\AdminDashboard;
+                        $adminDashboard->renderAdminDashboardPage($twig);
+                    }
+                }
+
+                else {
+                    $user->logoutUser();
+                }
+            }
+
+            else {
+                $user->logoutUser();
             }
         }
 
         else {
             throw new URL_Exception('INVALID PAGE PARAMETER');
             // $user = new Dodie_Coaching\Controllers\User;
-            // $user->destroySessionData();
-            // $user->routeTo('login');
+            // $user->logoutUser();
         }
     }
 
@@ -413,8 +448,7 @@ try {
             }
 
             elseif ($user->isLogoutActionRequested($action) && $user->isLogged()) {
-                $user->destroySessionData();
-                $user->routeTo('login');
+                $user->logoutUser();
             }
         }
 
@@ -500,8 +534,7 @@ try {
             }
 
             else {
-                $user->destroySessionData();
-                $user->routeTo('login');
+                $user->logoutUser();
             }
         }
 
@@ -541,14 +574,12 @@ try {
             }
 
             else {
-                $user->destroySessionData();
-                $user->routeTo('login');
+                $user->logoutUser();
             }
         }
         
         else {
-            $user->destroySessionData();
-            $user->routeTo('presentation');
+            $user->logoutUser();
         }
     }
 

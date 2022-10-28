@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class UserDashboard extends UserPanels {
+class AdminDashboard extends AdminPanels {
     private $_dashboardMenuItems = [
         'nutrition' => [
             'frenchTitle' => 'Programme nutritionnel',
@@ -22,12 +22,12 @@ class UserDashboard extends UserPanels {
         ]
     ];
 
-    public function renderUserDashboardPage(object $twig) {
-        echo $twig->render('user_panels/dashboard.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles(),
-            'frenchTitle' => 'tableau de bord',
-            'appSection' => 'userPanels',
-            'userPanelLandingPage' => 'tableau de bord',
+    public function renderAdminDashboardPage(object $twig) {
+        echo $twig->render('admin_panels/dashboard.html.twig', [
+            'stylePaths' => $this->_getAdminPanelsStyle(),
+            'frenchTitle' => 'Tableau de bord',
+            'appSection' => 'adminPanels',
+            'userPanelLandingPage' => 'Tableau de bord',
             'dashboardMenuItems' => $this->_getDashboardMenuItems()
         ]);
     }

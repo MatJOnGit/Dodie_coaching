@@ -62,8 +62,9 @@ class User extends Main {
         'mail-notification' => 'index.php?page=mail-notification',
         'edit-password' => 'index.php?page=password-editing',
         'retrieved-password' => 'index.php?page=retrieved-password',
+        'admin-dashboard' => 'index.php?page=admin-dashboard',
         'send-token' => 'index.php?action=send-token',
-        'token-signing' => 'index.php?page=token-signing',
+        'token-signing' => 'index.php?page=token-signing'
     ];
 
     public function areDataPosted(array $postedData) {
@@ -81,7 +82,7 @@ class User extends Main {
     public function areFormDataValid(array $userData) {
         $areFormDataValid = true;
 
-        forEach ($userData as $userDataItemKey => $userDataItemValue) {
+        foreach($userData as $userDataItemKey => $userDataItemValue) {
             if (($userDataItemKey === 'email' && !preg_match($this->_getEmailRegex(), $userData['email']))
             || ($userDataItemKey === 'password' && !preg_match($this->_getPasswordRegex(), $userData['password']))
             || ($userDataItemKey === 'confirmation-password' && $userData['password'] !== $userData['confirmation-password'])
@@ -109,14 +110,14 @@ class User extends Main {
         return $user->deleteToken($email);
     }
 
-    public function generateToken() {
+    public function generateToken(): string {
         return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
     }
 
     public function getFormData(array $formData): array {
         $userData = [];
         
-        forEach ($formData as $formDataItem) {
+        foreach($formData as $formDataItem) {
             $userData += [$formDataItem => htmlspecialchars($_POST['user-' . $formDataItem])];
         }
         
@@ -125,6 +126,12 @@ class User extends Main {
 
     public function getRequestedAction(): string {
         return htmlspecialchars($_GET['action']);
+    }
+    
+    public function getRole() {
+        $user = new UserModel;
+
+        return $user->selectRole($_SESSION['email']);
     }
 
     public function getTokenDate(string $email) {
@@ -146,7 +153,15 @@ class User extends Main {
         return $isAccountExisting;
     }
 
-    public function isDataSessionized(string $data) {
+    public function isAdmin($userRole) {
+        return $userRole['status'] === 'admin';
+    }
+
+    public function isCustomer($userRole) {
+        return ($userRole['status'] === 'member' || $userRole['status'] === 'subscriber');
+    }
+
+    public function isDataSessionized(string $data): bool {
         return isset($_SESSION[$data]);
     }
 
@@ -156,7 +171,7 @@ class User extends Main {
         return $user->selectEmail($email);
     }
 
-    public function isLastTokenOld(array $token) {
+    public function isLastTokenOld(array $token): bool {
         date_default_timezone_set('Europe/Paris');
         $isLastTokenOld = false;
 
@@ -226,7 +241,7 @@ class User extends Main {
         return $action === 'send-token';
     }
 
-    public function isTokenMatching() {
+    public function isTokenMatching(): bool {
         $user = new UserModel;
 
         $correctToken = $user->selectToken($_SESSION['email']);
@@ -246,6 +261,11 @@ class User extends Main {
     public function logUser(array $userData) {
         $_SESSION['email'] = $userData['email'];
         $_SESSION['password'] = $userData['password'];
+    }
+
+    public function logoutUser() {
+        $this->destroySessionData();
+        $this->routeTo('login');
     }
     
     public function registerAccount(array $userData) {
@@ -350,7 +370,7 @@ class User extends Main {
     }
 
     public function unsessionizeData(array $sessionData) {
-        forEach ($sessionData as $sessionDataItem) {
+        foreach($sessionData as $sessionDataItem) {
             unset($_SESSION[$sessionDataItem]);
         }
     }

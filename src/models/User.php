@@ -40,6 +40,15 @@ class User extends Main {
         return $selectRemainingAttemptsStatement->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function selectRole(string $email) {
+        $db = $this->dbConnect();
+        $selectRoleQuery = 'SELECT status FROM accounts WHERE email = ?';
+        $selectRoleStatement = $db->prepare($selectRoleQuery);
+        $selectRoleStatement->execute([$email]);
+
+        return $selectRoleStatement->fetch(PDO::FETCH_ASSOC);
+    } 
+
     public function selectTokenDate(string $email) {
         $db = $this->dbConnect();
         $selectTokenDateQuery = 'SELECT generation_date FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';
@@ -85,7 +94,7 @@ class User extends Main {
         return $insertStaticDataStatement->execute([$email]);
     }
 
-    public function updateLoginDate(string $email): bool {
+    public function updateLoginDate(string $email) {
         $db = $this->dbConnect();
         $updateLoginDateQuery = 'UPDATE accounts SET last_login = NOW() WHERE email = ?';
         $updateLoginDateStatement = $db->prepare($updateLoginDateQuery);

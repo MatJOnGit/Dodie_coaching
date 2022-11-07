@@ -158,7 +158,7 @@ class User extends Main {
     }
 
     public function isCustomer($userRole) {
-        return ($userRole['status'] === 'member' || $userRole['status'] === 'subscriber');
+        return (in_array($userRole['status'], ['member', 'subscriber']));
     }
 
     public function isDataSessionized(string $data): bool {

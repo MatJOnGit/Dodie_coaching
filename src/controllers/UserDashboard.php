@@ -27,7 +27,6 @@ class UserDashboard extends UserPanels {
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'tableau de bord',
             'appSection' => 'userPanels',
-            'userPanelLandingPage' => 'tableau de bord',
             'dashboardMenuItems' => $this->_getDashboardMenuItems()
         ]);
     }

@@ -31,7 +31,7 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard']
+            'adminPanels' => ['admin-dashboard', 'applications-list']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],

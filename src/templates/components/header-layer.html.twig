@@ -16,21 +16,12 @@
         {% endif %}
     </nav>
 
-{% elseif appSection == 'userPanels' %}
+{% elseif appSection in ['userPanels', 'adminPanels'] %}
 
     <div id='page-name-cnn'>
         <div class='title-layer cloudy-bkgd'>
 
-            {% if (userPanel is defined) and (userSubPanel is defined) %}
-
-                <a href='index.php?page=nutrition' class='back-to-dashboard-btn'>
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                <h2>
-                    ... > {{ userPanel }} > {{ userSubPanel }}
-                </h2>
-
-            {% elseif (userPanel is defined) and (userSubPanel is not defined) %}
+            {% if (userPanel is defined) and (userSubPanel is not defined) %}
 
                 <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
                     <i class="fa-solid fa-arrow-left"></i>
@@ -39,10 +30,19 @@
                     Mon tableau de bord > {{ userPanel | capitalize }}
                 </h2>
 
-            {% elseif userPanelLandingPage is defined %}
+            {% elseif (userPanel is defined) and (userSubPanel is defined) %}
+
+                <a href='index.php?page=nutrition' class='back-to-dashboard-btn'>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <h2>
+                    ... > {{ userPanel }} > {{ userSubPanel }}
+                </h2>
+
+            {% elseif (userPanel is not defined) %}
 
                 <h2>
-                    {{ userPanelLandingPage | capitalize }}
+                    Tableau de bord
                 </h2>
 
             {% endif %}

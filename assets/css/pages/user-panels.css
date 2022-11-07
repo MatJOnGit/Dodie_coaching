@@ -1,7 +1,8 @@
 /*********************************/
 /*             THEME             */
 /*********************************/
-h2 {
+
+h2 { /* commun avec admin-panels */
     font-size: 0.9em;
     font-weight: normal;
 }
@@ -20,7 +21,7 @@ footer i {
     color: hsla(268, 71%, 41%, 1);
 }
 
-#title-layer i {
+#title-layer i { /* commun avec admin-panels */
     font-size: 2.5em;
 }
 
@@ -46,7 +47,7 @@ footer {
 }
 
 .dashboard-btn,
-footer p {
+footer p { /* commun avec admin-panels */
     color: hsla(0, 0%, 100%, 1);
 }
 
@@ -54,7 +55,7 @@ footer p {
     font-size: 1.2em;
 }
 
-footer li {
+footer li { /* commun avec admin-panels */
     background-color: hsla(0, 0%, 100%, 1);
 }
 
@@ -77,7 +78,7 @@ footer li {
     height: 51px;
 }
 
-h2 {
+h2 { /* commun avec admin-panels */
     display: flex;
     align-items: center;
     margin: 0 0 0 65px;
@@ -93,7 +94,7 @@ h2 {
     padding: 3vh 10%;
 }
 
-.dashboard-panel {
+.dashboard-panel { /* commun avec admin-panels */
     justify-content: center;
     height: calc(73vh - 70px);
 }
@@ -200,7 +201,6 @@ select {
 
 .full-length-fields {
     width: 100%;
-
 }
 
 .form-fields {
@@ -309,9 +309,9 @@ input[type=submit] {
 .red-bkgd {
     background: linear-gradient(
         135deg, 
-        hsl(336, 100%, 29%, 1) 0%,
-        hsl(336, 100%, 29%, 1) 50%,
-        hsl(336, 100%, 16%, 1) 100%
+        hsla(336, 100%, 29%, 1) 0%,
+        hsla(336, 100%, 29%, 1) 50%,
+        hsla(336, 100%, 16%, 1) 100%
     );
 }
 

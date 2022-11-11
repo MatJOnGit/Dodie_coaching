@@ -1,7 +1,7 @@
 form {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 input[type=email],
@@ -11,9 +11,9 @@ input[type=number],
 input[type=date],
 input[type=time],
 select {
-    text-align: center;
-    margin: 1.5vh 0;
     background-color: inherit;
+    margin: 1.5vh 0;
+    text-align: center;
 }
 
 input[type=email],
@@ -24,15 +24,15 @@ input[type=number] {
 }
 
 input[type=date] {
-    padding: 1vh 1% 0.9vh 1%;
+    padding: 1vh 1% .9vh 1%;
 }
 
 input[type=time] {
-    padding: 1vh 1% 0.8vh 1%;
+    padding: 1vh 1% .8vh 1%;
 }
 
 select {
-    padding: 1vh 1% 0.7vh 1%;
+    padding: 1vh 1% .7vh 1%;
 }
 
 input::placeholder,
@@ -42,26 +42,15 @@ select::-ms-select-placeholder {
 	text-align: center; 
 }
 
-.form-links {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 85%;
-    margin-top: 1.5vh;
-    padding: 0;
-}
-
 .tiny-btn,
 .large-btn {
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 3vh;
 }
 
 .tiny-btn {
-    width: 45%;
+    width: 48%;
 }
 
 .tiny-btn p {

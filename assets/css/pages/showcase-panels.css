@@ -21,27 +21,18 @@ footer {
     background-color: hsla(188, 87%, 30%, 1);
 }
 
+.program-description {
+    background-color: hsla(0, 0%, 0%, .55);
+}
+
 footer li {
     background-color: hsla(0, 0%, 100%, 1);
-}
-
-.glowy-bkgd {
-    background: linear-gradient(
-        135deg,
-        hsla(0, 0%, 0%, 1) 0%,
-        hsla(200, 40%, 70%, .3) 45%,
-        hsla(0, 0%, 50%, 0) 100%
-    );
-}
-
-.program-description {
-    border: 1px solid white;
-    background-color: hsla(0, 0%, 0%, 0.5);
 }
 
 /********************************/
 /*           GLOBALS            */
 /********************************/
+
 .showcase-panel {
     display: flex;
     flex-direction: column;
@@ -49,18 +40,24 @@ footer li {
 }
 
 .showcase-panel span i {
-    font-size: 1.7em;
+    font-size: 7vmin;
 }
 
-.showcase-error {
-    padding: 30px;
-}
-
-/*****************************************/
-/*     PRESENTATION & COACHING PAGES     */
-/*****************************************/
 .speech-container p {
     margin: 10px 5%;
+}
+
+.speech-container img {
+    height: 150px;
+    margin: 20px 0;
+    object-fit: cover;
+    width: 100%;
+}
+
+.speech-container .btn {
+    align-self: center;
+    margin-bottom: 17px;
+    margin-top: 10px;
 }
 
 .showcase-question {
@@ -68,26 +65,10 @@ footer li {
     text-decoration: underline;
 }
 
-.speech-container img {
-    width: 100%;
-    height: 150px;
-    margin: 20px 0;
-    object-fit: cover;
-}
-
-.speech-container .btn {
-    align-self: center;
-    margin-top: 10px;
-    margin-bottom: 17px;
-}
-
-/***********************************************/
-/*     PROGRAMSLIST & PROGRAMDETAILS PAGES     */
-/***********************************************/
 .programs-list li,
 .program-details-container {
-    background-size: cover;
     background-position: 50%;
+    background-size: cover;
 }
 
 .monthly-program {
@@ -105,32 +86,27 @@ footer li {
 .showcase-panel i {
     margin-right: 5px;
 }
-/*---------------------------------------------*/
-
 
 /*******************************/
 /*     PROGRAMS LIST LAYER     */
 /*******************************/
-.programs-list {
-    padding: 0;
-}
 
 .programs-list li {
-    position: relative;
     min-height: calc((100vh - 11vh - 16vh - 70px) / 3);
+    position: relative;
 }
 
 .program-summary {
     display: flex;
     flex-direction: column;
+    height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
-    height: 100%;
 }
 
 h2 {
-    font-size: 1.7em;
+    font-size: 8vmin;
 }
 
 .program-summary h2 {
@@ -142,35 +118,28 @@ h2 {
 }
 
 .programs-list span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    bottom: 30px;
     position: absolute;
     right: 30px;
-    bottom: 30px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
 }
 
 .programs-list span i {
     margin: 0;
 }
-/*-----------------------------*/
-
 
 /*********************************/
 /*     PROGRAM DETAILS LAYER     */
 /*********************************/
+
 .program-details-container {
     position: relative;
 }
 
 .program-details {
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
     min-height: calc(73vh - 70px);
     padding: 20px;
 }
@@ -184,27 +153,20 @@ h2 {
 }
 
 .program-description {
+    border-radius: 15px;
     margin: 20px 20px 25px 20px;
     padding: 15px 20px;
-    border: 1px solid white;
-    border-radius: 15px;
 }
 
 .program-details a:last-child {
     align-self: flex-end;
 }
 
-.rounded-btn {
-    padding: 17px 10%;
-}
-/*-------------------------------*/
-
 /************************/
 /*     SHOWCASE 404     */
 /************************/
-.centered-content {
-    text-align: center;
-    padding: 20px 25px 0;
-}
 
-/*----------------------*/
+.centered-content {
+    padding: 20px 25px 0;
+    text-align: center;
+}

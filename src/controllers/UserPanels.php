@@ -13,15 +13,12 @@ class UserPanels extends Main {
         'subscription' => 'index.php?page=subscription'
     ];
 
-    private $_timeZone = 'Europe/Paris';
-
     private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
     
     protected $_userPanelsStyles = [
         'pages/user-panels',
         'components/header',
         'components/form',
-        'components/buttons',
         'components/footer'
     ];
 
@@ -66,9 +63,5 @@ class UserPanels extends Main {
 
     protected function _getUserPanelsSubpanels(string $page) {
         return $this->_userPanelsSubpanels[$page];
-    }
-    
-    protected function _setTimeZone() {
-        date_default_timezone_set($this->_timeZone);
     }
 }

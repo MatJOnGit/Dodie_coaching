@@ -14,7 +14,6 @@ class AdminPanels extends Main {
         'pages/admin-panels',
         'components/header',
         'components/form',
-        'components/buttons',
         'components/footer'
     ];
 

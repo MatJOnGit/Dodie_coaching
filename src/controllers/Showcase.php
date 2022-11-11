@@ -9,7 +9,7 @@ class Showcase extends Main {
             'frenchTitle' => 'Formule mois',
             'duration' => 30,
             'subscriptionPrice' => 219,
-            'description' => "Vous avez un mariage de prévu et vous avez besoin d'un coup de main pour rentrer dans votre robe ou votre costume ?\n\nVous souhaitez peut-être simplement tester par vous-même mes services ?\n\nCe programme vous donnera des bases solides pour commencer à prendre soin de vous, et en toute sérénité."
+            'description' => "Vous avez un mariage de prévu et vous avez besoin d'un coup de main pour rentrer dans votre robe ou votre costume ?<br><br>Vous souhaitez peut-être simplement tester par vous-même nos services ?<br><br>Ce programme vous donnera des bases solides pour commencer à prendre soin de vous, et en toute sérénité."
         ],
         'quarterly' => [
             'name' => 'quarterly',
@@ -46,7 +46,6 @@ class Showcase extends Main {
     private $_showcasePanelsStyles = [
         'pages/showcase-panels',
         'components/header',
-        'components/buttons',
         'components/footer'
     ];
 

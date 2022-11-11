@@ -2,38 +2,67 @@
 /*             THEME             */
 /*********************************/
 
-#title-layer a,
-.purple-bkgd,
-footer li {
-    background: linear-gradient(
-        135deg, 
-        hsla(261, 57%, 55%, 1) 0%,
-        hsla(261, 47%, 27%, 1) 100%
-    );
+.homepage-link i,
+footer p {
+    color: hsla(261, 48%, 40%, 1);
 }
 
-.homepage-link i,
-.error-container,
+.input-helper-dismiss-btn {
+    color: hsla(46, 92%, 35%, 1);
+}
+
+#input-helper-container {
+    background-color: hsla(45, 95%, 92%, 1);
+}
+
+h2,
+input,
+input::placeholder,
+select,
+.show-input-helper-btn i,
+.notification-box p,
+#token-signing-form p,
 footer i {
     color: hsla(0, 0%, 100%, 1);
 }
 
-#dynamic-menu-button i {
-    color: hsla(261, 57%, 55%, 1);
+.show-input-helper-btn,
+.input-helper,
+.input-helper-dismiss-btn {
+    background-color: inherit;
 }
 
-h2 {
-    color: white;
-    text-align: center;
-    margin: 2vh 2% 5vh 2%;
+footer {
+    background-color: hsla(0, 0%, 100%, 1);
 }
 
-h3,
-input,
-input::placeholder,
-select {
-    border: none;
-    color: hsla(0, 0%, 100%, 1);
+footer li {
+    background-color: hsla(261, 48%, 40%, 1);
+}
+
+.light-to-dark-purple-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(261, 71%, 64%, 1) 0%,
+        hsla(261, 71%, 20%, 1) 100%
+    );
+}
+
+.purple-to-blue-bkgd {
+    background: linear-gradient(
+        135deg, 
+        hsla(260, 68%, 41%, 1) 0%,
+        hsla(260, 68%, 41%, 1) 50%,
+        hsla(261, 83%, 18%, 1) 100%
+    );
+}
+
+.input-helper-dismiss-btn {
+    border: 1px solid hsla(46, 92%, 35%, 1);
+}
+
+.show-input-helper-btn {
+    border: solid 2px hsla(0, 0%, 100%, 1);
 }
 
 input[type=email],
@@ -44,72 +73,78 @@ select {
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
 }
 
-footer {
-    background-color: hsla(0, 0%, 100%, 1);
-}
-
-footer p {
-    color: hsla(261, 47%, 27%, 1);
-}
-
 /********************************/
-/*           GLOBALS            */
+/*            GLOBALS            */
 /********************************/
-
-.homepage-link i {
-    font-size: 6vmin;
-}
 
 .connection-panel {
-    position: relative;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     height: calc(100vh - 11vh - 70px);
+    justify-content: center;
     margin: 11vh 0 70px 0;
-    padding: 0 10%;
+    padding: 0 7%;
+    position: relative;
 }
 
-.error-container,
 form {
     width: 100%;
+    padding: 3vh 0;
 }
 
-.error-container {
-    display:flex;
-    justify-content: center;
+#input-helper-container {
     align-items: center;
-    width: 100%;
-    margin-bottom: 4vh;
-    padding: 2vh 10%;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: row;
+    font-weight: 600;
+    font-size: 4vmin;
+    justify-content: space-between;
+    opacity: 0;
+    padding: 4px 20px;
+    position: absolute;
+    top: 10px;
+    width: 80%;
 }
 
-.error-container p {
+#input-helper-container p {
+    display: inline-block;
+    max-width: 80%;
+}
+
+.input-helper-dismiss-btn {
+    align-items: center;
+    border-radius: 50%;
+    border-width: thin;
+    font-size: 5vmin;
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+    display: flex;
+}
+
+h2 {
+    margin: 0 2% 1.5vh;
     text-align: center;
-    margin: 0 10%;
-    font-size: 3.5vmin;
 }
 
 div[class$='-input-container'] {
-    width: 80%;
+    align-items: flex-end;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: flex-end;
+    width: 80%;
 }
 
 .show-input-helper-btn,
 .input-helper {
-    width: 25px;
-    height: 25px;
     border-radius: 50%;
-    background-color: inherit;
-    color: white;
+    height: 30px;
+    width: 30px;
 }
 
 .show-input-helper-btn {
-    border: solid 2px white;
     margin: 0 3% 2vh 0;
 }
 
@@ -121,67 +156,27 @@ select {
     width: 70%;
 }
 
-input[type=submit] {
-    padding: 0;
-}
-
 .input-helper {
     margin: 0 0 1vh 3%;
+    font-size: 6vmin;
 }
 
-.wrong {
-    color: red;
-}
-
-.correct {
-    color: green;
+.form-links {
+    align-content: space-between;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 17vh;
+    margin-top: 1.5vh;
+    padding: 0;
+    width: 90%;
 }
 
 .tiny-btn,
 .large-btn,
 input[type=submit] {
     height: 7vh;
-}
-
-.btn span {
-    font-size: 1em;
-    text-align: center;
-    width: 90%;
-}
-
-#input-helper-container {
-    position: absolute;
-    font-weight: 600;
-    font-size: 0.9em;
-    top: 10px;
-    width: 80%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 20px;
-    background-color: #FEF4D5;
-    opacity: 0;
-    border-radius: 3px;
-}
-
-#input-helper-container p {
-    display: inline-block;
-    max-width: 80%;
-}
-
-.input-helper-dismiss-btn {
-    border-radius: 50%;
-    font-size: 0.8em;
-    width: 30px;
-    height: 30px;
-    border-width: thin;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: inherit;
-    color: hsla(46, 92%, 35%, 1);
-    border-color: hsla(46, 92%, 35%, 1);
 }
 
 /*******************************/
@@ -193,9 +188,8 @@ input[type=submit] {
 }
 
 .notification-box p {
-    text-align: center;
     margin: 0 1%;
-    color: white;
+    text-align: center;
 }
 
 .notification-box .btn {
@@ -208,5 +202,4 @@ input[type=submit] {
 
 #token-signing-form p {
     margin: 2vh 10% 2vh 10%;
-    color: white;
 }

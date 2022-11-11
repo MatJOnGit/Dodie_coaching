@@ -265,7 +265,7 @@ class User extends Main {
 
     public function logoutUser() {
         $this->destroySessionData();
-        $this->routeTo('login');
+        $this->routeTo('presentation');
     }
     
     public function registerAccount(array $userData) {

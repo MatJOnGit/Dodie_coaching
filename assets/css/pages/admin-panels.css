@@ -2,24 +2,17 @@
 /*             THEME             */
 /*********************************/
 
-h2 { /* commun avec user-panels */
-    font-size: 0.9em;
-    font-weight: normal;
-}
-
 #title-layer i,
 footer i {
     color: hsla(185, 51%, 47%, 1);
 }
 
-.btn {
-    background-color: hsla(185, 51%, 47%, 1);
-    height: 3vh;
-    padding: 1vh 0;
+footer p {
+    color: hsla(0, 0%, 100%, 1);
 }
 
-#title-layer i { /* commun avec user-panels */
-    font-size: 2.5em;
+.btn {
+    background-color: hsla(185, 51%, 47%, 1);
 }
 
 .dashboard-btn,
@@ -27,73 +20,69 @@ footer {
     background-color: hsla(185, 51%, 47%, 1);
 }
 
-.dashboard-btn,
-footer p { /* commun avec user-panels */
-    color: hsla(0, 0%, 100%, 1);
-}
-
-footer li { /* commun avec user-panels */
-    background-color: hsla(0, 0%, 100%, 1);
-}
-
 /********************************/
 /*           GLOBALS            */
 /********************************/
 
-h2 { /* commun avec user-panels */
-    display: flex;
+h2 {
     align-items: center;
+    display: flex;
+    font-size: 4vmin;
+    font-weight: 600;
+    font-style: italic;
     margin: 0 0 0 65px;
 }
 
 .admin-panel {
-    position: relative;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
     margin: 27vh 0 70px 0;
-    padding: 1.5vh 10%;
+    padding: 2vh 7%;
+    position: relative;
+    width: 100%;
 }
 
-.dashboard-panel { /* commun avec user-panels */
+/**********************************/
+/*           DASHBOARD            */
+/**********************************/
+
+.dashboard-panel {
     justify-content: flex-start;
-    height: calc(73vh - 70px);
 }
 
 .dashboard-card {
-    width: 100%;
+    align-items: center;
     border: 1px solid grey;
     border-radius: 20px;
-    margin: 1vh 0;
-    padding: 2vh 5%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 1vh;
+    padding: 1.5vh 5% 10px;
+    width: 100%;
+}
+
+.dashboard-card * {
+    margin: 0 5% 10px;
+}
+
+.dashboard-card {
     text-align: center;
 }
 
-.dashboard-card :not(:last-child) {
-    margin-bottom: 10px;
-}
-
-.dashboard-card :last-child {
-    margin-bottom: 0px;
-}
-
-h3 {
-    margin: 0;
-}
-
 .dashboard-card ul {
-    list-style: disc;
-    text-align: left;
-    padding: 0 5%;
+    align-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    list-style: circle;
 }
 
 .dashboard-card li {
-    margin-left: 0px;
+    margin-bottom: 4px;
 }
 
 .admin-link {
-    margin: 0;
-    padding: 2.5vh;
     border-radius: 2.5vh;
+    padding: 2.5vh;
 }

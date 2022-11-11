@@ -37,6 +37,7 @@ class AdminDashboard extends AdminPanels {
     }
 
     private function _filterTodayMeetingsData(array $incomingMeetings) {
+        $this->_setTimeZone();
         $currentDate = date('Y-m-d');
         $todayMeetingsData = [];
 
@@ -46,8 +47,6 @@ class AdminDashboard extends AdminPanels {
                 $incomingMeetingTime = explode(' ', $incomingMeeting['slot_date'])[1];
                 $costumerFirstName = $incomingMeeting['first_name'];
                 $costumerLastName = strtoupper($incomingMeeting['last_name']);
-
-                // echo 'la clé est ' . $key;
 
                 if ($incomingMeetingDay === $currentDate) {
                     array_push($todayMeetingsData, [

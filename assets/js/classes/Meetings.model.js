@@ -132,9 +132,10 @@ class Meetings extends UserPanels {
 
             meetingsArray.slots.forEach(meetingSlot => {
                 let meetingSlotsListElt = document.createElement('li');
-                meetingSlotsListElt.classList.add('btn', 'rounded-btn', 'purple-to-blue-bkgd')
+                meetingSlotsListElt.classList.add('rounded-btn')
 
                 let meetingSlotButton = document.createElement('button');
+                meetingSlotButton.classList.add('purple-bkgd')
                 meetingSlotButton.textContent = this.convertTimeToFrenchTimeString(meetingSlot);
     
                 meetingSlotsListElt.appendChild(meetingSlotButton);
@@ -177,7 +178,7 @@ class Meetings extends UserPanels {
     displayCancelMeetingConfirmation() {
         let cancelMeetingCancelationButton = document.createElement('a');
         cancelMeetingCancelationButton.href = 'index.php?page=meetings';
-        cancelMeetingCancelationButton.classList = 'btn user-panel-rounded-btn purple-to-blue-bkgd'
+        cancelMeetingCancelationButton.classList = 'btn circle-btn purple-bkgd'
         cancelMeetingCancelationButton.textContent = 'Non';
 
         let meetingConcelationMessage = document.createElement('div');
@@ -186,7 +187,7 @@ class Meetings extends UserPanels {
 
         let confirmMeetingCancelationLink = document.createElement('a');
         confirmMeetingCancelationLink.href = 'index.php?action=cancel-appointment';
-        confirmMeetingCancelationLink.classList = 'btn user-panel-rounded-btn red-bkgd';
+        confirmMeetingCancelationLink.classList = 'btn circle-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
 
         this.cancelMeetingButtonContainer.innerHTML = '';
@@ -217,7 +218,7 @@ class Meetings extends UserPanels {
                 this.previousDaysSchedule.innerHTML = '';
             }
             else {
-                this.previousDaysSchedule.innerHTML = "<button class='btn previous-days-btn purple-to-blue-bkgd'><i class='fa-solid fa-angle-left'></i></button>";
+                this.previousDaysSchedule.innerHTML = "<button class='btn previous-days-btn purple-bkgd'><i class='fa-solid fa-angle-left'></i></button>";
                 let previousDaysScheduleBtn = this.previousDaysSchedule.getElementsByTagName('button')[0];
                 previousDaysScheduleBtn.addEventListener('click', this._displayTabPreviousElements);
             }
@@ -226,7 +227,7 @@ class Meetings extends UserPanels {
                 this.nextDaysSchedule.innerHTML = '';
             }
             else {
-                this.nextDaysSchedule.innerHTML = "<button class='btn next-days-btn purple-to-blue-bkgd'><i class='fa-solid fa-angle-right'></i></button>";
+                this.nextDaysSchedule.innerHTML = "<button class='btn next-days-btn purple-bkgd'><i class='fa-solid fa-angle-right'></i></button>";
                 let nextDaysScheduleBtn = this.nextDaysSchedule.getElementsByTagName('button')[0]
 
                 nextDaysScheduleBtn.addEventListener('click', this._displayTabNextElements);

@@ -2,110 +2,129 @@
 /*             THEME             */
 /*********************************/
 
-h2 { /* commun avec admin-panels */
-    font-size: 0.9em;
-    font-weight: normal;
-}
-
-h3 {
-    font-size: 1.3em;
-    margin: 2.5vh 0;
-}
-
-.user-panel h3:first-child {
-    margin-top: 0;
-}
-
 #title-layer i,
+.settings-btn i,
 footer i {
-    color: hsla(268, 71%, 41%, 1);
+    color: hsla(261, 48%, 40%, 1);
 }
 
-#title-layer i { /* commun avec admin-panels */
-    font-size: 2.5em;
-}
-
-.back-to-dashboard-btn {
-    background-color: hsla(0, 0%, 100%, 1);
-}
-
-.settings-btn i {
-    font-size: 2em;
-}
-
-figcaption {
-    color: hsla(0, 0%, 0%, 1);
-}
-
-.dashboard-btn,
-footer {
-    background: linear-gradient(
-        135deg, 
-        hsla(261, 71%, 64%, 1) 0%,
-        hsla(261, 71%, 20%, 1) 100%
-    );
-}
-
-.dashboard-btn,
-footer p { /* commun avec admin-panels */
+.previous-days-btn,
+.next-days-btn,
+#cancel-btn-container button,
+.user-panel input[type=submit],
+.nutrition-requests a,
+.meals-list h5,
+.daily-slots button,
+.daily-slots li,
+footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-.dashboard-btn i {
-    font-size: 1.2em;
+footer {
+    background-color: hsla(261, 48%, 40%, 1);
 }
 
-footer li { /* commun avec admin-panels */
-    background-color: hsla(0, 0%, 100%, 1);
+#user-progress-graph {
+    border-bottom: 2px solid hsla(0, 0%, 0%, 1);
+    border-left: 2px solid hsla(0, 0%, 0%, 1);
+}
+
+input,
+select {
+    border-bottom: 1px solid hsla(0, 0%, 0%, 1);
 }
 
 /********************************/
 /*           GLOBALS            */
 /********************************/
 
-.title-layer {
-    position: relative;
-}
-
 .back-to-dashboard-btn {
+    align-items: center;
+    display: flex;
+    height: 51px;
+    justify-content: center;
+    left: 0;
     position: absolute;
     top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 51px;
-    height: 51px;
 }
 
-h2 { /* commun avec admin-panels */
-    display: flex;
+h2 {
     align-items: center;
+    display: flex;
+    font-size: 4vmin;
+    font-weight: 600;
+    font-style: italic;
     margin: 0 0 0 65px;
 }
 
 .user-panel {
-    position: relative;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
     margin: 27vh 0 70px 0;
-    padding: 3vh 10%;
+    padding: 3vh 7%;
+    position: relative;
+    width: 100%;
 }
 
-.dashboard-panel { /* commun avec admin-panels */
-    justify-content: center;
+h3 {
+    font-size: 5vmin;
+    margin: 0 0 2.5vh;
+}
+
+.btn span,
+.dashboard-btn i {
+    margin: auto;
+}
+
+form {
+    width: 100%;
+}
+
+select {
+    width: 90px;
+}
+
+input[type=submit] {
+    margin-top: 1vh;
+}
+
+.dashboard-panel h3:nth-child(3) {
+    margin-bottom: 2vh;
+    margin-top: 2.5vh;
+}
+
+.cancelation-alert {
+    width: 40%;
+}
+
+#cancel-btn-container button,
+.user-panel input[type=submit] {
+    height: 64px;
+}
+
+.user-panel form {
+    margin-bottom: 5vh;
+}
+
+/**********************************/
+/*           DASHBOARD            */
+/**********************************/
+
+.dashboard-panel {
     height: calc(73vh - 70px);
+    justify-content: center;
 }
 
 .settings-btn {
     position: absolute;
-    top: 0;
     right: 0;
+    top: 0;
 }
 
 .settings-btn i {
+    font-size: 9vmin;
     padding: 3vh;
 }
 
@@ -115,296 +134,67 @@ h2 { /* commun avec admin-panels */
 }
 
 .progress-graph-cnn {
-    width: 80%;
     position: relative;
+    width: 80%;
 }
 
 #user-progress-graph {
+    align-items: center;
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
-    border-left: 2px solid hsla(0, 0%, 0%, 1);
-    border-bottom: 2px solid hsla(0, 0%, 0%, 1);
 }
 
 figcaption {
     position: absolute;
+    text-align: center;
     top: 0;
     width: 100%;
-    text-align: center;
 }
 
 .dashboard-menu {
     display: flex;
     flex-direction: column;
+    height: calc(39vh - 70px);
     justify-content: center;
     width: 90%;
-    height: calc(39vh - 70px);
 }
 
 .dashboard-menu ul {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    height: 22vh;
     justify-content: space-between;
     width: 100%;
-    height: 22vh;
-    padding: 0;
-    margin: 0;
 }
 
 .dashboard-menu li {
+    align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     width: 45%;
-    margin: 0;
 }
 
 .dashboard-btn {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-content: center;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
     height: 60px;
+    justify-content: center;
+    padding: 2px 15px;
     text-align: center;
+    width: 100%;
 }
 
-.btn span,
-.dashboard-btn i {
-    margin: auto 0;
-}
-
-.btn span {
-    width: 65%;
+.dashboard-btn span {
     text-align: start;
-}
-
-form {
-    width: 100%;
-}
-
-input,
-select {
-    border: none;
-    border-bottom: 1px solid hsla(0, 0%, 0%, 1);
-}
-
-.sided-fields {
-    width: 145px;
-    justify-content: space-between;
-    
-}
-
-.full-length-fields {
-    width: 100%;
-}
-
-.form-fields {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-self: flex-start;
-}
-
-.user-weight-input {
-    width: 50px;
-}
-
-select {
-    box-sizing: border-box;
-    width: 90px;
-}
-
-.report-day {
-    width: 105px;
-}
-
-.report-time {
-    width: 75px;
-}
-
-input[type=submit] {
-    margin-top: 1vh;
-}
-
-.dashboard-panel h3:nth-child(3) {
-    margin-top: 2.5vh;
-    margin-bottom: 2vh;
-}
-
-.delete-progress-item-btn {
-    color: white;
-    padding: 2vh;
-    border-radius: 50%;
-}
-
-.progression-logs {
-    width: 100%;
-    padding: 0;
-}
-
-.progress-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    padding: 1vh 0;
-}
-
-.report-weight {
-    width: 45%;
-}
-
-.cancelation-alert {
-    width: 40%;
-}
-
-#cancel-btn-container button,
-.user-panel input[type=submit],
-.user-panel-rounded-btn {
-    height: 64px;
-    color: hsla(0, 0%, 100%, 1);
-}
-
-.user-panel-rounded-btn {
-    width: 64px;
-    border-radius: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.user-panel-large-btn {
-    width: max-content;
-    padding: 0 20px;
-    border: 0;
-}
-
-/*********************************/
-/*           MEETINGS            */
-/*********************************/
-
-#cancel-btn-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 3vh;
-    padding-bottom: 1vh;
-}
-
-#cancel-btn-container > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40%;
-    height: 64px;
-}
-
-.red-bkgd {
-    background: linear-gradient(
-        135deg, 
-        hsla(336, 100%, 29%, 1) 0%,
-        hsla(336, 100%, 29%, 1) 50%,
-        hsla(336, 100%, 16%, 1) 100%
-    );
-}
-
-.cancelation-alert p {
-    text-align: center;
-}
-
-.appointment-block {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.appointment-days {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-}
-
-.appointment-days::-webkit-scrollbar {
-    display: none;
-}
-
-.schedule-days-nav {
-    width: calc((100% - 200px) / 2);
-    display: flex;
-    flex-direction: row;
-}
-
-.previous-days-nav {
-    justify-content: flex-start;
-}
-
-.next-days-nav {
-    justify-content: flex-end;
-}
-
-.previous-days-btn,
-.next-days-btn {
-    height: 40px;
-    width: 40px;
-    margin-top: 8px;
-    border-radius: 50%;
-    color:hsla(0, 0%, 100%, 1);
-}
-
-.next-days-btn {
-    justify-self: flex-end;
-}
-
-.appointment-days > li {
-    min-width: 100px;
-    text-align: center;
-    margin: 0 3%;
-}
-
-.daily-schedule {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.meeting-day {
-    height: 5vh;
     width: 80%;
-    margin: 0 0 1.8vh;
 }
 
-.daily-slots {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.daily-slots li {
-    text-align: center;
-    width: 100%;
-    height: 55px;
-    margin: 1.8vh 0;
-    color: white;
-}
-
-.daily-slots button {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    background-color: inherit;
-    border: none;
-    color: white;
+.dashboard-btn i {
+    font-size: 6vmin;
 }
 
 /*****************************************/
@@ -416,40 +206,36 @@ input[type=submit] {
 }
 
 .nutrition-days-list {
-    margin: 0;
-    padding: 0;
     width: 100%;
 }
 
 .meals-list-panel h4 {
+    font-size: 4.5vmin;
     margin: 0 0 2vh 5%;
-    font-size: 1.2em;
 }
 
 .nutrition-days-list > li {
-    width: 100%;
     margin-bottom: 2vh;
+    width: 100%;
 }
 
 .meals-list {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 24vh;
+    align-content: space-between;
     display: flex;
     flex-direction: row;
-    align-content: space-between;
-    justify-content: space-between;
     flex-wrap: wrap;
+    height: 24vh;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .meals-list li {
-    width: 48%;
+    background-position: 50%;
+    background-size: cover;
     height: 49%;
     margin: 2px 1% 2px 1%;
-    background-size: cover;
-    background-position: 50%;
     position: relative;
+    width: 48%;
 }
 
 .breakfast-list-item {
@@ -470,43 +256,31 @@ input[type=submit] {
 
 .meals-list a {
     display: flex;
+    height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        162deg,
-        hsla(0, 0%, 25%, 1) 0%,
-        hsla(228, 33%, 60%, .45) 40%,
-        hsla(0, 0%, 50%, 0) 70%,
-        hsla(0, 0%, 50%, 0) 100%
-    );
 }
 
 .meals-list h5 {
+    font-size: 6.5vmin;
+    margin: 0 0 0 10px;
     position: absolute;
     top: 5px;
-    left: 5px;
-    color: white;
-    font-size: 6.5vmin;
-    margin: 0;
 }
 
 .nutrition-requests {
-    margin-top: 3vh;
-    padding: 0 5%;
-    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 3vh;
+    padding: 0 5%;
+    width: 100%;
 }
 
 .nutrition-requests a {
     padding: 17px;
-    color: white;
 }
-
-/*-----------------------------------------------*/
 
 /******************************************/
 /*           NUTRITION (MEALS)            */
@@ -514,38 +288,29 @@ input[type=submit] {
 
 .ingredients-list {
     width: 100%;
-    margin: 0;
-    padding: 0;
 }
 
 .ingredients-list-item {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
     width: 100%;
 }
 
 .ingredient-picture {
-    width: 150px;
     height: 100px;
     margin: 5px 30px 5px 0;
     object-fit: cover;
+    width: 150px;
 }
 
 .ingredient-desc {
     width: 150px;
 }
 
-/*------------------------------------------------*/
-
 /**************************************/
 /*           SHOPPING LIST            */
 /**************************************/
-
-.shopping-list {
-    margin: 0;
-    padding: 0;
-}
 
 .shopping-list li {
     margin: 1vh 0;
@@ -553,4 +318,164 @@ input[type=submit] {
 
 .shopping-list label {
     margin-left: 10px;
+}
+
+/*********************************/
+/*           PROGRESS            */
+/*********************************/
+
+.form-fields {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.sided-fields {
+    width: 145px;
+}
+
+.full-length-fields {
+    width: 100%;
+}
+
+.user-weight-input {
+    width: 50px;
+}
+
+.report-day {
+    width: 105px;
+}
+
+.report-time {
+    width: 75px;
+}
+
+.report-weight {
+    width: 45%;
+}
+
+.progression-logs {
+    padding: 0;
+    width: 100%;
+}
+
+.progress-item {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1vh 0;
+    text-align: center;
+}
+
+/*********************************/
+/*           MEETINGS            */
+/*********************************/
+
+#user-next-meeting {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#cancel-btn-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5vh;
+    padding-top: 3vh;
+}
+
+#cancel-btn-container > div {
+    align-items: center;
+    display: flex;
+    height: 64px;
+    justify-content: center;
+    width: 40%;
+}
+
+.cancelation-alert p {
+    text-align: center;
+}
+
+.appointment-block {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.appointment-days {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+}
+
+.appointment-days::-webkit-scrollbar {
+    display: none;
+}
+
+.schedule-days-nav {
+    display: flex;
+    flex-direction: row;
+    width: calc((100% - 200px) / 2);
+}
+
+.previous-days-nav {
+    justify-content: flex-start;
+}
+
+.next-days-nav {
+    justify-content: flex-end;
+}
+
+.previous-days-btn,
+.next-days-btn {
+    border-radius: 50%;
+    height: 40px;
+    padding: 10px;
+    width: 40px;
+}
+
+.next-days-btn {
+    justify-self: flex-end;
+}
+
+.appointment-days > li {
+    margin: 0 3%;
+    min-width: 100px;
+    text-align: center;
+}
+
+.daily-schedule {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.meeting-day {
+    height: 5vh;
+    margin: 0 0 1.8vh;
+    width: 80%;
+}
+
+.daily-slots {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.daily-slots li {
+    height: 55px;
+    margin: 1.8vh 0;
+    text-align: center;
+    width: 100%;
+}
+
+.daily-slots button {
+    height: 100%;
+    width: 100%;
+    border-radius: 1.5vh;
 }

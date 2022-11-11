@@ -231,7 +231,8 @@ try {
                 }
 
                 else {
-                    $user->logoutUser();
+                    throw new Data_Exception('WRONG USER ROLE');
+                    // $user->logoutUser();
                 }
             }
 

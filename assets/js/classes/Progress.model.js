@@ -70,7 +70,7 @@ class Progress extends UserPanels {
 
         let cancelReportDeletionButton = document.createElement('a');
         cancelReportDeletionButton.href = 'index.php?page=progress';
-        cancelReportDeletionButton.classList = 'btn user-panel-rounded-btn purple-to-blue-bkgd'
+        cancelReportDeletionButton.classList = 'btn circle-btn purple-bkgd'
         cancelReportDeletionButton.textContent = 'Non';
 
         let reportDeletionMessage = document.createElement('div');
@@ -79,7 +79,7 @@ class Progress extends UserPanels {
 
         let confirmReportDeletionButton = document.createElement('a');
         confirmReportDeletionButton.href = `index.php?action=delete-report&id=${selectedReport.id}`;
-        confirmReportDeletionButton.classList = 'btn user-panel-rounded-btn red-bkgd';
+        confirmReportDeletionButton.classList = 'btn circle-btn red-bkgd';
         confirmReportDeletionButton.textContent = 'Oui';
 
         selectedReport.innerHTML = '';

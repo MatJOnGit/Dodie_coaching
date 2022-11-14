@@ -26,7 +26,7 @@ class UserDashboard extends UserPanels {
         echo $twig->render('user_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'tableau de bord',
-            'appSection' => 'userPanels',
+            'appSection' => 'privatePanels',
             'dashboardMenuItems' => $this->_getDashboardMenuItems()
         ]);
     }

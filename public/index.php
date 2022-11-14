@@ -228,6 +228,10 @@ try {
                         $adminDashboard = new Dodie_Coaching\Controllers\AdminDashboard;
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
+
+                    if ($adminPanels->isApplicationsListRequested($page)) {
+                        $adminPanels->renderApplicationsListPage($twig);
+                    }
                 }
 
                 else {

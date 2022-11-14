@@ -1,12 +1,12 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='admin-panel dashboard-panel'>
+    <div class='admin-panel'>
         {% if (applicationsCount is defined) and (applicationsCount != false) %}
             <div class='dashboard-card pending-applications'>
                 <h3>Vos demandes de coaching</h3>
                 <p>Vous avez {{ applicationsCount['applicationsCount'] }} demandes en attente.</p>
-                <a href='index.php?page=applications-list' class='btn large-btn admin-link'>Voir les demandes</a>
+                <a href='index.php?page=applications-list' class='btn large-btn admin-link'>Gérer de vos demandes</a>
             </div>
         {% endif %}
 
@@ -14,7 +14,7 @@
             <div class='dashboard-card current-subscribers'>
                 <h3>Vos coaching en cours</h3>
                 <p>Vous suivez actuellement {{ subscribersCount['subscribersCount'] }} abonné(s).</p>
-                <a href='index.php?page=subscribers-list' class='btn large-btn admin-link'>Voir les demandes</a>
+                <a href='index.php?page=subscribers-list' class='btn large-btn admin-link'>Gestion de vos suivis</a>
             </div>
         {% endif %}
 
@@ -26,15 +26,16 @@
 
                     <p>Aujourd'hui, vous avez {{ todayMeetingsData | length }} rendez-vous  :</p>
                     <ul>
+
                     {% for meetingData in todayMeetingsData %}
 
                         <li>
                             à {{ meetingData['meetingTime'] }}
-                             : {{ meetingData['costumerName'] }}
+                            : {{ meetingData['costumerName'] }}
                         </li>
                         
-
                     {% endfor %}
+
                     </ul>
 
                 {% else %}
@@ -43,7 +44,7 @@
                     <p>Vous allez enfin pouvoir vous détendre !</p>
 
                 {% endif %}
-                <a href='index.php?page=manage-meetings' class='btn large-btn admin-link'>Gérer les rendez-vous</a>
+                <a href='index.php?page=manage-meetings' class='btn large-btn admin-link'>Gestion de vos rendez-vous</a>
             </div>
         {% endif %}
     </div>

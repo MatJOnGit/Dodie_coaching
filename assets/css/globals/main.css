@@ -123,6 +123,17 @@ h1 {
     position: relative;
 }
 
+.back-to-dashboard-btn {
+    align-items: center;
+    display: flex;
+    height: 51px;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 51px;
+}
+
 li, a, input, select {
     font-family: 'archivo narrow';
 }

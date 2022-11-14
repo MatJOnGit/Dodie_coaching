@@ -29,23 +29,23 @@ class UserPanels extends Main {
         'subscriptions' => 'Abonnement'
     ];
 
-    public function isMeetingsPageRequested($page): bool {
+    public function isMeetingsPageRequested(string $page): bool {
         return $page === 'meetings';
     }
 
-    public function isNutritionPageRequested($page): bool {
+    public function isNutritionPageRequested(string $page): bool {
         return $page === 'nutrition';
     }
 
-    public function isProgressPageRequested($page): bool {
+    public function isProgressPageRequested(string $page): bool {
         return $page === 'progress';
     }
 
-    public function isSubscriptionPageRequested($page): bool {
+    public function isSubscriptionPageRequested(string $page): bool {
         return $page === 'subscription';
     }
 
-    public function isDashboardPageRequested($page): bool {
+    public function isDashboardPageRequested(string $page): bool {
         return $page === 'dashboard';
     }
 

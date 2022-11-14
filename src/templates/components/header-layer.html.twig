@@ -6,9 +6,11 @@
             <li class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
                 <a href='{{ showcasePanels['presentation'] }}'>Présentation</a>
             </li>
+            
             <li class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
                 <a href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
             </li>
+
             <li class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
                 <a href='{{ showcasePanels['programs-list'] }}'>Formules</a>
             </li>
@@ -16,34 +18,28 @@
         {% endif %}
     </nav>
 
-{% elseif appSection in ['userPanels', 'adminPanels'] %}
+{% elseif appSection == 'privatePanels' %}
 
     <div id='page-name-cnn'>
         <div id='subtitle-layer' class='cloudy-bkgd'>
 
-            {% if (userPanel is defined) and (userSubPanel is not defined) %}
+            {% if subPanel is not defined %}
+
+                <h2>Tableau de bord</h2>
+            
+            {% elseif thirdLevelPanel is not defined %}
 
                 <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                <h2>
-                    Mon tableau de bord > {{ userPanel | capitalize }}
-                </h2>
+                <h2>Mon tableau de bord > {{ subPanel | capitalize }}</h2>
 
-            {% elseif (userPanel is defined) and (userSubPanel is defined) %}
+            {% else %}
 
                 <a href='index.php?page=nutrition' class='back-to-dashboard-btn'>
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                <h2>
-                    ... > {{ userPanel }} > {{ userSubPanel }}
-                </h2>
-
-            {% elseif (userPanel is not defined) %}
-
-                <h2>
-                    Tableau de bord
-                </h2>
+                <h2>... > {{ panel }} > {{ subPanel }}</h2>
 
             {% endif %}
             

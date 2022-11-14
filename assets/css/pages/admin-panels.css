@@ -27,7 +27,7 @@ footer {
 h2 {
     align-items: center;
     display: flex;
-    font-size: 4vmin;
+    font-size: 3.8vmin;
     font-weight: 600;
     font-style: italic;
     margin: 0 0 0 65px;
@@ -47,10 +47,6 @@ h2 {
 /*           DASHBOARD            */
 /**********************************/
 
-.dashboard-panel {
-    justify-content: flex-start;
-}
-
 .dashboard-card {
     align-items: center;
     border: 1px solid grey;
@@ -59,15 +55,12 @@ h2 {
     flex-direction: column;
     margin: 0 0 1vh;
     padding: 1.5vh 5% 10px;
+    text-align: center;
     width: 100%;
 }
 
 .dashboard-card * {
-    margin: 0 5% 10px;
-}
-
-.dashboard-card {
-    text-align: center;
+    margin: 0 0 10px;
 }
 
 .dashboard-card ul {
@@ -85,4 +78,24 @@ h2 {
 .admin-link {
     border-radius: 2.5vh;
     padding: 2.5vh;
+}
+
+/**********************************/
+/*       APPLICATIONS LIST        */
+/**********************************/
+
+.application-card {
+    align-items: center;
+    border: 1px solid grey;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 1vh;
+    padding: 1.5vh 5% 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.application-card * {
+    margin: 0 0 10px;
 }

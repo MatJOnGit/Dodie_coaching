@@ -9,7 +9,7 @@ class AdminDashboard extends AdminPanels {
         echo $twig->render('admin_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Tableau de bord',
-            'appSection' => 'adminPanels',
+            'appSection' => 'privatePanels',
             'applicationsCount' => $this->_getApplicationsCount(),
             'subscribersCount' => $this->_getSubscribersCount(),
             'todayMeetingsData' => $this->_getTodayMeetingsData()

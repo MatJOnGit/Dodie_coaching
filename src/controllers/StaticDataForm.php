@@ -9,7 +9,7 @@ class StaticDataForm extends UserPanels {
         echo $twig->render('user_panels/static-data-form.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'informations',
-            'appSection' => 'userPanels',
+            'appSection' => 'privatePanels',
             'userPanelLandingPage' => 'vos informations',
         ]);
     }

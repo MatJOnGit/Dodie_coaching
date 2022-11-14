@@ -9,7 +9,7 @@ class Subscriptions extends UserPanels {
         echo $twig->render('user_panels/subscriptions.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'abonnements',
-            'appSection' => 'userPanels',
+            'appSection' => 'privatePanels',
             'userPanel' => 'abonnements',
         ]);
     }

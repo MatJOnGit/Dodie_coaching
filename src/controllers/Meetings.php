@@ -72,7 +72,6 @@ class Meetings extends UserPanels {
         $hour = $dateData['hour'];
         $minute = $dateData['minute'];
 
-        // build a date string out of prepared parameters
         $date = date('Y') . '-' . $this->_getTwoDigitsNumber($formatedMonth) . '-' . $this->_getTwoDigitsNumber($day) . ' ' . $this->_getTwoDigitsNumber($hour) . ':' . $this->_getTwoDigitsNumber($minute) . ':00';
 
         return $date;
@@ -101,8 +100,8 @@ class Meetings extends UserPanels {
         echo $twig->render('user_panels/meetings.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'rendez-vous',
-            'appSection' => 'userPanels',
-            'userPanel' => 'rendez-vous',
+            'appSection' => 'privatePanels',
+            'panel' => 'rendez-vous',
             'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage),
             'meetingSlots' => $this->_getSortedMeetingsSlots(),
             'scheduledMeetingDate' => $this->_getBookedMeetingDate(),

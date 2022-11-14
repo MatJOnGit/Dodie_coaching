@@ -1,0 +1,20 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel'>
+        {% if applicationsHeaders %}
+            {% for headers in applicationsHeaders %}
+                <ul class='application-card'>
+                    <li>{{ headers['name'] }}</li>
+                    <li>{{ headers['age'] }} ans, {{ headers['job_style'] | lower }}</li>
+                    <li>Objectif(s) : {{ headers['program_goal'] }}</li>
+                    <a href='index.php?page=application-details&id={{ headers['id'] }}' class='btn large-btn admin-link'>Détails du profil</a>
+                </ul>
+            {% endfor %}
+        {% else %}
+            <div class='application-card'>
+                <p>Vous n'avez pas de nouvelle demande à valider.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock pageContent %}

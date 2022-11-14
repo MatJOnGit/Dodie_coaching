@@ -7,7 +7,7 @@ use PDO;
 class Admin extends Main {
     public function selectApplicationsCount() {
         $db = $this->dbConnect();
-        $selectApplicationsCountQuery = "SELECT COUNT(user_id) as applicationsCount FROM costumer_applications WHERE status = 'pending'";
+        $selectApplicationsCountQuery = "SELECT COUNT(user_id) as applicationsCount FROM costumer_applications WHERE staging = 'support_confirmation'";
         $selectApplicationsCountStatement = $db->prepare($selectApplicationsCountQuery);
         $selectApplicationsCountStatement->execute();
 
@@ -30,5 +30,14 @@ class Admin extends Main {
         $selectIncomingMeetingsStatement->execute();
 
         return $selectIncomingMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectApplicationsHeaders() {
+        $db = $this->dbConnect();
+        $selectApplicationsHeadersQuery = "SELECT CONCAT(a.first_name, ' ', UPPER(a.last_name)) as 'name', ca.id, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age', usd.job_style, usd.program_goal FROM costumer_applications ca INNER JOIN users_static_data usd ON ca.user_id = usd.user_id INNER JOIN accounts a ON ca.user_id = a.id WHERE ca.staging = 'support_confirmation' ORDER BY ca.application_date ASC";
+        $selectApplicationsHeadersStatement = $db->prepare($selectApplicationsHeadersQuery);
+        $selectApplicationsHeadersStatement->execute();
+
+        return $selectApplicationsHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

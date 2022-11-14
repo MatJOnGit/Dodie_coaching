@@ -38,21 +38,10 @@ select {
 /*           GLOBALS            */
 /********************************/
 
-.back-to-dashboard-btn {
-    align-items: center;
-    display: flex;
-    height: 51px;
-    justify-content: center;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 51px;
-}
-
 h2 {
     align-items: center;
     display: flex;
-    font-size: 4vmin;
+    font-size: 3.8vmin;
     font-weight: 600;
     font-style: italic;
     margin: 0 0 0 65px;

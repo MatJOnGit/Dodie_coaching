@@ -19,22 +19,40 @@ class AdminPanels extends Main {
         'components/footer'
     ];
 
-    public function isDashboardPageRequested($page) {
-        return $page === 'admin-dashboard';
+    protected $_routingURLs = [
+        'dashboard' => 'index.php?page=admin-dashboard',
+        'applicationsList' => 'index.php?page=applications-list'
+    ];
+    
+    private $_progressScripts = [
+        'classes/ApplicationDetails.model',
+        'applicationDetailsApp'
+    ];
+
+    public function getApplicationId(): string {
+        return htmlspecialchars($_GET['id']);
+    }
+  
+    public function isApplicationAvailable(string $applicationId) {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicationDate($applicationId);
+    }
+
+    public function isApplicationDetailsRequested(string $page): bool {
+        return $page === 'application-details';
     }
 
     public function isApplicationsListRequested(string $page): bool {
         return $page === 'applications-list';
     }
 
-    public function renderApplicationsListPage(object $twig) {
-        echo $twig->render('admin_panels/applications-list.html.twig', [
-            'stylePaths' => $this->_getAdminPanelsStyle(),
-            'frenchTitle' => 'Liste des demandes',
-            'appSection' => 'privatePanels',
-            'subPanel' => 'Demandes en attente',
-            'applicationsHeaders' => $this->_getApplicationsHeaders()
-        ]);
+    public function isDashboardPageRequested($page) {
+        return $page === 'admin-dashboard';
+    }
+
+    public function isRequestedApplicationIdSet() : bool {
+        return isset($_GET['id']);
     }
 
     protected function _getAdminPanelsSubpanels(string $page) {
@@ -45,9 +63,19 @@ class AdminPanels extends Main {
         return $this->_adminPanelsStyles;
     }
 
-    private function _getApplicationsHeaders() {
+    protected function _getApplicationsHeaders() {
         $admin = new AdminModel;
 
         return $admin->selectApplicationsHeaders();
+    }
+
+    protected function _getApplicationsDetails(string $applicationId) {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicationDetails($applicationId);
+    }
+
+    protected function _getProgressScripts(): array {
+        return $this->_progressScripts;
     }
 }

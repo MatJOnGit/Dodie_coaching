@@ -20,6 +20,10 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
+.red-bkgd {
+    background-color: hsla(336, 100%, 29%, 1);
+}
+
 footer {
     background-color: hsla(261, 48%, 40%, 1);
 }

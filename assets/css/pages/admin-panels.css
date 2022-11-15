@@ -15,6 +15,10 @@ footer p {
     background-color: hsla(185, 51%, 47%, 1);
 }
 
+.red-bkgd {
+    background-color: hsla(336, 100%, 29%, 1);
+}
+
 .dashboard-btn,
 footer {
     background-color: hsla(185, 51%, 47%, 1);
@@ -63,6 +67,11 @@ h2 {
     margin: 0 0 10px;
 }
 
+.admin-panel > h3 {
+    padding: 0 10%;
+    text-align: center;
+}
+
 .dashboard-card ul {
     align-content: flex-start;
     display: flex;
@@ -71,8 +80,8 @@ h2 {
     list-style: circle;
 }
 
-.dashboard-card li {
-    margin-bottom: 4px;
+.admin-panel li {
+    margin-bottom: 10px;
 }
 
 .admin-link {
@@ -98,4 +107,42 @@ h2 {
 
 .application-card * {
     margin: 0 0 10px;
+}
+
+#application-decision-box {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/************************************/
+/*       APPLICATION DETAILS        */
+/************************************/
+
+.application-details {
+    width: 100%;
+    padding: 0 10%;
+}
+
+#application-decision-box {
+    margin-top: 2vh;
+}
+
+#reject-application-form,
+#reject-application-form > textarea {
+    width: 100%;
+}
+
+#reject-application-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 2vh;
+}
+
+#reject-application-form > textarea {
+    height: 12vh;
+    margin-bottom: 2vh;
 }

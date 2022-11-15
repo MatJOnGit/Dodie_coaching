@@ -18,31 +18,24 @@
         {% endif %}
     </nav>
 
-{% elseif appSection == 'privatePanels' %}
+{% elseif appSection == 'userPanels' %}
 
     <div id='page-name-cnn'>
         <div id='subtitle-layer' class='cloudy-bkgd'>
 
-            {% if subPanel is not defined %}
+            {% if (prevPanel is defined) %}
 
-                <h2>Tableau de bord</h2>
-            
-            {% elseif thirdLevelPanel is not defined %}
-
-                <a href='index.php?page=dashboard' class='back-to-dashboard-btn'>
+                <a href='index.php?page={{ prevPanel[0] }}' class='back-to-dashboard-btn'>
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                <h2>Mon tableau de bord > {{ subPanel | capitalize }}</h2>
-
+                <h2>{{ prevPanel[1] }} > {{ frenchTitle | capitalize }}</h2>
+            
             {% else %}
 
-                <a href='index.php?page=nutrition' class='back-to-dashboard-btn'>
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                <h2>... > {{ panel }} > {{ subPanel }}</h2>
+                <h2>{{ frenchTitle | capitalize }}</h2>
 
             {% endif %}
-            
+
         </div>
     </div>
 {% endif %}

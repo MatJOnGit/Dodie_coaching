@@ -57,7 +57,3 @@ select::-ms-select-placeholder {
     margin: 0 10px;
     text-align: center;
 }
-
-.large-btn {
-    width: 100%;
-}

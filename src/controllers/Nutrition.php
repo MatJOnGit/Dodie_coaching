@@ -84,9 +84,9 @@ class Nutrition extends UserPanels {
     public function renderMealDetails(object $twig, array $mealData) {
         echo $twig->render('user_panels/meal-details.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
-            'frenchTitle' => 'Nutrition',
-            'appSection' => 'privatePanels',
-            'panel' => 'Nutrition',
+            'frenchTitle' => 'Ingrédients',
+            'appSection' => 'userPanels',
+            'prevPanel' => ['nutrition', 'Nutrition'],
             'subPanel' => 'Composition du repas',
             'meal' => $this->_getTranslatedMealData($mealData),
             'ingredients' => $this->_getMealDetails($mealData)
@@ -97,8 +97,8 @@ class Nutrition extends UserPanels {
         echo $twig->render('user_panels/nutrition.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'Nutrition',
-            'appSection' => 'privatePanels',
-            'panel' => 'Nutrition',
+            'appSection' => 'userPanels',
+            'prevPanel' => ['dashboard', 'Tableau de bord'],
             'nextDays' => $this->_getNextDates(),
             'meals' => $this->_getMeals(),
             'programFilePath' => $this->_getProgramsFilePath()
@@ -108,9 +108,9 @@ class Nutrition extends UserPanels {
     public function renderShoppingList(object $twig) {
         echo $twig->render('user_panels/shopping-list.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
-            'frenchTitle' => 'shopping list',
-            'appSection' => 'privatePanels',
-            'panel' => 'Nutrition',
+            'frenchTitle' => 'Liste de courses',
+            'appSection' => 'userPanels',
+            'prevPanel' => ['nutrition', 'Nutrition'],
             'subPanel' => 'Liste de courses',
             'shoppingList' => $this->_getShoppingList()
         ]);

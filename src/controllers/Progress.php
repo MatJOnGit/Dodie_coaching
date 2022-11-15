@@ -128,8 +128,8 @@ class Progress extends UserPanels {
         echo $twig->render('user_panels/progress.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'progression',
-            'appSection' => 'privatePanels',
-            'panel' => 'progression',
+            'appSection' => 'userPanels',
+            'prevPanel' => ['dashboard', 'Tableau de bord'],
             'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage),
             'progressHistory' => $this->getHistory(),
             'pageScripts' => $this->_getProgressScripts()

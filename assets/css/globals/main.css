@@ -64,10 +64,6 @@ footer li {
     background-color: hsla(0, 0%, 100%, .6);
 }
 
-.red-bkgd {
-    background-color: hsla(336, 100%, 29%, 1);
-}
-
 .dark-shaded-bkgd {
     background: linear-gradient(
         135deg,
@@ -171,6 +167,10 @@ input::placeholder {
 .tiny-btn,
 .large-btn {
     text-align: center;
+}
+
+.large-btn {
+    width: 100%;
 }
 
 .circle-btn {

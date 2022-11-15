@@ -100,8 +100,8 @@ class Meetings extends UserPanels {
         echo $twig->render('user_panels/meetings.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'rendez-vous',
-            'appSection' => 'privatePanels',
-            'panel' => 'rendez-vous',
+            'appSection' => 'userPanels',
+            'prevPanel' => ['dashboard', 'Tableau de bord'],
             'subPanel' => $this->_getUserPanelsSubpanels($this->_subMenuPage),
             'meetingSlots' => $this->_getSortedMeetingsSlots(),
             'scheduledMeetingDate' => $this->_getBookedMeetingDate(),

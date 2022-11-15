@@ -14,8 +14,8 @@ class Meetings extends UserPanels {
         this._nextDaysSchedule = this.scheduleNavElts[1];
         this._previousDaysSchedule = this.scheduleNavElts[0];
 
-        this._displayTabNextElements = this.displayTabNextElements.bind(this)
-        this._displayTabPreviousElements = this.displayTabPreviousElements.bind(this)
+        this._displayTabNextElements = this.displayTabNextElements.bind(this);
+        this._displayTabPreviousElements = this.displayTabPreviousElements.bind(this);
     }
 
     get appointmentTab() {

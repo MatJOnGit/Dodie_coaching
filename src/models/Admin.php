@@ -5,6 +5,15 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Admin extends Main {
+    public function selectApplicationDate(string $applicationId) {
+        $db = $this->dbConnect();
+        $selectApplicationQuery = "SELECT application_date FROM costumer_applications WHERE id = ?";
+        $selectApplicationStatement = $db->prepare($selectApplicationQuery);
+        $selectApplicationStatement->execute([$applicationId]);
+
+        return $selectApplicationStatement->fetch();
+    }
+    
     public function selectApplicationsCount() {
         $db = $this->dbConnect();
         $selectApplicationsCountQuery = "SELECT COUNT(user_id) as applicationsCount FROM costumer_applications WHERE staging = 'support_confirmation'";
@@ -34,10 +43,20 @@ class Admin extends Main {
 
     public function selectApplicationsHeaders() {
         $db = $this->dbConnect();
-        $selectApplicationsHeadersQuery = "SELECT CONCAT(a.first_name, ' ', UPPER(a.last_name)) as 'name', ca.id, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age', usd.job_style, usd.program_goal FROM costumer_applications ca INNER JOIN users_static_data usd ON ca.user_id = usd.user_id INNER JOIN accounts a ON ca.user_id = a.id WHERE ca.staging = 'support_confirmation' ORDER BY ca.application_date ASC";
+        $selectApplicationsHeadersQuery = "SELECT CONCAT(a.first_name, ' ', UPPER(a.last_name)) as 'name', ca.id, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age', udd.job_style, usd.program_goal FROM costumer_applications ca INNER JOIN users_static_data usd ON ca.user_id = usd.user_id INNER JOIN accounts a ON ca.user_id = a.id INNER JOIN users_dynamic_data udd ON ca.user_id = udd.user_id WHERE ca.staging = 'support_confirmation' ORDER BY ca.application_date ASC";
         $selectApplicationsHeadersStatement = $db->prepare($selectApplicationsHeadersQuery);
         $selectApplicationsHeadersStatement->execute();
 
         return $selectApplicationsHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectApplicationDetails(string $applicationId) {
+        $db = $this->dbConnect();
+        $selectApplicationDetailsQuery = "SELECT ca.id, CONCAT(a.first_name, ' ', UPPER(a.last_name)) as 'name', DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age', udd.job_style, usd.height, usd.initial_weight, usd.weight_goal, usd.food_restrictions, usd.food_intolerances, usd.sport_habits, udd.objectives FROM costumer_applications ca INNER JOIN accounts a ON ca.user_id = a.id INNER JOIN users_dynamic_data udd ON ca.user_id = udd.user_id INNER JOIN users_static_data usd
+        ON ca.user_id = usd.user_id WHERE ca.id = ?";
+        $selectApplicationDetailsStatement = $db->prepare($selectApplicationDetailsQuery);
+        $selectApplicationDetailsStatement->execute([$applicationId]);
+
+        return $selectApplicationDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

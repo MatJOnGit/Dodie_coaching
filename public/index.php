@@ -31,7 +31,7 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'applications-list']
+            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -229,8 +229,22 @@ try {
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
 
-                    if ($adminPanels->isApplicationsListRequested($page)) {
-                        $adminPanels->renderApplicationsListPage($twig);
+                    elseif ($adminPanels->isApplicationsListRequested($page)) {
+                        $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
+                        $adminApplication->renderApplicationsListPage($twig);
+                    }
+
+                    elseif ($adminPanels->isApplicationDetailsRequested($page) && $adminPanels->isRequestedApplicationIdSet()) {
+                        $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
+                        $applicationId = $adminPanels->getApplicationId();
+                        
+                        if ($adminPanels->isApplicationAvailable($applicationId)) {
+                            $adminApplication->renderApplicationDetailsPage($twig, $applicationId);
+                        }
+
+                        else {
+                            $adminPanels->routeTo('applicationsList');
+                        }
                     }
                 }
 

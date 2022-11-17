@@ -27,8 +27,8 @@ class PasswordRetriever extends Mailer {
 
             <p>Vous pourrez par la suite choisir un nouveau mot de passe.</p>
 
-            <p>A tout de suite !</p>" . $this->signature
-            ;
+            <p>A tout de suite !</p>"
+            . $this->signature;
     }
 
     public function sendToken(string $token) {

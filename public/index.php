@@ -35,7 +35,7 @@ try {
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment'],
-            'application' => ['reject-application']
+            'application' => ['reject-application', 'approve-application']
         ]
     ];
 
@@ -605,11 +605,12 @@ try {
                         $applicationId = $adminApplication->getParam('id');
 
                         if ($adminApplication->isApplicationIdValid($applicationId)) {
-                            $appRejecter = new Dodie_Coaching\Services\ApplicationRejecter;
+                            $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
 
                             $applicantData = $adminApplication->getApplicantData($applicationId);
+                            $messageType = $adminApplication->getMessageType();
 
-                            if ($appRejecter->sendNotification($adminApplication->getMessageType(), $applicantData)) {
+                            if ($appResponder->sendRejectionNotification($messageType, $applicantData)) {
 
                                 $adminApplication->eraseApplication($applicationId);
                                 $adminApplication->routeTo('applicationsList');
@@ -624,8 +625,38 @@ try {
                             $adminApplication->routeTo('applicationsList');
                         }
                     }
+
                     else {
-                        $adminApplication->routeTo('applicationsList');
+                        throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                    }
+                }
+
+                elseif ($adminApplication->isApproveApplicationActionRequested($action)) {
+                    if ($adminApplication->areParamsSet(['id'])) {
+                        $applicationId = $adminApplication->getParam('id');
+
+                        if ($adminApplication->isApplicationIdValid($applicationId)) {
+                            $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
+
+                            $applicantData = $adminApplication->getApplicantData($applicationId);
+
+                            if ($appResponder->sendApprovalNotification($applicantData)) {
+                                $adminApplication->acceptApplication($applicationId, 'payment_pending');
+                                $adminApplication->routeTo('applicationsList');
+                            }
+
+                            else {
+                                throw new Mailer_Exception('FAILED TO SEND APPLICATION APPROVAL EMAIL');
+                            }
+                        }
+
+                        else {
+                            $adminApplication->routeTo('applicationsList');
+                        }
+                    }
+
+                    else {
+                        throw new Data_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
                 

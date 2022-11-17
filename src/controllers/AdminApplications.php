@@ -44,6 +44,14 @@ class AdminApplications extends AdminPanels {
         return $admin->selectApplicationDate($applicationId);
     }
 
+    public function isRejectApplicationActionRequested(string $action): bool {
+        return $action === 'reject-application';
+    }
+
+    public function isApproveApplicationActionRequested(string $action): bool {
+        return $action === 'approve-application';
+    }
+
     public function isRejectionMessageEmpty() {
         return empty($_POST['rejection-message']);
     }
@@ -62,5 +70,11 @@ class AdminApplications extends AdminPanels {
         $admin = new AdminModel;
 
         return $admin->deleteApplication($applicationId);
+    }
+
+    public function acceptApplication (int $applicationId, string $newApplicationStatus) {
+        $admin = new AdminModel;
+
+        return $admin->updateApplicationStatus($applicationId, $newApplicationStatus);
     }
 }

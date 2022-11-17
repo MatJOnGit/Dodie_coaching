@@ -76,4 +76,12 @@ class Admin extends Main {
 
         return $selectApplicationDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function updateApplicationStatus(string $applicationId, string $newApplicationStatus) {
+        $db = $this->dbConnect();
+        $updateApplicationStatusQuery = "UPDATE costumer_applications SET staging = ? WHERE id = ?";
+        $updateApplicationStatusStatement = $db->prepare($updateApplicationStatusQuery);
+
+        return $updateApplicationStatusStatement->execute([$newApplicationStatus, $applicationId]);
+    }
 }

@@ -51,10 +51,6 @@ class AdminPanels extends Main {
         return $page === 'admin-dashboard';
     }
 
-    public function isRejectApplicationActionRequested(string $action): bool {
-        return $action === 'reject-application';
-    }
-
     public function isRequestedApplicationIdSet() : bool {
         return isset($_GET['id']);
     }

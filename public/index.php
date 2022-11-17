@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Dodie_Coaching\Services\Mailer;
-
 session_start();
 
 // session_destroy();
@@ -36,7 +34,8 @@ try {
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
-            'meeting' => ['book-appointment', 'cancel-appointment']
+            'meeting' => ['book-appointment', 'cancel-appointment'],
+            'application' => ['reject-application']
         ]
     ];
 
@@ -383,9 +382,9 @@ try {
                     $newToken = $user->generateToken();
 
                     if ($user->registerToken($newToken)) {
-                        $mailer = new \Dodie_Coaching\Services\Mailer;
+                        $pwdRetriever = new Dodie_Coaching\Services\PasswordRetriever;
             
-                        if ($mailer->sendToken($newToken)) {
+                        if ($pwdRetriever->sendToken($newToken)) {
                             $user->routeTo('mail-notification');
                         }
 
@@ -523,7 +522,7 @@ try {
 
                 elseif ($progress->isReportDeletionRequested($action)) {
                     if ($progress->isReportIdSet()) {
-                        $reportId = $progress->getReportId();
+                        $reportId = $progress->getParam('id');
 
                         if ($progress->isReportIdValid($reportId)) {
                             $progressHistory = $progress->getHistory();
@@ -590,6 +589,49 @@ try {
                 }
 
                 $meetings->routeTo('meetings');
+            }
+
+            else {
+                $user->logoutUser();
+            }
+        }
+
+        elseif (in_array($action, $Urls['actions']['application'])) {
+            $adminApplication = new \Dodie_Coaching\Controllers\AdminApplications;
+
+            if ($user->isLogged()) {
+                if ($adminApplication->isRejectApplicationActionRequested($action)) {
+                    if ($adminApplication->areParamsSet(['id'])) {
+                        $applicationId = $adminApplication->getParam('id');
+
+                        if ($adminApplication->isApplicationIdValid($applicationId)) {
+                            $appRejecter = new Dodie_Coaching\Services\ApplicationRejecter;
+
+                            $applicantData = $adminApplication->getApplicantData($applicationId);
+
+                            if ($appRejecter->sendNotification($adminApplication->getMessageType(), $applicantData)) {
+
+                                $adminApplication->eraseApplication($applicationId);
+                                $adminApplication->routeTo('applicationsList');
+                            }
+
+                            else {
+                                throw new Mailer_Exception('FAILED TO SEND APPLICATION REJECTION EMAIL');
+                            }
+                        }
+
+                        else {
+                            $adminApplication->routeTo('applicationsList');
+                        }
+                    }
+                    else {
+                        $adminApplication->routeTo('applicationsList');
+                    }
+                }
+                
+                else {
+                    echo "Page d'action inconnue";
+                }
             }
 
             else {

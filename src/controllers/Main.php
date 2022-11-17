@@ -16,4 +16,8 @@ class Main {
     protected function _setTimeZone() {
         date_default_timezone_set($this->_timeZone);
     }
+
+    public function getParam(string $param): int {
+        return intval(htmlspecialchars($_GET[$param]));
+    }
 }

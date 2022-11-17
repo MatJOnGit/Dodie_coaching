@@ -5,6 +5,23 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Admin extends Main {
+    public function deleteApplication(int $applicationId) {
+        $db = $this->dbConnect();
+        $deleteApplicationQuery = "DELETE FROM costumer_applications WHERE id = ?";
+        $deleteApplicationStatement = $db->prepare($deleteApplicationQuery);
+
+        return $deleteApplicationStatement->execute([$applicationId]);
+    }
+
+    public function selectApplicantData(int $applicationId) {
+        $db = $this->dbConnect();
+        $selectApplicantEmailQuery = "SELECT email, first_name FROM accounts a INNER JOIN costumer_applications ca ON a.id = ca.user_id WHERE ca.id = ?";
+        $selectApplicantEmailStatement = $db->prepare($selectApplicantEmailQuery);
+        $selectApplicantEmailStatement->execute([$applicationId]);
+
+        return $selectApplicantEmailStatement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function selectApplicationDate(string $applicationId) {
         $db = $this->dbConnect();
         $selectApplicationQuery = "SELECT application_date FROM costumer_applications WHERE id = ?";

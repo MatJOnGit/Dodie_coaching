@@ -88,10 +88,6 @@ class Progress extends UserPanels {
         return $progress->selectReports($_SESSION['email']);
     }
 
-    public function getReportId(): int {
-        return intval(htmlspecialchars($_GET['id']));
-    }
-
     public function isCurrentWeightReport(array $baseFormData): bool {
         return ($baseFormData['dateType'] === 'current-weight');
     }

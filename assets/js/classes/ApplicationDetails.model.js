@@ -4,7 +4,7 @@ class ApplicationDetails {
         this._applicationDecisionBox = document.getElementById('application-decision-box');
         this._declineApplicationBtn = document.getElementById('decline-btn');
 
-        this._rejectApplicationLink = 'index.php?action=rejectApplication&id=';
+        this._rejectApplicationLink = 'index.php?action=reject-application&id=';
 
         this._applicationId;
     }
@@ -64,6 +64,7 @@ class ApplicationDetails {
         rejectApplicationForm.method = 'post';
 
         rejectionMessage.placeholder = 'Votre message de refus de prise en charge';
+        rejectionMessage.name = 'rejection-message';
 
         reloadBtn.innerText = 'Annuler';
         reloadBtn.href = `index.php?page=application-details&id=${this.applicationId}`;

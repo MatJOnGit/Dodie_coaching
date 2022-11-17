@@ -2,6 +2,8 @@
 
 namespace Dodie_Coaching\Controllers;
 
+use Dodie_Coaching\Models\Admin as AdminModel;
+
 class AdminApplications extends AdminPanels {
     public function renderApplicationDetailsPage(object $twig, string $applicationId) {
         echo $twig->render('admin_panels/application-details.html.twig', [
@@ -22,5 +24,43 @@ class AdminApplications extends AdminPanels {
             'prevPanel' => ['admin-dashboard', 'Tableau de bord'],
             'applicationsHeaders' => $this->_getApplicationsHeaders()
         ]);
+    }
+
+    public function areParamsSet(array $params) {
+        $areParamsSet = true;
+
+        foreach ($params as $param) {
+            if (!isset($_GET[$param])) {
+                $areParamsSet = false;
+            }
+        }
+
+        return $areParamsSet;
+    }
+
+    public function isApplicationIdValid(int $applicationId) {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicationDate($applicationId);
+    }
+
+    public function isRejectionMessageEmpty() {
+        return empty($_POST['rejection-message']);
+    }
+
+    public function getMessageType() {
+        return empty($_POST['rejection-message']) ? 'default' : 'custom';
+    }
+
+    public function getApplicantData(int $applicationId) {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicantData($applicationId);
+    }
+
+    public function eraseApplication (int $applicationId) {
+        $admin = new AdminModel;
+
+        return $admin->deleteApplication($applicationId);
     }
 }

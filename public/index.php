@@ -29,7 +29,7 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list']
+            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list', 'subscriber-profile']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -233,11 +233,11 @@ try {
                         $adminApplication->renderApplicationsListPage($twig);
                     }
 
-                    elseif ($adminPanels->isApplicationDetailsRequested($page) && $adminPanels->isRequestedApplicationIdSet()) {
+                    elseif ($adminPanels->isApplicationDetailsRequested($page) && $adminPanels->areParamSet(['id'])) {
                         $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
-                        $applicationId = $adminPanels->getApplicationId();
+                        $applicationId = $adminPanels->getParam('id');
                         
-                        if ($adminPanels->isApplicationAvailable($applicationId)) {
+                        if ($adminApplication->isApplicationAvailable($applicationId)) {
                             $adminApplication->renderApplicationDetailsPage($twig, $applicationId);
                         }
 
@@ -249,6 +249,19 @@ try {
                     elseif ($adminPanels->isSubscribersListRequested($page)) {
                         $adminSubs = new Dodie_Coaching\Controllers\AdminSubscribers;
                         $adminSubs->renderSubscribersListPage($twig);
+                    }
+
+                    elseif ($adminPanels->isSubscriberProfileRequested($page) && $adminPanels->areParamSet(['id'])) {
+                        $adminSubscribers = new Dodie_Coaching\Controllers\AdminSubscribers;
+                        $subscriberId = $adminSubscribers->getParam('id');
+                        
+                        if ($adminSubscribers->isSubscriberIdAvailable($subscriberId)) {
+                            $adminSubscribers->renderSubscriberProfilePage($twig, $subscriberId);
+                        }
+
+                        else {
+                            $adminPanels->routeTo('subscribersList');
+                        }
                     }
                 }
 

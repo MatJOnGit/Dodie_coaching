@@ -2,16 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Admin as AdminModel;
-
 class AdminPanels extends Main {
-    protected $_adminPanelsSubpanels = [
-        'pending-applications' => 'Demandes en attente',
-        'meetings' => 'Rendez-vous',
-        'programs' => 'Programmes',
-        'users' => 'Utilisateurs'
-    ];
-    
     protected $_adminPanelsStyles = [
         'pages/admin-panels',
         'components/header',
@@ -19,9 +10,17 @@ class AdminPanels extends Main {
         'components/footer'
     ];
 
+    protected $_adminPanelsSubpanels = [
+        'pending-applications' => 'Demandes en attente',
+        'meetings' => 'Rendez-vous',
+        'programs' => 'Programmes',
+        'users' => 'Utilisateurs'
+    ];
+    
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=admin-dashboard',
-        'applicationsList' => 'index.php?page=applications-list'
+        'applicationsList' => 'index.php?page=applications-list',
+        'subscribersList' => 'index.php?page=subscribers-list'
     ];
     
     private $_progressScripts = [
@@ -29,14 +28,16 @@ class AdminPanels extends Main {
         'applicationDetailsApp'
     ];
 
-    public function getApplicationId(): string {
-        return htmlspecialchars($_GET['id']);
-    }
-  
-    public function isApplicationAvailable(string $applicationId) {
-        $admin = new AdminModel;
+    public function areParamSet(array $params): bool {
+        $areParamSet = true;
 
-        return $admin->selectApplicationDate($applicationId);
+        foreach ($params as $param) {
+            if (!isset($_GET[$param])) {
+                $areParamSet = false;
+            }
+        }
+
+        return $areParamSet;
     }
 
     public function isApplicationDetailsRequested(string $page): bool {
@@ -47,30 +48,24 @@ class AdminPanels extends Main {
         return $page === 'applications-list';
     }
 
-    public function isSubscribersListRequested(string $page): bool {
-        return $page === 'subscribers-list';
-    }
-
-    public function isDashboardPageRequested($page) {
+    public function isDashboardPageRequested($page): bool {
         return $page === 'admin-dashboard';
     }
 
-    public function isRequestedApplicationIdSet() : bool {
-        return isset($_GET['id']);
+    public function isSubscriberProfileRequested(string $page): bool {
+        return $page === 'subscriber-profile';
     }
 
-    protected function _getAdminPanelsSubpanels(string $page) {
-        return $this->_adminPanelsSubpanels[$page];
+    public function isSubscribersListRequested(string $page): bool {
+        return $page === 'subscribers-list';
     }
 
     protected function _getAdminPanelsStyle() {
         return $this->_adminPanelsStyles;
     }
 
-    protected function _getApplicationsDetails(string $applicationId) {
-        $admin = new AdminModel;
-
-        return $admin->selectApplicationDetails($applicationId);
+    protected function _getAdminPanelsSubpanels(string $page) {
+        return $this->_adminPanelsSubpanels[$page];
     }
 
     protected function _getProgressScripts(): array {

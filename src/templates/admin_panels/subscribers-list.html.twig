@@ -11,7 +11,7 @@
                     <li>{{ headers['age'] }} ans, {{ headers['job_style'] | lower }}</li>
                     <li>Objectif(s) : {{ headers['program_goal'] }}</li>
                     <li>Status du programme : {{ headers['program_status'] }}</li>
-                    <a href='index.php?page=subscriber-details&id={{ headers['id'] }}' class='btn large-btn admin-link'>Détails du profil</a>
+                    <a href='index.php?page=subscriber-profile&id={{ headers['id'] }}' class='btn large-btn admin-link'>Détails du profil</a>
                 </ul>
             {% endfor %}
         {% else %}

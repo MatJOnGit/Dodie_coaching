@@ -26,16 +26,16 @@ class Meetings extends UserPanels {
         );
     }
 
-    public function cancelAppointment(): bool {
-        $dashboard = new MeetingsModel;
-
-        return $dashboard->updateBookedMeeting($_SESSION['email']);
-    }
-
     public function bookAppointment(string $meetingDate): bool {
         $dashboard = new MeetingsModel;
 
         return $dashboard->updateAvailableMeeting($_SESSION['email'], $meetingDate);
+    }
+
+    public function cancelAppointment(): bool {
+        $dashboard = new MeetingsModel;
+
+        return $dashboard->updateBookedMeeting($_SESSION['email']);
     }
 
     public function getDateData(): array {

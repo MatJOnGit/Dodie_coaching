@@ -5,6 +5,19 @@ namespace Dodie_Coaching\Controllers;
 use Dodie_Coaching\Models\User as UserModel;
 
 class User extends Main {
+    protected $_routingURLs = [
+        'dashboard' => 'index.php?page=dashboard',
+        'login' => 'index.php?page=login',
+        'presentation' => 'index.php?page=presentation',
+        'registering' => 'index.php?page=registering',
+        'mail-notification' => 'index.php?page=mail-notification',
+        'edit-password' => 'index.php?page=password-editing',
+        'retrieved-password' => 'index.php?page=retrieved-password',
+        'admin-dashboard' => 'index.php?page=admin-dashboard',
+        'send-token' => 'index.php?action=send-token',
+        'token-signing' => 'index.php?page=token-signing'
+    ];
+
     private $_connectionPagesStyles = [
         'pages/connection-panels',
         'components/header',
@@ -53,19 +66,6 @@ class User extends Main {
     private $_tokenRegex = '/^[A-Z0-9]{6}$/';
 
     private $_tokenGeneratorTimeOut = 3600;
-
-    protected $_routingURLs = [
-        'dashboard' => 'index.php?page=dashboard',
-        'login' => 'index.php?page=login',
-        'presentation' => 'index.php?page=presentation',
-        'registering' => 'index.php?page=registering',
-        'mail-notification' => 'index.php?page=mail-notification',
-        'edit-password' => 'index.php?page=password-editing',
-        'retrieved-password' => 'index.php?page=retrieved-password',
-        'admin-dashboard' => 'index.php?page=admin-dashboard',
-        'send-token' => 'index.php?action=send-token',
-        'token-signing' => 'index.php?page=token-signing'
-    ];
 
     public function areDataPosted(array $postedData) {
         $areDataPosted = true;

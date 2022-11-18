@@ -61,6 +61,10 @@ class Nutrition extends UserPanels {
         return $mealData;
     }
 
+    public function getRequest(): string {
+        return htmlspecialchars($_GET['request']);
+    }
+
     public function isMealRequested(): bool {
         return (isset($_GET['meal']) && !isset($_GET['request']));
     }
@@ -75,10 +79,6 @@ class Nutrition extends UserPanels {
 
     public function isShoppingListRequested($request): bool {
         return $request === 'shopping-list';
-    }
-
-    public function getRequest(): string {
-        return htmlspecialchars($_GET['request']);
     }
 
     public function renderMealDetails(object $twig, array $mealData) {
@@ -160,7 +160,7 @@ class Nutrition extends UserPanels {
 
     private function _getProgramsFilePath() {
         $nutrition = new NutritionModel;
-        $fileName = $nutrition->selectFileName($_SESSION['email']);
+        $fileName = $nutrition->selectProgramFileName($_SESSION['email']);
 
         return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
     }

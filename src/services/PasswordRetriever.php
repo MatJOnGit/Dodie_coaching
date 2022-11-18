@@ -3,9 +3,13 @@
 namespace Dodie_Coaching\Services;
 
 class PasswordRetriever extends Mailer {
+    private $_subject = 'Récupération de votre mot de passe';
+
     protected $_tokenSigningLink = 'http://localhost:8080/Dodie_coaching/public/index.php?page=token-signing';
 
-    private $_subject = 'Récupération de votre mot de passe';
+    public function sendToken(string $token) {
+        return mail($this->_getMailTo(), $this->_subject, $this->_getPwdRetrievingMessage($token), $this->headers);
+    }
 
     protected function _getMailTo(): string {
         return $_SESSION['email'];
@@ -29,9 +33,5 @@ class PasswordRetriever extends Mailer {
 
             <p>A tout de suite !</p>"
             . $this->signature;
-    }
-
-    public function sendToken(string $token) {
-        return mail($this->_getMailTo(), $this->_subject, $this->_getPwdRetrievingMessage($token), $this->headers);
     }
 }

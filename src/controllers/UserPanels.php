@@ -3,8 +3,6 @@
 namespace Dodie_Coaching\Controllers;
 
 class UserPanels extends Main {
-    private $_months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
         'progress' => 'index.php?page=progress',
@@ -12,8 +10,6 @@ class UserPanels extends Main {
         'meetings' => 'index.php?page=meetings',
         'subscription' => 'index.php?page=subscription'
     ];
-
-    private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
     
     protected $_userPanelsStyles = [
         'pages/user-panels',
@@ -29,6 +25,14 @@ class UserPanels extends Main {
         'subscriptions' => 'Abonnement'
     ];
 
+    private $_months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+    private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
+
+    public function isDashboardPageRequested(string $page): bool {
+        return $page === 'dashboard';
+    }
+
     public function isMeetingsPageRequested(string $page): bool {
         return $page === 'meetings';
     }
@@ -43,10 +47,6 @@ class UserPanels extends Main {
 
     public function isSubscriptionPageRequested(string $page): bool {
         return $page === 'subscription';
-    }
-
-    public function isDashboardPageRequested(string $page): bool {
-        return $page === 'dashboard';
     }
 
     protected function _getMonths() {

@@ -5,15 +5,6 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Nutrition extends Main {
-    public function selectFileName(string $email) {
-        $db = $this->dbConnect();
-        $selectFileNameQuery = 'SELECT nutrition_file_name FROM programs_files WHERE user_id = (SELECT id FROM accounts WHERE email = ?)';
-        $selectFileNameStatement = $db->prepare($selectFileNameQuery);
-        $selectFileNameStatement->execute([$email]);
-
-        return $selectFileNameStatement->fetch();
-    }
-
     public function selectMealDetails(string $day, string $meal, string $email) {
         $db = $this->dbConnect();
         $selectMealQuery = 'SELECT ingr.name, ingr.french_name, ingr.recipe, ingr.type, fp.quantity, ingr. measure_unit FROM food_plans fp INNER JOIN ingredients ingr ON fp.ingredient_id = ingr.id WHERE day = ? AND meal = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)';
@@ -30,5 +21,14 @@ class Nutrition extends Main {
         $selectMealsIngredientsStatement->execute([$email]);
 
         return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectProgramFileName(string $email) {
+        $db = $this->dbConnect();
+        $selectProgramFileNameQuery = 'SELECT nutrition_file_name FROM programs_files WHERE user_id = (SELECT id FROM accounts WHERE email = ?)';
+        $selectProgramFileNameStatement = $db->prepare($selectProgramFileNameQuery);
+        $selectProgramFileNameStatement->execute([$email]);
+
+        return $selectProgramFileNameStatement->fetch();
     }
 }

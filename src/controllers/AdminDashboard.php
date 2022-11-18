@@ -16,26 +16,6 @@ class AdminDashboard extends AdminPanels {
         ]);
     }
 
-    private function _getApplicationsCount() {
-        $admin = new AdminModel;
-
-        return $admin->selectApplicationsCount();
-    }
-
-    private function _getSubscribersCount() {
-        $admin = new AdminModel;
-
-        return $admin->selectSubscribersCount();
-    }
-
-    private function _getTodayMeetingsData() {
-        $admin = new AdminModel;
-
-        $incomingMeetings = $admin->selectIncomingMeetings();
-
-        return $this->_filterTodayMeetingsData($incomingMeetings);
-    }
-
     private function _filterTodayMeetingsData(array $incomingMeetings) {
         $this->_setTimeZone();
         $currentDate = date('Y-m-d');
@@ -58,5 +38,25 @@ class AdminDashboard extends AdminPanels {
         }
 
         return $todayMeetingsData;
+    }
+
+    private function _getApplicationsCount() {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicationsCount();
+    }
+
+    private function _getSubscribersCount() {
+        $admin = new AdminModel;
+
+        return $admin->selectSubscribersCount();
+    }
+
+    private function _getTodayMeetingsData() {
+        $admin = new AdminModel;
+
+        $incomingMeetings = $admin->selectIncomingMeetings();
+
+        return $this->_filterTodayMeetingsData($incomingMeetings);
     }
 }

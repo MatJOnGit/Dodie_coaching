@@ -15,10 +15,10 @@
             <li>Activité sportive : {{ applicationDetails['sport_habits'] }}</li>
         </ul>
 
-    <div id='application-decision-box'>
-        <a href='index.php?action=approve-application&id={{ applicationDetails['id'] }}' class='btn rounded-btn tiny-btn'>Accepter</a>
-        <button class='btn rounded-btn tiny-btn red-bkgd' id='decline-btn' data-id='{{ applicationDetails['id'] }}'>Refuser</button>
-    </div>
+        <div id='application-decision-box'>
+            <a href='index.php?action=approve-application&id={{ applicationDetails['id'] }}' class='btn rounded-btn tiny-btn'>Accepter</a>
+            <button class='btn rounded-btn tiny-btn red-bkgd' id='decline-btn' data-id='{{ applicationDetails['id'] }}'>Refuser</button>
+        </div>
         
     </div>
 {% endblock pageContent %}

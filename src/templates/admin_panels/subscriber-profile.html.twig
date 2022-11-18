@@ -1,0 +1,51 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel profile-panel'>
+
+        <h3>Profil de {{ subscriberDetails['name'] }}</h3>
+
+        <div class='sub-profile-btns'>
+            <a href='index.php?page=subscriber-program&id={{ subscriberDetails['id'] }}' class='btn rounded-btn tiny-btn'>Programme</a>
+            <a href='index.php?page=subscriber-notes&id={{ subscriberDetails['id'] }}' class='btn rounded-btn tiny-btn'>Notes de suivi</a>
+        </div>
+
+        <h4>Informations utilisateur</h4>
+
+        <ul>
+            <li><b>Age :</b> {{ subscriberDetails['age'] }} ans</li>
+            <li><b>Emploi :</b> {{ subscriberDetails['job_style'] }}</li>
+            <li><b>Taille :</b> {{ subscriberDetails['height'] / 100}} m</li>
+            <li><b>Poids de départ :</b> {{ subscriberDetails['initial_weight'] }} kg</li>
+            <li><b>Poids actuel :</b> 
+                {% if subscriberDetails['current_weight'] is null %}
+                    {{ subscriberDetails['initial_weight'] }} kg
+                {% else %}
+                    {{ subscriberDetails['current_weight'] }} kg
+                {% endif %}
+            </li>
+            <li><b>Objectif poids :</b> {{ subscriberDetails['weight_goal'] }} kg</li>
+            <li><b>Restrictions nutritives :</b> {{ subscriberDetails['food_restrictions'] }}</li>
+            <li><b>Intolérances nutritives :</b> {{ subscriberDetails['food_intolerances'] }}</li>
+            <li><b>Activité sportive :</b> {{ subscriberDetails['sport_habits'] }}</li>
+            <li><b>Repas journalier :</b> {{ subscriberDetails['daily_meals'] }}
+                {% if subscriberDetails['snacks_enabled'] %}
+                    + snack
+                {% endif %}
+            </li>
+        </ul>
+
+        <h4>Information abonnement</h4>
+        <ul>
+            <li><b>Compte créé le :</b> {{ accountDetails[0]['first_subscription_date'] | date('d/m/Y') | split(' ')[0]}}</li>
+            <li><b>Type d'abonnement en cours :</b> {{ accountDetails[0]['program_type'] }}</li>
+            <li><b>Date de fin d'abonnement :</b> {{ accountDetails[0]['date'] | date_modify('+1 month') | date ('d/m/Y') }}</li>
+            <li><b>Durée de suivi (à ce jour) :</b> {{ accountDetails | length }} mois</li>
+        </ul>
+
+    </div>
+{% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

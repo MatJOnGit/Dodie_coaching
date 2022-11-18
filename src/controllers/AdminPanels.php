@@ -47,6 +47,10 @@ class AdminPanels extends Main {
         return $page === 'applications-list';
     }
 
+    public function isSubscribersListRequested(string $page): bool {
+        return $page === 'subscribers-list';
+    }
+
     public function isDashboardPageRequested($page) {
         return $page === 'admin-dashboard';
     }
@@ -61,12 +65,6 @@ class AdminPanels extends Main {
 
     protected function _getAdminPanelsStyle() {
         return $this->_adminPanelsStyles;
-    }
-
-    protected function _getApplicationsHeaders() {
-        $admin = new AdminModel;
-
-        return $admin->selectApplicationsHeaders();
     }
 
     protected function _getApplicationsDetails(string $applicationId) {

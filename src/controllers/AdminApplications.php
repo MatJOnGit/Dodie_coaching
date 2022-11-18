@@ -77,4 +77,10 @@ class AdminApplications extends AdminPanels {
 
         return $admin->updateApplicationStatus($applicationId, $newApplicationStatus);
     }
+
+    private function _getApplicationsHeaders() {
+        $admin = new AdminModel;
+
+        return $admin->selectApplicationsHeaders();
+    }
 }

@@ -49,6 +49,15 @@ class Admin extends Main {
         return $selectSubscribersCountStatement->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function selectSubscriberssHeaders() {
+        $db = $this->dbConnect();
+        $selectSubscribersHeadersQuery = "SELECT CONCAT(a.first_name, ' ', UPPER(a.last_name)) as 'name', sub.id, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age', usd.program_goal, udd.job_style, sub.program_status FROM subscribers sub INNER JOIN users_static_data usd ON sub.user_id = usd.user_id INNER JOIN accounts a ON sub.user_id = a.id INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id";
+        $selectSubscribersHeadersStatement = $db->prepare($selectSubscribersHeadersQuery);
+        $selectSubscribersHeadersStatement->execute();
+
+        return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function selectIncomingMeetings() {
         $db = $this->dbConnect();
         $selectIncomingMeetingsQuery = "SELECT sl.slot_date, a.first_name, a.last_name FROM scheduled_slots sl INNER JOIN accounts a ON sl.user_id = a.id WHERE sl.slot_date > CURRENT_TIMESTAMP AND sl.slot_status = 'booked' AND sl.user_id > 0";

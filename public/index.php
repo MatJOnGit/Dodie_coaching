@@ -29,7 +29,7 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details']
+            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -244,6 +244,11 @@ try {
                         else {
                             $adminPanels->routeTo('applicationsList');
                         }
+                    }
+
+                    elseif ($adminPanels->isSubscribersListRequested($page)) {
+                        $adminSubs = new Dodie_Coaching\Controllers\AdminSubscribers;
+                        $adminSubs->renderSubscribersListPage($twig);
                     }
                 }
 

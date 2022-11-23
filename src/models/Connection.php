@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class User extends Main {
+class Connection extends Main {
     public function deleteToken(string $email) {
         $db = $this->dbConnect();
         $deleteTokenQuery = 'DELETE rt FROM reset_tokens rt INNER JOIN accounts a ON rt.user_id = a.id WHERE a.email = ?';

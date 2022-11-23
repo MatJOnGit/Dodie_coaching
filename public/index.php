@@ -29,13 +29,14 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list', 'subscriber-profile']
+            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment'],
-            'application' => ['reject-application', 'approve-application']
+            'application' => ['reject-application', 'approve-application'],
+            'subscriber' => ['save-note', 'edit-note', 'delete-note']
         ]
     ];
 
@@ -228,17 +229,17 @@ try {
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
 
-                    elseif ($adminPanels->isApplicationsListRequested($page)) {
+                    elseif ($adminPanels->isApplicationsListPageRequested($page)) {
                         $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
                         $adminApplication->renderApplicationsListPage($twig);
                     }
 
-                    elseif ($adminPanels->isApplicationDetailsRequested($page) && $adminPanels->areParamSet(['id'])) {
+                    elseif ($adminPanels->isApplicationDetailsPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
                         $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
-                        $applicationId = $adminPanels->getParam('id');
+                        $applicantId = $adminPanels->getParam('id');
                         
-                        if ($adminApplication->isApplicationAvailable($applicationId)) {
-                            $adminApplication->renderApplicationDetailsPage($twig, $applicationId);
+                        if ($adminApplication->isApplicationAvailable($applicantId)) {
+                            $adminApplication->renderApplicationDetailsPage($twig, $applicantId);
                         }
 
                         else {
@@ -246,17 +247,43 @@ try {
                         }
                     }
 
-                    elseif ($adminPanels->isSubscribersListRequested($page)) {
+                    elseif ($adminPanels->isSubscribersListPageRequested($page)) {
                         $adminSubs = new Dodie_Coaching\Controllers\AdminSubscribers;
                         $adminSubs->renderSubscribersListPage($twig);
                     }
 
-                    elseif ($adminPanels->isSubscriberProfileRequested($page) && $adminPanels->areParamSet(['id'])) {
+                    elseif ($adminPanels->isSubscriberProfilePageRequested($page) && $adminPanels->areParamsSet(['id'])) {
                         $adminSubscribers = new Dodie_Coaching\Controllers\AdminSubscribers;
                         $subscriberId = $adminSubscribers->getParam('id');
                         
                         if ($adminSubscribers->isSubscriberIdAvailable($subscriberId)) {
                             $adminSubscribers->renderSubscriberProfilePage($twig, $subscriberId);
+                        }
+
+                        else {
+                            $adminPanels->routeTo('subscribersList');
+                        }
+                    }
+
+                    elseif ($adminPanels->isSubscriberProgramPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
+                        $subscriberProgram = new Dodie_Coaching\Controllers\SubscriberProgram;
+                        $subscriberId = $subscriberProgram->getParam('id');
+                        
+                        if ($subscriberProgram->isSubscriberIdAvailable($subscriberId)) {
+                            $subscriberProgram->renderSubscriberProgramPage($twig, $subscriberId);
+                        }
+
+                        else {
+                            $adminPanels->routeTo('subscribersList');
+                        }
+                    }
+
+                    elseif ($adminPanels->isSubscriberNotesPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
+                        $subscriberNotes = new Dodie_Coaching\Controllers\SubscriberNotes;
+                        $subscriberId = $subscriberNotes->getParam('id');
+                        
+                        if ($subscriberNotes->isSubscriberIdAvailable($subscriberId)) {
+                            $subscriberNotes->renderSubscriberNotesPage($twig, $subscriberId);
                         }
 
                         else {
@@ -620,17 +647,17 @@ try {
             if ($user->isLogged()) {
                 if ($adminApplication->isRejectApplicationActionRequested($action)) {
                     if ($adminApplication->areParamsSet(['id'])) {
-                        $applicationId = $adminApplication->getParam('id');
+                        $applicantId = $adminApplication->getParam('id');
 
-                        if ($adminApplication->isApplicationIdValid($applicationId)) {
+                        if ($adminApplication->isApplicationIdValid($applicantId)) {
                             $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
 
-                            $applicantData = $adminApplication->getApplicantData($applicationId);
+                            $applicantData = $adminApplication->getApplicantData($applicantId);
                             $messageType = $adminApplication->getMessageType();
 
                             if ($appResponder->sendRejectionNotification($messageType, $applicantData)) {
 
-                                $adminApplication->eraseApplication($applicationId);
+                                $adminApplication->eraseApplication($applicantId);
                                 $adminApplication->routeTo('applicationsList');
                             }
 
@@ -651,15 +678,15 @@ try {
 
                 elseif ($adminApplication->isApproveApplicationActionRequested($action)) {
                     if ($adminApplication->areParamsSet(['id'])) {
-                        $applicationId = $adminApplication->getParam('id');
+                        $applicantId = $adminApplication->getParam('id');
 
-                        if ($adminApplication->isApplicationIdValid($applicationId)) {
+                        if ($adminApplication->isApplicationIdValid($applicantId)) {
                             $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
 
-                            $applicantData = $adminApplication->getApplicantData($applicationId);
+                            $applicantData = $adminApplication->getApplicantData($applicantId);
 
                             if ($appResponder->sendApprovalNotification($applicantData)) {
-                                $adminApplication->acceptApplication($applicationId, 'payment_pending');
+                                $adminApplication->acceptApplication($applicantId, 'payment_pending');
                                 $adminApplication->routeTo('applicationsList');
                             }
 
@@ -680,6 +707,108 @@ try {
                 
                 else {
                     echo "Page d'action inconnue";
+                }
+            }
+
+            else {
+                $user->logoutUser();
+            }
+        }
+
+        elseif (in_array($action, $Urls['actions']['subscriber'])) {
+            $subscriberNotes = new \Dodie_Coaching\Controllers\SubscriberNotes;
+
+            if ($user->isLogged()) {
+                if ($subscriberNotes->isSaveNoteActionRequested($action)) {
+                    if ($subscriberNotes->areParamsSet(['id'])) {
+                        $subscriberId = $subscriberNotes->getParam('id');
+
+                        if ($subscriberNotes->isSubscriberIdValid($subscriberId)) {
+                            if ($subscriberNotes->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                                $noteData = $subscriberNotes->buildNoteData($subscriberId);
+                                
+                                if ($noteData) {
+                                    $subscriberNotes->logNote($noteData);
+
+                                    header("location:index.php?page=subscriber-notes&id=" . $noteData['subscriber_id']);
+                                }
+
+                                else {
+                                    // header("location:index.php?page=subscriber-notes&id=" . $noteData['subscriber_id']);
+                                    throw new Data_Exception('INVALID NOTES PARAMERS FROM NOTE FORM');
+                                }
+
+                            }
+
+                            else {
+                                throw new Data_Exception('MISSING NOTE PARAMETERS FROM NOTE FORM');
+                                // $adminApplication->routeTo('applicationsList');
+                            }
+                        }
+
+                        else {
+                            throw new Data_Exception('INVALID ID PARAMETER IN URL');
+                            // $adminApplication->routeTo('applicationsList');
+                        }
+                    }
+
+                    else {
+                        throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                    }
+                }
+
+                elseif ($subscriberNotes->isEditNoteActionRequested($action)) {
+                    if ($subscriberNotes->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = $subscriberNotes->getParam('id');
+                        $noteId = $subscriberNotes->getParam('note-id');
+
+                        if ($subscriberNotes->isSubscriberIdValid($subscriberId) && $subscriberNotes->isNoteIdValid($noteId)) {
+
+                            if ($subscriberNotes->areDataPosted(['note-message', 'attached-meeting-date'])) {
+
+                                $noteData = $subscriberNotes->buildNoteData($subscriberId);
+
+                                if ($noteData) {
+                                    $subscriberNotes->editNote($noteData, $noteId);
+
+                                    header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
+                                }
+
+                                else {
+                                    throw new Data_Exception('INVALID NOTES PARAMERS FROM NOTE FORM');
+                                }
+                            }
+                            else {
+                                throw new Data_Exception('MISSING NOTE OR DATE IN EDIT NOTE FORM');
+                            }
+                        }
+                    }
+                    
+                    else {
+                        throw new Data_Exception('MISSING ID PARAMETER IS URL');
+                    }
+                }
+
+                elseif ($subscriberNotes->isDeleteNoteActionRequested($action)) {
+                    if ($subscriberNotes->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = $subscriberNotes->getParam('id');
+                        $noteId = $subscriberNotes->getParam('note-id');
+
+
+                        if ($subscriberNotes->isNoteIdValid($noteId)) {
+                            $subscriberNotes->eraseNote($noteId);
+
+                            header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
+                        }
+                    }
+                    
+                    else {
+                        throw new Data_Exception('MISSING ID PARAMETER IS URL');
+                    }
+                }
+                
+                else {
+                    throw new URL_Exception('UNTESTED ACTION IN SUBSCRIBER ACTIONS');
                 }
             }
 

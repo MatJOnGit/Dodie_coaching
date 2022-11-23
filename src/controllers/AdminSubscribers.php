@@ -2,19 +2,13 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Admin as AdminModel;
+use Dodie_Coaching\Models\Subscribers;
 
 class AdminSubscribers extends AdminPanels {
-    public function isSubscriberIdAvailable(int $subscriberId) {
-        $admin = new AdminModel;
-
-        return $admin->selectSubscriberId($subscriberId);
-    }
-  
     public function renderSubscriberProfilePage(object $twig, int $subscriberId) {
         echo $twig->render('admin_panels/subscriber-profile.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
-            'frenchTitle' => "Programme d'abonné",
+            'frenchTitle' => "Profil abonné",
             'appSection' => 'userPanels',
             'prevPanel' => ['subscribers-list', 'Liste des abonnés'],
             'subscriberDetails' => $this->_getSubscriberDetails($subscriberId)[0],
@@ -32,21 +26,43 @@ class AdminSubscribers extends AdminPanels {
         ]);
     }
 
-    private function _getAccountDetails(int $subscriberId) {
-        $admin = new AdminModel;
+    public function getSubscriberData(int $subscriberId) {
+        $subscriber = new Subscribers;
 
-        return $admin->selectAccountDetails($subscriberId);
+        return $subscriber->selectSubscriberData($subscriberId);
+    }
+
+    public function getMessageType() {
+        return empty($_POST['rejection-message']) ? 'default' : 'custom';
+    }
+
+    public function isSubscriberIdValid(int $subscriberId) {
+        $subscriber = new Subscribers;
+
+        return $subscriber->selectSubscriberId($subscriberId);
+    }
+
+    protected function _getSubscriberHeaders(int $subscriberId) {
+        $subscriber = new Subscribers;
+
+        return $subscriber->selectSubscriberHeader($subscriberId);
+    }
+
+    private function _getAccountDetails(int $subscriberId) {
+        $subscriber = new Subscribers;
+
+        return $subscriber->selectAccountDetails($subscriberId);
     }
 
     private function _getSubscriberDetails(int $subscriberId) {
-        $admin = new AdminModel;
+        $subscriber = new Subscribers;
 
-        return $admin->selectSubscriberDetails($subscriberId);
+        return $subscriber->selectSubscriberDetails($subscriberId);
     }
 
     private function _getSubscribersHeaders() {
-        $admin = new AdminModel;
+        $subscriber = new Subscribers;
 
-        return $admin->selectSubscribersHeaders();
+        return $subscriber->selectSubscribersHeaders();
     }
 }

@@ -4,8 +4,6 @@ class ApplicationDetails {
         this._applicationDecisionBox = document.getElementById('application-decision-box');
         this._declineApplicationBtn = document.getElementById('decline-btn');
 
-        this._rejectApplicationLink = 'index.php?action=reject-application&id=';
-
         this._applicationId;
     }
 
@@ -25,10 +23,6 @@ class ApplicationDetails {
         return this._declineApplicationBtn;
     }
 
-    get rejectApplicationLink() {
-        return this._rejectApplicationLink;
-    }
-
     set applicationId(id) {
         this._applicationId = id;
     }
@@ -39,7 +33,7 @@ class ApplicationDetails {
 
     addDeclineApplicationButtonListener() {
         this.declineApplicationBtn.addEventListener('click', () => {
-            this.getApplicationId();
+            this.setApplicationId();
             this.removeApplicationDecisionBox();
             this.buildRejectApplicationForm();
         });
@@ -49,7 +43,7 @@ class ApplicationDetails {
         this.adminPanel.removeChild(this.applicationDecisionBox);
     }
 
-    getApplicationId() {
+    setApplicationId() {
         this.applicationId = this.declineApplicationBtn.getAttribute('data-id')
     }
 
@@ -59,12 +53,13 @@ class ApplicationDetails {
         const reloadBtn = document.createElement('a');
         const confirmRejectionBtn = document.createElement('input');
 
-        rejectApplicationForm.id = 'reject-application-form';
-        rejectApplicationForm.action = `${this.rejectApplicationLink}${this.applicationId}`;
+        rejectApplicationForm.classList.add('admin-form');
+        rejectApplicationForm.action = `index.php?action=reject-application&id=${this.applicationId}`;
         rejectApplicationForm.method = 'post';
 
         rejectionMessage.placeholder = 'Votre message de refus de prise en charge';
         rejectionMessage.name = 'rejection-message';
+        rejectionMessage.id = 'rejection-message';
 
         reloadBtn.innerText = 'Annuler';
         reloadBtn.href = `index.php?page=application-details&id=${this.applicationId}`;

@@ -2,7 +2,9 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Admin as AdminModel;
+use Dodie_Coaching\Models\Subscribers;
+use Dodie_Coaching\Models\Applications;
+use Dodie_Coaching\Models\Meetings;
 
 class AdminDashboard extends AdminPanels {
     public function renderAdminDashboardPage(object $twig) {
@@ -41,21 +43,21 @@ class AdminDashboard extends AdminPanels {
     }
 
     private function _getApplicationsCount() {
-        $admin = new AdminModel;
+        $application = new Applications;
 
-        return $admin->selectApplicationsCount();
+        return $application->selectApplicationsCount();
     }
 
     private function _getSubscribersCount() {
-        $admin = new AdminModel;
+        $subscriber = new Subscribers;
 
-        return $admin->selectSubscribersCount();
+        return $subscriber->selectSubscribersCount();
     }
 
     private function _getTodayMeetingsData() {
-        $admin = new AdminModel;
+        $meeting = new Meetings;
 
-        $incomingMeetings = $admin->selectIncomingMeetings();
+        $incomingMeetings = $meeting->selectIncomingMeetings();
 
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

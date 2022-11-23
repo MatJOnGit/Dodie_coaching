@@ -18,7 +18,7 @@ class Progress extends UserPanels {
     private $_subMenuPage = 'progress';
 
     public function areBaseFormDataSet(): bool {
-        return (isset($_POST['user-weight']) && (isset($_POST['date-type'])));
+        return (isset($_POST['weight']) && (isset($_POST['date-type'])));
     }
 
     public function areBaseFormDataValid(array $baseFormData): bool {
@@ -50,7 +50,7 @@ class Progress extends UserPanels {
 
     public function getBaseFormData(): array {
         return [
-            'userWeight' => floatval(htmlspecialchars($_POST['user-weight'])),
+            'userWeight' => floatval(htmlspecialchars($_POST['weight'])),
             'dateType' => htmlspecialchars($_POST['date-type'])
         ];
     }

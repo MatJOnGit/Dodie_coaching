@@ -43,7 +43,7 @@ figcaption {
 }
 
 header,
-.back-to-dashboard-btn,
+.prev-page-btn,
 footer li {
     background-color: hsla(0, 0%, 100%, 1);
 }
@@ -119,7 +119,7 @@ h1 {
     position: relative;
 }
 
-.back-to-dashboard-btn {
+.prev-page-btn {
     align-items: center;
     display: flex;
     height: 51px;

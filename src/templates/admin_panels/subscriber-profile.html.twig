@@ -6,11 +6,11 @@
         <h3>Profil de {{ subscriberDetails['name'] }}</h3>
 
         <div class='sub-profile-btns'>
-            <a href='index.php?page=subscriber-program&id={{ subscriberDetails['id'] }}' class='btn rounded-btn tiny-btn'>Programme</a>
-            <a href='index.php?page=subscriber-notes&id={{ subscriberDetails['id'] }}' class='btn rounded-btn tiny-btn'>Notes de suivi</a>
+            <a href='index.php?page=subscriber-program&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn'>Programme</a>
+            <a href='index.php?page=subscriber-notes&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn'>Notes de suivi</a>
         </div>
 
-        <h4>Informations utilisateur</h4>
+        <h4 class='section-header orange-bkgd'>Informations utilisateur</h4>
 
         <ul>
             <li><b>Age :</b> {{ subscriberDetails['age'] }} ans</li>
@@ -35,7 +35,7 @@
             </li>
         </ul>
 
-        <h4>Information abonnement</h4>
+        <h4 class='section-header orange-bkgd'>Information abonnement</h4>
         <ul>
             <li><b>Compte créé le :</b> {{ accountDetails[0]['first_subscription_date'] | date('d/m/Y') | split(' ')[0]}}</li>
             <li><b>Type d'abonnement en cours :</b> {{ accountDetails[0]['program_type'] }}</li>

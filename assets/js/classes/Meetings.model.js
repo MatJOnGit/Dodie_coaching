@@ -153,7 +153,7 @@ class Meetings extends UserPanels {
 
     buildParsedMeetingsData() {
         let meetingsSlotData = document.getElementById('appointment-tab').attributes['data-meeting-slots'].textContent;
-        this.parsedMeetingsSlots = Object.entries(JSON.parse(meetingsSlotData))
+        this.parsedMeetingsSlots = Object.entries(JSON.parse(meetingsSlotData));
     }
 
     convertDateToFrenchDateString(dateItem) {

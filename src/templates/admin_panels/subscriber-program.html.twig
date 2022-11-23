@@ -1,0 +1,13 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel'>
+        <h3>Programme de {{ subscriberHeaders['name'] }}</h3>
+
+        <ul class='programs-list'>
+            {% for weekDay in weekDays %}
+                <li class='section-header orange-bkgd'>{{ weekDay['french'] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock pageContent %}

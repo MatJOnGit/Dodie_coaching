@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\User as UserModel;
+use Dodie_Coaching\Models\Connection as ConnectionModel;
 
 class User extends Main {
     protected $_routingURLs = [
@@ -67,22 +67,10 @@ class User extends Main {
 
     private $_tokenGeneratorTimeOut = 3600;
 
-    public function areDataPosted(array $postedData) {
-        $areDataPosted = true;
-
-        foreach($postedData as $postedDataItem) {
-            if (!isset($_POST["user-$postedDataItem"])) {
-                $areDataPosted = false;
-            }
-        }
-        
-        return $areDataPosted;
-    }
-
     public function areFormDataValid(array $userData) {
         $areFormDataValid = true;
 
-        foreach($userData as $userDataItemKey => $userDataItemValue) {
+        foreach($userData as $userDataItemKey) {
             if (($userDataItemKey === 'email' && !preg_match($this->_getEmailRegex(), $userData['email']))
             || ($userDataItemKey === 'password' && !preg_match($this->_getPasswordRegex(), $userData['password']))
             || ($userDataItemKey === 'confirmation-password' && $userData['password'] !== $userData['confirmation-password'])
@@ -95,19 +83,15 @@ class User extends Main {
     }
 
     public function createStaticData(array $userData) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->insertStaticData($userData['email']);
-    }
-
-    public function destroySessionData() {
-        session_destroy();
+        return $connection->insertStaticData($userData['email']);
     }
 
     public function eraseToken(string $email) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->deleteToken($email);
+        return $connection->deleteToken($email);
     }
 
     public function generateToken(): string {
@@ -118,7 +102,7 @@ class User extends Main {
         $userData = [];
         
         foreach($formData as $formDataItem) {
-            $userData += [$formDataItem => htmlspecialchars($_POST['user-' . $formDataItem])];
+            $userData += [$formDataItem => htmlspecialchars($_POST[$formDataItem])];
         }
         
         return $userData;
@@ -129,21 +113,21 @@ class User extends Main {
     }
     
     public function getRole() {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->selectRole($_SESSION['email']);
+        return $connection->selectRole($_SESSION['email']);
     }
 
     public function getTokenDate(string $email) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->selectTokenDate($email);
+        return $connection->selectTokenDate($email);
     }
 
     public function isAccountExisting(array $userData): bool {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        $accountPassword = $user->selectAccountPassword($userData['email']);
+        $accountPassword = $connection->selectAccountPassword($userData['email']);
         $isAccountExisting = false;
 
         if ($accountPassword) {
@@ -166,9 +150,9 @@ class User extends Main {
     }
 
     public function isEmailExisting(string $email) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->selectEmail($email);
+        return $connection->selectEmail($email);
     }
 
     public function isLastTokenOld(array $token): bool {
@@ -242,10 +226,10 @@ class User extends Main {
     }
 
     public function isTokenMatching(): bool {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        $correctToken = $user->selectToken($_SESSION['email']);
-        $postedToken = htmlspecialchars($_POST['user-token']);
+        $correctToken = $connection->selectToken($_SESSION['email']);
+        $postedToken = htmlspecialchars($_POST['token']);
 
         return password_verify(strtoupper($postedToken), $correctToken['token']);
     }
@@ -269,27 +253,27 @@ class User extends Main {
     }
     
     public function registerAccount(array $userData) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->insertAccount(
+        return $connection->insertAccount(
             $userData['email'],
             password_hash($userData['password'], PASSWORD_DEFAULT)
         );
     }
 
     public function registerPassword(array $userData) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->updatePassword(
+        return $connection->updatePassword(
             $_SESSION['email'],
             password_hash($userData['password'], PASSWORD_DEFAULT)
         );
     }
 
     public function registerToken(string $token) {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->insertToken(
+        return $connection->insertToken(
             password_hash($token, PASSWORD_DEFAULT),
             $_SESSION['email']
         );
@@ -364,9 +348,9 @@ class User extends Main {
     }
 
     public function subtractTokenAttempt() {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->updateRemainingAttempts($_SESSION['email']);
+        return $connection->updateRemainingAttempts($_SESSION['email']);
     }
 
     public function unsessionizeData(array $sessionData) {
@@ -376,9 +360,9 @@ class User extends Main {
     }
 
     public function updateLoginData(array $userData): bool {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->updateLoginDate($userData['email']);
+        return $connection->updateLoginDate($userData['email']);
     }
 
     private function _getConnectionPagesStyles() {
@@ -406,8 +390,8 @@ class User extends Main {
     }
 
     private function _getTokenSigningRemainingAttempts() {
-        $user = new UserModel;
+        $connection = new ConnectionModel;
 
-        return $user->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
+        return $connection->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
     }
 }

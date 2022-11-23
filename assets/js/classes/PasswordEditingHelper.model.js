@@ -55,11 +55,11 @@ class PasswordEditingHelper extends ConnectionHelper {
         const confirmationPasswordValue = document.getElementById('user-confirmation-password').value;
         let isBlurredInputValid;
 
-        if (inputName === 'user-password') {
+        if (inputName === 'password') {
             this.isPasswordValid = this.passwordRegex.test(inputValue);
             isBlurredInputValid = this.isPasswordValid;
         }
-        else if (inputName === 'user-confirmation-password') {
+        else if (inputName === 'confirmation-password') {
             this.isConfirmationPasswordValid = this.passwordRegex.test(inputValue);
             isBlurredInputValid = this.isConfirmationPasswordValid;
         }

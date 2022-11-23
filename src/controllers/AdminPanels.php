@@ -2,6 +2,8 @@
 
 namespace Dodie_Coaching\Controllers;
 
+use Dodie_Coaching\Models\Subscribers;
+
 class AdminPanels extends Main {
     protected $_adminPanelsStyles = [
         'pages/admin-panels',
@@ -28,44 +30,42 @@ class AdminPanels extends Main {
         'applicationDetailsApp'
     ];
 
-    public function areParamSet(array $params): bool {
-        $areParamSet = true;
-
-        foreach ($params as $param) {
-            if (!isset($_GET[$param])) {
-                $areParamSet = false;
-            }
-        }
-
-        return $areParamSet;
-    }
-
-    public function isApplicationDetailsRequested(string $page): bool {
+    public function isApplicationDetailsPageRequested(string $page): bool {
         return $page === 'application-details';
     }
 
-    public function isApplicationsListRequested(string $page): bool {
+    public function isApplicationsListPageRequested(string $page): bool {
         return $page === 'applications-list';
     }
 
     public function isDashboardPageRequested($page): bool {
         return $page === 'admin-dashboard';
     }
+    
+    public function isSubscriberIdAvailable(int $subscriberId) {
+        $subscriber = new Subscribers;
 
-    public function isSubscriberProfileRequested(string $page): bool {
+        return $subscriber->selectSubscriberId($subscriberId);
+    }
+
+    public function isSubscriberNotesPageRequested(string $page) {
+        return $page === 'subscriber-notes';
+    }
+
+    public function isSubscriberProfilePageRequested(string $page): bool {
         return $page === 'subscriber-profile';
     }
 
-    public function isSubscribersListRequested(string $page): bool {
+    public function isSubscriberProgramPageRequested(string $page): bool {
+        return $page === 'subscriber-program';
+    }
+
+    public function isSubscribersListPageRequested(string $page): bool {
         return $page === 'subscribers-list';
     }
 
     protected function _getAdminPanelsStyle() {
         return $this->_adminPanelsStyles;
-    }
-
-    protected function _getAdminPanelsSubpanels(string $page) {
-        return $this->_adminPanelsSubpanels[$page];
     }
 
     protected function _getProgressScripts(): array {

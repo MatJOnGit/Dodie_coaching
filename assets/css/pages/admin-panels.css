@@ -7,6 +7,9 @@ footer i {
     color: hsla(185, 51%, 47%, 1);
 }
 
+h4,
+.programs-list li,
+.notes-list h4,
 footer p {
     color: hsla(0, 0%, 100%, 1);
 }
@@ -17,6 +20,10 @@ footer p {
 
 .red-bkgd {
     background-color: hsla(336, 100%, 29%, 1);
+}
+
+.orange-bkgd {
+    background-color: hsla(9, 71%, 70%, 1);
 }
 
 .dashboard-btn,
@@ -45,6 +52,23 @@ h2 {
     padding: 2vh 7%;
     position: relative;
     width: 100%;
+}
+
+.admin-form,
+.admin-form > textarea,
+.edit-note {
+    width: 100%;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.admin-form > textarea {
+    height: 20vh;
 }
 
 /**********************************/
@@ -89,6 +113,19 @@ h2 {
     padding: 2.5vh;
 }
 
+.profile-panel ul,
+.programs-list,
+.programs-list li,
+.notes-list,
+.notes-list li {
+    width: 100%;
+}
+
+.profile-panel ul,
+.programs-list li {
+    padding: 1vh 10%;
+}
+
 /**********************************/
 /*       APPLICATIONS LIST        */
 /**********************************/
@@ -129,24 +166,6 @@ h2 {
     margin-top: 2vh;
 }
 
-#reject-application-form,
-#reject-application-form > textarea {
-    width: 100%;
-}
-
-#reject-application-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top: 2vh;
-}
-
-#reject-application-form > textarea {
-    height: 12vh;
-    margin-bottom: 2vh;
-}
-
 /***********************************/
 /*       SUBSCRIBER PROFILE        */
 /***********************************/
@@ -156,13 +175,66 @@ h2 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 3vh;
 }
 
-.profile-panel h4 {
+.section-header {
     width: 100%;
     text-align: center;
     text-transform: uppercase;
-    padding: 1vh 0;
-    color:hsla(0, 0%, 100%, 1);
-    background-color: hsl(9, 71%, 70%);
+    padding: 1vh 0 ;
+    margin: 0 0 1vh;
+}
+
+/**********************/
+/*       NOTES        */
+/**********************/
+
+.associated-meeting {
+    text-align: center;
+    margin-bottom: 2vh;
+}
+
+#add-note-btn {
+    position: fixed;
+    left: 4%;
+    bottom: 85px;
+}
+
+.edit-note {
+    background-color: inherit;
+    margin: 0 0 2vh;
+    padding: 0;
+    position: relative;
+}
+
+.note-entry {
+    overflow-wrap: break-word;
+    text-align: left;
+    padding-bottom: 45px;
+}
+
+.note-textarea {
+    height: 15vh;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 3px 8px black;
+}
+
+.edit-icon i {
+    font-size: 5vmin;
+}
+
+.save-note-btn {
+    margin-top: 2vh;
 }

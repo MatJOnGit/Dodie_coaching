@@ -14,16 +14,7 @@ class Nutrition extends UserPanels {
 
     private $_programsFolderRoute = './../var/nutrition_programs/';
 
-    private $_weekDays = [
-        ['english' => 'sunday', 'french' => 'Dimanche'],
-        ['english' => 'monday', 'french' => 'Lundi'],
-        ['english' => 'tuesday', 'french' => 'Mardi'],
-        ['english' => 'wednesday', 'french' => 'Mercredi'],
-        ['english' => 'thursday', 'french' => 'Jeudi'],
-        ['english' => 'friday', 'french' => 'Vendredi'],
-        ['english' => 'saturday', 'french' => 'Samedi'],
-        ['english' => 'sunday', 'french' => 'Dimanche']
-    ];
+    
 
     public function areMealParamsValid(array $mealData): bool {
         $requestedDay = $mealData['day'];
@@ -189,9 +180,5 @@ class Nutrition extends UserPanels {
         }
 
         return $mealData;
-    }
-
-    private function _getWeekDays(): array {
-        return $this->_weekDays;
     }
 }

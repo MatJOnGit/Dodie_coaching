@@ -2,37 +2,25 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Admin as AdminModel;
+use Dodie_Coaching\Models\Applications;
 
 class AdminApplications extends AdminPanels {
     public function acceptApplication (int $applicationId, string $newApplicationStatus) {
-        $admin = new AdminModel;
+        $application = new Applications;
 
-        return $admin->updateApplicationStatus($applicationId, $newApplicationStatus);
+        return $application->updateApplicationStatus($applicationId, $newApplicationStatus);
     }
 
-    public function areParamsSet(array $params) {
-        $areParamsSet = true;
+    public function eraseApplication (int $applicantId) {
+        $application = new Applications;
 
-        foreach ($params as $param) {
-            if (!isset($_GET[$param])) {
-                $areParamsSet = false;
-            }
-        }
-
-        return $areParamsSet;
+        return $application->deleteApplication($applicantId);
     }
 
-    public function eraseApplication (int $applicationId) {
-        $admin = new AdminModel;
+    public function getApplicantData(int $applicantId) {
+        $application = new Applications;
 
-        return $admin->deleteApplication($applicationId);
-    }
-
-    public function getApplicantData(int $applicationId) {
-        $admin = new AdminModel;
-
-        return $admin->selectApplicantData($applicationId);
+        return $application->selectApplicantData($applicantId);
     }
 
     public function getMessageType() {
@@ -40,15 +28,15 @@ class AdminApplications extends AdminPanels {
     }
   
     public function isApplicationAvailable(int $applicationId) {
-        $admin = new AdminModel;
+        $application = new Applications;
 
-        return $admin->selectApplicationDate($applicationId);
+        return $application->selectApplicantId($applicationId);
     }
 
-    public function isApplicationIdValid(int $applicationId) {
-        $admin = new AdminModel;
+    public function isApplicationIdValid(int $applicantId) {
+        $application = new Applications;
 
-        return $admin->selectApplicationDate($applicationId);
+        return $application->selectApplicantId($applicantId);
     }
 
     public function isApproveApplicationActionRequested(string $action): bool {
@@ -69,7 +57,7 @@ class AdminApplications extends AdminPanels {
             'frenchTitle' => 'Profil du demandeur',
             'appSection' => 'userPanels',
             'prevPanel' => ['applications-list', 'Liste des demandes'],
-            'applicationDetails' => $this->_getApplicationsDetails($applicationId)[0],
+            'applicationDetails' => $this->_getApplicationDetails($applicationId)[0],
             'pageScripts' => $this->_getProgressScripts()
         ]);
     }
@@ -84,15 +72,15 @@ class AdminApplications extends AdminPanels {
         ]);
     }
 
-    protected function _getApplicationsDetails(string $applicationId) {
-        $admin = new AdminModel;
+    protected function _getApplicationDetails(string $applicationId) {
+        $application = new Applications;
 
-        return $admin->selectApplicationDetails($applicationId);
+        return $application->selectApplicationDetails($applicationId);
     }
 
     private function _getApplicationsHeaders() {
-        $admin = new AdminModel;
+        $application = new Applications;
 
-        return $admin->selectApplicationsHeaders();
+        return $application->selectApplicationsHeaders();
     }
 }

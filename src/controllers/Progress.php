@@ -41,7 +41,7 @@ class Progress extends UserPanels {
         return $this->_isDateValid($date, 'Y-m-d H:i');
     }
 
-    public function eraseProgress(array $progressHistory, int $reportId) {
+    public function eraseProgress(array $progressHistory, string $reportId) {
         $progress = new ProgressModel;
         $reportDate = $progressHistory[$reportId - 1]['date'];
 
@@ -92,23 +92,11 @@ class Progress extends UserPanels {
         return ($baseFormData['dateType'] === 'current-weight');
     }
 
-    public function isReportAdditionRequested(string $action): bool {
-        return $action === 'add-report';
-    }
-
-    public function isReportDeletionRequested(string $action): bool {
-        return $action === 'delete-report';
-    }
-
-    public function isReportIdExisting(array $progressHistory, int $reportId): bool {
+    public function isReportIdExisting(array $progressHistory, string $reportId): bool {
         return array_key_exists($reportId-1, $progressHistory);
     }
 
-    public function isReportIdSet(): bool {
-        return (isset($_GET['id']));
-    }
-
-    public function isReportIdValid(int $reportId): bool {
+    public function isReportIdValid(string $reportId): bool {
         return (is_numeric($reportId) && $reportId>=1);
     }
 

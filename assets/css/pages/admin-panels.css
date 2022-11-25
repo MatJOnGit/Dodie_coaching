@@ -127,10 +127,10 @@ h2 {
 }
 
 /**********************************/
-/*       APPLICATIONS LIST        */
+/*       APPLIANCES LIST        */
 /**********************************/
 
-.application-card {
+.appliance-card {
     align-items: center;
     border: 1px solid grey;
     border-radius: 20px;
@@ -142,27 +142,31 @@ h2 {
     width: 100%;
 }
 
-.application-card * {
+.appliance-card * {
     margin: 0 0 10px;
 }
 
-#application-decision-box {
+#appliance-decision-box {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
+.appliance-form textarea {
+    margin-bottom: 2vh;
+}
+
 /************************************/
-/*       APPLICATION DETAILS        */
+/*       APPLIANCE DETAILS        */
 /************************************/
 
-.application-details {
+.appliance-details {
     width: 100%;
     padding: 0 10%;
 }
 
-#application-decision-box {
+#appliance-decision-box {
     margin-top: 2vh;
 }
 

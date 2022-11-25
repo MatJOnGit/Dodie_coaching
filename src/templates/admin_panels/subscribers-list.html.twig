@@ -6,7 +6,7 @@
 
         {% if subscribersHeaders %}
             {% for headers in subscribersHeaders %}
-                <ul class='application-card'>
+                <ul class='appliance-card'>
                     <li>{{ headers['name'] }}</li>
                     <li>{{ headers['age'] }} ans, {{ headers['job_style'] | lower }}</li>
                     <li>Objectif(s) : {{ headers['program_goal'] }}</li>
@@ -15,7 +15,7 @@
                 </ul>
             {% endfor %}
         {% else %}
-            <div class='application-card'>
+            <div class='appliance-card'>
                 <p>Vous n'avez encore d'abonnés, mais ne vous inquiétez pas ... ça va venir !</p>
             </div>
         {% endif %}

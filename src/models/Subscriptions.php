@@ -2,6 +2,6 @@
 
 namespace Dodie_Coaching\Models;
 
-class Subscription extends Main {
+class Subscriptions extends Main {
 
 }

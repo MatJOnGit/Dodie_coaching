@@ -2,9 +2,25 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Subscribers;
+use Dodie_Coaching\Models\Subscribers as SubscriberModel;
 
-class AdminSubscribers extends AdminPanels {
+class Subscribers extends AdminPanels {
+    public function getMessageType() {
+        return empty($_POST['rejection-message']) ? 'default' : 'custom';
+    }
+    
+    public function getSubscriberData(int $subscriberId) {
+        $subscriber = new SubscriberModel;
+
+        return $subscriber->selectSubscriberData($subscriberId);
+    }
+    
+    public function isSubscriberIdValid(int $subscriberId) {
+        $subscriber = new SubscriberModel;
+
+        return $subscriber->selectSubscriberId($subscriberId);
+    }
+    
     public function renderSubscriberProfilePage(object $twig, int $subscriberId) {
         echo $twig->render('admin_panels/subscriber-profile.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
@@ -15,7 +31,7 @@ class AdminSubscribers extends AdminPanels {
             'accountDetails' => $this->_getAccountDetails($subscriberId)
         ]);
     }
-
+    
     public function renderSubscribersListPage(object $twig) {
         echo $twig->render('admin_panels/subscribers-list.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
@@ -25,43 +41,27 @@ class AdminSubscribers extends AdminPanels {
             'subscribersHeaders' => $this->_getSubscribersHeaders()
         ]);
     }
-
-    public function getSubscriberData(int $subscriberId) {
-        $subscriber = new Subscribers;
-
-        return $subscriber->selectSubscriberData($subscriberId);
-    }
-
-    public function getMessageType() {
-        return empty($_POST['rejection-message']) ? 'default' : 'custom';
-    }
-
-    public function isSubscriberIdValid(int $subscriberId) {
-        $subscriber = new Subscribers;
-
-        return $subscriber->selectSubscriberId($subscriberId);
-    }
-
-    protected function _getSubscriberHeaders(int $subscriberId) {
-        $subscriber = new Subscribers;
-
-        return $subscriber->selectSubscriberHeader($subscriberId);
-    }
-
+    
     private function _getAccountDetails(int $subscriberId) {
-        $subscriber = new Subscribers;
+        $subscriber = new SubscriberModel;
 
         return $subscriber->selectAccountDetails($subscriberId);
     }
-
+    
     private function _getSubscriberDetails(int $subscriberId) {
-        $subscriber = new Subscribers;
+        $subscriber = new SubscriberModel;
 
         return $subscriber->selectSubscriberDetails($subscriberId);
     }
+    
+    protected function _getSubscriberHeaders(int $subscriberId) {
+        $subscriber = new SubscriberModel;
 
+        return $subscriber->selectSubscriberHeader($subscriberId);
+    }
+    
     private function _getSubscribersHeaders() {
-        $subscriber = new Subscribers;
+        $subscriber = new SubscriberModel;
 
         return $subscriber->selectSubscribersHeaders();
     }

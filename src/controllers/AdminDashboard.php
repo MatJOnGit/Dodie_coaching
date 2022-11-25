@@ -3,7 +3,7 @@
 namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Subscribers;
-use Dodie_Coaching\Models\Applications;
+use Dodie_Coaching\Models\Appliances;
 use Dodie_Coaching\Models\Meetings;
 
 class AdminDashboard extends AdminPanels {
@@ -12,12 +12,12 @@ class AdminDashboard extends AdminPanels {
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Tableau de bord',
             'appSection' => 'userPanels',
-            'applicationsCount' => $this->_getApplicationsCount(),
+            'appliancesCount' => $this->_getAppliancesCount(),
             'subscribersCount' => $this->_getSubscribersCount(),
             'todayMeetingsData' => $this->_getTodayMeetingsData()
         ]);
     }
-
+    
     private function _filterTodayMeetingsData(array $incomingMeetings) {
         $this->_setTimeZone();
         $currentDate = date('Y-m-d');
@@ -38,26 +38,26 @@ class AdminDashboard extends AdminPanels {
                 }
             }
         }
-
+        
         return $todayMeetingsData;
     }
 
-    private function _getApplicationsCount() {
-        $application = new Applications;
+    private function _getAppliancesCount() {
+        $appliances = new Appliances;
 
-        return $application->selectApplicationsCount();
+        return $appliances->selectAppliancesCount();
     }
 
     private function _getSubscribersCount() {
-        $subscriber = new Subscribers;
+        $subscribers = new Subscribers;
 
-        return $subscriber->selectSubscribersCount();
+        return $subscribers->selectSubscribersCount();
     }
-
+    
     private function _getTodayMeetingsData() {
-        $meeting = new Meetings;
+        $meetings = new Meetings;
 
-        $incomingMeetings = $meeting->selectIncomingMeetings();
+        $incomingMeetings = $meetings->selectIncomingMeetings();
 
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

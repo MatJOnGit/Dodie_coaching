@@ -15,6 +15,10 @@ class Main {
         ['english' => 'sunday', 'french' => 'Dimanche']
     ];
 
+    public function isRequestMatching(string $request, string $toMatch) {
+        return $request === $toMatch;
+    }
+
     public function areDataPosted(array $postedData) {
         $areDataPosted = true;
 
@@ -43,8 +47,8 @@ class Main {
         session_destroy();
     }
 
-    public function getParam(string $param): int {
-        return intval(htmlspecialchars($_GET[$param]));
+    public function getParam(string $param) {
+        return htmlspecialchars($_GET[$param]);
     }
 
     public function routeTo(string $page) {

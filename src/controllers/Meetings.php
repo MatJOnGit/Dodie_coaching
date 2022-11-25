@@ -27,15 +27,15 @@ class Meetings extends UserPanels {
     }
 
     public function bookAppointment(string $meetingDate): bool {
-        $dashboard = new MeetingsModel;
+        $meetings = new MeetingsModel;
 
-        return $dashboard->updateAvailableMeeting($_SESSION['email'], $meetingDate);
+        return $meetings->updateToBooked($_SESSION['email'], $meetingDate);
     }
 
     public function cancelAppointment(): bool {
         $dashboard = new MeetingsModel;
 
-        return $dashboard->updateBookedMeeting($_SESSION['email']);
+        return $dashboard->updateToAvailableMeeting($_SESSION['email']);
     }
 
     public function getDateData(): array {
@@ -75,14 +75,6 @@ class Meetings extends UserPanels {
         $date = date('Y') . '-' . $this->_getTwoDigitsNumber($formatedMonth) . '-' . $this->_getTwoDigitsNumber($day) . ' ' . $this->_getTwoDigitsNumber($hour) . ':' . $this->_getTwoDigitsNumber($minute) . ':00';
 
         return $date;
-    }
-
-    public function isBookingRequested(string $action): bool {
-        return $action === 'book-appointment';
-    }
-
-    public function isCancellationRequested(string $action): bool {
-        return $action === 'cancel-appointment';
     }
 
     public function isMeetingsSlotAvailable(string $formatedDate): bool {

@@ -2,7 +2,9 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Connection as ConnectionModel;
+use Dodie_Coaching\Models\Accounts;
+use Dodie_Coaching\Models\ResetTokens;
+use Dodie_Coaching\Models\StaticData;
 
 class User extends Main {
     protected $_routingURLs = [
@@ -83,15 +85,15 @@ class User extends Main {
     }
 
     public function createStaticData(array $userData) {
-        $connection = new ConnectionModel;
+        $staticData = new StaticData;
 
-        return $connection->insertStaticData($userData['email']);
+        return $staticData->insertStaticData($userData['email']);
     }
 
     public function eraseToken(string $email) {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        return $connection->deleteToken($email);
+        return $resetToken->deleteToken($email);
     }
 
     public function generateToken(): string {
@@ -107,27 +109,27 @@ class User extends Main {
         
         return $userData;
     }
-
-    public function getRequestedAction(): string {
-        return htmlspecialchars($_GET['action']);
-    }
     
     public function getRole() {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        return $connection->selectRole($_SESSION['email']);
+        return $account->selectRole($_SESSION['email']);
+    }
+
+    public function getSessionizedParam(string $param) {
+        return $_SESSION[$param];
     }
 
     public function getTokenDate(string $email) {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        return $connection->selectTokenDate($email);
+        return $resetToken->selectTokenDate($email);
     }
 
     public function isAccountExisting(array $userData): bool {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        $accountPassword = $connection->selectAccountPassword($userData['email']);
+        $accountPassword = $account->selectPassword($userData['email']);
         $isAccountExisting = false;
 
         if ($accountPassword) {
@@ -137,22 +139,18 @@ class User extends Main {
         return $isAccountExisting;
     }
 
-    public function isAdmin($userRole) {
-        return $userRole['status'] === 'admin';
-    }
-
-    public function isCustomer($userRole) {
-        return (in_array($userRole['status'], ['member', 'subscriber']));
-    }
-
     public function isDataSessionized(string $data): bool {
         return isset($_SESSION[$data]);
     }
 
     public function isEmailExisting(string $email) {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        return $connection->selectEmail($email);
+        return $account->selectEmail($email);
+    }
+
+    public function isGetParamSet(string $param): bool {
+        return isset($_GET[$param]);
     }
 
     public function isLastTokenOld(array $token): bool {
@@ -174,10 +172,6 @@ class User extends Main {
         return isset($_SESSION['email']) && isset($_SESSION['password']);
     }
 
-    public function isLoginActionRequested(string $page): bool {
-        return $page === 'log-account';
-    }
-
     public function isLoginFormValid(array $userData): bool {
         return (
             (preg_match($this->_getEmailRegex(), $userData['email'])) && 
@@ -185,95 +179,57 @@ class User extends Main {
         );
     }
 
-    public function isLoginPageRequested(string $page): bool {
-        return $page === 'login';
-    }
-
-    public function isLogoutActionRequested(string $action): bool {
-        return $action === 'logout';
-    }
-
-    public function isMailNotificationPageRequested(string $page): bool {
-        return $page === 'mail-notification';
-    }
-
-    public function isPasswordEditingPageRequested(string $page): bool {
-        return $page === 'password-editing';
-    }
-
-    public function isPasswordRetrievingPageRequested(string $page): bool {
-        return $page === 'password-retrieving';
-    }
-
-    public function isRegisterActionRequested(string $action): bool {
-        return $action === 'register-account';
-    }
-
-    public function isRegisteringPageRequested(string $page): bool {
-        return $page === 'registering';
-    }
-
-    public function isRegisterPasswordActionRequested(string $action): bool {
-        return $action === 'register-password';
-    }
-
-    public function isRetrievedPasswordPageRequested(string $page): bool {
-        return $page === 'retrieved-password';
-    }
-
-    public function isSendTokenActionRequested(string $action): bool {
-        return $action === 'send-token';
-    }
-
     public function isTokenMatching(): bool {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        $correctToken = $connection->selectToken($_SESSION['email']);
+        $correctToken = $resetToken->selectToken($_SESSION['email']);
         $postedToken = htmlspecialchars($_POST['token']);
 
         return password_verify(strtoupper($postedToken), $correctToken['token']);
     }
 
-    public function isTokenSigningPageRequested(string $page): bool {
-        return $page === 'token-signing';
-    }
+    public function isRoleMatching(array $userRole, array $toMatch): bool {
+        $isRoleMatching = false;
+        
+        if ($userRole) {
+            $isRoleMatching = in_array($userRole['status'], $toMatch);
+        }
 
-    public function isVerifyTokenActionRequested(string $action): bool {
-        return $action === 'verify-token';
-    }
-
-    public function logUser(array $userData) {
-        $_SESSION['email'] = $userData['email'];
-        $_SESSION['password'] = $userData['password'];
+        return $isRoleMatching;
     }
 
     public function logoutUser() {
         $this->destroySessionData();
         $this->routeTo('presentation');
     }
+
+    public function logUser(array $userData) {
+        $_SESSION['email'] = $userData['email'];
+        $_SESSION['password'] = $userData['password'];
+    }
     
     public function registerAccount(array $userData) {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        return $connection->insertAccount(
+        return $account->insertAccount(
             $userData['email'],
             password_hash($userData['password'], PASSWORD_DEFAULT)
         );
     }
 
     public function registerPassword(array $userData) {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        return $connection->updatePassword(
+        return $account->updatePassword(
             $_SESSION['email'],
             password_hash($userData['password'], PASSWORD_DEFAULT)
         );
     }
 
     public function registerToken(string $token) {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        return $connection->insertToken(
+        return $resetToken->insertToken(
             password_hash($token, PASSWORD_DEFAULT),
             $_SESSION['email']
         );
@@ -348,9 +304,9 @@ class User extends Main {
     }
 
     public function subtractTokenAttempt() {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        return $connection->updateRemainingAttempts($_SESSION['email']);
+        return $resetToken->updateRemainingAttempts($_SESSION['email']);
     }
 
     public function unsessionizeData(array $sessionData) {
@@ -360,9 +316,9 @@ class User extends Main {
     }
 
     public function updateLoginData(array $userData): bool {
-        $connection = new ConnectionModel;
+        $account = new Accounts;
 
-        return $connection->updateLoginDate($userData['email']);
+        return $account->updateLoginDate($userData['email']);
     }
 
     private function _getConnectionPagesStyles() {
@@ -385,13 +341,13 @@ class User extends Main {
         return $this->_tokenGeneratorTimeOut;
     }
 
-    public function _getTokenRegex() {
+    private function _getTokenRegex() {
         return $this->_tokenRegex;
     }
 
     private function _getTokenSigningRemainingAttempts() {
-        $connection = new ConnectionModel;
+        $resetToken = new ResetTokens;
 
-        return $connection->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
+        return $resetToken->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
     }
 }

@@ -11,11 +11,9 @@ class Nutrition extends UserPanels {
         ['english' => 'diner', 'french' => 'Dîner'],
         ['english' => 'snacks', 'french' => 'Snacks']
     ];
-
-    private $_programsFolderRoute = './../var/nutrition_programs/';
-
     
-
+    private $_programsFolderRoute = './../var/nutrition_programs/';
+    
     public function areMealParamsValid(array $mealData): bool {
         $requestedDay = $mealData['day'];
         $requestedMeal = $mealData['meal'];
@@ -36,7 +34,7 @@ class Nutrition extends UserPanels {
 
         return ($isDayValid && $isMealValid);
     }
-
+    
     public function getMealData(): array {
         $meal = htmlspecialchars($_GET['meal']);
         $mealData = [
@@ -51,27 +49,27 @@ class Nutrition extends UserPanels {
 
         return $mealData;
     }
-
+    
     public function getRequest(): string {
         return htmlspecialchars($_GET['request']);
     }
-
+    
     public function isMealRequested(): bool {
         return (isset($_GET['meal']) && !isset($_GET['request']));
     }
-
+    
     public function isMenuRequested(): bool {
         return (!isset($_GET['meal']) && !isset($_GET['request']));
     }
-
+    
     public function isRequestSet(): bool {
         return (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request']));
     }
-
+    
     public function isShoppingListRequested($request): bool {
         return $request === 'shopping-list';
     }
-
+    
     public function renderMealDetails(object $twig, array $mealData) {
         echo $twig->render('user_panels/meal-details.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
@@ -83,7 +81,7 @@ class Nutrition extends UserPanels {
             'ingredients' => $this->_getMealDetails($mealData)
         ]);
     }
-
+    
     public function renderNutritionMenu(object $twig) {
         echo $twig->render('user_panels/nutrition.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
@@ -95,7 +93,7 @@ class Nutrition extends UserPanels {
             'programFilePath' => $this->_getProgramsFilePath()
         ]);
     }
-
+    
     public function renderShoppingList(object $twig) {
         echo $twig->render('user_panels/shopping-list.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
@@ -106,11 +104,11 @@ class Nutrition extends UserPanels {
             'shoppingList' => $this->_getShoppingList()
         ]);
     }
-
+    
     private function _getEnglishWeekDay(string $date): string {
         return $this->_getWeekDays()[explode(' ', $date)[0]]['english'];
     }
-
+    
     private function _getFrenchDate(string $date): string {
         $frenchDateWeekDay = $this->_getWeekDays()[explode(' ', $date)[0]]['french'];
         $dateDay = explode(' ', $date)[1];
@@ -118,17 +116,17 @@ class Nutrition extends UserPanels {
 
         return "{$frenchDateWeekDay} {$dateDay} {$dateMonth}";
     }
-
+    
     private function _getMealDetails(array $mealData) {
         $nutrition = new NutritionModel;
 
         return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['email']);
     }
-
+    
     private function _getMeals(): array {
         return $this->_meals;
     }
-
+    
     private function _getNextDates(): array {
         $this->_setTimeZone();
         $nextDates[] = [];
@@ -148,31 +146,31 @@ class Nutrition extends UserPanels {
 
         return $nextDates;
     }
-
+    
     private function _getProgramsFilePath() {
         $nutrition = new NutritionModel;
         $fileName = $nutrition->selectProgramFileName($_SESSION['email']);
 
         return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
     }
-
+    
     private function _getProgramsFolderRoute(): string {
         return $this->_programsFolderRoute;
     }
-
+    
     private function _getShoppingList() {
         $nutrition = new NutritionModel;
-
+        
         return $nutrition->selectMealsIngredients($_SESSION['email']);
     }
-
+    
     private function _getTranslatedMealData(array $mealData): array {
         foreach($this->_getNextDates() as $day) {
             if ($mealData['day'] === $day['englishWeekDay']) {
                 $mealData['day'] = $day['frenchFullDate'];
             }
         }
-
+        
         foreach($this->_getMeals() as $meal) {
             if ($mealData['meal'] === $meal['english']) {
                 $mealData['meal'] = $meal['french'];

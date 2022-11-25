@@ -29,58 +29,66 @@ try {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'applications-list', 'application-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes']
+            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management']
         ],
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment'],
-            'application' => ['reject-application', 'approve-application'],
+            'appliance' => ['reject-appliance', 'approve-appliance'],
             'subscriber' => ['save-note', 'edit-note', 'delete-note']
         ]
     ];
 
-    if (isset($_GET['page'])) {
-        $page = htmlspecialchars($_GET['page']);
+    $user = new Dodie_Coaching\Controllers\User;
+    if ($user->isGetParamSet('page')) {
+        $page = $user->getParam('page');
 
         if (in_array($page, $Urls['pages']['showcase'])) {
             $showcase = new Dodie_Coaching\Controllers\Showcase;
 
-            if ($showcase->isPresentationPageRequested($page)) {
+            if ($showcase->isRequestMatching($page, 'presentation')) {
                 $showcase->renderPresentationPage($twig);
             }
 
-            elseif ($showcase->isCoachingPageRequested($page)) {
+            elseif ($showcase->isRequestMatching($page, 'coaching')) {
                 $showcase->renderCoachingPage($twig);
             }
 
-            elseif ($showcase->areProgramsPagesRequested($page)) {
+            elseif ($showcase->isRequestMatching($page, 'programs-list')) {
                 if ($showcase->isProgramsListAvailable()) {
-                    if ($showcase->isProgramsListRequested($page)) {
-                        $showcase->renderProgramsListPage($twig);
-                    }
+                    $showcase->renderProgramsListPage($twig);
+                }
 
-                    elseif ($showcase->isProgramDetailsRequested($page) && $showcase->isRequestedProgramSet()) {
-                        $requestedProgram = $showcase->getProgram();
+                else {
+                    throw new Data_Exception('MISSING PROGRAMS LIST IN DATA');
+                    // $showcase->routeTo('404');
+                }
+            }
 
+            elseif ($showcase->isRequestMatching($page, 'program-details')) {
+                if ($showcase->isProgramsListAvailable()) {
+                    if ($showcase->areParamsSet(['program'])) {
+                        $requestedProgram = $showcase->getParam('program');
+    
                         if ($showcase->isProgramAvailable($requestedProgram)) {
                             $showcase->renderProgramDetailsPage($twig, $requestedProgram);
                         }
-
+    
                         else {
                             throw new URL_Exception('INVALID PROGRAM PARAMETER');
                             // $showcase->routeTo('programsList');
                         }
                     }
-
+    
                     else {
                         throw new URL_Exception('MISSING PROGRAM PARAMETER');
                         // $showcase->routeTo('404');
                     }
                 }
-
+                
                 else {
-                    throw new Data_Exception('EMPTY PROGRAMS ARRAY IN SHOWCASE CONTROLLER');
+                    throw new Data_Exception('MISSING PROGRAMS LIST IN DATA');
                     // $showcase->routeTo('404');
                 }
             }
@@ -91,60 +99,54 @@ try {
         }
 
         elseif (in_array($page, $Urls['pages']['connection'])) {
-            $user = new Dodie_Coaching\Controllers\User;
-
             if (!$user->isLogged()) {
-                if ($user->isLoginPageRequested($page)) {
+                if ($user->isRequestMatching($page, 'login')) {
                     $user->renderLoginPage($twig);
                 }
 
-                elseif ($user->isRegisteringPageRequested($page)) {
+                elseif ($user->isRequestMatching($page, 'registering')) {
                     $user->renderRegisteringPage($twig);
                 }
 
-                elseif ($user->isMailNotificationPageRequested($page)) {
+                elseif ($user->isRequestMatching($page, 'mail-notification')) {
                     $user->renderMailNotificationPage($twig);
                 }
 
-                elseif ($user->isTokenSigningPageRequested($page)) {
+                elseif ($user->isRequestMatching($page, 'token-signing')) {
                     $user->renderTokenSigningPage($twig);
                 }
 
-                elseif ($user->isPasswordRetrievingPageRequested($page)) {
+                elseif ($user->isRequestMatching($page, 'password-retrieving')) {
                     $user->renderPasswordRetrievingPage($twig);
                 }
 
-                elseif ($user->isPasswordEditingPageRequested($page)) {
+                elseif ($user->isRequestMatching($page, 'password-editing')) {
                     $user->renderPasswordEditingPage($twig);
                 }
             }
 
-            else {
-                if ($user->isRetrievedPasswordPageRequested($page)) {
-                    $user->renderRetrievedPasswordPage($twig);
-                }
+            elseif ($user->isRequestMatching($page, 'retrieved-password')) {
+                $user->renderRetrievedPasswordPage($twig);
+            }
 
-                else {
-                    $user->routeTo('dashboard');
-                }
+            else {
+                $user->routeTo('dashboard');
             }
         }
 
         elseif (in_array($page, $Urls['pages']['userPanels'])) {
-            $user = new Dodie_Coaching\Controllers\User;
-
             if ($user->isLogged()) {
                 $userRole = $user->getRole();
 
-                if ($userRole && $user->isCustomer($userRole)) {
+                if ($userRole && $user->isRoleMatching($userRole, ['member', 'subscriber'])) {
                     $userPanels = new Dodie_Coaching\Controllers\UserPanels;
 
-                    if ($userPanels->isDashboardPageRequested($page)) {
+                    if ($userPanels->isRequestMatching($page, 'dashboard')) {
                         $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
                         $userDashboard->renderUserDashboardPage($twig);
                     }
 
-                    elseif ($userPanels->isNutritionPageRequested($page)) {
+                    elseif ($userPanels->isRequestMatching($page, 'nutrition')) {
                         $nutrition = new Dodie_Coaching\Controllers\Nutrition;
 
                         if ($nutrition->isMenuRequested()) {
@@ -160,7 +162,7 @@ try {
 
                             else {
                                 throw new URL_Exception('INVALID MEAL PARAMETER');
-                                // $userPanels->routeTo('nutrition');
+                                // $nutrition->routeTo('nutrition');
                             }
                         }
 
@@ -181,17 +183,17 @@ try {
                         }
                     }
 
-                    elseif ($userPanels->isProgressPageRequested($page)) {
+                    elseif ($userPanels->isRequestMatching($page, 'progress')) {
                         $progress = new Dodie_Coaching\Controllers\Progress;
                         $progress->renderProgress($twig);
                     }
 
-                    elseif ($userPanels->isMeetingsPageRequested($page)){
+                    elseif ($userPanels->isRequestMatching($page, 'meetings')){
                         $meetings = new Dodie_Coaching\Controllers\Meetings;
                         $meetings->renderMeetings($twig);
                     }
 
-                    elseif ($userPanels->isSubscriptionPageRequested($page)) {
+                    elseif ($userPanels->isRequestMatching($page, 'subscription')) {
                         $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
                         $subscriptions->renderSubscriptions($twig);
                     }
@@ -201,12 +203,13 @@ try {
                     }
                 }
 
-                elseif ($userRole && $user->isAdmin($userRole)) {
+                elseif ($userRole && $user->isRoleMatching($userRole, ['admin'])) {
                     $user->routeTo('admin-dashboard');
                 }
 
                 else {
-                    throw new Data_Exception('MISSING USER ROLE');
+                    throw new Data_Exception('INVALID USER ROLE');
+                    // $user->logoutUser();
                 }
             }
 
@@ -216,84 +219,110 @@ try {
         }
 
         elseif (in_array($page, $Urls['pages']['adminPanels'])) {
-            $user = new Dodie_Coaching\Controllers\User;
-
             if ($user->isLogged()) {
                 $userRole = $user->getRole();
 
-                if ($userRole && $user->isAdmin($userRole)) {
+                if ($userRole && $user->isRoleMatching($userRole, ['admin'])) {
                     $adminPanels = new Dodie_Coaching\Controllers\AdminPanels;
 
-                    if ($adminPanels->isDashboardPageRequested($page)) {
+                    if ($adminPanels->isRequestMatching($page, 'admin-dashboard')) {
                         $adminDashboard = new Dodie_Coaching\Controllers\AdminDashboard;
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
 
-                    elseif ($adminPanels->isApplicationsListPageRequested($page)) {
-                        $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
-                        $adminApplication->renderApplicationsListPage($twig);
+                    elseif ($adminPanels->isRequestMatching($page, 'appliances-list')) {
+                        $appliances = new Dodie_Coaching\Controllers\Appliances;
+                        $appliances->renderAppliancesListPage($twig);
                     }
 
-                    elseif ($adminPanels->isApplicationDetailsPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
-                        $adminApplication = new Dodie_Coaching\Controllers\AdminApplications;
-                        $applicantId = $adminPanels->getParam('id');
+                    elseif ($adminPanels->isRequestMatching($page, 'appliance-details') && $adminPanels->areParamsSet(['id'])) {
+                        $appliance = new Dodie_Coaching\Controllers\Appliances;
+                        $applicantId = $appliance->getParam('id');
                         
-                        if ($adminApplication->isApplicationAvailable($applicantId)) {
-                            $adminApplication->renderApplicationDetailsPage($twig, $applicantId);
+                        if ($appliance->isApplianceAvailable($applicantId)) {
+                            $appliance->renderApplianceDetailsPage($twig, $applicantId);
                         }
 
                         else {
-                            $adminPanels->routeTo('applicationsList');
+                            $appliance->routeTo('appliancesList');
                         }
                     }
 
-                    elseif ($adminPanels->isSubscribersListPageRequested($page)) {
-                        $adminSubs = new Dodie_Coaching\Controllers\AdminSubscribers;
-                        $adminSubs->renderSubscribersListPage($twig);
+                    elseif ($adminPanels->isRequestMatching($page, 'subscribers-list')) {
+                        $subscribers = new Dodie_Coaching\Controllers\Subscribers;
+                        $subscribers->renderSubscribersListPage($twig);
                     }
 
-                    elseif ($adminPanels->isSubscriberProfilePageRequested($page) && $adminPanels->areParamsSet(['id'])) {
-                        $adminSubscribers = new Dodie_Coaching\Controllers\AdminSubscribers;
-                        $subscriberId = $adminSubscribers->getParam('id');
-                        
-                        if ($adminSubscribers->isSubscriberIdAvailable($subscriberId)) {
-                            $adminSubscribers->renderSubscriberProfilePage($twig, $subscriberId);
+                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-profile')) {
+                        $subscribers = new Dodie_Coaching\Controllers\Subscribers;
+
+                        if ($adminPanels->areParamsSet(['id'])) {
+                            $subscriberId = intval($subscribers->getParam('id'));
+                            
+                            if ($subscribers->isSubscriberIdValid($subscriberId)) {
+                                $subscribers->renderSubscriberProfilePage($twig, $subscriberId);
+                            }
+    
+                            else {
+                                $subscribers->routeTo('subscribersList');
+                            }
                         }
 
                         else {
-                            $adminPanels->routeTo('subscribersList');
+                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            // $subscribers->routeTo('subscribersList');
                         }
                     }
 
-                    elseif ($adminPanels->isSubscriberProgramPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
-                        $subscriberProgram = new Dodie_Coaching\Controllers\SubscriberProgram;
-                        $subscriberId = $subscriberProgram->getParam('id');
-                        
-                        if ($subscriberProgram->isSubscriberIdAvailable($subscriberId)) {
-                            $subscriberProgram->renderSubscriberProgramPage($twig, $subscriberId);
+                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-program')) {
+                        $programs = new Dodie_Coaching\Controllers\Programs;
+
+                        if ($adminPanels->areParamsSet(['id'])) {
+                            $subscriberId = intval($programs->getParam('id'));
+                            
+                            if ($programs->isSubscriberIdValid($subscriberId)) {
+                                $programs->renderSubscriberProgramPage($twig, $subscriberId);
+                            }
+
+                            else {
+                                $programs->routeTo('subscribersList');
+                            }
                         }
 
                         else {
-                            $adminPanels->routeTo('subscribersList');
+                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            // $programs->routeTo('subscribersList');
                         }
                     }
 
-                    elseif ($adminPanels->isSubscriberNotesPageRequested($page) && $adminPanels->areParamsSet(['id'])) {
-                        $subscriberNotes = new Dodie_Coaching\Controllers\SubscriberNotes;
-                        $subscriberId = $subscriberNotes->getParam('id');
-                        
-                        if ($subscriberNotes->isSubscriberIdAvailable($subscriberId)) {
-                            $subscriberNotes->renderSubscriberNotesPage($twig, $subscriberId);
+                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-notes')) {
+                        $notes = new Dodie_Coaching\Controllers\Notes;
+
+                        if ($notes->areParamsSet(['id'])) {
+                            $subscriberId = intval($notes->getParam('id'));
+                            
+                            if ($notes->isSubscriberIdValid($subscriberId)) {
+                                $notes->renderSubscriberNotesPage($twig, $subscriberId);
+                            }
+    
+                            else {
+                                $notes->routeTo('subscribersList');
+                            }
                         }
 
                         else {
-                            $adminPanels->routeTo('subscribersList');
+                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            // $notes->routeTo('subscribersList');
                         }
+                    }
+
+                    else if ($adminPanels->isRequestMatching($page, 'meetings-management')) {
+                        $meetings = new Dodie_Coaching\Controllers\AdminMeetings;
                     }
                 }
 
                 else {
-                    throw new Data_Exception('WRONG USER ROLE');
+                    throw new Data_Exception('INVALID USER ROLE');
                     // $user->logoutUser();
                 }
             }
@@ -310,23 +339,23 @@ try {
         }
     }
 
-    elseif (isset($_GET['action'])) {
+    elseif ($user->isGetParamSet('action')) {
         $user = new Dodie_Coaching\Controllers\User;
-        $action = $user->getRequestedAction();
+        $action = $user->getParam('action');
         
         if (in_array($action, $Urls['actions']['connection'])) {
-
-            if ($user->isLoginActionRequested($action) && !$user->isLogged()) {
+            
+            if ($user->isRequestMatching($action, 'log-account') && !$user->isLogged()) {
                 if ($user->areDataPosted(['email', 'password'])) {
                     $userData = $user->getFormData(['email', 'password']);
-
+                    
                     if ($user->areFormDataValid($userData)) {
                         if ($user->isAccountExisting($userData)) {
                             if ($user->updateLoginData($userData)) {
                                 $user->logUser($userData);
                                 $user->routeTo('dashboard');
                             }
-
+                            
                             else {
                                 throw new DB_Exception('FAILED TO UPDATE LOGGING DATE');
                                 // $user->routeTo('login');
@@ -337,21 +366,21 @@ try {
                             $user->routeTo('login');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('INVALID EMAIL AND/OR PASSWORD PARAMETERS');
                     }
                 }
-
+                
                 else {
                     throw new Data_Exception('MISSING EMAIL AND/OR PASSWORD PARAMETERS');
                 }
             }
 
-            elseif ($user->isRegisterActionRequested($action) && !$user->isLogged()) {
+            elseif ($user->isRequestMatching($action, 'register-account') && !$user->isLogged()) {
                 if ($user->areDataPosted(['email', 'password', 'confirmation-password'])) {
                     $userData = $user->getFormData(['email', 'password', 'confirmation-password']);
-
+                    
                     if ($user->areFormDataValid($userData)) {
                         if (!$user->isEmailExisting($userData['email'])) {            
                             if ($user->registerAccount($userData)) {
@@ -359,36 +388,36 @@ try {
                                 $user->logUser($userData);
                                 $user->routeTo('dashboard');
                             }
-    
+                            
                             else {
                                 throw new DB_Exception('FAILED TO REGISTER ACCOUNT');
                                 // $user->routeTo('registering');
                             }
                         }
-
+                        
                         else {
                             $user->routeTo('registering');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('INVALID EMAIL AND/OR PASSWORD PARAMETERS');
                     }
                 }
-
+                
                 else {
                     throw new Data_Exception('MISSING EMAIL AND/OR PASSWORD AND OR CONFIRMATION-PASSWORD PARAMETERS');
                 }
             }
-
-            elseif ($user->isSendTokenActionRequested($action) && !$user->isLogged()) {
+            
+            elseif ($user->isRequestMatching($action, 'send-token') && !$user->isLogged()) {
                 if ($user->areDataPosted(['email'])) {
                     $userData = $user->getFormData(['email']);
-
+                    
                     if ($user->areFormDataValid($userData)) {
                         if ($user->isEmailExisting($userData['email'])) {
                             $token = $user->getTokenDate($userData['email']);
-
+                            
                             if ($token) {
                                 if ($user->isLastTokenOld($token)) {
                                     if ($user->eraseToken($userData['email'])) {
@@ -401,12 +430,12 @@ try {
                                         // $user->routeTo('mail-notification');
                                     }
                                 }
-
+                                
                                 else {
                                     $user->routeTo('mail-notification');
                                 }
                             }
-
+                            
                             else {
                                 $user->sessionize($userData, ['email']);
                                 $user->routeTo('send-token');
@@ -417,7 +446,7 @@ try {
                             $user->routeTo('mail-notification');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('INVALID FORM DATA');
                     }
@@ -425,19 +454,19 @@ try {
 
                 elseif ($user->isDataSessionized('email')) {
                     $newToken = $user->generateToken();
-
+                    
                     if ($user->registerToken($newToken)) {
                         $pwdRetriever = new Dodie_Coaching\Services\PasswordRetriever;
-            
+                        
                         if ($pwdRetriever->sendToken($newToken)) {
                             $user->routeTo('mail-notification');
                         }
-
+                        
                         else {
                             throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
                         }
                     }
-            
+                    
                     else {
                         throw new DB_Exception('FAILED TO INSERT A NEW TOKEN');
                     }
@@ -447,82 +476,89 @@ try {
                     throw new Data_Exception('MISSING EMAIL PARAMETER');
                 }
             }
-
-            elseif ($user->isVerifyTokenActionRequested($action) && !$user->isLogged()) {
+            
+            elseif ($user->isRequestMatching($action, 'verify-token') && !$user->isLogged()) {
                 if ($user->isDataSessionized('email') && $user->areDataPosted(['token'])) {
                     $userData = $user->getFormData(['token']);
-
+                    
                     if ($user->areFormDataValid($userData)) {
                         if ($user->isTokenMatching()) {
                             $user->sessionize($userData, ['token']);
                             $user->routeTo('edit-password');
                         }
-
+                        
                         else {
                             if (!$user->subtractTokenAttempt()) {
                                 throw new DB_Exception('FAILED TO SUBTRACT A TOKEN ATTEMPT');                                
                             }
-
+                            
                             $user->routeTo('token-signing');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('INVALID TOKEN DATA IN FORM');
                     }
-
                 }
-
+                
                 else {
                     throw new Data_Exception('MISSING EMAIL IN SESSION AND/OR TOKEN IN POST');
                 }
             }
-
-            elseif ($user->isRegisterPasswordActionRequested($action) && !$user->isLogged()) {
+            
+            elseif ($user->isRequestMatching($action, 'register-password') && !$user->isLogged()) {
                 if ($user->areDataPosted(['password', 'confirmation-password'])) {
                     $userData = $user->getFormData(['password', 'confirmation-password']);
-
+                    
                     if ($user->areFormDataValid($userData)) {
-                        if ($user->registerPassword($userData)) {
-                            if ($user->eraseToken($_SESSION['email'])) {
-                                $user->unsessionizeData(['token']);
-                                $user->sessionize($userData, ['password']);
-                                $user->routeTo('retrieved-password');
-                            }
+                        if ($user->isDataSessionized('email')) {
+                            $userEmail = $user->getSessionizedParam('email');
 
+                            if ($user->registerPassword($userData)) {
+                                if ($user->eraseToken($userEmail)) {
+                                    $user->unsessionizeData(['token']);
+                                    $user->sessionize($userData, ['password']);
+                                    $user->routeTo('retrieved-password');
+                                }
+                                
+                                else {
+                                    throw new DB_Exception('FAILED TO REMOVE TOKEN');
+                                }
+                            }
+                            
                             else {
-                                throw new DB_Exception('FAILED TO REMOVE TOKEN');
+                                throw new DB_Exception('FAILED TO REGISTER NEW PASSWORD');
                             }
                         }
                         
                         else {
-                            throw new DB_Exception('FAILED TO REGISTER NEW PASSWORD');
+                            throw new Data_Exception('MISSING EMAIL DATA IN SESSION');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('INVALID PASSWORD AND/OR CONFIRMATION PASSWORD PARAMETERS');
                     }
                 }
-
+                
                 else {
                     throw new Data_Exception('MISSING PASSWORD AND/OR CONFIRMATION PASSWORD DATA');
                 }
             }
-
-            elseif ($user->isLogoutActionRequested($action) && $user->isLogged()) {
+            
+            elseif ($user->isRequestMatching($action, 'logout') && $user->isLogged()) {
                 $user->logoutUser();
             }
         }
-
+        
         elseif (in_array($action, $Urls['actions']['progress'])) {
             $progress = new Dodie_Coaching\Controllers\Progress;
-
+            
             if ($user->isLogged()) {
-                if ($progress->isReportAdditionRequested($action)) {
+                if ($progress->isRequestMatching($action, 'add-report')) {
                     if ($progress->areBaseFormDataSet()) {
                         $baseFormData = $progress->getBaseFormData();
-
+                        
                         if ($progress->areBaseFormDataValid($baseFormData)) {
                             if ($progress->isCurrentWeightReport($baseFormData)) {
                                 $formatedFormData = $progress->getFormatedBaseFormData($baseFormData);
@@ -531,10 +567,10 @@ try {
                                     throw new DB_Exception('FAILED TO LOG CURRENT WEIGHT REPORT');
                                 }
                             }
-
+                            
                             elseif ($progress->areExtendedFormDataSet()) {
                                 $extendedFormData = $progress->getExtendedFormData($baseFormData);
-
+                                
                                 if ($progress->areExtendedFormDataValid($extendedFormData)) {
                                     $formatedFormData = $progress->getFormatedExtendedFormData($extendedFormData);
                                     
@@ -542,164 +578,162 @@ try {
                                         throw new DB_Exception('FAILED TO LOG OLD WEIGHT REPORT');
                                     }
                                 }
-
+                                
                                 else {
                                     throw new URL_Exception('INVALID "DAY" OR "TIME" PARAMETERS FOR OLD WEIGHT REPORT');
                                 }
                             }
-
+                            
                             else {
                                 throw new URL_Exception('MISSING "DAY" OR "TIME" PARAMETER FOR OLD WEIGHT REPORT');
                             }
                         }
-
+                        
                         else {
                             throw new URL_Exception('INVALID "USER-WEIGHT" OR "DATE-TYPE" PARAMETERS FOR CURRENT WEIGHT REPORT');
                         }
                     }
-
+                    
                     else {
                         throw new URL_Exception('MISSING "USER-WEIGHT" OR "DATE-TYPE" PARAMETER FOR CURRENT WEIGHT REPORT');
                     }
-
+                    
                     $progress->routeTo('progress');
                 }
-
-                elseif ($progress->isReportDeletionRequested($action)) {
-                    if ($progress->isReportIdSet()) {
+                
+                elseif ($progress->isRequestMatching($action, 'delete-report')) {
+                    if ($progress->areParamsSet(['id'])) {
                         $reportId = $progress->getParam('id');
-
+                        
                         if ($progress->isReportIdValid($reportId)) {
                             $progressHistory = $progress->getHistory();
-
+                            
                             if ($progress->isReportIdExisting($progressHistory, $reportId)) {
                                 if (!$progress->eraseProgress($progressHistory, $reportId)) {
                                     throw new DB_Exception ("FAILED TO DELETE REPORT");
                                 }
                             }
-
+                            
                             else {
                                 throw new Data_Exception("NO REPORT FOUND TO DELETE");
                             }
                         }
-
+                        
                         else {
                             throw new URL_Exception("INVALID REPORT ID PARAMETER");
                         }
                     }
-
+                    
                     else {
                         throw new URL_Exception("MISSING REPORT ID PARAMETER");
                     }
                 }
-
+                
                 $progress->routeTo('progress');
             }
-
+            
             else {
                 $user->logoutUser();
             }
         }
-
+        
         elseif (in_array($action, $Urls['actions']['meeting'])) {
             $meetings = new Dodie_Coaching\Controllers\Meetings;
-
+            
             if ($user->isLogged()) {
-                if ($meetings->isBookingRequested($action)) {
+                if ($meetings->isRequestMatching($action, 'book-appointment')) {
                     $dateData = $meetings->getDateData();
                     
                     if ($meetings->areDateDataValid($dateData)) {
                         $formatedDate = $meetings->getFormatedDate($dateData);
-
+                        
                         if ($meetings->isMeetingsSlotAvailable($formatedDate)) {
                             if (!$meetings->bookAppointment($formatedDate)) {
                                 throw new DB_Exception('FAILED TO BOOK APPOINTMENT');
                             }
                         }
-
+                        
                         else {
                             throw new Data_Exception('UNAVAILABLE MEETING SLOT');
                         }
                     }
-
+                    
                     else {
                         throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
                 }
-
-                elseif ($meetings->isCancellationRequested($action)) {
+                
+                elseif ($meetings->isRequestMatching($action, 'cancel-appointment')) {
                     if (!$meetings->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
                 }
-
+                
                 $meetings->routeTo('meetings');
             }
-
+            
             else {
                 $user->logoutUser();
             }
         }
-
-        elseif (in_array($action, $Urls['actions']['application'])) {
-            $adminApplication = new \Dodie_Coaching\Controllers\AdminApplications;
-
+        
+        elseif (in_array($action, $Urls['actions']['appliance'])) {
+            $appliances = new \Dodie_Coaching\Controllers\Appliances;
+            
             if ($user->isLogged()) {
-                if ($adminApplication->isRejectApplicationActionRequested($action)) {
-                    if ($adminApplication->areParamsSet(['id'])) {
-                        $applicantId = $adminApplication->getParam('id');
-
-                        if ($adminApplication->isApplicationIdValid($applicantId)) {
-                            $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
-
-                            $applicantData = $adminApplication->getApplicantData($applicantId);
-                            $messageType = $adminApplication->getMessageType();
-
+                if ($appliances->isRequestMatching($action, 'reject-appliance')) {
+                    if ($appliances->areParamsSet(['id'])) {
+                        $applicantId = $appliances->getParam('id');
+                        
+                        if ($appliances->isApplianceIdValid($applicantId)) {
+                            $appResponder = new Dodie_Coaching\Services\ApplianceResponder;
+                            
+                            $applicantData = $appliances->getApplicantData($applicantId);
+                            $messageType = $appliances->getMessageType();
+                            
                             if ($appResponder->sendRejectionNotification($messageType, $applicantData)) {
-
-                                $adminApplication->eraseApplication($applicantId);
-                                $adminApplication->routeTo('applicationsList');
+                                $appliances->eraseAppliance($applicantId);
+                                $appliances->routeTo('appliancesList');
                             }
-
+                            
                             else {
-                                throw new Mailer_Exception('FAILED TO SEND APPLICATION REJECTION EMAIL');
+                                throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
                             }
                         }
-
+                        
                         else {
-                            $adminApplication->routeTo('applicationsList');
+                            $appliances->routeTo('appliancesList');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
-
-                elseif ($adminApplication->isApproveApplicationActionRequested($action)) {
-                    if ($adminApplication->areParamsSet(['id'])) {
-                        $applicantId = $adminApplication->getParam('id');
-
-                        if ($adminApplication->isApplicationIdValid($applicantId)) {
-                            $appResponder = new Dodie_Coaching\Services\ApplicationResponder;
-
-                            $applicantData = $adminApplication->getApplicantData($applicantId);
-
-                            if ($appResponder->sendApprovalNotification($applicantData)) {
-                                $adminApplication->acceptApplication($applicantId, 'payment_pending');
-                                $adminApplication->routeTo('applicationsList');
+                
+                elseif ($appliances->isRequestMatching($action, 'approve-appliance')) {
+                    if ($appliances->areParamsSet(['id'])) {
+                        $applicantId = $appliances->getParam('id');
+                        
+                        if ($appliances->isApplianceIdValid($applicantId)) {
+                            $applianceResponder = new Dodie_Coaching\Services\ApplianceResponder;
+                            $applicantData = $appliances->getApplicantData($applicantId);
+                            
+                            if ($applianceResponder->sendApprovalNotification($applicantData)) {
+                                $appliances->acceptAppliance($applicantId, 'payment_pending');
+                                $appliances->routeTo('appliancesList');
                             }
-
+                            
                             else {
-                                throw new Mailer_Exception('FAILED TO SEND APPLICATION APPROVAL EMAIL');
+                                throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
                             }
                         }
-
+                        
                         else {
-                            $adminApplication->routeTo('applicationsList');
+                            $appliances->routeTo('appliancesList');
                         }
                     }
-
+                    
                     else {
                         throw new Data_Exception('MISSING ID PARAMETER IN URL');
                     }
@@ -709,26 +743,26 @@ try {
                     echo "Page d'action inconnue";
                 }
             }
-
+            
             else {
                 $user->logoutUser();
             }
         }
-
+        
         elseif (in_array($action, $Urls['actions']['subscriber'])) {
-            $subscriberNotes = new \Dodie_Coaching\Controllers\SubscriberNotes;
-
+            $notes = new \Dodie_Coaching\Controllers\Notes;
+            
             if ($user->isLogged()) {
-                if ($subscriberNotes->isSaveNoteActionRequested($action)) {
-                    if ($subscriberNotes->areParamsSet(['id'])) {
-                        $subscriberId = $subscriberNotes->getParam('id');
+                if ($notes->isRequestMatching($action, 'save-note')) {
+                    if ($notes->areParamsSet(['id'])) {
+                        $subscriberId = intval($notes->getParam('id'));
 
-                        if ($subscriberNotes->isSubscriberIdValid($subscriberId)) {
-                            if ($subscriberNotes->areDataPosted(['note-message', 'attached-meeting-date'])) {
-                                $noteData = $subscriberNotes->buildNoteData($subscriberId);
+                        if ($notes->isSubscriberIdValid($subscriberId)) {
+                            if ($notes->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                                $noteData = $notes->buildNoteData($subscriberId);
                                 
                                 if ($noteData) {
-                                    $subscriberNotes->logNote($noteData);
+                                    $notes->logNote($noteData);
 
                                     header("location:index.php?page=subscriber-notes&id=" . $noteData['subscriber_id']);
                                 }
@@ -742,13 +776,13 @@ try {
 
                             else {
                                 throw new Data_Exception('MISSING NOTE PARAMETERS FROM NOTE FORM');
-                                // $adminApplication->routeTo('applicationsList');
+                                // $notes->routeTo('appliancesList');
                             }
                         }
 
                         else {
                             throw new Data_Exception('INVALID ID PARAMETER IN URL');
-                            // $adminApplication->routeTo('applicationsList');
+                            // $notes->routeTo('appliancesList');
                         }
                     }
 
@@ -756,20 +790,20 @@ try {
                         throw new Data_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
+                
+                elseif ($notes->isRequestMatching($action, 'edit-note')) {
+                    if ($notes->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($notes->getParam('id'));
+                        $noteId = intval($notes->getParam('note-id'));
 
-                elseif ($subscriberNotes->isEditNoteActionRequested($action)) {
-                    if ($subscriberNotes->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = $subscriberNotes->getParam('id');
-                        $noteId = $subscriberNotes->getParam('note-id');
+                        if ($notes->isSubscriberIdValid($subscriberId) && $notes->isNoteIdValid($noteId)) {
 
-                        if ($subscriberNotes->isSubscriberIdValid($subscriberId) && $subscriberNotes->isNoteIdValid($noteId)) {
+                            if ($notes->areDataPosted(['note-message', 'attached-meeting-date'])) {
 
-                            if ($subscriberNotes->areDataPosted(['note-message', 'attached-meeting-date'])) {
-
-                                $noteData = $subscriberNotes->buildNoteData($subscriberId);
+                                $noteData = $notes->buildNoteData($subscriberId);
 
                                 if ($noteData) {
-                                    $subscriberNotes->editNote($noteData, $noteId);
+                                    $notes->editNote($noteData, $noteId);
 
                                     header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
                                 }
@@ -778,27 +812,14 @@ try {
                                     throw new Data_Exception('INVALID NOTES PARAMERS FROM NOTE FORM');
                                 }
                             }
+
                             else {
                                 throw new Data_Exception('MISSING NOTE OR DATE IN EDIT NOTE FORM');
                             }
                         }
-                    }
-                    
-                    else {
-                        throw new Data_Exception('MISSING ID PARAMETER IS URL');
-                    }
-                }
 
-                elseif ($subscriberNotes->isDeleteNoteActionRequested($action)) {
-                    if ($subscriberNotes->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = $subscriberNotes->getParam('id');
-                        $noteId = $subscriberNotes->getParam('note-id');
-
-
-                        if ($subscriberNotes->isNoteIdValid($noteId)) {
-                            $subscriberNotes->eraseNote($noteId);
-
-                            header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
+                        else {
+                            throw new Data_Exception('INVALID SUBSCRIBER OR NOTE ID');
                         }
                     }
                     
@@ -807,11 +828,29 @@ try {
                     }
                 }
                 
-                else {
-                    throw new URL_Exception('UNTESTED ACTION IN SUBSCRIBER ACTIONS');
+                elseif ($notes->isRequestMatching($action, 'delete-note')) {
+                    if ($notes->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($notes->getParam('id'));
+                        $noteId = intval($notes->getParam('note-id'));
+
+
+                        if ($notes->isNoteIdValid($noteId)) {
+                            $notes->eraseNote($noteId);
+
+                            header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
+                        }
+
+                        else {
+                            throw new Data_Exception('INVALID NOTE ID');
+                        }
+                    }
+                    
+                    else {
+                        throw new Data_Exception('MISSING ID PARAMETER IS URL');
+                    }
                 }
             }
-
+            
             else {
                 $user->logoutUser();
             }
@@ -821,7 +860,7 @@ try {
             $user->logoutUser();
         }
     }
-
+    
     else {
         header("location:index.php?page=presentation");
     }

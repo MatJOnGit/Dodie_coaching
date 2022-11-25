@@ -3,12 +3,12 @@
 {% block pageContent %}
     <div class='admin-panel'>
     
-        {% if (applicationsCount is defined) and (applicationsCount != false) %}
+        {% if (appliancesCount is defined) and (appliancesCount != false) %}
 
-            <div class='dashboard-card pending-applications'>
+            <div class='dashboard-card pending-appliances'>
                 <h3>Vos demandes de coaching</h3>
-                <p>Vous avez {{ applicationsCount['applicationsCount'] }} demandes en attente.</p>
-                <a href='index.php?page=applications-list' class='btn large-btn admin-link'>Gérer de vos demandes</a>
+                <p>Vous avez {{ appliancesCount['appliancesCount'] }} demandes en attente.</p>
+                <a href='index.php?page=appliances-list' class='btn large-btn admin-link'>Gérer de vos demandes</a>
             </div>
 
         {% endif %}
@@ -51,7 +51,7 @@
 
                 {% endif %}
 
-                <a href='index.php?page=manage-meetings' class='btn large-btn admin-link'>Gestion de vos rendez-vous</a>
+                <a href='index.php?page=meetings-management' class='btn large-btn admin-link'>Gestion de vos rendez-vous</a>
             </div>
 
         {% endif %}

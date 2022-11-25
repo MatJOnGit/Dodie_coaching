@@ -13,7 +13,7 @@ class NotesHelper extends UserPanels {
         this._mappedAttendedMeetings = [];
 
         this._timezone = 'Europe/Paris';
-        this._addNoteLink = 'index.php?action=reject-application&id=';
+        this._addNoteLink = 'index.php?action=reject-appliance&id=';
     }
 
     get addNoteBtn() {

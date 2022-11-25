@@ -29,26 +29,6 @@ class UserPanels extends Main {
 
     private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
 
-    public function isDashboardPageRequested(string $page): bool {
-        return $page === 'dashboard';
-    }
-
-    public function isMeetingsPageRequested(string $page): bool {
-        return $page === 'meetings';
-    }
-
-    public function isNutritionPageRequested(string $page): bool {
-        return $page === 'nutrition';
-    }
-
-    public function isProgressPageRequested(string $page): bool {
-        return $page === 'progress';
-    }
-
-    public function isSubscriptionPageRequested(string $page): bool {
-        return $page === 'subscription';
-    }
-
     protected function _getMonths() {
         return $this->_months;
     }

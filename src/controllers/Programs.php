@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class SubscriberProgram extends AdminSubscribers {
+class Programs extends Subscribers {
     public function renderSubscriberProgramPage(object $twig, int $subscriberId) {
         echo $twig->render('admin_panels/subscriber-program.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),

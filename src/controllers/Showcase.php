@@ -3,7 +3,7 @@
 namespace Dodie_Coaching\Controllers;
 
 class Showcase extends Main {
-    public $programsList = [
+    private $_programsList = [
         'monthly' => [
             'name' => 'monthly',
             'frenchTitle' => 'Formule mois',
@@ -35,7 +35,7 @@ class Showcase extends Main {
         // ]
     ];
 
-    protected $_routingURLs = [
+    private $_routingURLs = [
         'presentation' => 'index.php?page=presentation',
         'coaching' => 'index.php?page=coaching',
         'programs-list' => 'index.php?page=programs-list',
@@ -48,41 +48,13 @@ class Showcase extends Main {
         'components/header',
         'components/footer'
     ];
-
-    public function areProgramsPagesRequested(string $page): bool {
-        return ($page === 'programs-list') || ($page === 'program-details');
-    }
-
-    public function getProgram(): string {
-        return htmlspecialchars($_GET['program']);
-    }
-
-    public function isCoachingPageRequested(string $page): bool {
-        return $page === 'coaching';
-    }
-
-    public function isPresentationPageRequested(string $page): bool {
-        return $page === 'presentation';
-    }
   
     public function isProgramAvailable(string $requestedProgram): bool {
-        return in_array($requestedProgram, array_keys($this->programsList));
-    }
-
-    public function isProgramDetailsRequested(string $page): bool {
-        return $page === 'program-details';
+        return in_array($requestedProgram, array_keys($this->_programsList));
     }
 
     public function isProgramsListAvailable(): bool {
         return count($this->_getProgramsList()) > 0;
-    }
-
-    public function isProgramsListRequested(string $page): bool {
-        return $page === 'programs-list';
-    }
-
-    public function isRequestedProgramSet() : bool {
-        return isset($_GET['program']);
     }
     
     public function renderCoachingPage(object $twig) {
@@ -133,11 +105,11 @@ class Showcase extends Main {
     }
 
     private function _getProgramDetails(string $program): array {
-        return $this->programsList[$program];
+        return $this->_programsList[$program];
     }
 
     private function _getProgramsList(): array {
-        return $this->programsList;
+        return $this->_programsList;
     }
 
     private function _getRoutingURLs(): array {

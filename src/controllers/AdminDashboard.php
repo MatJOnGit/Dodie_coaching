@@ -20,20 +20,19 @@ class AdminDashboard extends AdminPanels {
     
     private function _filterTodayMeetingsData(array $incomingMeetings) {
         $this->_setTimeZone();
-        $currentDate = date('Y-m-d');
+        $currentDate = date('d/m/Y');
         $todayMeetingsData = [];
 
-        if ($incomingMeetings != false) {
-            foreach ($incomingMeetings as $key=>$incomingMeeting) {
-                $incomingMeetingDay = explode(' ', $incomingMeeting['slot_date'])[0];
-                $incomingMeetingTime = explode(' ', $incomingMeeting['slot_date'])[1];
-                $costumerFirstName = $incomingMeeting['first_name'];
-                $costumerLastName = strtoupper($incomingMeeting['last_name']);
+        if ($incomingMeetings) {
+            foreach ($incomingMeetings as $incomingMeeting) {
+                $incomingMeetingDay = $incomingMeeting['day'];
+                $incomingMeetingTime = $incomingMeeting['starting_time'];
+                $costumerName = $incomingMeeting['name'];
 
                 if ($incomingMeetingDay === $currentDate) {
                     array_push($todayMeetingsData, [
                         'meetingTime' => $incomingMeetingTime,
-                        'costumerName' => $costumerFirstName . ' ' . $costumerLastName
+                        'costumerName' => $costumerName
                     ]);
                 }
             }
@@ -57,7 +56,7 @@ class AdminDashboard extends AdminPanels {
     private function _getTodayMeetingsData() {
         $meetings = new Meetings;
 
-        $incomingMeetings = $meetings->selectIncomingMeetings();
+        $incomingMeetings = $meetings->selectNextBookedMeetings();
 
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

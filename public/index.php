@@ -28,7 +28,7 @@ try {
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
-            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'],
+            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings-booking', 'subscription'],
             'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management']
         ],
         'actions' => [
@@ -188,9 +188,9 @@ try {
                         $progress->renderProgress($twig);
                     }
 
-                    elseif ($userPanels->isRequestMatching($page, 'meetings')){
-                        $meetings = new Dodie_Coaching\Controllers\Meetings;
-                        $meetings->renderMeetings($twig);
+                    elseif ($userPanels->isRequestMatching($page, 'meetings-booking')){
+                        $meetingsBooking = new Dodie_Coaching\Controllers\MeetingsBooking;
+                        $meetingsBooking->renderMeetingsBooking($twig);
                     }
 
                     elseif ($userPanels->isRequestMatching($page, 'subscription')) {
@@ -273,28 +273,28 @@ try {
                             // $subscribers->routeTo('subscribersList');
                         }
                     }
-
+                    
                     elseif ($adminPanels->isRequestMatching($page, 'subscriber-program')) {
                         $programs = new Dodie_Coaching\Controllers\Programs;
-
+                        
                         if ($adminPanels->areParamsSet(['id'])) {
                             $subscriberId = intval($programs->getParam('id'));
                             
                             if ($programs->isSubscriberIdValid($subscriberId)) {
                                 $programs->renderSubscriberProgramPage($twig, $subscriberId);
                             }
-
+                            
                             else {
                                 $programs->routeTo('subscribersList');
                             }
                         }
-
+                        
                         else {
                             throw new Data_Exception('MISSING ID PARAMETER IN URL');
                             // $programs->routeTo('subscribersList');
                         }
                     }
-
+                    
                     elseif ($adminPanels->isRequestMatching($page, 'subscriber-notes')) {
                         $notes = new Dodie_Coaching\Controllers\Notes;
 
@@ -317,7 +317,9 @@ try {
                     }
 
                     else if ($adminPanels->isRequestMatching($page, 'meetings-management')) {
-                        $meetings = new Dodie_Coaching\Controllers\AdminMeetings;
+                        $meetingsManagement = new Dodie_Coaching\Controllers\MeetingsManagement;
+
+                        $meetingsManagement->renderMeetingsManagement($twig);
                     }
                 }
 
@@ -638,7 +640,7 @@ try {
         }
         
         elseif (in_array($action, $Urls['actions']['meeting'])) {
-            $meetings = new Dodie_Coaching\Controllers\Meetings;
+            $meetings = new Dodie_Coaching\Controllers\MeetingsBooking;
             
             if ($user->isLogged()) {
                 if ($meetings->isRequestMatching($action, 'book-appointment')) {
@@ -669,7 +671,7 @@ try {
                     }
                 }
                 
-                $meetings->routeTo('meetings');
+                $meetings->routeTo('meetingsBooking');
             }
             
             else {

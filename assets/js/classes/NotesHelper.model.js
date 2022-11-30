@@ -181,7 +181,7 @@ class NotesHelper extends UserPanels {
     }
 
     mapAttendedMeetings() {
-        this.mappedAttendedMeetings = this.attendedMeetingsData.map(attendedMeetings => 'le ' + new Date(attendedMeetings['slot_date']).toLocaleDateString('fr') + ' à ' + new Date(attendedMeetings['slot_date']).toLocaleTimeString('fr'))
+        this.mappedAttendedMeetings = this.attendedMeetingsData.map(attendedMeetings => 'le ' + new Date(attendedMeetings['slot_date']).toLocaleDateString('fr') + ' à ' + new Date(attendedMeetings['slot_date']).toLocaleTimeString('fr').slice(0, 5).replace(':', 'h'));
     }
 
     removePreviousNotes() {

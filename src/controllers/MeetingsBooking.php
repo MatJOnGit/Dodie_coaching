@@ -4,15 +4,15 @@ namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Meetings as MeetingsModel, DateTime;
 
-class Meetings extends UserPanels {
+class MeetingsBooking extends UserPanels {
     private $_appointmentDelay = 24;
 
     private $_dateNeededSpaces = 4;
 
     private $_meetingsScripts = [
         'classes/UserPanels.model',
-        'classes/Meetings.model',
-        'meetingsApp'
+        'classes/MeetingsBooking.model',
+        'meetingsBookingHelper'
     ];
 
     private $_subMenuPage = 'meetings';
@@ -88,8 +88,8 @@ class Meetings extends UserPanels {
         );
     }
 
-    public function renderMeetings(object $twig) {
-        echo $twig->render('user_panels/meetings.html.twig', [
+    public function renderMeetingsBooking(object $twig) {
+        echo $twig->render('user_panels/meetings-booking.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'rendez-vous',
             'appSection' => 'userPanels',
@@ -143,7 +143,6 @@ class Meetings extends UserPanels {
 
         $availableMeetingsSlots = $dashboard->selectAvailableMeetings($this->_getAppointmentDelay());
         $meetingsSlotsArray = $this->_getMeetingsSlotsArray($availableMeetingsSlots);
-
         return $this->_sortMeetingsSlots($meetingsSlotsArray);
     }
 

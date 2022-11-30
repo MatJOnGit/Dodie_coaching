@@ -12,9 +12,9 @@ class UserDashboard extends UserPanels {
             'frenchTitle' => 'Progression',
             'link' => 'progress'
         ],
-        'meetings' => [
+        'meetings-booking' => [
             'frenchTitle' => 'Rendez-vous',
-            'link' => 'meetings'
+            'link' => 'meetings-booking'
         ],
         'subscription' => [
             'frenchTitle' => 'Abonnement',

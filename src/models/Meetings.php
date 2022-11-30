@@ -17,24 +17,27 @@ class Meetings extends Main {
         $selectAvailableMeetingsStatement = $db->prepare($selectAvailableMeetingsQuery);
         $selectAvailableMeetingsStatement->execute([$appointmentDelay]);
         
-        return $selectAvailableMeetingsStatement->fetchAll();
+        return $selectAvailableMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectIncomingMeetings() {
+    public function selectNextBookedMeetings() {
         $db = $this->dbConnect();
-        $selectIncomingMeetingsQuery =
-            "SELECT ms.slot_date,
-                acc.first_name,
-                acc.last_name
-            FROM meeting_slots ms
-            INNER JOIN accounts acc ON ms.user_id = acc.id
-            WHERE ms.slot_date > CURRENT_TIMESTAMP
-            AND ms.slot_status = 'booked'
-            AND ms.user_id > 0";
-        $selectIncomingMeetingsStatement = $db->prepare($selectIncomingMeetingsQuery);
-        $selectIncomingMeetingsStatement->execute();
-        
-        return $selectIncomingMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
+        $selectNextBookedMeetingsQuery =
+            "SELECT DATE_FORMAT(slot_date, '%d/%m/%Y') AS 'day', DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'starting_time', CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name' FROM meeting_slots ms INNER JOIN accounts acc ON ms.user_id = acc.id WHERE ms.slot_date > CURRENT_TIMESTAMP AND ms.slot_status = 'booked' AND ms.user_id > 0";
+        $selectNextBookedMeetingsStatement = $db->prepare($selectNextBookedMeetingsQuery);
+        $selectNextBookedMeetingsStatement->execute();
+
+        return $selectNextBookedMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectNextMeetings() {
+        $db = $this->dbConnect();
+        $selectNextMeetingsQuery =
+            "SELECT DATE_FORMAT(slot_date, '%d/%m/%Y') AS 'day', DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'starting_time', CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name', slot_id FROM meeting_slots ms LEFT JOIN accounts acc ON ms.user_id = acc.id WHERE ms.slot_date > CURRENT_TIMESTAMP";
+        $selectNextMeetingsStatement = $db->prepare($selectNextMeetingsQuery);
+        $selectNextMeetingsStatement->execute();
+
+        return $selectNextMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function selectScheduledMeeting(string $email) {
@@ -64,6 +67,7 @@ class Meetings extends Main {
             INNER JOIN meeting_slots ms ON sub.user_id = ms.user_id
             WHERE ms.slot_status = 'attended'
             AND sub.user_id = ?
+            AND ms.slot_date < NOW()
             ORDER BY ms.slot_date DESC";
         $selectAttendedMeetingsStatement = $db->prepare($selectAttendedMeetingsQuery);
         $selectAttendedMeetingsStatement->execute([$subscriberId]);

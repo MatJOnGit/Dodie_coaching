@@ -4,14 +4,14 @@
     <div class='admin-panel profile-panel'>
         <h3>Notes de suivi de {{ subscriberHeaders['name'] }}</h3>
                 
-        {% if subscriberNotes %}
+        {% if notes %}
 
             <ul class='notes-list'>
             
-            {% for note in subscriberNotes %}
+            {% for note in notes %}
 
                 <li>
-                    <button data-id = '{{ note['id'] }}' class='edit-note'>
+                    <button data-id='{{ note['id'] }}' class='edit-note'>
                         <h4 class='section-header orange-bkgd'>
 
                             {% if note['attached_to_meeting'] %}

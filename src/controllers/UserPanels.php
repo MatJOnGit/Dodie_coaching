@@ -7,7 +7,7 @@ class UserPanels extends Main {
         'dashboard' => 'index.php?page=dashboard',
         'progress' => 'index.php?page=progress',
         'nutrition' => 'index.php?page=nutrition',
-        'meetings' => 'index.php?page=meetings',
+        'meetingsBooking' => 'index.php?page=meetings-booking',
         'subscription' => 'index.php?page=subscription'
     ];
     

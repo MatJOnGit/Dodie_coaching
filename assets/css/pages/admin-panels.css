@@ -56,7 +56,8 @@ h2 {
 
 .admin-form,
 .admin-form > textarea,
-.edit-note {
+.edit-note,
+#meeting-slots {
     width: 100%;
 }
 
@@ -92,7 +93,6 @@ h2 {
 }
 
 .admin-panel > h3 {
-    padding: 0 10%;
     text-align: center;
 }
 
@@ -119,11 +119,6 @@ h2 {
 .notes-list,
 .notes-list li {
     width: 100%;
-}
-
-.profile-panel ul,
-.programs-list li {
-    padding: 1vh 10%;
 }
 
 /**********************************/
@@ -186,7 +181,7 @@ h2 {
     width: 100%;
     text-align: center;
     text-transform: uppercase;
-    padding: 1vh 0 ;
+    padding: 2vh 0 ;
     margin: 0 0 1vh;
 }
 
@@ -206,7 +201,6 @@ h2 {
 }
 
 .edit-note {
-    background-color: inherit;
     margin: 0 0 2vh;
     padding: 0;
     position: relative;
@@ -241,4 +235,25 @@ h2 {
 
 .save-note-btn {
     margin-top: 2vh;
+}
+
+/********************************/
+/*     MEETINGS MANAGEMENT      */
+/********************************/
+
+.daily-meetings-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.meeting-item {
+    width: 90%;
+}
+
+.meeting-btn {
+    width: 100%;
+    border-radius: 2.5vh;
+    height: 7vh;
+    text-align: center;
 }

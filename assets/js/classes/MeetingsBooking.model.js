@@ -1,4 +1,4 @@
-class Meetings extends UserPanels {
+class MeetingsBooking extends UserPanels {
     constructor() {
         super();
 

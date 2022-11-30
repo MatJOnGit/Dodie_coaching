@@ -26,12 +26,6 @@ footer i {
     color: hsla(0, 0%, 100%, 1);
 }
 
-.show-input-helper-btn,
-.input-helper,
-.input-helper-dismiss-btn {
-    background-color: inherit;
-}
-
 footer {
     background-color: hsla(0, 0%, 100%, 1);
 }

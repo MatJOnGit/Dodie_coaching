@@ -1,5 +1,7 @@
-class ApplianceDetails {
+class ApplianceDetails extends UserPanels {
     constructor() {
+        super();
+
         this._adminPanel = document.getElementsByClassName('admin-panel')[0];
         this._applianceDecisionBox = document.getElementById('appliance-decision-box');
         this._declineApplianceBtn = document.getElementById('decline-btn');
@@ -56,6 +58,7 @@ class ApplianceDetails {
         rejectApplianceForm.classList.add('admin-form', 'appliance-form');
         rejectApplianceForm.action = `index.php?action=reject-appliance&id=${this.applianceId}`;
         rejectApplianceForm.method = 'post';
+        rejectApplianceForm.style.opacity = 0;
 
         rejectionMessage.placeholder = 'Votre message de refus de prise en charge';
         rejectionMessage.name = 'rejection-message';
@@ -74,5 +77,6 @@ class ApplianceDetails {
         rejectApplianceForm.appendChild(confirmRejectionBtn);
 
         this.adminPanel.appendChild(rejectApplianceForm);
+        rejectApplianceForm.onload = this.fadeInItem(rejectApplianceForm, 4000);
     }
 }

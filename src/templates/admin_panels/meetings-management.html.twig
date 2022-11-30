@@ -1,0 +1,19 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel'>
+        <h3>Vos prochains rendez-vous</h3>
+
+        {% if meetingSlots %}
+
+            <ul id='meeting-slots' data-meeting-slots='{{ meetingSlots | json_encode() }}'>
+            
+            </ul>
+
+        {% endif %}
+    </div>
+{% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

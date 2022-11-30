@@ -3,6 +3,8 @@
 {% block pageContent %}
     <div class='user-panel'>
 
+    {{ dump(meetingSlots) }}
+
         {% if scheduledMeetingDate is iterable %}
 
         <h3>Votre prochain rendez-vous</h3>
@@ -25,7 +27,7 @@
 
         <h3>Prochaines dates disponibles</h3>
         <div class='appointment-block'>
-            {% if meetingSlots is not empty %}
+            {% if meetingSlots %}
 
                 <div class='schedule-days-nav previous-days-nav'></div>
 

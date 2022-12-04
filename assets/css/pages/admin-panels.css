@@ -72,6 +72,13 @@ h2 {
     height: 20vh;
 }
 
+#add-note-btn,
+#add-meeting-btn {
+    position: fixed;
+    left: 4%;
+    bottom: 85px;
+}
+
 /**********************************/
 /*           DASHBOARD            */
 /**********************************/
@@ -105,7 +112,7 @@ h2 {
 }
 
 .admin-panel li {
-    margin-bottom: 10px;
+    margin-bottom: 2vh;
 }
 
 .admin-link {
@@ -194,12 +201,6 @@ h2 {
     margin-bottom: 2vh;
 }
 
-#add-note-btn {
-    position: fixed;
-    left: 4%;
-    bottom: 85px;
-}
-
 .edit-note {
     margin: 0 0 2vh;
     padding: 0;
@@ -245,15 +246,32 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 10%;
 }
 
 .meeting-item {
-    width: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.meeting-btn {
+.edit-meeting {
     width: 100%;
     border-radius: 2.5vh;
     height: 7vh;
     text-align: center;
+}
+
+.selected {
+    background-color: hsla(0, 0%, 100%, 1);
+    color: hsla(185, 51%, 47%, 1);
+    border: 1px solid hsla(185, 51%, 47%, 1);
+    margin-bottom: 1vh;
+    box-shadow: unset;
+}
+
+.hidden {
+    display: none;
 }

@@ -47,20 +47,28 @@ class MeetingsManagementHelper extends UserPanels {
             meetingDateListItem.appendChild(dailyMeetingsBtnsList);
 
             incomingMeetingData[1].forEach(incomingMeetingData => {
+                let bookedMeeting = incomingMeetingData['name'] ? true : false;
+
                 let meetingItem = document.createElement('li');
-                meetingItem.classList.add('meeting-item');
                 let meetingBtn = document.createElement('button');
-                meetingBtn.textContent = incomingMeetingData['starting_time'] + ' : ';
+                let cancelEditionBtn = document.createElement('a');
+                let deleteMeetingBtn = document.createElement('a');
+
+                meetingItem.classList.add('meeting-item');
                 meetingBtn.id = incomingMeetingData['slot_id'];
-                meetingBtn.classList.add('btn', 'large-btn', 'meeting-btn');
-                
-                if (incomingMeetingData['name']) {
-                    meetingBtn.textContent += incomingMeetingData['name'];
-                }
-                else {
-                    meetingBtn.textContent += 'disponible';
-                }
+                meetingBtn.classList.add('btn', 'large-btn', 'edit-meeting');
+                meetingBtn.textContent = incomingMeetingData['starting_time'] + ' : ';
+                meetingBtn.textContent += bookedMeeting ? incomingMeetingData['name'] : 'disponible';
+                cancelEditionBtn.classList.add('btn', 'rounded-btn', 'hidden');
+                cancelEditionBtn.textContent = 'Annuler';
+                cancelEditionBtn.href = 'index.php?page=meetings-management';
+                deleteMeetingBtn.classList.add('btn', 'rounded-btn', 'hidden', 'red-bkgd');
+                deleteMeetingBtn.textContent = bookedMeeting ? 'Supprimer le rendez-vous' : 'Supprimer le créneau';
+                deleteMeetingBtn.href = 'index.php?action=delete-meeting&id=' + incomingMeetingData['slot_id'];
+
                 meetingItem.appendChild(meetingBtn);
+                meetingItem.appendChild(cancelEditionBtn);
+                meetingItem.appendChild(deleteMeetingBtn);
                 dailyMeetingsBtnsList.appendChild(meetingItem);
             })
 
@@ -70,6 +78,32 @@ class MeetingsManagementHelper extends UserPanels {
     }
 
     addMeetingsButtonsListeners() {
+        let editMeetingBtns = document.querySelectorAll('.edit-meeting');
+        editMeetingBtns.forEach(editMeetingBtn => {
+            editMeetingBtn.addEventListener('click', (e) => {
+                this.triggerEditMeetingBtns(e.target);
+            })
+        });
+    }
 
+    triggerEditMeetingBtns(clickedElt) {
+        let clickedEltLinks = clickedElt.closest('li').querySelectorAll('a');
+
+        if (clickedElt.classList.contains('selected')) {
+            clickedElt.classList.remove('selected');
+            clickedEltLinks.forEach(linkItem => {
+                linkItem.classList.remove('tiny-btn');
+                linkItem.classList.add('hidden');
+            });
+        }
+        else {
+            clickedElt.classList.add('selected');
+            clickedEltLinks.forEach(linkItem => {
+                linkItem.classList.remove('hidden');
+                linkItem.style.opacity = 0;
+                linkItem.classList.add('tiny-btn');
+                linkItem.onload = this.fadeInItem(linkItem, 4000);
+            });
+        }
     }
 }

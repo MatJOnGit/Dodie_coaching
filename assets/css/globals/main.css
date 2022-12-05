@@ -186,6 +186,10 @@ input::placeholder {
     width: 64px;
 }
 
+.hidden {
+    display: none;
+}
+
 button,
 input,
 input::placeholder,

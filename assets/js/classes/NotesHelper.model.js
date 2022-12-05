@@ -66,6 +66,7 @@ class NotesHelper extends UserPanels {
 
     displayAddNoteElements() {
         this.removePreviousNotes();
+        this.editPagetitle();
         this.buildAddnoteForm();
         this.addSubmitFormBtnListener();
     }
@@ -186,14 +187,15 @@ class NotesHelper extends UserPanels {
 
     removePreviousNotes() {
         const notesList = document.getElementsByClassName('notes-list')[0];
-        const titleEltTxt = document.getElementsByTagName('h3')[0].innerHTML;
-        const ptrn = "Notes de suivi de";
-        const replacement = "Ajout de note pour";
-
-        document.getElementsByTagName('h3')[0].innerText = titleEltTxt.replace(ptrn, replacement);
-
         this.profilePanel.removeChild(notesList);
         this.profilePanel.removeChild(this.addNoteBtn);
+    }
+
+    editPagetitle() {
+        const panelTitle = document.getElementsByTagName('h3')[0].innerHTML;
+        const ptrn = "Notes de suivi de";
+        const replacement = "Ajout de note pour";
+        document.getElementsByTagName('h3')[0].innerText = panelTitle.replace(ptrn, replacement);
     }
 
     buildAddnoteForm() {

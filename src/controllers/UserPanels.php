@@ -8,7 +8,7 @@ class UserPanels extends Main {
         'progress' => 'index.php?page=progress',
         'nutrition' => 'index.php?page=nutrition',
         'meetingsBooking' => 'index.php?page=meetings-booking',
-        'subscription' => 'index.php?page=subscription'
+        'subscription' => 'index.php?page=subscription',
     ];
     
     protected $_userPanelsStyles = [

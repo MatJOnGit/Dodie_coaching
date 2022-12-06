@@ -34,7 +34,7 @@ try {
         'actions' => [
             'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
             'progress' => ['add-report', 'delete-report'],
-            'meeting' => ['book-appointment', 'cancel-appointment'],
+            'meeting' => ['book-appointment', 'cancel-appointment', 'save-meeting', 'delete-meeting'],
             'appliance' => ['reject-appliance', 'approve-appliance'],
             'subscriber' => ['save-note', 'edit-note', 'delete-note']
         ]
@@ -663,15 +663,73 @@ try {
                     else {
                         throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
+
+                    $meetings->routeTo('meetingsBooking');
                 }
                 
                 elseif ($meetings->isRequestMatching($action, 'cancel-appointment')) {
                     if (!$meetings->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
+                    $meetings->routeTo('meetingsBooking');
                 }
-                
-                $meetings->routeTo('meetingsBooking');
+
+                elseif ($meetings->isRequestMatching($action, 'save-meeting')) {
+                    $userRole = $user->getRole();
+                    
+                    if ($user->isRoleMatching($userRole, ['admin'])) {
+                        $meetingData = $user->getFormData(['meeting-day', 'meeting-time']);
+
+                        if ($meetingData) {
+                            $meeting = new Dodie_Coaching\Controllers\MeetingsManagement;
+
+                            if ($meeting->areDateDataValid($meetingData)) {
+                                if (!$meeting->addMeetingSlot($meetingData)) {
+                                    throw new DB_Exception('FAILED TO INSERT A NEW MEETING');
+                                }
+
+                                $meeting->routeTo('meetingsManagement');
+                            }        
+                        }
+
+
+                    }
+
+                    else {
+                        $user->logoutUser();
+                    }
+                }
+
+                elseif ($meetings->isRequestMatching($action, 'delete-meeting')) {
+                    $userRole = $user->getRole();
+                    
+                    if ($user->isRoleMatching($userRole, ['admin'])) {
+                        if ($user->isGetParamSet('id')) {
+                            $meeting = new Dodie_Coaching\Controllers\MeetingsManagement;
+                            $meetingId = $meeting->getParam('id');
+
+                            if ($meeting->isMeetingIdValid($meetingId)) {
+                                if (!$meeting->eraseMeetingSlot($meetingId)) {
+                                    throw new DB_Exception('FAILED TO DELETE MEETING');
+                                }
+
+                                $meeting->routeTo('meetingsManagement');
+                            }
+
+                            else {
+                                throw new Data_Exception('INVALID MEETING ID PARAMETER IS URL');
+                            }
+                        }
+
+                        else {
+                            throw new URL_Exception('MISSING MEETING ID PARAMETER IS URL');
+                        }
+                    }
+
+                    else {
+                        $user->logoutUser();
+                    }
+                }
             }
             
             else {

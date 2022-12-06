@@ -5,6 +5,22 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Meetings extends Main {
+    public function deleteMeeting($meetingId) {
+        $db = $this->dbConnect();
+        $deleteMeetingQuery = 'DELETE FROM meeting_slots WHERE slot_id = ?';
+        $deleteMeetingStatement = $db->prepare($deleteMeetingQuery);
+
+        return $deleteMeetingStatement->execute([$meetingId]);
+    }
+
+    public function insertMeeting($meetingDate) {
+        $db = $this->dbConnect();
+        $insertMeetingQuery = 'INSERT INTO meeting_slots (slot_date) VALUES (?)';
+        $insertMeetingStatement = $db->prepare($insertMeetingQuery);
+
+        return $insertMeetingStatement->execute([$meetingDate]);
+    }
+
     public function selectAvailableMeetings(int $appointmentDelay) {
         $db = $this->dbConnect();
         $selectAvailableMeetingsQuery =

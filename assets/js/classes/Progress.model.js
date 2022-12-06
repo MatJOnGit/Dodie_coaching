@@ -125,7 +125,6 @@ class Progress extends UserPanels {
         reportTime.name = 'report-time';
         reportDate.setAttribute('required', '');
 
-        
         this.formFields.classList.remove('sided-fields');
         this.formFields.classList.add('full-length-fields');
 

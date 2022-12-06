@@ -3,6 +3,10 @@
 namespace Dodie_Coaching\Controllers;
 
 class AdminPanels extends Main {
+    protected $_routingURLs = [
+        'meetingsManagement' => 'index.php?page=meetings-management'
+    ];
+
     protected $_adminPanelsSubpanels = [
         'pending-appliances' => 'Demandes en attente',
         'meetings' => 'Rendez-vous',

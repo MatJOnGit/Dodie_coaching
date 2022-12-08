@@ -11,26 +11,26 @@ class MeetingsManagement extends AdminPanels {
         'meetingsManagementHelper'
     ];
 
-    public function addMeetingSlot($meetingData) {
+    public function addMeetingSlot(array $meetingData) {
         $meetings = new MeetingsModel;
         $meetingDate = $meetingData['meeting-day'] . ' ' . $meetingData['meeting-time'] . ':00';
 
         return $meetings->insertMeeting($meetingDate);
     }
 
-    public function areDateDataValid($meetingData) {
+    public function areDateDataValid(array $meetingData) {
         $meetingDate = $meetingData['meeting-day'] . ' ' . $meetingData['meeting-time'];
         
         return date('Y-m-d H:i', strtotime($meetingDate)) === $meetingDate;
     }
 
-    public function eraseMeetingSlot($meetingId) {
+    public function eraseMeetingSlot(string $meetingId) {
         $meetings = new MeetingsModel;
 
         return $meetings->deleteMeeting($meetingId);
     }
 
-    public function isMeetingIdValid($meetingId) {
+    public function isMeetingIdValid(string $meetingId) {
         $meetings = new MeetingsModel;
         $isMeetingIdValid = false;
 
@@ -41,6 +41,16 @@ class MeetingsManagement extends AdminPanels {
         }
         
         return $isMeetingIdValid;
+    }
+
+    public function getAttendeeData(string $meetingId) {
+        $meetings = new MeetingsModel;
+        
+        return $meetings->selectAttendeeData($meetingId);
+    }
+
+    public function isMeetingBooked(array $attendeeData) {
+        return $attendeeData[0]['user_id'] > 0;
     }
 
     public function renderMeetingsManagement(object $twig) {        

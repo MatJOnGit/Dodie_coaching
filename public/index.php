@@ -460,12 +460,12 @@ try {
                     if ($user->registerToken($newToken)) {
                         $pwdRetriever = new Dodie_Coaching\Services\PasswordRetriever;
                         
-                        if ($pwdRetriever->sendToken($newToken)) {
-                            $user->routeTo('mail-notification');
+                        if (!$pwdRetriever->sendToken($newToken)) {
+                            throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
                         }
                         
                         else {
-                            throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
+                            $user->routeTo('mail-notification');
                         }
                     }
                     
@@ -691,8 +691,6 @@ try {
                                 $meeting->routeTo('meetingsManagement');
                             }        
                         }
-
-
                     }
 
                     else {
@@ -709,7 +707,18 @@ try {
                             $meetingId = $meeting->getParam('id');
 
                             if ($meeting->isMeetingIdValid($meetingId)) {
-                                if (!$meeting->eraseMeetingSlot($meetingId)) {
+                                $attendeeData = $meeting->getAttendeeData($meetingId);
+                                $isMeetingBooked = $meeting->isMeetingBooked($attendeeData);
+
+                                if ($meeting->eraseMeetingSlot($meetingId) && $isMeetingBooked) {
+                                    $canceledMeetingAlerter = new Dodie_Coaching\Services\CanceledMeetingAlerter;
+                                    
+                                    if (!$canceledMeetingAlerter->sendCancelMeetingNotification($attendeeData[0])) {
+                                        throw new Mailer_Exception('FAILED TO SEND MEETING DELETION NOTIFICATION');
+                                    }
+                                }
+
+                                else {
                                     throw new DB_Exception('FAILED TO DELETE MEETING');
                                 }
 
@@ -750,14 +759,14 @@ try {
                             
                             $applicantData = $appliances->getApplicantData($applicantId);
                             $messageType = $appliances->getMessageType();
-                            
-                            if ($appResponder->sendRejectionNotification($messageType, $applicantData)) {
-                                $appliances->eraseAppliance($applicantId);
+
+                            if ($appliances->eraseAppliance($applicantId)) {
+                                if (!$appResponder->sendRejectionNotification($messageType, $applicantData)) {
+                                    throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
+                                }
+
+
                                 $appliances->routeTo('appliancesList');
-                            }
-                            
-                            else {
-                                throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
                             }
                         }
                         
@@ -779,13 +788,12 @@ try {
                             $applianceResponder = new Dodie_Coaching\Services\ApplianceResponder;
                             $applicantData = $appliances->getApplicantData($applicantId);
                             
-                            if ($applianceResponder->sendApprovalNotification($applicantData)) {
-                                $appliances->acceptAppliance($applicantId, 'payment_pending');
+                            if ($appliances->acceptAppliance($applicantId, 'payment_pending')) {
+                                if (!$applianceResponder->sendApprovalNotification($applicantData)) {
+                                    throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
+                                }
+                                
                                 $appliances->routeTo('appliancesList');
-                            }
-                            
-                            else {
-                                throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
                             }
                         }
                         

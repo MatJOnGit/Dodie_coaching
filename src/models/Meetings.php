@@ -21,6 +21,15 @@ class Meetings extends Main {
         return $insertMeetingStatement->execute([$meetingDate]);
     }
 
+    public function selectAttendeeData(string $meetingId) {
+        $db = $this->dbConnect();
+        $selectAttendeeDataQuery = "SELECT ms.user_id, DATE_FORMAT(ms.slot_date, '%d/%m/%Y') AS 'day', DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'time', acc.first_name, acc.email FROM meeting_slots ms LEFT JOIN accounts acc ON ms.user_id = acc.id WHERE ms.slot_id = ?";
+        $selectAttendeeDataStatement = $db->prepare($selectAttendeeDataQuery);
+        $selectAttendeeDataStatement->execute([$meetingId]);
+
+        return $selectAttendeeDataStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function selectAvailableMeetings(int $appointmentDelay) {
         $db = $this->dbConnect();
         $selectAvailableMeetingsQuery =

@@ -15,7 +15,7 @@ class CanceledMeetingAlerter extends Mailer {
             
             <p>Nous vous prions de nous excuser pour la gêne occasionnelle.</p>
             
-            <p>A tout de suite !</p>"
+            <p>A très bientôt !</p>"
             .$this->signature;
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Dodie_Coaching\Controllers;
+use Dodie_Coaching\Controllers\User;
 
 class Showcase extends Main {
     private $_programsList = [
@@ -48,6 +49,12 @@ class Showcase extends Main {
         'components/header',
         'components/footer'
     ];
+
+    private $_showcaseScripts = [
+        'classes/UserPanels.model',
+        'classes/DynamicMenu.model',
+        'dynamicMenu'
+    ];
   
     public function isProgramAvailable(string $requestedProgram): bool {
         return in_array($requestedProgram, array_keys($this->_programsList));
@@ -57,50 +64,68 @@ class Showcase extends Main {
         return count($this->_getProgramsList()) > 0;
     }
     
-    public function renderCoachingPage(object $twig) {
+    public function renderCoachingPage(object $twig, $isLogged) {
+        $user = new User;
+
         echo $twig->render('showcase_panels/coaching.html.twig', [
             'frenchTitle' => 'coaching',
             'appSection' => 'showcasePanels',
             'showcasePanels' => $this->_getRoutingURLs(),
-            'stylePaths' => $this->_getShowcasePanelsStyles()
+            'stylePaths' => $this->_getShowcasePanelsStyles(),
+            'isUserLogged' => $isLogged,
+            'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
 
-    public function renderPresentationPage(object $twig) {
+    public function renderPresentationPage(object $twig, $isLogged) {
         echo $twig->render('showcase_panels/presentation.html.twig', [
             'frenchTitle' => 'présentation',
             'appSection' => 'showcasePanels',
             'showcasePanels' => $this->_getRoutingURLs(),
-            'stylePaths' => $this->_getShowcasePanelsStyles()
+            'stylePaths' => $this->_getShowcasePanelsStyles(),
+            'isUserLogged' => $isLogged,
+            'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
     
-    public function renderProgramDetailsPage(object $twig, string $program) {
+    public function renderProgramDetailsPage(object $twig, string $program, $isLogged) {
+        $user = new User;
+
         echo $twig->render('showcase_panels/program-details.html.twig', [
             'frenchTitle' => 'programmes',
             'appSection' => 'showcasePanels',
             'showcasePanels' => $this->_getRoutingURLs(),
             'program' => $this->_getProgramDetails($program),
-            'stylePaths' => $this->_getShowcasePanelsStyles()
+            'stylePaths' => $this->_getShowcasePanelsStyles(),
+            'isUserLogged' => $isLogged,
+            'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
     
-    public function renderProgramsListPage(object $twig) {
+    public function renderProgramsListPage(object $twig, $isLogged) {
+        $user = new User;
+
         echo $twig->render('showcase_panels/programs-list.html.twig', [
             'frenchTitle' => 'programmes',
             'appSection' => 'showcasePanels',
             'showcasePanels' => $this->_getRoutingURLs(),
             'programs' => $this->_getProgramsList(),
-            'stylePaths' => $this->_getShowcasePanelsStyles()
+            'stylePaths' => $this->_getShowcasePanelsStyles(),
+            'isUserLogged' => $isLogged,
+            'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
 
-    public function renderShowcase404Page(object $twig) {
+    public function renderShowcase404Page(object $twig, $isLogged) {
+        $user = new User;
+
         echo $twig->render('showcase_panels/404.html.twig', [
             'frenchTitle' => '404',
             'appSection' => 'showcasePanels',
             'showcasePanels' => $this->_getRoutingURLs(),
-            'stylePaths' => $this->_getShowcasePanelsStyles()
+            'stylePaths' => $this->_getShowcasePanelsStyles(),
+            'isUserLogged' => $isLogged,
+            'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
 
@@ -118,5 +143,9 @@ class Showcase extends Main {
 
     private function _getShowcasePanelsStyles(): array {
         return $this->_showcasePanelsStyles;
+    }
+
+    private function _getShowcaseScripts(): array {
+        return $this->_showcaseScripts;
     }
 }

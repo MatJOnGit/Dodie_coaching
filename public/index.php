@@ -46,18 +46,19 @@ try {
 
         if (in_array($page, $Urls['pages']['showcase'])) {
             $showcase = new Dodie_Coaching\Controllers\Showcase;
+            $isLogged = $user->isLogged();
 
             if ($showcase->isRequestMatching($page, 'presentation')) {
-                $showcase->renderPresentationPage($twig);
+                $showcase->renderPresentationPage($twig, $isLogged);
             }
 
             elseif ($showcase->isRequestMatching($page, 'coaching')) {
-                $showcase->renderCoachingPage($twig);
+                $showcase->renderCoachingPage($twig, $isLogged);
             }
 
             elseif ($showcase->isRequestMatching($page, 'programs-list')) {
                 if ($showcase->isProgramsListAvailable()) {
-                    $showcase->renderProgramsListPage($twig);
+                    $showcase->renderProgramsListPage($twig, $isLogged);
                 }
 
                 else {
@@ -72,7 +73,7 @@ try {
                         $requestedProgram = $showcase->getParam('program');
     
                         if ($showcase->isProgramAvailable($requestedProgram)) {
-                            $showcase->renderProgramDetailsPage($twig, $requestedProgram);
+                            $showcase->renderProgramDetailsPage($twig, $requestedProgram, $isLogged);
                         }
     
                         else {
@@ -94,7 +95,7 @@ try {
             }
 
             else {
-                $showcase->renderShowcase404Page($twig);
+                $showcase->renderShowcase404Page($twig, $isLogged);
             }
         }
 

@@ -256,7 +256,7 @@ class ConnectionHelper extends UserPanels {
         }
 
         connectionPanel.insertAdjacentElement('afterbegin', inputHelper);
-        this.fadeInItem(inputHelper, 2000);
+        this.fadeInItem(inputHelper, 2000, 1);
         this.addHelperDismissButtonListener(inputHelper);
     }
 

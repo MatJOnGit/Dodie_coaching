@@ -195,7 +195,7 @@ class MeetingsBooking extends UserPanels {
         this.cancelMeetingButtonContainer.appendChild(cancelMeetingCancelationButton);
         this.cancelMeetingButtonContainer.appendChild(meetingConcelationMessage);
         this.cancelMeetingButtonContainer.appendChild(confirmMeetingCancelationLink);
-        this.cancelMeetingButtonContainer.onload = this.fadeInItem(this.cancelMeetingButtonContainer, 4000);
+        this.fadeInItem(this.cancelMeetingButtonContainer, 4000, 1);
     }
 
     displayTabNextElements() {

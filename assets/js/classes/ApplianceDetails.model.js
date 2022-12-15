@@ -77,6 +77,6 @@ class ApplianceDetails extends UserPanels {
         rejectApplianceForm.appendChild(confirmRejectionBtn);
 
         this.adminPanel.appendChild(rejectApplianceForm);
-        rejectApplianceForm.onload = this.fadeInItem(rejectApplianceForm, 4000);
+        this.fadeInItem(rejectApplianceForm, 4000, 1);
     }
 }

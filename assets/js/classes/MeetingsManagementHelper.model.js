@@ -158,7 +158,7 @@ class MeetingsManagementHelper extends UserPanels {
         addMeetingForm.appendChild(cancelBtn);
         addMeetingForm.appendChild(saveMeetingBtn);
         this.meetingPanel.appendChild(addMeetingForm);
-        addMeetingForm.onload = this.fadeInItem(addMeetingForm, 4000);
+        this.fadeInItem(addMeetingForm, 4000, 1);
     }
 
     buildMeetingsList() {
@@ -313,7 +313,7 @@ class MeetingsManagementHelper extends UserPanels {
                 linkItem.classList.remove('hidden');
                 linkItem.style.opacity = 0;
                 linkItem.classList.add('tiny-btn');
-                linkItem.onload = this.fadeInItem(linkItem, 4000);
+                this.fadeInItem(linkItem, 4000, 1);
             });
         }
     }

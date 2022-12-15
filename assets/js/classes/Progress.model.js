@@ -87,7 +87,7 @@ class Progress extends UserPanels {
         selectedReport.appendChild(cancelReportDeletionButton);
         selectedReport.appendChild(reportDeletionMessage);
         selectedReport.appendChild(confirmReportDeletionButton);
-        selectedReport.onload = this.fadeInItem(selectedReport, 4000);
+        this.fadeInItem(selectedReport, 4000, 1);
     }
 
     hideDatetimeInputs() {

@@ -167,7 +167,7 @@ class NotesHelper extends UserPanels {
 
         clickedListItem.appendChild(editNoteContainer);
         clickedListItem.replaceChild(editNoteContainer, clickedBtn);
-        editNoteContainer.onload = this.fadeInItem(editNoteContainer, 4000);
+        this.fadeInItem(editNoteContainer, 4000, 1);
     }
 
     addSubmitFormBtnListener() {
@@ -246,6 +246,6 @@ class NotesHelper extends UserPanels {
         });
 
         this.profilePanel.appendChild(addNoteForm)
-        addNoteForm.onload = this.fadeInItem(addNoteForm, 4000);
+        this.fadeInItem(addNoteForm, 4000, 1);
     }
 }

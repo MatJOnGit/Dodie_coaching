@@ -5,7 +5,7 @@
 #title-layer i,
 .settings-btn i,
 footer i {
-    color: hsla(261, 48%, 40%, 1);
+    color: hsla(261, 48%, 51%, 1);
 }
 
 .previous-days-btn,
@@ -20,12 +20,19 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
+.menu-item-name {
+    display: block;
+    width: 40%;
+    text-align: left;
+    color: hsla(0, 0%, 0%, 1);
+}
+
 .red-bkgd {
     background-color: hsla(336, 100%, 29%, 1);
 }
 
 footer {
-    background-color: hsla(261, 48%, 40%, 1);
+    background-color: hsla(261, 48%, 51%, 1);
 }
 
 #user-progress-graph {
@@ -123,7 +130,7 @@ input[type=submit] {
 
 .progress-graph-cnn,
 #user-progress-graph {
-    height: 20vh;
+    height: 15vh;
 }
 
 .progress-graph-cnn {
@@ -155,8 +162,7 @@ figcaption {
 
 .dashboard-menu ul {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     height: 22vh;
     justify-content: space-between;
     width: 100%;
@@ -167,7 +173,8 @@ figcaption {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 45%;
+    width: 100%;
+    margin-bottom: 2vh;
 }
 
 .dashboard-btn {
@@ -175,15 +182,11 @@ figcaption {
     display: flex;
     flex-direction: row;
     height: 60px;
-    justify-content: center;
-    padding: 2px 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
     text-align: center;
     width: 100%;
-}
-
-.dashboard-btn span {
-    text-align: start;
-    width: 80%;
 }
 
 .dashboard-btn i {

@@ -5,18 +5,22 @@ namespace Dodie_Coaching\Controllers;
 class UserDashboard extends UserPanels {
     private $_dashboardMenuItems = [
         'nutrition' => [
+            'icon' => 'fa-utensils',
             'frenchTitle' => 'Programme nutritionnel',
             'link' => 'nutrition'
         ],
         'progress' => [
+            'icon' => 'fa-chart-line',
             'frenchTitle' => 'Progression',
             'link' => 'progress'
         ],
         'meetings-booking' => [
+            'icon' => 'fa-calendar-days',
             'frenchTitle' => 'Rendez-vous',
             'link' => 'meetings-booking'
         ],
         'subscription' => [
+            'icon' => 'fa-star',
             'frenchTitle' => 'Abonnement',
             'link' => 'subscription'
         ]

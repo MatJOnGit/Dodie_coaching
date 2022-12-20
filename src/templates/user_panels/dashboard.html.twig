@@ -15,9 +15,10 @@
             <ul>
                 {% for dashboardMenuItem in dashboardMenuItems %}
                 <li>
-                    <a href='index.php?page={{ dashboardMenuItem.link }}' class='btn dashboard-btn rounded-btn purple-bkgd'>
-                        <span>{{ dashboardMenuItem.frenchTitle }}</span>
-                        <i class="fa-solid fa-chevron-right"></i>
+                    <a href='index.php?page={{ dashboardMenuItem.link }}' class='dashboard-btn rounded-btn'>
+                        <span class='btn menu-icon circle-btn purple-bkgd'><i class="fa-solid {{ dashboardMenuItem.icon }}"></i></span>
+                        <p class='menu-item-name'>{{ dashboardMenuItem.frenchTitle }}</p>
+                        <span class='btn rounded-btn purple-bkgd'><i class="fa-solid fa-chevron-right"></i></span>
                     </a>
                 </li>
                 {% endfor %}

@@ -38,8 +38,7 @@ class Nutrition extends Main {
             INNER JOIN food_plans fp ON fp.ingredient_id = ingr.id
             INNER JOIN accounts acc ON fp.user_id = acc.id
             WHERE acc.email = ?
-            GROUP BY ingr.french_name, ingr.measure_unit
-            ";
+            GROUP BY ingr.french_name, ingr.measure_unit";
         $selectMealsIngredientsStatement = $db->prepare($selectMealsIngredientsQuery);
         $selectMealsIngredientsStatement->execute([$email]);
         
@@ -53,5 +52,52 @@ class Nutrition extends Main {
         $selectProgramFileNameStatement->execute([$email]);
         
         return $selectProgramFileNameStatement->fetch();
+    }
+
+    public function selectMealIngredients($subscriberId, $day, $mealOrder) {
+        $db = $this->dbConnect();
+        $selectProgramIngredientsQuery = 
+            "SELECT
+                fp.day,
+                fp.meal,
+                fp.meal_index,
+                fp.ingredient_id,
+                fp.quantity,
+                ingr.id,
+                ingr.name,
+                ingr.french_name,
+                ingr.measure,
+                nut.measure_base_value,
+                nut.calories,
+                nut.fat,
+                nut.proteins,
+                nut.carbs,
+                nut.sodium,
+                nut.potassium,
+                nut.fibers,
+                nut.sugar
+            FROM food_plans fp
+            LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
+            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
+            WHERE fp.user_id = :subId
+            AND fp.day = :day
+            AND fp.meal_index = :mealOrder";
+        $selectProgramIngredientsStatement = $db->prepare($selectProgramIngredientsQuery);
+        $selectProgramIngredientsStatement->execute([
+            'subId' => $subscriberId,
+            'day' => $day,
+            'mealOrder' => $mealOrder
+        ]);
+
+        return $selectProgramIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectSubscriberMeals($subscriberId) {
+        $db = $this->dbConnect();
+        $selectSubscriberMealsQuery = "SELECT DISTINCT(meal_index) FROM food_plans WHERE user_id = ? ORDER BY meal_index";
+        $selectSubscriberMealsStatement = $db->prepare($selectSubscriberMealsQuery);
+        $selectSubscriberMealsStatement->execute([$subscriberId]);
+
+        return $selectSubscriberMealsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

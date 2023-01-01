@@ -143,6 +143,7 @@ class MeetingsBooking extends UserPanels {
 
         $availableMeetingsSlots = $dashboard->selectAvailableMeetings($this->_getAppointmentDelay());
         $meetingsSlotsArray = $this->_getMeetingsSlotsArray($availableMeetingsSlots);
+        
         return $this->_sortMeetingsSlots($meetingsSlotsArray);
     }
 

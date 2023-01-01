@@ -113,7 +113,9 @@ class Subscribers extends Main {
             FROM subscribers sub
             INNER JOIN users_static_data usd ON sub.user_id = usd.user_id
             INNER JOIN accounts acc ON sub.user_id = acc.id
-            INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id";
+            INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id
+            INNER JOIN appliances app ON sub.user_id = app.user_id
+            WHERE app.staging = 'confirmed'";
         $selectSubscribersHeadersStatement = $db->prepare($selectSubscribersHeadersQuery);
         $selectSubscribersHeadersStatement->execute();
         

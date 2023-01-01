@@ -25,13 +25,7 @@ class UserPanels extends Main {
         'subscriptions' => 'Abonnement'
     ];
 
-    private $_months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
     private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
-
-    protected function _getMonths() {
-        return $this->_months;
-    }
 
     protected function _getUserPanels() {
         return $this->_userPanels;

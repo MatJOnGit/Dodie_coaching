@@ -4,14 +4,7 @@ namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Nutrition as NutritionModel, DatePeriod, DateTime, DateInterval;
 
-class Nutrition extends UserPanels {
-    private $_meals = [
-        ['english' => 'breakfast', 'french' => 'Petit déjeuner'],
-        ['english' => 'lunch', 'french' => 'Déjeuner'],
-        ['english' => 'diner', 'french' => 'Dîner'],
-        ['english' => 'snacks', 'french' => 'Snacks']
-    ];
-    
+class Nutrition extends UserPanels {    
     private $_programsFolderRoute = './../var/nutrition_programs/';
     
     public function areMealParamsValid(array $mealData): bool {
@@ -105,26 +98,10 @@ class Nutrition extends UserPanels {
         ]);
     }
     
-    private function _getEnglishWeekDay(string $date): string {
-        return $this->_getWeekDays()[explode(' ', $date)[0]]['english'];
-    }
-    
-    private function _getFrenchDate(string $date): string {
-        $frenchDateWeekDay = $this->_getWeekDays()[explode(' ', $date)[0]]['french'];
-        $dateDay = explode(' ', $date)[1];
-        $dateMonth = $this->_getMonths()[explode(' ',  $date)[2] -1];
-
-        return "{$frenchDateWeekDay} {$dateDay} {$dateMonth}";
-    }
-    
     private function _getMealDetails(array $mealData) {
         $nutrition = new NutritionModel;
 
         return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['email']);
-    }
-    
-    private function _getMeals(): array {
-        return $this->_meals;
     }
     
     private function _getNextDates(): array {

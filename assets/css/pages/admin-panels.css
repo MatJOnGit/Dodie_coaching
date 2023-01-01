@@ -9,7 +9,7 @@ footer i {
 }
 
 h4,
-.programs-list li,
+.day-list li,
 .notes-list h4,
 footer p {
     color: hsla(0, 0%, 100%, 1);
@@ -46,7 +46,8 @@ footer {
     border: 1px solid hsla(185, 51%, 47%, 1);
 }
 
-.date-container > input {
+.date-container > input,
+.program-build-form > input {
     border-bottom: 1px solid hsla(0, 0%, 0%, 1);
 }
 
@@ -143,8 +144,8 @@ h2 {
 }
 
 .profile-panel ul,
-.programs-list,
-.programs-list li,
+.day-list,
+.day-list li,
 .notes-list,
 .notes-list li {
     width: 100%;
@@ -333,4 +334,16 @@ h2 {
     position: fixed;
     text-align: center;
     width: 90%;
+}
+
+/*******************************/
+/*     SUBSCRIBER PROGRAM      */
+/*******************************/
+
+.meals-list {
+    color:hsla(0, 0%, 0%, 1);
+}
+
+.meal-item {
+    color: hsla(0, 0%, 0%, 1)
 }

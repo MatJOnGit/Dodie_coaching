@@ -3,48 +3,62 @@ class ProgramHelper extends UserPanels {
         super();
 
         this._nutrientDefaultValue = 0;
+        this._nutrientsList = ['calories', 'carbs', 'fat', 'proteins', 'sodium', 'potassium', 'fibers', 'sugar'];
 
         this._programMealsItems;
         this._dailyMealsParsedData;
 
+        this._dayKey;
+        this._mealKey;
+        this._nutrientKey;
+
         // Contains an array of intakes for every day, with a index from 0 to 6 (or can be from "lundi" to "dimanche")
         // In this array, meals intakes from the same day are cumulated
         this._nutrientsPerDay = {};
+        this._nutrientsPerDayIndex;
 
         // Contains an array of intakes for every meals, with a index from 0 to 27 (based on a collection of 4 meals for a 7 days program)
         this._nutrientsPerMeal = {};
-
-        // Buffer variables
-        this._dailyNutrients = [];
-        this._mealNutrients = {
-            'calories': 0,
-            'carbs': 0,
-            'fat': 0,
-            'fibers': 0,
-            'potassium': 0,
-            'proteins': 0,
-            'sodium': 0,
-            'sugar': 0
-        };
+        this._nutrientsPerMealIndex;
 
         // Variable allowing to get the day french name as a key
         this._weekDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
-    }
-
-    get nutrientsPerMeal() {
-        return this._nutrientsPerMeal;
     }
 
     get nutrientDefaultValue() {
         return this._nutrientDefaultValue;
     }
 
-    get dailyNutrients() {
-        return this._dailyNutrients;
+    get nutrientsPerDayIndex() {
+        return this._nutrientsPerDayIndex;
     }
 
-    get mealNutrients() {
-        return this._mealNutrients;
+    get nutrientsPerMealIndex() {
+        return this._nutrientsPerMealIndex;
+    }
+
+    get nutrientsList() {
+        return this._nutrientsList;
+    }
+
+    get dayKey() {
+        return this._dayKey;
+    }
+
+    get mealKey() {
+        return this._mealKey;
+    }
+
+    get nutrientKey() {
+        return this._nutrientKey;
+    }
+
+    get nutrientsPerDay() {
+        return this._nutrientsPerDay;
+    }
+
+    get nutrientsPerMeal() {
+        return this._nutrientsPerMeal;
     }
 
     get weekDays() {
@@ -59,6 +73,22 @@ class ProgramHelper extends UserPanels {
         return this._programMealsItems;
     }
 
+    set nutrientsPerMealIndex(index) {
+        this._nutrientsPerMealIndex = index;
+    }
+
+    set mealKey(mealKey) {
+        this._mealKey = mealKey;
+    }
+
+    set dayKey(dayKey) {
+        this._dayKey = dayKey;
+    }
+
+    set nutrientKey(nutrientKey) {
+        this._nutrientKey = nutrientKey;
+    }
+
     set programMealsItems(weeklyMealsElts) {
         this._programMealsItems = weeklyMealsElts;
     }
@@ -67,82 +97,56 @@ class ProgramHelper extends UserPanels {
         this._dailyMealsParsedData = JSON.parse(dailyMealsData);
     }
 
-    setDailyNutrientsValues(mealKey, nutrientsValues) {
-        this._dailyNutrients[mealKey] = nutrientsValues;
+    set nutrientPerMealValue(nutrientValue) {
+        this._nutrientsPerMeal[this.nutrientsPerMealIndex][this.nutrientKey] = nutrientValue;
     }
 
-    setMealNutrientValue(nutrientKey, nutrientValue) {
-        this._mealNutrients[nutrientKey] = nutrientValue;
-    }
+    initNutrientsPerMealEntry() {
+        console.log("On traite un nouveau menu, donc on initialise les valeurs des nutriments")
+        this.nutrientsPerMealIndex = this.computeNutrientsPerMealIndex();
+        this.nutrientsPerMeal[this.nutrientsPerMealIndex] = {}
 
-    addDailyNutrients(dailyNutrients) {
-        this._weeklyNutrients += dailyNutrients;
-    }
-
-    initMealNutrientsTab(mealData, dayKey, mealKey) {
-        console.log(('Nouveau repas du ' + this.weekDays[dayKey] + '. On réinitialise la valeur de this.mealNutrients').toUpperCase());
-        
-        Object.keys(this.mealNutrients).forEach(nutrientKey => {
-            this.mealNutrients[nutrientKey] = this.nutrientDefaultValue;
-        })
-
-        // console.log(this.mealNutrients)
-        console.log('***************************************************************************');
-
+        this.nutrientsList.forEach((nutrient) => {            
+            this._nutrientsPerMeal[this.nutrientsPerMealIndex][nutrient] = this.nutrientDefaultValue;
+        });
     }
 
     init() {
         this.programMealsItems = document.getElementsByClassName('program-meals-list');
 
         if (this.programMealsItems) {
-            this.buildNutrientsData();
-            // this.testnutrientsPerMeal();
+            this.buildProgramArrays();
         }
     }
 
-    gatherProgramMealsData(dayKey) {
-        let mealElt = this.programMealsItems[dayKey];
-        this.dailyMealsParsedData = mealElt.getAttribute('data-meals');
-    }
-
-    buildNutrientsData() {
+    buildProgramArrays() {
         Object.keys(this.programMealsItems).forEach(dayKey => {
-            this.gatherProgramMealsData(dayKey);
-            this.buildDailyNutrientsData(dayKey);
+            this.dayKey = dayKey;
+            this.gatherProgramMealsData();
+            this.buildDailyNutrientsData();
         });
 
         // Notes de suivi
         console.log('Fin du traitement des données. Résultats ... this.nutrientsPerMeal vaut :')
         console.log(this.nutrientsPerMeal)
-        // console.log("Test d'accès aux nutriments du petit déjeuner du lundi (indice 0) :")
-        // console.log(this.weeklyCumulatedNutrients[0])
-        // console.log("Test d'accès aux calories du petit déjeuner du lundi :")
-        // console.log(this.weeklyCumulatedNutrients[0]['calories'])
     }
 
-    buildDailyNutrientsData(dayKey) {
-        Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
-            let mealData = this.dailyMealsParsedData[mealKey];
+    gatherProgramMealsData() {
+        let mealElt = this.programMealsItems[this.dayKey];
+        this.dailyMealsParsedData = mealElt.getAttribute('data-meals');
+    }
 
-            this.initMealNutrientsTab(mealData, dayKey, mealKey);
+    buildDailyNutrientsData() {
+        Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
+            this.mealKey = mealKey;
+            let mealData = this.dailyMealsParsedData[this.mealKey];
+
             this.buildMealNutrientsData(mealData);
             
-            // Notes de suivi
-            console.log('Cumul des nutriments pour le repas #' + mealKey + ' du ' + this.weekDays[dayKey] + ' en cours ... ')
-            console.log("Résultat ... this.mealNutrients['calories'] vaut :")
-
-            console.log('Fin des data du repas'.toUpperCase())
-                        
-            // la fonction suivante doit push mealNutrients dans un array qui contiendras les apports de chaque repas, sans nom de repas associé (juste un indice). Pour quatre repas par jour, on aura donc des indices variants de 0 à 27.
-            this.fillNutrientsPerMeal(this.mealNutrients, dayKey, mealKey);
-
-            console.log("On a sauvegardé les données des nutriments")
-            
-            // console.log(this.weeklyCumulatedNutrients);
-            console.log(' ')
+            // Notes de suivi            
             console.log('***************************************************************************');
             console.log('***************************************************************************');
-            console.log("Fin du traitement d'un repas. On stock les nutriments de chaque repas dans un array ")
+            console.log("Fin du traitement d'un repas. On stock les nutriments de chaque repas dans un array".toUpperCase())
         });
         
         // Notes de suivi
@@ -152,87 +156,58 @@ class ProgramHelper extends UserPanels {
         console.log('**************************************************************');
         console.log('**************************************************************');
     }
+    
+    computeNutrientsPerMealIndex() {
+        return (parseInt(this.dayKey) * this.dailyMealsParsedData.length + parseInt(this.mealKey));
+    }
 
     buildMealNutrientsData(mealData) {
+        this.initNutrientsPerMealEntry();
+
         Object.keys(mealData).forEach(ingredientKey => {
+            this.ingredientKey = ingredientKey;
             const ingredientData = mealData[ingredientKey];
 
             console.log(" --- Début du traitement pour l'ingrédient " + ingredientData['french_name'] + " ---")
             console.log('-------------------------------------------------------')
 
-            Object.keys(this._mealNutrients).forEach(nutrientKey => {
-                const rationNutrientValue = this.getNutrientValue(ingredientData, nutrientKey)
-
-                this.updateMealNutrients(rationNutrientValue, nutrientKey);
-                // this.updateDailyNutrients(rationNutrientValue, nutrientKey, )
-            });
+            this.buildIngredientsNutrientsData(ingredientData);
 
             console.log('-------------------------------------------------------')
         })
     }
 
-    updateMealNutrients(rationNutrientValue, nutrientKey) {
-        let cumulatedNutrientValue = this.getCumulatedNutrientValue(this.mealNutrients[nutrientKey], rationNutrientValue)
+    buildIngredientsNutrientsData(ingredientData) {
+        Object.keys(this.nutrientsList).forEach(nutrientKey => {
+            this.nutrientKey = this.nutrientsList[nutrientKey]
+            const rationNutrientValue = this.getNutrientValue(ingredientData)
 
-        console.log("Ancienne valeur de " + nutrientKey + " : " + this.mealNutrients[nutrientKey])
-
-        console.log("Valeur à ajouter : " + rationNutrientValue);
-
-        this.setMealNutrientValue(nutrientKey, cumulatedNutrientValue)
-
-        console.log("Nouvelle valeur de " + nutrientKey + " : " + this.mealNutrients[nutrientKey])
-        console.log(this.mealNutrients)
-    }
-
-    getCumulatedNutrientValue(initialNutrientTabValue, newNutientValue) {
-        return (typeof initialNutrientTabValue === 'number' && typeof newNutientValue === 'number' ? initialNutrientTabValue + newNutientValue : 'Missing data');
-    }
-
-    getNutrientValue(ingredient, nutrient) {
-        console.log(ingredient)
-
-        console.log(ingredient[nutrient])
-        console.log('Valeur de la base :')
-        console.log(ingredient['measure_base_value'])
-
-        let isNutrientValueSet = ingredient[nutrient] !== '-1';
-        let isNutrientInGrams = ingredient['measure'] === 'grammes';
-        let isBaseValueNotNull = ingredient['measure_base_value'] !== '0';
-
-        console.log(ingredient[nutrient])
-        console.log(ingredient['quantity'])
-        console.log(ingredient[nutrient] * ingredient['quantity'])
-
-        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredient[nutrient] / ingredient['measure_base_value'] * ingredient['quantity'] :'Missing data' : ingredient[nutrient] * ingredient['quantity'] : 'Missing data';
-    }
-
-    computeNutrientsPerMealIndex(dayKey, mealKey) {
-        return dayKey * this.dailyMealsParsedData.length + mealKey;
-    }
-
-    fillNutrientsPerMeal(mealNutrientValues, dayKey, mealKey) {
-        console.log("Initialisation de la méthode this.fillWeeklyCumultar");
-
-        console.log("Valeur initiale de l'array this._nutrientsPerMeal :");
-        console.log(this.nutrientsPerMeal);
-
-        console.log("Données à ajouter : ");
-        console.log(mealNutrientValues);
-
-        let nutrientsPerMealIndex = this.computeNutrientsPerMealIndex(parseInt(dayKey), parseInt(mealKey));
-
-        console.log('Test')
-        console.log(this.nutrientsPerMeal)
-
-        this._nutrientsPerMeal[nutrientsPerMealIndex] = [];
-
-        Object.keys(mealNutrientValues).forEach(nutrientKey => {
-            this._nutrientsPerMeal[nutrientsPerMealIndex][nutrientKey] = mealNutrientValues[nutrientKey];
+            this.updateMealNutrients(rationNutrientValue);
         });
+    }
 
-        console.log(this.nutrientsPerMeal[nutrientsPerMealIndex]['calories']);
+    getNutrientValue(ingredientData) {
+        console.log('On traite maintenant le nutriment ' + this.nutrientKey)
+        console.log('La valeur de ce nutriment est : ' + ingredientData[this.nutrientKey])
 
-        console.log("Valeur finale de l'array this._nutrientsPerMeal : ");
-        console.log(this.nutrientsPerMeal);
+        let isNutrientValueSet = ingredientData[this.nutrientKey] !== '-1';
+        let isNutrientInGrams = ingredientData['measure'] === 'grammes';
+        let isBaseValueNotNull = ingredientData['measure_base_value'] !== '0';
+
+        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredientData[this.nutrientKey] / ingredientData['measure_base_value'] * ingredientData['quantity'] :'Missing data' : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
+    }
+
+    updateMealNutrients(rationNutrientValue) {
+        let newNutientPerMealValue = this.computeNewNutrientPerMealValue(rationNutrientValue)
+
+        this.nutrientPerMealValue = newNutientPerMealValue
+    }
+    
+    computeNewNutrientPerMealValue(rationNutrientValue) {
+        let oldNutrientValue = this.nutrientsPerMeal[this.nutrientsPerMealIndex][this.nutrientKey];
+
+        console.log("Ancienne valeur de this.nutrientsPerMeal[" + this.nutrientsPerMealIndex + "][" + this.nutrientKey + "] : " + oldNutrientValue);
+        
+        return typeof oldNutrientValue === 'number' && typeof rationNutrientValue === 'number' ? oldNutrientValue + rationNutrientValue : 'Missing data';
     }
 }

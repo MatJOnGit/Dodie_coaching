@@ -30,9 +30,12 @@ class Programs extends Subscribers {
         $weekDays = $this->_getWeekDays();
 
         $orderedEnglishWeekDaysList = [];
-        $orderedWeekIndex = [1, 2 , 3, 4, 5 ,6 ,0];
+        $orderedWeekIndex = [1, 2, 3, 4, 5, 6, 0];
         foreach($orderedWeekIndex as $key => $dayIndex) {
+
             $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
+            
+            // var_dump($orderedEnglishWeekDaysList);
         }
 
         return $orderedEnglishWeekDaysList;
@@ -49,12 +52,12 @@ class Programs extends Subscribers {
 
                 $mealIngredients = $nutrition->selectMealIngredients($subscriberId, $weekDay["englishWeekDay"], $meal["meal_index"]);
 
-                foreach($mealIngredients as $ingredient) {
-                    $programIngredients[$weekDay["englishWeekDay"]][$meal["meal_index"]] += [$ingredient["ingredient_id"] => $ingredient];
+                foreach($mealIngredients as $ingredientKey => $ingredient) {
+                    $programIngredients[$weekDay["englishWeekDay"]][$meal["meal_index"]] += [$ingredientKey => $ingredient];
                 }
             }
         }
-
+        
         return $programIngredients;
     }
 

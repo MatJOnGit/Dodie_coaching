@@ -345,5 +345,14 @@ h2 {
 }
 
 .meal-item {
-    color: hsla(0, 0%, 0%, 1)
+    color: hsla(0, 0%, 0%, 1);
+}
+
+table {
+    width: 100%;
+}
+
+
+td {
+    color: hsla(0, 0%, 0%, 1);
 }

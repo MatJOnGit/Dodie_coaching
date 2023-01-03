@@ -17,7 +17,7 @@
                         </h4>
 
                         {{ dump}}
-                        <ul class='program-meals-list' data-meals='{{ dailyMeals | json_encode() }}'>
+                        <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in dailyMeals %}
                                 <li>
                                     <h5 class='section-header meal-item'>
@@ -29,11 +29,13 @@
                                             {% endif %}
                                         {% endfor %}
                                     </h5>
-                                    <ul class='ingredients-list' data-ingredients='{{ meals | json_encode() }}'>
-                                    </ul>
+                                    <table class='meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
+                                    </table>
                                 </li>
                             {% endfor %}
                         </ul>
+                        <table class='day-data-tab'>
+                        </table>
                     </li>
                 {% endfor %}
             </ul>

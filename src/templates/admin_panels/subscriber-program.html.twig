@@ -20,17 +20,19 @@
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in dailyMeals %}
                                 <li class='meal-item'>
-                                    <table class='btn meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
-                                        <caption class='meal-header meal-item-title'>
-                                            {# look for translation of day in weekDayList #}
-                                            {% for mealName in mealsList %}
-                                                {% set meal = meals | first %}
-                                                {% if mealName['english'] == meal['meal'] %}
-                                                    {{ mealName['french'] }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </caption>
-                                    </table>
+                                    <a href='index.php?page=edit-program-menu&day={{ dayKey }}&meal={{mealKey}}'>
+                                        <table class='btn meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
+                                            <caption class='meal-header meal-item-title'>
+                                                {# look for translation of day in weekDayList #}
+                                                {% for mealName in mealsList %}
+                                                    {% set meal = meals | first %}
+                                                    {% if mealName['english'] == meal['meal'] %}
+                                                        {{ mealName['french'] }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </caption>
+                                        </table>
+                                    </a>
                                 </li>
                             {% endfor %}
                             {# On ajoute un bouton pour cacher les data #}

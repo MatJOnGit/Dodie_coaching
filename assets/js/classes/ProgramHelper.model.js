@@ -3,7 +3,6 @@ class ProgramHelper extends UserPanels {
         super();
 
         this._nutrientDefaultValue = 0;
-        this._nutrientPerTableRow = 2;
         this._nutrientsList = ['calories', 'carbs', 'fat', 'proteins', 'sodium', 'potassium', 'fibers', 'sugar'];
 
         this._mealDataTabs = document.getElementsByClassName('meal-data-tab');
@@ -25,6 +24,10 @@ class ProgramHelper extends UserPanels {
         return this._dailyMealsParsedData;
     }
 
+    get dailyProgramItems() {
+        return this._dailyProgramItems;
+    }
+
     get dayDataTabs() {
         return this._dayDataTabs;
     }
@@ -33,12 +36,12 @@ class ProgramHelper extends UserPanels {
         return this._dayKey;
     }
 
-    get mealKey() {
-        return this._mealKey;
-    }
-
     get mealDataTabs() {
         return this._mealDataTabs;
+    }
+
+    get mealKey() {
+        return this._mealKey;
     }
 
     get nutrientDefaultValue() {
@@ -65,16 +68,12 @@ class ProgramHelper extends UserPanels {
         return this._nutrientsPerMealIndex;
     }
 
-    get nutrientsPerTableRow() {
-        return this._nutrientPerTableRow;
-    }
-
-    get dailyProgramItems() {
-        return this._dailyProgramItems;
-    }
-
     set dailyMealsParsedData(dailyMealsData) {
         this._dailyMealsParsedData = JSON.parse(dailyMealsData);
+    }
+
+    set dailyProgramItems(weeklyMealsElts) {
+        this._dailyProgramItems = weeklyMealsElts;
     }
 
     set dayKey(dayKey) {
@@ -101,10 +100,6 @@ class ProgramHelper extends UserPanels {
         this._nutrientsPerMealIndex = index;
     }
 
-    set dailyProgramItems(weeklyMealsElts) {
-        this._dailyProgramItems = weeklyMealsElts;
-    }
-
     addNutrientsTabToggleListeners() {
         const dayNutrientsElts = document.getElementsByClassName('day-nutrients');
         const wrapBtns = document.getElementsByClassName('wrap-btn');
@@ -115,7 +110,9 @@ class ProgramHelper extends UserPanels {
                 let dailyProgramList = dayNutrients.parentNode.getElementsByClassName('hidden')[0];
 
                 dayNutrients.classList.add('hidden');
+                dailyProgramList.style.opacity = 0;
                 dailyProgramList.classList.remove('hidden');
+                this.fadeInItem(dailyProgramList, 4000, 1);
             })
         });
 
@@ -128,14 +125,6 @@ class ProgramHelper extends UserPanels {
                 dayNutrients.classList.remove('hidden');
             })
         })
-    }
-
-    manageDisplayedTable() {
-        let dailyProgramLists = document.getElementsByClassName('daily-program-list');
-
-        Object.keys(dailyProgramLists).forEach(mealItemKey => {
-            dailyProgramLists[mealItemKey].classList.add('hidden');
-        });
     }
 
     buildDailyNutrientsData() {
@@ -287,6 +276,14 @@ class ProgramHelper extends UserPanels {
         
         this.nutrientsList.forEach((nutrient) => {            
             this._nutrientsPerMeal[this.nutrientsPerMealIndex][nutrient] = this.nutrientDefaultValue;
+        });
+    }
+
+    manageDisplayedTable() {
+        let dailyProgramLists = document.getElementsByClassName('daily-program-list');
+
+        Object.keys(dailyProgramLists).forEach(mealItemKey => {
+            dailyProgramLists[mealItemKey].classList.add('hidden');
         });
     }
 

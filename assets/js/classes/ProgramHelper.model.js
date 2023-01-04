@@ -105,6 +105,39 @@ class ProgramHelper extends UserPanels {
         this._dailyProgramItems = weeklyMealsElts;
     }
 
+    addNutrientsTabToggleListeners() {
+        const dayNutrientsElts = document.getElementsByClassName('day-nutrients');
+        const wrapBtns = document.getElementsByClassName('wrap-btn');
+
+        Object.keys(dayNutrientsElts).forEach(dayNutrientsIndex => {
+            dayNutrientsElts[dayNutrientsIndex].addEventListener('click', (e) => {
+                let dayNutrients = e.target.closest('.day-nutrients');
+                let dailyProgramList = dayNutrients.parentNode.getElementsByClassName('hidden')[0];
+
+                dayNutrients.classList.add('hidden');
+                dailyProgramList.classList.remove('hidden');
+            })
+        });
+
+        Object.keys(wrapBtns).forEach(dailyProgramListIndex => {
+            wrapBtns[dailyProgramListIndex].addEventListener('click', (e) => {
+                let dailyProgramList = e.target.closest('.daily-program-list');
+                let dayNutrients = dailyProgramList.parentNode.getElementsByClassName('hidden')[0];
+
+                dailyProgramList.classList.add('hidden');
+                dayNutrients.classList.remove('hidden');
+            })
+        })
+    }
+
+    manageDisplayedTable() {
+        let dailyProgramLists = document.getElementsByClassName('daily-program-list');
+
+        Object.keys(dailyProgramLists).forEach(mealItemKey => {
+            dailyProgramLists[mealItemKey].classList.add('hidden');
+        });
+    }
+
     buildDailyNutrientsData() {
         this.initNutrientsPerDayEntry()
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
@@ -136,7 +169,7 @@ class ProgramHelper extends UserPanels {
         })
     }
 
-    buildNutrientsTable(nutrientsTab, mealDataTabElt, mealDataTabKey) {
+    buildNutrientsTable(nutrientsTab, dataTabElt, dataTabKey) {
         const tableBodyElt = document.createElement('tbody');
         
         const firstNutrientsRow = document.createElement('tr');
@@ -145,20 +178,21 @@ class ProgramHelper extends UserPanels {
         const fourthNutrientsRow = document.createElement('tr');
 
         const caloriesTdElt = document.createElement('td');
-        caloriesTdElt.innerText = nutrientsTab[mealDataTabKey]['calories'].toFixed(0) + ' calories';
+        caloriesTdElt.innerText = nutrientsTab[dataTabKey]['calories'].toFixed(0) + ' calories';
+        caloriesTdElt.setAttribute('colspan', 2);
         const proteinsTdElt = document.createElement('td');
-        proteinsTdElt.innerText = nutrientsTab[mealDataTabKey]['proteins'].toFixed(0) + 'g protéines';
+        proteinsTdElt.innerText = nutrientsTab[dataTabKey]['proteins'].toFixed(0) + 'g protéines';
         const carbsTdElt = document.createElement('td');
-        carbsTdElt.innerText = nutrientsTab[mealDataTabKey]['carbs'].toFixed(0) + 'g glucides';
+        carbsTdElt.innerText = nutrientsTab[dataTabKey]['carbs'].toFixed(0) + 'g glucides';
         const fatTdElt = document.createElement('td');
-        fatTdElt.innerText = nutrientsTab[mealDataTabKey]['fat'].toFixed(0) + 'g lipides';
+        fatTdElt.innerText = nutrientsTab[dataTabKey]['fat'].toFixed(0) + 'g lipides';
         
         const sugarTdElt = document.createElement('td');
-        sugarTdElt.innerText = nutrientsTab[mealDataTabKey]['sugar'].toFixed(0) + 'g sucre';
+        sugarTdElt.innerText = nutrientsTab[dataTabKey]['sugar'].toFixed(0) + 'g sucre';
         const fibersTdElt = document.createElement('td');
-        fibersTdElt.innerText = nutrientsTab[mealDataTabKey]['fibers'].toFixed(0) + 'g fibre';
+        fibersTdElt.innerText = nutrientsTab[dataTabKey]['fibers'].toFixed(0) + 'g fibres';
         const sodiumTdElt = document.createElement('td');
-        sodiumTdElt.innerText = nutrientsTab[mealDataTabKey]['sodium'].toFixed(0) + 'mg sodium';
+        sodiumTdElt.innerText = nutrientsTab[dataTabKey]['sodium'].toFixed(0) + 'mg sodium';
 
         firstNutrientsRow.appendChild(caloriesTdElt);
         secondNutrientsRow.appendChild(proteinsTdElt);
@@ -173,7 +207,7 @@ class ProgramHelper extends UserPanels {
         tableBodyElt.appendChild(thirdNutrientsRow);
         tableBodyElt.appendChild(fourthNutrientsRow);
 
-        mealDataTabElt.appendChild(tableBodyElt);
+        dataTabElt.appendChild(tableBodyElt);
     }
 
     buildProgramArrays() {
@@ -188,7 +222,6 @@ class ProgramHelper extends UserPanels {
         let oldNutrientValue = this.nutrientsPerDay[this.dayKey][this.nutrientKey];
 
         return typeof oldNutrientValue === 'number' && typeof rationNutrientValue === 'number' ? oldNutrientValue + rationNutrientValue : 'Missing data';
-
     }
     
     computeNewNutrientPerMealValue(rationNutrientValue) {
@@ -200,6 +233,8 @@ class ProgramHelper extends UserPanels {
     displayProgramData() {
         this.displayMealsDataTab();
         this.displayDailyDataTab();
+        this.manageDisplayedTable();
+        this.addNutrientsTabToggleListeners();
     }
 
     displayDailyDataTab() {

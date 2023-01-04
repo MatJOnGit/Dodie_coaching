@@ -7,7 +7,7 @@
             <ul class='day-list'>
                 {% for dayKey, dailyMeals in subscriberMeals %}
                     <li>
-                        <h4 class='section-header orange-bkgd'>
+                        <h4 class='day-header orange-bkgd'>
                             {# look for translation of day in weekDayList #}
                             {% for weekDay in weekDaysList %}
                                 {% if weekDay['english'] == dayKey %}
@@ -19,23 +19,33 @@
                         {{ dump}}
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in dailyMeals %}
-                                <li>
-                                    <h5 class='section-header meal-item'>
-                                        {# look for translation of day in weekDayList #}
-                                        {% for mealName in mealsList %}
-                                            {% set meal = meals | first %}
-                                            {% if mealName['english'] == meal['meal'] %}
-                                                {{ mealName['french'] }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </h5>
-                                    <table class='meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
+                                <li class='meal-item'>
+                                    <table class='btn meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
+                                        <caption class='meal-header meal-item-title'>
+                                            {# look for translation of day in weekDayList #}
+                                            {% for mealName in mealsList %}
+                                                {% set meal = meals | first %}
+                                                {% if mealName['english'] == meal['meal'] %}
+                                                    {{ mealName['french'] }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </caption>
                                     </table>
                                 </li>
                             {% endfor %}
+                            {# On ajoute un bouton pour cacher les data #}
+                            <button class='btn rounded-btn nutrients-toggle wrap-btn large-btn'>
+                                <i class="fa-solid fa-angle-up"></i>
+                            </button>
+
                         </ul>
-                        <table class='day-data-tab'>
-                        </table>
+                        
+                        <div class='day-nutrients'>
+                            <table class='btn day-data-tab'>
+                            </table>
+
+                            <button class='btn rounded-btn unwrap-btn nutrients-toggle large-btn'><i class='fa-solid fa-angle-down'></i></button>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>

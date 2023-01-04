@@ -4,6 +4,7 @@
 
 #title-layer i,
 .selected,
+.wrap-btn,
 footer i {
     color: hsla(185, 51%, 47%, 1);
 }
@@ -11,12 +12,18 @@ footer i {
 h4,
 .day-list li,
 .notes-list h4,
+table,
 footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
+caption {
+    color: hsla(0, 0%, 0%, 1);
+}
+
 .btn,
 .dashboard-btn,
+table,
 footer {
     background-color: hsla(185, 51%, 47%, 1);
 }
@@ -29,7 +36,8 @@ footer {
     background-color: hsla(9, 71%, 70%, 1);
 }
 
-.selected {
+.selected,
+.wrap-btn {
     background-color: hsla(0, 0%, 100%, 1);
 }
 
@@ -135,7 +143,7 @@ h2 {
 }
 
 .admin-panel li {
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
 }
 
 .admin-link {
@@ -340,19 +348,57 @@ h2 {
 /*     SUBSCRIBER PROGRAM      */
 /*******************************/
 
-.meals-list {
-    color:hsla(0, 0%, 0%, 1);
-}
-
-.meal-item {
-    color: hsla(0, 0%, 0%, 1);
+.day-header,
+.meal-header {
+    margin: 0;
+    padding: 1vh 0 ;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
 }
 
 table {
     width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border-radius: 2vh;
 }
 
-
 td {
-    color: hsla(0, 0%, 0%, 1);
+    padding: 1vh;
+}
+
+tr:first-child {
+    position: relative;
+}
+
+tr:first-child::after {
+    content: '';
+    position: absolute;
+    left: 15%;
+    bottom: 0;
+    height: 1px;
+    width: 70%;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+tr:not(:first-child) td:not(:first-child) {
+    border-left: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+.day-data-tab {
+    margin-top: 1vh;
+}
+
+.nutrients-toggle {
+    margin-top: 1vh;
+}
+
+.wrap-btn {
+    border: 1px solid hsla(0, 1%, 79%, 1);
+    margin-bottom: 2vh;
+}
+
+.hidden {
+    display: none;
 }

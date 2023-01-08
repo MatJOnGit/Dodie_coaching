@@ -3,12 +3,13 @@
 {% block pageContent %}
     <div class='admin-panel'>
         <h3>Programme de {{ subscriberHeaders['name'] }}</h3>
+        
         {% if subscriberMeals['monday'] | length > 0 %}
             <ul class='day-list'>
                 {% for dayKey, dailyMeals in subscriberMeals %}
                     <li>
                         <h4 class='day-header orange-bkgd'>
-                            {# look for translation of day in weekDayList #}
+
                             {% for weekDay in weekDaysList %}
                                 {% if weekDay['english'] == dayKey %}
                                     {{ weekDay['french'] }} - {{ dailyMeals | length }} repas
@@ -16,14 +17,13 @@
                             {% endfor %}
                         </h4>
 
-                        {{ dump}}
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in dailyMeals %}
                                 <li class='meal-item'>
                                     <a href='index.php?page=edit-program-menu&day={{ dayKey }}&meal={{mealKey}}'>
                                         <table class='btn meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
                                             <caption class='meal-header meal-item-title'>
-                                                {# look for translation of day in weekDayList #}
+                                            
                                                 {% for mealName in mealsList %}
                                                     {% set meal = meals | first %}
                                                     {% if mealName['english'] == meal['meal'] %}
@@ -35,7 +35,7 @@
                                     </a>
                                 </li>
                             {% endfor %}
-                            {# On ajoute un bouton pour cacher les data #}
+                            
                             <button class='btn rounded-btn nutrients-toggle wrap-btn large-btn'>
                                 <i class="fa-solid fa-angle-up"></i>
                             </button>
@@ -52,11 +52,22 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <form class='program-build-form'>
-                <label for='meals-per-day'>Combien de repas par jour ?</label>
-                <input type='number' name='meals-per-day'></input>
+            <form action='index.php?action=generate-meals&id={{ subscriberHeaders['user_id'] }}' method='post' class='meals-form' data-meals='{{ mealsList | json_encode() }}'>
+                <p>Sélectionnez les repas à intégrer chaque jour :</p>
 
-                <input type='submit' value='Valider' class='btn rounded-btn large-btn'></input>
+                <div id='meal-inputs-block'>
+
+                    {% for mealKey, meal in mealsList %}
+                        <div class='meal-entry'>
+                            <input type="checkbox" name="meal-{{ mealKey }}" id="meal-{{ mealKey }}">
+                            <label for="meal-{{ mealKey }}">{{ meal['french'] }}</label>
+                        </div>
+
+                    {% endfor %}
+                </div>
+                    
+                <button type='submit' id='meals-submit-btn' class='btn rounded-btn tiny-btn'>Suivant</button>
+                
             </form>
         {% endif %}
     </div>

@@ -187,6 +187,17 @@ input::placeholder {
     width: 64px;
 }
 
+.input-helper-dismiss-btn {
+    align-items: center;
+    border-radius: 50%;
+    border-width: thin;
+    font-size: 5vmin;
+    height: 30px;
+    justify-content: center;
+    width: 30px;
+    display: flex;
+}
+
 .hidden {
     display: none;
 }

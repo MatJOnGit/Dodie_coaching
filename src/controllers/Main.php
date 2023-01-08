@@ -5,9 +5,10 @@ namespace Dodie_Coaching\Controllers;
 class Main {
     private $_meals = [
         ['english' => 'breakfast', 'french' => 'petit-déjeuner'],
+        ['english' => 'snack #1', 'french' => 'en-cas de 10h'],
         ['english' => 'lunch', 'french' => 'déjeuner'],
-        ['english' => 'diner', 'french' => 'diner'],
-        ['english' => 'snacks', 'french' => 'snacks']
+        ['english' => 'snack #2', 'french' => 'goûté'],
+        ['english' => 'diner', 'french' => 'dîner']
     ];
 
     private $_months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];

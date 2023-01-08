@@ -7,8 +7,9 @@ use Dodie_Coaching\Models\Nutrition as NutritionModel, DatePeriod, DateTime, Dat
 class Programs extends Subscribers {
     private $_programScripts = [
         'classes/UserPanels.model',
-        'classes/ProgramHelper.model',
-        'programHelperApp'
+        'classes/ProgramDisplayer.model',
+        'classes/ProgramBuildingHelper.model',
+        'programsApp'
     ];
     
     public function renderSubscriberProgramPage(object $twig, int $subscriberId) {
@@ -34,8 +35,6 @@ class Programs extends Subscribers {
         foreach($orderedWeekIndex as $key => $dayIndex) {
 
             $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
-            
-            // var_dump($orderedEnglishWeekDaysList);
         }
 
         return $orderedEnglishWeekDaysList;

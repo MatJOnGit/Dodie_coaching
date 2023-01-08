@@ -49,8 +49,10 @@
             <span id='attended-meetings' data-attended-slots='{{ attendedMeetings | json_encode() }}'></span>
         
         {% endif %}
-
-        <button class='btn rounded-btn circle-btn' id='add-note-btn'><i class="fa-solid fa-plus"></i></button>
+        
+        <button class='btn rounded-btn circle-btn' id='add-note-btn'>
+            <i class="fa-solid fa-plus"></i>
+        </button>
     </div>
 {% endblock pageContent %}
 

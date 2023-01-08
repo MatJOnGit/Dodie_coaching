@@ -71,6 +71,7 @@ class Subscribers extends Main {
             "SELECT
                 CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
                 usd.daily_meals,
+                usd.user_id,
                 usd.snacks_enabled
             FROM subscribers sub
             INNER JOIN accounts acc ON sub.user_id = acc.id

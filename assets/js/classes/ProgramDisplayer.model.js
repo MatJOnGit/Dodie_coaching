@@ -1,4 +1,4 @@
-class ProgramHelper extends UserPanels {
+class ProgramDisplayer extends UserPanels {
     constructor() {
         super();
 
@@ -256,9 +256,13 @@ class ProgramHelper extends UserPanels {
     init() {
         this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
         
-        if (this.dailyProgramItems) {
+        if (this.dailyProgramItems.length > 0) {
             this.buildProgramArrays();
             this.displayProgramData();
+        }
+
+        else {
+            console.log('coucou');
         }
     }
 

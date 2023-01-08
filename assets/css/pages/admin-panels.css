@@ -50,13 +50,18 @@ footer {
     border: 1px solid hsla(0, 0%, 0%, 1);
 }
 
+.date-container > input,
+.program-build-form > input {
+    border-bottom: 1px solid hsla(0, 0%, 0%, 1);
+}
+
 .selected {
     border: 1px solid hsla(185, 51%, 47%, 1);
 }
 
-.date-container > input,
-.program-build-form > input {
-    border-bottom: 1px solid hsla(0, 0%, 0%, 1);
+#input-helper-container,
+.input-helper-dismiss-btn {
+    border: 2px solid hsla(9, 71%, 70%, 1);
 }
 
 .edit-icon {
@@ -399,6 +404,46 @@ tr:not(:first-child) td:not(:first-child) {
     margin-bottom: 2vh;
 }
 
-.hidden {
-    display: none;
+.meal-setup-panel {
+    height: calc(100vh - 11vh - 16vh - 70px);
+}
+
+.meals-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.meals-form > p,
+.meals-form > div > div {
+    margin-bottom: 3vh;
+}
+
+#meal-inputs-block {
+    width: 70%;
+}
+
+#input-helper-container {
+    align-items: center;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: row;
+    font-weight: 600;
+    font-size: 4vmin;
+    justify-content: space-between;
+    opacity: 0;
+    padding: 4px 20px;
+    border-radius: 8px;
+}
+
+.meal-building-alert {
+    display: inline-block;
+    max-width: 80%;
+}
+
+.input-helper-dismiss-btn {
+    color: hsla(9, 71%, 70%, 1);
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
 }

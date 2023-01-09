@@ -12,7 +12,7 @@ class Subscribers extends Main {
                 sub.first_subscription_date,
                 sl.program_type,
                 sl.date
-            FROM subscribers sub
+            FROM subscribers_data sub
             LEFT JOIN subscription_logs sl ON sub.user_id = sl.user_id
             WHERE sub.user_id = ?
             ORDER BY sl.date DESC";
@@ -32,17 +32,16 @@ class Subscribers extends Main {
                 usd.program_goal,
                 udd.job_style,
                 sub.program_status,
+                sub.meals_list,
                 usd.height,
                 usd.initial_weight,
                 usd.food_restrictions,
                 usd.food_intolerances,
                 usd.sport_habits,
-                usd.daily_meals,
-                usd.snacks_enabled,
                 uwr.date,
                 uwr.weight AS 'current_weight',
                 usd.weight_goal
-            FROM subscribers sub
+            FROM subscribers_data sub
             INNER JOIN accounts acc ON sub.user_id = acc.id
             INNER JOIN appliances app ON sub.user_id = app.user_id
             INNER JOIN users_static_data usd ON app.user_id = usd.user_id
@@ -58,7 +57,7 @@ class Subscribers extends Main {
     
     public function selectSubscriberData (int $subscriberId) {
         $db = $this->dbConnect();
-        $selectSubscriberDataQuery = "SELECT email, first_name FROM accounts acc INNER JOIN subscribers sub ON acc.id = sub.user_id WHERE sub.user_id = ?";
+        $selectSubscriberDataQuery = "SELECT email, first_name FROM accounts acc INNER JOIN subscribers_data sub ON acc.id = sub.user_id WHERE sub.user_id = ?";
         $selectSubscriberDataStatement = $db->prepare($selectSubscriberDataQuery);
         $selectSubscriberDataStatement->execute([$subscriberId]);
         
@@ -70,10 +69,9 @@ class Subscribers extends Main {
         $selectSubscriberHeaderQuery =
             "SELECT
                 CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
-                usd.daily_meals,
-                usd.user_id,
-                usd.snacks_enabled
-            FROM subscribers sub
+                -- usd.daily_meals,
+                usd.user_id
+            FROM subscribers_data sub
             INNER JOIN accounts acc ON sub.user_id = acc.id
             INNER JOIN users_static_data usd ON sub.user_id = usd.user_id
             WHERE sub.user_id = ?";
@@ -85,7 +83,7 @@ class Subscribers extends Main {
     
     public function selectSubscriberId(int $subscriberId) {
         $db = $this->dbConnect();
-        $selectSubscriberIdQuery = "SELECT user_id FROM subscribers WHERE user_id = ?";
+        $selectSubscriberIdQuery = "SELECT user_id FROM subscribers_data WHERE user_id = ?";
         $selectSubscriberIdStatement = $db->prepare($selectSubscriberIdQuery);
         $selectSubscriberIdStatement->execute([$subscriberId]);
         
@@ -111,7 +109,7 @@ class Subscribers extends Main {
                 usd.program_goal,
                 udd.job_style,
                 sub.program_status
-            FROM subscribers sub
+            FROM subscribers_data sub
             INNER JOIN users_static_data usd ON sub.user_id = usd.user_id
             INNER JOIN accounts acc ON sub.user_id = acc.id
             INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id
@@ -121,5 +119,14 @@ class Subscribers extends Main {
         $selectSubscribersHeadersStatement->execute();
         
         return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectProgramMeals($subscriberId) {
+        $db = $this->dbConnect();
+        $selectProgramMealsQuery = "SELECT meals_list FROM subscribers_data WHERE user_id = ?";
+        $selectProgramMealsStatement = $db->prepare($selectProgramMealsQuery);
+        $selectProgramMealsStatement->execute([$subscriberId]);
+
+        return $selectProgramMealsStatement->fetch(PDO::FETCH_ASSOC);
     }
 }

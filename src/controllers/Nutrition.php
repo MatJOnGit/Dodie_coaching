@@ -19,7 +19,7 @@ class Nutrition extends UserPanels {
             }
         }
 
-        foreach($this->_getMeals() as $meal) {
+        foreach($this->_getMealsTranslations() as $meal) {
             if ($requestedMeal === $meal['english']) {
                 $isMealValid = true;
             }
@@ -82,7 +82,7 @@ class Nutrition extends UserPanels {
             'appSection' => 'userPanels',
             'prevPanel' => ['dashboard', 'Tableau de bord'],
             'nextDays' => $this->_getNextDates(),
-            'meals' => $this->_getMeals(),
+            'meals' => $this->_getMealsTranslations(),
             'programFilePath' => $this->_getProgramsFilePath()
         ]);
     }
@@ -148,7 +148,7 @@ class Nutrition extends UserPanels {
             }
         }
         
-        foreach($this->_getMeals() as $meal) {
+        foreach($this->_getMealsTranslations() as $meal) {
             if ($mealData['meal'] === $meal['english']) {
                 $mealData['meal'] = $meal['french'];
             }

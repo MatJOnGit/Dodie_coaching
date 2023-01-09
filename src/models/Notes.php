@@ -44,7 +44,7 @@ class Notes extends Main {
                 fun.note_entry,
                 fun.attached_to_meeting 
             FROM followup_notes fun
-            INNER JOIN subscribers sub ON fun.user_id = sub.user_id
+            INNER JOIN subscribers_data sub ON fun.user_id = sub.user_id
             WHERE sub.user_id = ?
             ORDER BY fun.date DESC";
         $selectNotesStatement = $db->prepare($selectNotesQuery);

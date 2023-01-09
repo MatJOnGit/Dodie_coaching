@@ -28,11 +28,7 @@
             <li><b>Restrictions nutritives :</b> {{ subscriberDetails['food_restrictions'] }}</li>
             <li><b>Intolérances nutritives :</b> {{ subscriberDetails['food_intolerances'] }}</li>
             <li><b>Activité sportive :</b> {{ subscriberDetails['sport_habits'] }}</li>
-            <li><b>Repas journalier :</b> {{ subscriberDetails['daily_meals'] }}
-                {% if subscriberDetails['snacks_enabled'] %}
-                    + snack
-                {% endif %}
-            </li>
+            <li><b>Repas journalier :</b> {{ subscriberDetails['meals_list'] | split(', ') | length }}</li>
         </ul>
 
         <h4 class='section-header orange-bkgd'>Information abonnement</h4>

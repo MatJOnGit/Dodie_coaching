@@ -424,15 +424,6 @@ tr:not(:first-child) td:not(:first-child) {
 }
 
 #input-helper-container {
-    align-items: center;
-    border-radius: 3px;
-    display: flex;
-    flex-direction: row;
-    font-weight: 600;
-    font-size: 4vmin;
-    justify-content: space-between;
-    opacity: 0;
-    padding: 4px 20px;
     border-radius: 8px;
 }
 

@@ -2,7 +2,9 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Nutrition as NutritionModel, DatePeriod, DateTime, DateInterval;
+use Dodie_Coaching\Models\Nutrition as NutritionModel;
+use Dodie_Coaching\Models\Subscribers as SubscribersModel;
+use DatePeriod, DateTime, DateInterval;
 
 class Programs extends Subscribers {
     private $_programScripts = [
@@ -19,15 +21,25 @@ class Programs extends Subscribers {
             'appSection' => 'userPanels',
             'prevPanel' => ['subscriber-profile&id=' . $subscriberId, 'Profil abonnés'],
             'subscriberHeaders' => $this->_getSubscriberHeaders($subscriberId),
-            'subscriberMeals' => $this->_getSubscriberMeals($subscriberId),
-            'weekDaysList' => $this->_getWeekDaysList(),
-            'mealsIndex' => $this->_getMealsList($subscriberId),
-            'mealsList' => $this->_getMeals(),
+            'program' => $this->_getProgram($subscriberId),
+            'programMeals' => $this->_getProgramMeals($subscriberId),
+            'weekDaysTranslations' => $this->_buildWeekDaysTranslations(),
+            'mealsTranslations' => $this->_getMealsTranslations(),
             'pageScripts' => $this->_getProgramScripts()
         ]);
     }
 
-    private function _getWeekDaysList() {
+    // Generate an array out of a subscriber's program meals list. Return NULL if no meal is found. 
+    private function _getProgramMeals($subscriberId) {
+        $subscribers = new SubscribersModel;
+
+        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
+
+        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
+    }
+
+    // Build an associative array containing the translation of meal in english and french
+    private function _buildWeekDaysTranslations() {
         $weekDays = $this->_getWeekDays();
 
         $orderedEnglishWeekDaysList = [];
@@ -40,7 +52,10 @@ class Programs extends Subscribers {
         return $orderedEnglishWeekDaysList;
     }
 
-    private function _buildProgramIngredients($nutrition, $subscriberId, $weekDays, $meals) {
+    // Build an associative array containing ingredients for each meal and for each day of the week
+    private function _buildProgramIngredients ($subscriberId, $weekDays, $meals) {
+        $nutrition = new NutritionModel;
+
         $programIngredients = [];
 
         foreach($weekDays as $weekDay) {
@@ -82,7 +97,7 @@ class Programs extends Subscribers {
             6
         );
 
-        foreach ($period as $key => $day) {
+        foreach($period as $key => $day) {
             $date = $day->format('w d');
             $englishWeekDay = $this->_getEnglishWeekDay($date);
             $frenchWeekDay = $this->_getFrenchWeekDay($date);
@@ -92,18 +107,43 @@ class Programs extends Subscribers {
         return $weekDays;
     }
 
-    private function _getMealsList($subscriberId) {
+    private function _getMealsIndexes($subscriberId) {
         $nutrition = new NutritionModel;
 
-        return $nutrition->selectSubscriberMeals($subscriberId);
+        return $nutrition->selectSubscriberMealsIndexes($subscriberId);
     }
 
-    private function _getSubscriberMeals($subscriberId) {
+    private function _getProgram($subscriberId) {
+        $weekDays = $this->_getRegularWeekDays();
+        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
+        
+        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
+    }
+
+    // Build an array of checked meals
+    public function getCheckedMeals() {
+        $validMeals = $this->_getMealsTranslations();
+        $checkedMeals = [];
+
+        foreach($validMeals as $mealKey => $knownMeal) {
+            if (isset($_POST['meal-' . $mealKey])) {
+                array_push($checkedMeals, $knownMeal['english']);
+            }
+        }
+
+        return $checkedMeals;
+    }
+
+    // Convert an array of meals into a string separated with commas, then set it in database
+    public function addProgramMeals($subscriberId, $mealsList) {
         $nutrition = new NutritionModel;
 
-        $weekDays = $this->_getRegularWeekDays();
-        $meals = $this->_getMealsList($subscriberId);
+        $meals = '';
 
-        return $this->_buildProgramIngredients($nutrition, $subscriberId, $weekDays, $meals);
+        foreach($mealsList as $mealItem) {
+            $meals = empty($meals) ? $mealItem : $meals . ', ' . $mealItem;
+        }
+
+        return $nutrition->updateMealsList($subscriberId, $meals);
     }
 }

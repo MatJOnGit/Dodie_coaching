@@ -88,7 +88,7 @@ class Meetings extends Main {
                 ms.slot_date,
                 ms.user_id,
                 ms.slot_id
-            FROM subscribers sub
+            FROM subscribers_data sub
             INNER JOIN meeting_slots ms ON sub.user_id = ms.user_id
             WHERE ms.slot_status = 'attended'
             AND sub.user_id = ?

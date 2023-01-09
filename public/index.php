@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Symfony\Component\Asset\UrlPackage;
+
 session_start();
 
 // session_destroy();
@@ -36,7 +38,8 @@ try {
             'progress' => ['add-report', 'delete-report'],
             'meeting' => ['book-appointment', 'cancel-appointment', 'save-meeting', 'delete-meeting'],
             'appliance' => ['reject-appliance', 'approve-appliance'],
-            'subscriber' => ['save-note', 'edit-note', 'delete-note']
+            'notes' => ['save-note', 'edit-note', 'delete-note'],
+            'program-builder' => ['generate-meals']
         ]
     ];
 
@@ -270,7 +273,7 @@ try {
                         }
 
                         else {
-                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            throw new Url_Exception('MISSING ID PARAMETER IN URL');
                             // $subscribers->routeTo('subscribersList');
                         }
                     }
@@ -291,7 +294,7 @@ try {
                         }
                         
                         else {
-                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            throw new Url_Exception('MISSING ID PARAMETER IN URL');
                             // $programs->routeTo('subscribersList');
                         }
                     }
@@ -312,7 +315,7 @@ try {
                         }
 
                         else {
-                            throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                            throw new Url_Exception('MISSING ID PARAMETER IN URL');
                             // $notes->routeTo('subscribersList');
                         }
                     }
@@ -804,7 +807,7 @@ try {
                     }
                     
                     else {
-                        throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                        throw new Url_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
                 
@@ -818,7 +821,7 @@ try {
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['subscriber'])) {
+        elseif (in_array($action, $Urls['actions']['notes'])) {
             $notes = new \Dodie_Coaching\Controllers\Notes;
             
             if ($user->isLogged()) {
@@ -844,19 +847,19 @@ try {
                             }
 
                             else {
-                                throw new Data_Exception('MISSING NOTE PARAMETERS FROM NOTE FORM');
+                                throw new Data_Exception('MISSING NOTE PARAMETERS IN NOTE FORM');
                                 // $notes->routeTo('appliancesList');
                             }
                         }
 
                         else {
-                            throw new Data_Exception('INVALID ID PARAMETER IN URL');
+                            throw new Url_Exception('INVALID ID PARAMETER IN URL');
                             // $notes->routeTo('appliancesList');
                         }
                     }
 
                     else {
-                        throw new Data_Exception('MISSING ID PARAMETER IN URL');
+                        throw new Url_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
                 
@@ -922,6 +925,41 @@ try {
             
             else {
                 $user->logoutUser();
+            }
+        }
+
+        elseif (in_array($action, $Urls['actions']['program-builder'])) {
+            $program = new \Dodie_Coaching\Controllers\Programs;
+            
+            if ($user->isLogged()) {
+                if ($program->isRequestMatching($action, 'generate-meals')) {
+                    if ($program->areParamsSet(['id'])) {
+                        $subscriberId = intval($program->getParam('id'));
+
+                        if ($program->isSubscriberIdValid($subscriberId)) {
+                            $mealsList = $program->getCheckedMeals();
+
+                            if ($mealsList) {
+                                if (!$program->addProgramMeals($subscriberId, $mealsList)) {
+                                    throw new DB_Exception('échec de la mise à jour des repas du programme');
+                                }
+
+                                header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                            }
+                            else {
+                                throw new Data_Exception('MISSING CHECKED ELEMENT IN MEALS FORM');
+                            }
+                        }
+
+                        else {
+                            throw new URL_Exception('INVALID ID PARAMETER IN URL');
+                        }
+                    }
+
+                    else {
+                        throw new URL_Exception('MISSING ID PARAMETER IN URL');
+                    }
+                }
             }
         }
         

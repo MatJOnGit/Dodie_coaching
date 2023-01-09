@@ -128,7 +128,8 @@ class ProgramDisplayer extends UserPanels {
     }
 
     buildDailyNutrientsData() {
-        this.initNutrientsPerDayEntry()
+        this.initNutrientsPerDayEntry() // works
+
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
             this.mealKey = mealKey;
             let mealData = this.dailyMealsParsedData[this.mealKey];
@@ -167,21 +168,22 @@ class ProgramDisplayer extends UserPanels {
         const fourthNutrientsRow = document.createElement('tr');
 
         const caloriesTdElt = document.createElement('td');
-        caloriesTdElt.innerText = nutrientsTab[dataTabKey]['calories'].toFixed(0) + ' calories';
+
+        caloriesTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['calories'].toFixed(0) + ' calories' : '0 calories';
         caloriesTdElt.setAttribute('colspan', 2);
         const proteinsTdElt = document.createElement('td');
-        proteinsTdElt.innerText = nutrientsTab[dataTabKey]['proteins'].toFixed(0) + 'g protéines';
+        proteinsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['proteins'].toFixed(0) + 'g protéines' : '0g protéines';
         const carbsTdElt = document.createElement('td');
-        carbsTdElt.innerText = nutrientsTab[dataTabKey]['carbs'].toFixed(0) + 'g glucides';
+        carbsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['carbs'].toFixed(0) + 'g glucides' : '0g glucides';
         const fatTdElt = document.createElement('td');
-        fatTdElt.innerText = nutrientsTab[dataTabKey]['fat'].toFixed(0) + 'g lipides';
+        fatTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fat'].toFixed(0) + 'g lipides' : '0g lipides';
         
         const sugarTdElt = document.createElement('td');
-        sugarTdElt.innerText = nutrientsTab[dataTabKey]['sugar'].toFixed(0) + 'g sucre';
+        sugarTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sugar'].toFixed(0) + 'g sucre' : '0g sucre';
         const fibersTdElt = document.createElement('td');
-        fibersTdElt.innerText = nutrientsTab[dataTabKey]['fibers'].toFixed(0) + 'g fibres';
+        fibersTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fibers'].toFixed(0) + 'g fibres' : '0g fibres';
         const sodiumTdElt = document.createElement('td');
-        sodiumTdElt.innerText = nutrientsTab[dataTabKey]['sodium'].toFixed(0) + 'mg sodium';
+        sodiumTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sodium'].toFixed(0) + 'mg sodium' : '0mg sodium';
 
         firstNutrientsRow.appendChild(caloriesTdElt);
         secondNutrientsRow.appendChild(proteinsTdElt);
@@ -255,15 +257,9 @@ class ProgramDisplayer extends UserPanels {
 
     init() {
         this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
-        
-        if (this.dailyProgramItems.length > 0) {
-            this.buildProgramArrays();
-            this.displayProgramData();
-        }
 
-        else {
-            console.log('coucou');
-        }
+        this.buildProgramArrays();
+        this.displayProgramData();
     }
 
     initNutrientsPerDayEntry() {

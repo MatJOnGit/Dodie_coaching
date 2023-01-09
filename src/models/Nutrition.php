@@ -79,12 +79,12 @@ class Nutrition extends Main {
             FROM food_plans fp
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
-            WHERE fp.user_id = :subId
+            WHERE fp.user_id = :subscriberId
             AND fp.day = :day
             AND fp.meal_index = :mealOrder";
         $selectProgramIngredientsStatement = $db->prepare($selectProgramIngredientsQuery);
         $selectProgramIngredientsStatement->execute([
-            'subId' => $subscriberId,
+            'subscriberId' => $subscriberId,
             'day' => $day,
             'mealOrder' => $mealOrder
         ]);
@@ -92,12 +92,24 @@ class Nutrition extends Main {
         return $selectProgramIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function selectSubscriberMeals($subscriberId) {
+    public function selectSubscriberMealsIndexes($subscriberId) {
         $db = $this->dbConnect();
         $selectSubscriberMealsQuery = "SELECT DISTINCT(meal_index) FROM food_plans WHERE user_id = ? ORDER BY meal_index";
         $selectSubscriberMealsStatement = $db->prepare($selectSubscriberMealsQuery);
         $selectSubscriberMealsStatement->execute([$subscriberId]);
 
         return $selectSubscriberMealsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateMealsList($subscriberId, $meals) {
+        $db = $this->dbConnect();
+
+        $updateMealsListQuery = "UPDATE subscribers_data SET meals_list = :meals WHERE user_id = :subscriberId";
+        $updateMealsListStatement = $db->prepare($updateMealsListQuery);
+
+        return $updateMealsListStatement->execute([
+            'subscriberId' => $subscriberId,
+            'meals' => $meals
+        ]);
     }
 }

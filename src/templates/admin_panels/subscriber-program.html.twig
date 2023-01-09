@@ -3,31 +3,30 @@
 {% block pageContent %}
     <div class='admin-panel'>
         <h3>Programme de {{ subscriberHeaders['name'] }}</h3>
-        
-        {% if subscriberMeals['monday'] | length > 0 %}
+
+        {% if programMeals | length %}
             <ul class='day-list'>
-                {% for dayKey, dailyMeals in subscriberMeals %}
+                {% for dayKey, dailyMeals in program %}
                     <li>
                         <h4 class='day-header orange-bkgd'>
 
-                            {% for weekDay in weekDaysList %}
+                            {% for weekDay in weekDaysTranslations %}
                                 {% if weekDay['english'] == dayKey %}
-                                    {{ weekDay['french'] }} - {{ dailyMeals | length }} repas
+                                    {{ weekDay['french'] }} - {{ programMeals | length }} repas
                                 {% endif %}
                             {% endfor %}
                         </h4>
 
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
-                            {% for mealKey, meals in dailyMeals %}
+                            {% for mealKey, meals in programMeals %}
                                 <li class='meal-item'>
-                                    <a href='index.php?page=edit-program-menu&day={{ dayKey }}&meal={{mealKey}}'>
-                                        <table class='btn meal-data-tab' data-ingredients='{{ meals | json_encode() }}'>
+                                    <a href='index.php?page=edit-program-menu&day={{ dayKey }}&mealId={{mealKey}}'>
+                                        <table class='btn meal-data-tab'>
                                             <caption class='meal-header meal-item-title'>
-                                            
-                                                {% for mealName in mealsList %}
-                                                    {% set meal = meals | first %}
-                                                    {% if mealName['english'] == meal['meal'] %}
-                                                        {{ mealName['french'] }}
+
+                                                {% for mealTranslation in mealsTranslations %}
+                                                    {% if meals == mealTranslation['english'] %}
+                                                        {{ mealTranslation['french'] }}
                                                     {% endif %}
                                                 {% endfor %}
                                             </caption>
@@ -52,12 +51,12 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <form action='index.php?action=generate-meals&id={{ subscriberHeaders['user_id'] }}' method='post' class='meals-form' data-meals='{{ mealsList | json_encode() }}'>
+            <form action='index.php?action=generate-meals&id={{ subscriberHeaders['user_id'] }}' method='post' class='meals-form' data-meals='{{ mealsTranslations | json_encode() }}'>
                 <p>Sélectionnez les repas à intégrer chaque jour :</p>
 
                 <div id='meal-inputs-block'>
 
-                    {% for mealKey, meal in mealsList %}
+                    {% for mealKey, meal in mealsTranslations %}
                         <div class='meal-entry'>
                             <input type="checkbox" name="meal-{{ mealKey }}" id="meal-{{ mealKey }}">
                             <label for="meal-{{ mealKey }}">{{ meal['french'] }}</label>

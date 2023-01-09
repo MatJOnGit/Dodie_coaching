@@ -3,7 +3,7 @@
 namespace Dodie_Coaching\Controllers;
 
 class Main {
-    private $_meals = [
+    private $_mealsTranslations = [
         ['english' => 'breakfast', 'french' => 'petit-déjeuner'],
         ['english' => 'snack #1', 'french' => 'en-cas de 10h'],
         ['english' => 'lunch', 'french' => 'déjeuner'],
@@ -85,8 +85,8 @@ class Main {
         return $this->_months;
     }
 
-    protected function _getMeals() {
-        return $this->_meals;
+    protected function _getMealsTranslations() {
+        return $this->_mealsTranslations;
     }
 
     private function _getRoutingURL(string $panel): string {

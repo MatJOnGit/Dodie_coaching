@@ -1,23 +1,17 @@
 {% if appSection == 'showcasePanels' %}
-
     <button id='dynamic-menu-button'>
         <i class='fas fa-bars'
-        {% if isUserLogged %}
-            id='logged'
-        {% endif %}
+            {% if isUserLogged %}
+                id='logged'
+            {% endif %}
         ></i>
     </button>
-
 {% elseif appSection == 'connectionPanels' %}
-
     <a href='index.php' class='homepage-link'>
         <i class="fa-solid fa-house-chimney"></i>
     </a>
-
 {% elseif appSection == 'userPanels' %}
-
     <a href='index.php?action=logout' class='homepage-link'>
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
-
 {% endif %}

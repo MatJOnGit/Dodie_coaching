@@ -3,16 +3,12 @@
 {% block pageContent %}
     <div class='admin-panel'>
         <h3>Vos prochains rendez-vous</h3>
-
+        
         {% if meetingSlots %}
-
-            <ul id='meeting-slots' data-meeting-slots='{{ meetingSlots | json_encode() }}'>
-            
-            </ul>
-
+            <ul id='meeting-slots' data-meeting-slots='{{ meetingSlots | json_encode() }}'></ul>
         {% endif %}
-
-        <button class='btn rounded-btn circle-btn' id='add-meeting-btn'>
+        
+        <button class='btn circle-btn blue-bkgd' id='add-meeting-btn'>
             <i class='fa-solid fa-plus'></i>
         </button>
     </div>

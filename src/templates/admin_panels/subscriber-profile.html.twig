@@ -2,16 +2,16 @@
 
 {% block pageContent %}
     <div class='admin-panel profile-panel'>
-
+    
         <h3>Profil de {{ subscriberDetails['name'] }}</h3>
-
+        
         <div class='sub-profile-btns'>
-            <a href='index.php?page=subscriber-program&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn'>Programme</a>
-            <a href='index.php?page=subscriber-notes&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn'>Notes de suivi</a>
+            <a href='index.php?page=subscriber-program&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn blue-bkgd'>Programme</a>
+            <a href='index.php?page=subscriber-notes&id={{ subscriberDetails['user_id'] }}' class='btn rounded-btn tiny-btn blue-bkgd'>Notes de suivi</a>
         </div>
-
+        
         <h4 class='section-header orange-bkgd'>Informations utilisateur</h4>
-
+        
         <ul>
             <li><b>Age :</b> {{ subscriberDetails['age'] }} ans</li>
             <li><b>Emploi :</b> {{ subscriberDetails['job_style'] }}</li>
@@ -30,14 +30,14 @@
             <li><b>Activité sportive :</b> {{ subscriberDetails['sport_habits'] }}</li>
             <li><b>Repas journalier :</b> {{ subscriberDetails['meals_list'] | split(', ') | length }}</li>
         </ul>
-
+        
         <h4 class='section-header orange-bkgd'>Information abonnement</h4>
+        
         <ul>
             <li><b>Compte créé le :</b> {{ accountDetails[0]['first_subscription_date'] | date('d/m/Y') | split(' ')[0]}}</li>
             <li><b>Type d'abonnement en cours :</b> {{ accountDetails[0]['program_type'] }}</li>
             <li><b>Date de fin d'abonnement :</b> {{ accountDetails[0]['date'] | date_modify('+1 month') | date ('d/m/Y') }}</li>
             <li><b>Durée de suivi (à ce jour) :</b> {{ accountDetails | length }} mois</li>
         </ul>
-
     </div>
 {% endblock pageContent %}

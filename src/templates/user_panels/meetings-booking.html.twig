@@ -2,41 +2,35 @@
 
 {% block pageContent %}
     <div class='user-panel'>
-
         {% if scheduledMeetingDate is iterable %}
-
-        <h3>Votre prochain rendez-vous</h3>
-        <div>
-            <p>le {{ scheduledMeetingDate.slot_date | date('d/m/y \à H\\hi') }}</p>
-        </div>
-        <div id='cancel-btn-container'>
-            <button class='btn rounded-btn purple-bkgd' id='cancel-appointment'>Annuler mon rendez-vous</button>
-        </div>
-
+            <h3>Votre prochain rendez-vous</h3>
+            
+            <div>
+                <p>le {{ scheduledMeetingDate.slot_date | date('d/m/y \à H\\hi') }}</p>
+            </div>
+            
+            <div id='cancel-btn-container'>
+                <button class='btn rounded-btn purple-bkgd' id='cancel-appointment'>Annuler mon rendez-vous</button>
+            </div>
         {% else %}
-
-        <h3>Prendre un nouveau rendez-vous</h3>
-        <form action='index.php?action=book-appointment' class='appointment-form' method='post'>
-            <input type='text' name='meeting-date' placeholder='Veuillez choisir une date' id='user-next-meeting' disabled required />
-            <input type='submit' value='Valider le rendez-vous' id='submit-button' class='btn rounded-btn purple-bkgd' disabled />
-        </form>
-        
+            <h3>Prendre un nouveau rendez-vous</h3>
+            
+            <form action='index.php?action=book-appointment' class='appointment-form' method='post'>
+                <input type='text' name='meeting-date' placeholder='Veuillez choisir une date' id='user-next-meeting' disabled required />
+                <input type='submit' value='Valider le rendez-vous' id='submit-button' class='btn rounded-btn purple-bkgd' disabled />
+            </form>
         {% endif %}
-
+        
         <h3>Prochaines dates disponibles</h3>
         <div class='appointment-block'>
             {% if meetingSlots %}
-
                 <div class='schedule-days-nav previous-days-nav'></div>
-
+                
                 <ul class='appointment-days' id='appointment-tab' data-meeting-slots='{{ meetingSlots | json_encode() }}'></ul>
-
+                
                 <div class='schedule-days-nav next-days-nav'></div>
-
             {% else %}
-            
                 <p>Plus aucun rendez-vous n'est pour le moment disponible.</p>
-
             {% endif %}
         </div>
     </div>

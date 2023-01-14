@@ -2,14 +2,19 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Nutrition as NutritionModel, DatePeriod, DateTime, DateInterval;
+use Dodie_Coaching\Models\Accounts as AccountsModel;
+use Dodie_Coaching\Models\Nutrition as NutritionModel;
+use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
+use Dodie_Coaching\Models\Subscribers as SubscribersModels;
+use DatePeriod, DateTime, DateInterval;
 
 class Nutrition extends UserPanels {    
     private $_programsFolderRoute = './../var/nutrition_programs/';
     
     public function areMealParamsValid(array $mealData): bool {
         $requestedDay = $mealData['day'];
-        $requestedMeal = $mealData['meal'];
+        $requestedMeal = str_replace('_', ' #', $mealData['meal']);
+
         $isDayValid = false;
         $isMealValid = false;
 
@@ -82,7 +87,8 @@ class Nutrition extends UserPanels {
             'appSection' => 'userPanels',
             'prevPanel' => ['dashboard', 'Tableau de bord'],
             'nextDays' => $this->_getNextDates(),
-            'meals' => $this->_getMealsTranslations(),
+            'meals' => $this->_getProgramMeals(),
+            'mealsTranslations' => $this->_getMealsTranslations(),
             'programFilePath' => $this->_getProgramsFilePath()
         ]);
     }
@@ -101,7 +107,7 @@ class Nutrition extends UserPanels {
     private function _getMealDetails(array $mealData) {
         $nutrition = new NutritionModel;
 
-        return $nutrition->selectMealDetails($mealData['day'], $mealData['meal'], $_SESSION['email']);
+        return $nutrition->selectMealDetails($mealData['day'], str_replace('_', ' #', $mealData['meal']), $_SESSION['email']);
     }
     
     private function _getNextDates(): array {
@@ -125,10 +131,10 @@ class Nutrition extends UserPanels {
     }
     
     private function _getProgramsFilePath() {
-        $nutrition = new NutritionModel;
-        $fileName = $nutrition->selectProgramFileName($_SESSION['email']);
+        $programFile = new ProgramFilesModel;
+        $programsFilePath = $programFile->selectFileName($_SESSION['email']);
 
-        return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.txt' : null;
+        return $programsFilePath ? $this->_getProgramsFolderRoute() . $programsFilePath[0] . '.txt' : null;
     }
     
     private function _getProgramsFolderRoute(): string {
@@ -149,11 +155,27 @@ class Nutrition extends UserPanels {
         }
         
         foreach($this->_getMealsTranslations() as $meal) {
-            if ($mealData['meal'] === $meal['english']) {
+            if (str_replace('_', ' #', $mealData['meal']) === $meal['english']) {
                 $mealData['meal'] = $meal['french'];
             }
         }
 
         return $mealData;
+    }
+
+    public function _getProgramMeals() {
+        $subscribers = new SubscribersModels;
+
+        $subscriberId = $this->_getUserId()['id'];
+
+        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
+
+        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
+    }
+
+    private function _getUserId() {
+        $account = new AccountsModel;
+
+        return $account->selectId($_SESSION['email']);
     }
 }

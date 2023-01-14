@@ -220,7 +220,6 @@ figcaption {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 24vh;
     justify-content: space-between;
     width: 100%;
 }
@@ -228,7 +227,7 @@ figcaption {
 .meals-list li {
     background-position: 50%;
     background-size: cover;
-    height: 49%;
+    height: 12vh;
     margin: 2px 1% 2px 1%;
     position: relative;
     width: 48%;
@@ -246,8 +245,12 @@ figcaption {
     background-image: url('./../../../public/img/meals_pictures/diner.jpg');
 }
 
-.snacks-list-item {
-    background-image: url('./../../../public/img/meals_pictures/snacks.jpg');
+.snack_1-list-item {
+    background-image: url('./../../../public/img/meals_pictures/snack_1.jpg');
+}
+
+.snack_2-list-item {
+    background-image: url('./../../../public/img/meals_pictures/snack_2.jpg');
 }
 
 .meals-list a {
@@ -276,6 +279,16 @@ figcaption {
 
 .nutrition-requests a {
     padding: 17px;
+}
+
+.no-program-block {
+    display: flex;
+    flex-direction: column;
+    padding: 0 7%;
+}
+
+.no-program-block p {
+    margin-bottom: 2vh;
 }
 
 /******************************************/

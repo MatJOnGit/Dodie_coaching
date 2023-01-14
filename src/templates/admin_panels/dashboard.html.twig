@@ -2,59 +2,43 @@
 
 {% block pageContent %}
     <div class='admin-panel'>
-    
         {% if (appliancesCount is defined) and (appliancesCount != false) %}
-
             <div class='dashboard-card pending-appliances'>
                 <h3>Vos demandes de coaching</h3>
                 <p>Vous avez {{ appliancesCount['appliancesCount'] }} demandes en attente.</p>
                 <a href='index.php?page=appliances-list' class='btn large-btn admin-link'>Gérer vos demandes de suivi</a>
             </div>
-
         {% endif %}
-
+        
         {% if subscribersCount is defined %}
-
             <div class='dashboard-card current-subscribers'>
                 <h3>Vos coaching en cours</h3>
                 <p>Vous suivez actuellement {{ subscribersCount['subscribersCount'] }} abonné(s).</p>
                 <a href='index.php?page=subscribers-list' class='btn large-btn admin-link'>Gérer vos profils d'abonnés</a>
             </div>
-
         {% endif %}
-
+        
         {% if todayMeetingsData is defined %}
-
             <div class='dashboard-card incoming-meetings'>
                 <h3>Vos rendez-vous</h3>
-
+                
                 {% if todayMeetingsData %}
-
                     <p>Aujourd'hui, vous avez {{ todayMeetingsData | length }} rendez-vous  :</p>
                     <ul>
-
-                    {% for meetingData in todayMeetingsData %}
-
-                        <li>
-                            à {{ meetingData['meetingTime'] }}
-                            : {{ meetingData['costumerName'] }}
-                        </li>
-                        
-                    {% endfor %}
-
+                        {% for meetingData in todayMeetingsData %}
+                            <li>
+                                à {{ meetingData['meetingTime'] }}
+                                : {{ meetingData['costumerName'] }}
+                            </li> 
+                        {% endfor %}
                     </ul>
-
                 {% else %}
-
                     <p>Vous n'avez aucun rendez-vous aujourd'hui.</p>
                     <p>Vous allez enfin pouvoir vous détendre !</p>
-
                 {% endif %}
-
+                
                 <a href='index.php?page=meetings-management' class='btn large-btn admin-link'>Gérer vos rendez-vous</a>
             </div>
-
         {% endif %}
-
     </div>
 {% endblock pageContent %}

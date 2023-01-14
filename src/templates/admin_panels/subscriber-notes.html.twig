@@ -3,54 +3,38 @@
 {% block pageContent %}
     <div class='admin-panel profile-panel'>
         <h3>Notes de suivi de {{ subscriberHeaders['name'] }}</h3>
-                
+
         {% if notes %}
-
             <ul class='notes-list'>
-            
-            {% for note in notes %}
+                {% for note in notes %}
+                    <li>
+                        <button data-id='{{ note['id'] }}' class='edit-note'>
+                            <h4 class='section-header orange-bkgd'>
+                                {% if note['attached_to_meeting'] %}
+                                    rdv du {{ note['date'] | date('d/m/Y') }}
+                                {% else %}
+                                    note personnelle du {{ note['date'] | date('d/m/Y') }}
+                                {% endif %}
+                            </h4>
 
-                <li>
-                    <button data-id='{{ note['id'] }}' class='edit-note'>
-                        <h4 class='section-header orange-bkgd'>
-
-                            {% if note['attached_to_meeting'] %}
-
-                                rdv du {{ note['date'] | date('d/m/Y') }}
-
-                            {% else %}
-
-                                note personnelle du {{ note['date'] | date('d/m/Y') }}
-
-                            {% endif %}
-
-                        </h4>
-
-                        <p class='note-entry'>"{{ note['note_entry'] | nl2br }}"</p>
-
-                        <span class='edit-icon'>
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </span>
-                    </button>
-                </li>
-
-            {% endfor %}
-            
+                            <p class='note-entry'>"{{ note['note_entry'] | nl2br }}"</p>
+                            
+                            <span class='edit-icon'>
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </span>
+                        </button>
+                    </li>
+                {% endfor %}
             </ul>
-
         {% else %}
-
             <p>Vous n'avez pas encore entré de note pour cet abonné</p>
-
         {% endif %}
-
+        
         {% if attendedMeetings %}
-
             <span id='attended-meetings' data-attended-slots='{{ attendedMeetings | json_encode() }}'></span>
-        
         {% endif %}
         
-        <button class='btn rounded-btn circle-btn' id='add-note-btn'>
+        <button class='btn circle-btn blue-bkgd' id='add-note-btn'>
             <i class="fa-solid fa-plus"></i>
         </button>
     </div>

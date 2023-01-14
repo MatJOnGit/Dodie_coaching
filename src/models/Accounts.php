@@ -33,6 +33,15 @@ class Accounts extends Main {
         
         return $selectEmailStatement->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function selectId(string $email) {
+        $db = $this->dbConnect();
+        $selectIdQuery = "SELECT id FROM accounts WHERE email = ?";
+        $selectIdStatement = $db->prepare($selectIdQuery);
+        $selectIdStatement->execute([$email]);
+
+        return $selectIdStatement->fetch(PDO::FETCH_ASSOC);
+    }
     
     public function selectRole(string $email) {
         $db = $this->dbConnect();

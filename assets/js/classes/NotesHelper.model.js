@@ -137,7 +137,7 @@ class NotesHelper extends UserPanels {
 
         cancelEditionBtn.href = 'index.php?page=subscriber-notes&id=' + this.subscriberId;
         cancelEditionBtn.textContent = 'Annuler';
-        cancelEditionBtn.classList.add('btn', 'rounded-btn', 'tiny-btn');
+        cancelEditionBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
 
         deleteNoteBtn.href = 'index.php?action=delete-note&id=' + this.attendedMeetingsData[0]['user_id'] + '&note-id=' + noteData.id;
         deleteNoteBtn.textContent = 'Supprimer';
@@ -145,7 +145,7 @@ class NotesHelper extends UserPanels {
 
         confirmEditionBtn.value = 'Enregistrer';
         confirmEditionBtn.type = 'submit';
-        confirmEditionBtn.classList.add('btn', 'rounded-btn', 'large-btn', 'save-note-btn');
+        confirmEditionBtn.classList.add('btn', 'rounded-btn', 'large-btn', 'blue-bkgd', 'save-note-btn');
 
         editNoteForm.appendChild(editNoteTitle);
         editNoteForm.appendChild(editNoteTextarea);

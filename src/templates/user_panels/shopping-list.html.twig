@@ -3,23 +3,23 @@
 {% block pageContent %}
     <div class='user-panel'>
         <h3>Liste de courses</h3>
-
+        
         {% if shoppingList is iterable %}
-        <ul class='shopping-list'>
-            {% for shoppingListItem in shoppingList %}
-            <li>
-                <input type='checkbox' id={{ shoppingListItem ['french_name'] }} />
-
-                <label>
-                    {{ shoppingListItem['french_name'] }}
-                    (
-                        {{ shoppingListItem['ingredient_quantity'] }}
-                        {% if shoppingListItem['measure_unit'] is not null %}{{ shoppingListItem['measure_unit'] }}{% endif %}
-                    )
-                </label>
-            </li>
-            {% endfor %}
-        </ul>
+            <ul class='shopping-list'>
+                {% for shoppingListItem in shoppingList %}
+                    <li>
+                        <input type='checkbox' id={{ shoppingListItem ['french_name'] }} />
+                        
+                        <label>
+                            {{ shoppingListItem['french_name'] }}
+                            (
+                                {{ shoppingListItem['ingredient_quantity'] }}
+                                {% if shoppingListItem['measure_unit'] is not null %}{{ shoppingListItem['measure_unit'] }}{% endif %}
+                            )
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         {% endif %}
     </div>
 {% endblock pageContent %}

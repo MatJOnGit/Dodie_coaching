@@ -6,6 +6,8 @@ use PDO;
 
 class Nutrition extends Main {
     public function selectMealDetails(string $day, string $meal, string $email) {
+        var_dump($meal);
+                
         $db = $this->dbConnect();
         $selectMealQuery =
             "SELECT
@@ -14,7 +16,7 @@ class Nutrition extends Main {
                 ingr.recipe,
                 ingr.type,
                 fp.quantity,
-                ingr. measure_unit
+                ingr.measure
             FROM food_plans fp
             INNER JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             INNER JOIN accounts acc ON fp.user_id = acc.id
@@ -24,6 +26,8 @@ class Nutrition extends Main {
         $selectMealStatement = $db->prepare($selectMealQuery);
         $selectMealStatement->execute([$day, $meal, $email]);
         
+        // var_dump($selectMealStatement->fetchAll(PDO::FETCH_ASSOC));
+
         return $selectMealStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
@@ -43,15 +47,6 @@ class Nutrition extends Main {
         $selectMealsIngredientsStatement->execute([$email]);
         
         return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
-    public function selectProgramFileName(string $email) {
-        $db = $this->dbConnect();
-        $selectProgramFileNameQuery = "SELECT pf.nutrition_file_name FROM programs_files pf INNER JOIN accounts acc ON acc.id = pf.user_id WHERE acc.email = ?";
-        $selectProgramFileNameStatement = $db->prepare($selectProgramFileNameQuery);
-        $selectProgramFileNameStatement->execute([$email]);
-        
-        return $selectProgramFileNameStatement->fetch();
     }
 
     public function selectMealIngredients($subscriberId, $day, $mealOrder) {

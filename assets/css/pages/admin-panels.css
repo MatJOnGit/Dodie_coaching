@@ -21,8 +21,9 @@ caption {
     color: hsla(0, 0%, 0%, 1);
 }
 
-.btn,
-.dashboard-btn,
+.blue-bkgd,
+.unwrap-btn,
+.admin-link,
 table,
 footer {
     background-color: hsla(185, 51%, 47%, 1);
@@ -353,6 +354,10 @@ h2 {
 /*     SUBSCRIBER PROGRAM      */
 /*******************************/
 
+.program-panel h3 {
+    padding: 0 20%;
+}
+
 .day-header,
 .meal-header {
     margin: 0;
@@ -363,10 +368,10 @@ h2 {
 }
 
 table {
-    width: 100%;
     border-collapse: collapse;
-    text-align: center;
     border-radius: 2vh;
+    text-align: center;
+    width: 100%;
 }
 
 td {
@@ -378,23 +383,20 @@ tr:first-child {
 }
 
 tr:first-child::after {
-    content: '';
-    position: absolute;
-    left: 15%;
-    bottom: 0;
-    height: 1px;
-    width: 70%;
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+    bottom: 0;
+    content: '';
+    height: 1px;
+    left: 15%;
+    position: absolute;
+    width: 70%;
 }
 
 tr:not(:first-child) td:not(:first-child) {
     border-left: 1px solid hsla(0, 0%, 100%, 1);
 }
 
-.day-data-tab {
-    margin-top: 1vh;
-}
-
+.day-data-tab,
 .nutrients-toggle {
     margin-top: 1vh;
 }
@@ -433,8 +435,18 @@ tr:not(:first-child) td:not(:first-child) {
 }
 
 .input-helper-dismiss-btn {
-    color: hsla(9, 71%, 70%, 1);
     border-radius: 50%;
+    color: hsla(9, 71%, 70%, 1);
     height: 30px;
     width: 30px;
+}
+
+#pdf-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.fa-file-export {
+    font-size: 1.5em;
 }

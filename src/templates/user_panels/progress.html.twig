@@ -3,11 +3,11 @@
 {% block pageContent %}
     <div class='user-panel'>
         <h3>Ajouter votre pesée</h3>
-
+        
         <form action='index.php?action=add-report' method='post'>
             <div class='form-fields sided-fields'>
                 <input type='number' step='.01' name='weight' placeholder='Poids' class='user-weight-input' id='user-weight' required />
-
+                
                 <select name='date-type' id='date-selector' required>
                     <option value=''>Date</option>
                     <option value='current-weight'>A l'instant</option>
@@ -16,32 +16,30 @@
             </div>
             <input type='submit' value='Ajouter' class='btn rounded-btn purple-bkgd' id='submit-btn' />
         </form>
-
+        
         <h3>Vos derniers relevés</h3>
-
+        
         {% if (progressHistory is not empty) and (progressHistory is iterable) %}
-        <ul class='progression-logs'>
-            {% for progressHistoryItem in progressHistory %}
-            <li class='progress-item' id='{{ loop.index }}'>
-                <div class="report-full-date">
-                    le {{ progressHistoryItem.date  | date('d/m/y')}}<br>
-                    {{ progressHistoryItem.date  | date('à H')}}h{{ progressHistoryItem.date  | date('i')}}
-                </div>
-
-                <div class="report-weight">
-                    {{ progressHistoryItem.weight }} kg
-                </div>
-
-                <button class='btn circle-btn purple-bkgd'>
-                    <i class="fa-solid fa-ban"></i>
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
-
+            <ul class='progression-logs'>
+                {% for progressHistoryItem in progressHistory %}
+                    <li class='progress-item' id='{{ loop.index }}'>
+                        <div class="report-full-date">
+                            le {{ progressHistoryItem.date  | date('d/m/y')}}<br>
+                            {{ progressHistoryItem.date  | date('à H')}}h{{ progressHistoryItem.date  | date('i')}}
+                        </div>
+                        
+                        <div class="report-weight">
+                            {{ progressHistoryItem.weight }} kg
+                        </div>
+                        
+                        <button class='btn circle-btn purple-bkgd'>
+                            <i class="fa-solid fa-ban"></i>
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
-        <p class='no-progression'>Aucune progression n'a encore été enregistrée</p>
-
+            <p class='no-progression'>Aucune progression n'a encore été enregistrée</p>
         {% endif %}
     </div>
 {% endblock pageContent %}

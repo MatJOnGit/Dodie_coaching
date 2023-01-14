@@ -1,41 +1,32 @@
 {% if appSection == 'showcasePanels' %}
-
     <nav id='static-menu'>
         {% if frenchTitle != '404' %}
-        <ul>
-            <li class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                <a href='{{ showcasePanels['presentation'] }}'>Présentation</a>
-            </li>
-            
-            <li class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                <a href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
-            </li>
+            <ul>
+                <li class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                    <a href='{{ showcasePanels['presentation'] }}'>Présentation</a>
+                </li>
+                
+                <li class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                    <a href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
+                </li>
 
-            <li class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                <a href='{{ showcasePanels['programs-list'] }}'>Formules</a>
-            </li>
-        </ul>
+                <li class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
+                    <a href='{{ showcasePanels['programs-list'] }}'>Formules</a>
+                </li>
+            </ul>
         {% endif %}
     </nav>
-
 {% elseif appSection == 'userPanels' %}
-
     <div id='page-name-cnn'>
         <div id='subtitle-layer' class='cloudy-bkgd'>
-
             {% if (prevPanel is defined) %}
-
                 <a href='index.php?page={{ prevPanel[0] }}' class='prev-page-btn'>
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 <h2>{{ prevPanel[1] }} > {{ frenchTitle | capitalize }}</h2>
-            
             {% else %}
-
                 <h2>{{ frenchTitle | capitalize }}</h2>
-
             {% endif %}
-
         </div>
     </div>
 {% endif %}

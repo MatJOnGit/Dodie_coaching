@@ -1,29 +1,28 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='admin-panel'>
+    <div class='admin-panel program-panel'>
         <h3>Programme de {{ subscriberHeaders['name'] }}</h3>
-
+        
         {% if programMeals | length %}
             <ul class='day-list'>
-                {% for dayKey, dailyMeals in program %}
+                {% for dayKey, dailyMeals in programData %}
                     <li>
                         <h4 class='day-header orange-bkgd'>
-
                             {% for weekDay in weekDaysTranslations %}
                                 {% if weekDay['english'] == dayKey %}
                                     {{ weekDay['french'] }} - {{ programMeals | length }} repas
+                                    
                                 {% endif %}
                             {% endfor %}
                         </h4>
-
+                        
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in programMeals %}
                                 <li class='meal-item'>
                                     <a href='index.php?page=edit-program-menu&day={{ dayKey }}&mealId={{mealKey}}'>
                                         <table class='btn meal-data-tab'>
                                             <caption class='meal-header meal-item-title'>
-
                                                 {% for mealTranslation in mealsTranslations %}
                                                     {% if meals == mealTranslation['english'] %}
                                                         {{ mealTranslation['french'] }}
@@ -38,7 +37,6 @@
                             <button class='btn rounded-btn nutrients-toggle wrap-btn large-btn'>
                                 <i class="fa-solid fa-angle-up"></i>
                             </button>
-
                         </ul>
                         
                         <div class='day-nutrients'>
@@ -53,21 +51,28 @@
         {% else %}
             <form action='index.php?action=generate-meals&id={{ subscriberHeaders['user_id'] }}' method='post' class='meals-form' data-meals='{{ mealsTranslations | json_encode() }}'>
                 <p>Sélectionnez les repas à intégrer chaque jour :</p>
-
+                
                 <div id='meal-inputs-block'>
-
                     {% for mealKey, meal in mealsTranslations %}
                         <div class='meal-entry'>
                             <input type="checkbox" name="meal-{{ mealKey }}" id="meal-{{ mealKey }}">
                             <label for="meal-{{ mealKey }}">{{ meal['french'] }}</label>
                         </div>
-
                     {% endfor %}
                 </div>
-                    
-                <button type='submit' id='meals-submit-btn' class='btn rounded-btn tiny-btn'>Suivant</button>
                 
+                <button type='submit' id='meals-submit-btn' class='btn rounded-btn tiny-btn'>Suivant</button>
             </form>
+        {% endif %}
+        
+        {% if programFileStatus == 'updated' %}
+            <a href='index.php?action=generate-program-file&id={{ subscriberHeaders['user_id'] }}' class='btn circle-btn blue-bkgd' id='pdf-btn'>
+                <i class='fa-solid fa-file-export'></i>
+            </a>
+        {% else %}
+            <button class='btn circle-btn greyed-out-bkgd' id='pdf-btn'>
+                <i class='fa-solid fa-file-export'></i>
+            </button>
         {% endif %}
     </div>
 {% endblock pageContent %}

@@ -4,40 +4,60 @@
     <div class='user-panel meals-list-panel'>
         <h3>Votre programme de la semaine</h3>
 
-        {% if (nextDays is not empty) and (nextDays is iterable) %}
-        <ul class='nutrition-days-list'>
-            {% for dayKey, day in nextDays %}
-            <li>
-                <h4>{{ day['frenchFullDate'] }}</h4>
-                <ul class='meals-list'>
-                    {% for mealKey in meals | keys %}
-                    <li class='{{ meals[mealKey]['english'] }}-list-item'>
-                        <a href='index.php?page=nutrition&meal={{ day['englishWeekDay'] }}-{{ meals[mealKey]['english'] }}' class='light-shaded-bkgd'>
-                            <h5>{{ meals[mealKey]['french'] }}</h5>
-                        </a>
-                        <div></div>
-                    </li>
+        {% if meals != NULL %}
+            {% if (nextDays is not empty) and (nextDays is iterable) %}
+                <ul class='nutrition-days-list'>
+                    {% for dayKey, day in nextDays %}
+                        <li>
+                            <h4>{{ day['frenchFullDate'] }}</h4>
+
+                            <ul class='meals-list'>
+                                {% for mealKey in meals | keys %}
+                                    {% set englishMeal = meals[mealKey] %}
+                                    {% set shortEnglishMeal = meals[mealKey] | replace({' #': '_'}) %}
+                                    
+                                    <li class='{{ shortEnglishMeal }}-list-item'>
+                                        {% set frenchMeal = englishMeal %}
+                                        {% for mealTranslation in mealsTranslations %}
+                                            {% if mealTranslation['english'] == englishMeal %}
+                                                {% set frenchMeal = mealTranslation['french'] %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                        <a href='index.php?page=nutrition&meal={{ day['englishWeekDay'] }}-{{ shortEnglishMeal }}' class='light-shaded-bkgd'>
+                                            <h5>{{ frenchMeal }}</h5>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
                     {% endfor %}
                 </ul>
-            </li>
-            {% endfor %}
-        </ul>
-
-        <div class='nutrition-requests'>
-            <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded-btn purple-bkgd'>
-                Voir la liste de courses
-            </a>
-
-            {% if programFilePath is not empty %}
-            <a href='{{ programFilePath }}' class='btn rounded-btn purple-bkgd'  download="mon_plan_nutrition">
-                <i class="fa-solid fa-download"></i>
-            </a>
-            {% else %}
-            <a role='link' class='btn rounded-btn greyed-out-bkgd' aria-disabled='true'>
-                <i class="fa-solid fa-download"></i>
-            </a>
+                
+                <div class='nutrition-requests'>
+                    <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded-btn purple-bkgd'>
+                        Voir la liste de courses
+                    </a>
+                    
+                    {% if programFilePath is not empty %}
+                        <a href='{{ programFilePath }}' class='btn rounded-btn purple-bkgd'  download="mon_plan_nutrition">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    {% else %}
+                        <a role='link' class='btn rounded-btn greyed-out-bkgd' aria-disabled='true'>
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    {% endif %}
+                </div>
             {% endif %}
-        </div>
+        {% else %}
+            <div class='no-program-block'>
+                <p>Votre programme est en cours de création par votre coach.</p>
+
+                <p>Vous serez notifié(e) par email dès que celui-ci sera finalisé.</p>
+            </div>
+            
+            <a href='index.php?page=dashboard' class='btn rounded-btn tiny-btn purple-bkgd'>Retour au menu</a>
         {% endif %}
     </div>
 {% endblock pageContent %}

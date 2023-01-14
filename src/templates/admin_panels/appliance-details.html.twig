@@ -3,7 +3,7 @@
 {% block pageContent %}
     <div class='admin-panel'>
         <h3>Détails du profil de {{ applianceDetails['name'] }}</h3>
-
+        
         <ul class='appliance-details'>
             <li>Objectif(s) : {{ applianceDetails['objectives'] }}</li>
             <li>Emploi : {{ applianceDetails['job_style'] }}</li>
@@ -14,12 +14,12 @@
             <li>Intolérance(s) : {{ applianceDetails['food_intolerances'] }}</li>
             <li>Activité sportive : {{ applianceDetails['sport_habits'] }}</li>
         </ul>
-
+        
         <div id='appliance-decision-box'>
             <a href='index.php?action=approve-appliance&id={{ applianceDetails['user_id'] }}' class='btn rounded-btn tiny-btn'>Accepter</a>
+            
             <button class='btn rounded-btn tiny-btn red-bkgd' id='decline-btn' data-id='{{ applianceDetails['user_id'] }}'>Refuser</button>
         </div>
-        
     </div>
 {% endblock pageContent %}
 

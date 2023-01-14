@@ -6,24 +6,21 @@
             <h2>Réinitialisation de mot de passe</h2>
 
             {% if (remainingAttempts is defined) and (remainingAttempts > 0) %}
-
                 <input type='text' name='token' placeholder='Code de réinitialisation' id='user-token' required />
 
                 <p>Tentative(s) restante(s) : {{ remainingAttempts }}.</p>
-
+                
                 <div class='form-links'>
                     <input type='submit' value='Valider' class='btn large-btn purple-bkgd' />
                 </div>
-
             {% elseif (remainingAttempts is defined) and (remainingAttempts == 0) %}
-
                 <p>Votre jeton de réinitialisation de mot de passe a expiré.</p>
+
                 <p>Une nouvelle demande pourra être faite dans quelques minutes.</p>
 
                 <div class='form-links'>
                     <a href='index.php?page=presentation' class='btn large-btn purple-bkgd'>Revenir à l'accueil<a/>
                 </div>
-
             {% endif %}
         </form>
     </div>

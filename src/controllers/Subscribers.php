@@ -4,6 +4,7 @@ namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Subscribers as SubscriberModel;
 use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
+use Dodie_Coaching\Models\Nutrition as NutritionModel;
 
 class Subscribers extends AdminPanels {
     public function getMessageType() {
@@ -21,6 +22,28 @@ class Subscribers extends AdminPanels {
         $subscriber = new SubscriberModel;
 
         return $subscriber->selectSubscriberData($subscriberId);
+    }
+
+    public function isProgramFileUpdatable($subscriberId) {
+        $programFileStatus = $this->getProgramFileStatus($subscriberId);
+        $updatableFileStatus = ['unhosted', 'depleted'];
+        $isProgramFileUpdatable = in_array($programFileStatus, $updatableFileStatus);
+
+        $weekDays = $this->_getWeekDays();
+        $meals = $this->_getProgramMeals($subscriberId);
+        $isProgramCompleted = true;
+
+        foreach($weekDays as $weekDay) {
+            $englishWeekDay = $weekDay['english'];
+
+            foreach($meals as $meal) {
+                if (!$this->_isMealCompleted($subscriberId, $englishWeekDay, $meal)) {
+                    $isProgramCompleted = false;
+                }
+            }
+        }
+
+        return ($isProgramFileUpdatable && $isProgramCompleted);
     }
     
     public function isSubscriberIdValid(int $subscriberId) {
@@ -61,6 +84,15 @@ class Subscribers extends AdminPanels {
 
         return $subscriber->selectSubscriberDetails($subscriberId);
     }
+
+    // Build an array out of a subscriber's program meals list. Return NULL if no meal is found. 
+    protected function _getProgramMeals($subscriberId) {
+        $subscribers = new SubscriberModel;
+        
+        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
+        
+        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
+    }
     
     protected function _getSubscriberHeaders(int $subscriberId) {
         $subscriber = new SubscriberModel;
@@ -74,5 +106,17 @@ class Subscribers extends AdminPanels {
         return $subscriber->selectSubscribersHeaders();
     }
 
-    
+    private function _isMealCompleted($subscriberId, $weekDay, $meal) {
+        $nutrition = new NutritionModel;
+
+        $isMealCompleted = true;
+
+        $ingredientsCountPerMeal = $nutrition->selectIngredientsCount($subscriberId, $weekDay, $meal);
+        
+        if ($ingredientsCountPerMeal[0]['ingredientsCount'] === '0') {
+            $isMealCompleted = false;
+        }
+
+        return $isMealCompleted;
+    }
 }

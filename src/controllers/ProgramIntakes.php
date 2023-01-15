@@ -3,8 +3,6 @@
 namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
-use Dodie_Coaching\Models\Subscribers as SubscribersModel;
-use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
 use DatePeriod, DateTime, DateInterval;
 
 class ProgramIntakes extends Subscribers {
@@ -34,7 +32,7 @@ class ProgramIntakes extends Subscribers {
         $checkedMeals = [];
 
         foreach($validMeals as $mealKey => $knownMeal) {
-            if (isset($_POST['meal-' . $mealKey])) {
+            if (isset($_POST[`meal-` . $mealKey])) {
                 array_push($checkedMeals, $knownMeal['english']);
             }
         }
@@ -45,13 +43,13 @@ class ProgramIntakes extends Subscribers {
     public function renderSubscriberProgramPage(object $twig, int $subscriberId) {
         echo $twig->render('admin_panels/subscriber-program.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
-            'frenchTitle' => "Programme",
+            'frenchTitle' => 'Programme',
             'appSection' => 'userPanels',
             'prevPanel' => ['subscriber-profile&id=' . $subscriberId, 'Profil abonnés'],
             'subscriberHeaders' => $this->_getSubscriberHeaders($subscriberId),
             'programData' => $this->_getProgramData($subscriberId),
             'programMeals' => $this->_getProgramMeals($subscriberId),
-            'programFileStatus' => $this->getProgramFileStatus($subscriberId),
+            'isProgramFileUpdatable' => $this->isProgramFileUpdatable($subscriberId),
             'weekDaysTranslations' => $this->_buildWeekDaysTranslations(),
             'mealsTranslations' => $this->_getMealsTranslations(),
             'pageScripts' => $this->_getProgramScripts()
@@ -65,15 +63,15 @@ class ProgramIntakes extends Subscribers {
         $programIngredients = [];
 
         foreach($weekDays as $weekDay) {
-            $programIngredients += [$weekDay["englishWeekDay"] => []];
+            $programIngredients += [$weekDay['englishWeekDay'] => []];
 
             foreach($meals as $meal) {
-                $programIngredients[$weekDay["englishWeekDay"]] += [$meal["meal_index"] => []];
+                $programIngredients[$weekDay['englishWeekDay']] += [$meal['meal_index'] => []];
 
-                $mealIngredients = $nutrition->selectMealIngredients($subscriberId, $weekDay["englishWeekDay"], $meal["meal_index"]);
+                $mealIngredients = $nutrition->selectMealIngredients($subscriberId, $weekDay['englishWeekDay'], $meal['meal_index']);
 
                 foreach($mealIngredients as $ingredientKey => $ingredient) {
-                    $programIngredients[$weekDay["englishWeekDay"]][$meal["meal_index"]] += [$ingredientKey => $ingredient];
+                    $programIngredients[$weekDay['englishWeekDay']][$meal['meal_index']] += [$ingredientKey => $ingredient];
                 }
             }
         }
@@ -110,15 +108,6 @@ class ProgramIntakes extends Subscribers {
         $mealsIndexes = $this->_getMealsIndexes($subscriberId);
         
         return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
-    }
-
-    // Build an array out of a subscriber's program meals list. Return NULL if no meal is found. 
-    private function _getProgramMeals($subscriberId) {
-        $subscribers = new SubscribersModel;
-
-        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
-
-        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
     }
     
     private function _getProgramScripts(): array {

@@ -5,9 +5,7 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Nutrition extends Main {
-    public function selectMealDetails(string $day, string $meal, string $email) {
-        var_dump($meal);
-                
+    public function selectMealDetails(string $day, string $meal, string $email) {                
         $db = $this->dbConnect();
         $selectMealQuery =
             "SELECT
@@ -106,5 +104,20 @@ class Nutrition extends Main {
             'subscriberId' => $subscriberId,
             'meals' => $meals
         ]);
+    }
+
+    public function selectIngredientsCount(int $subscriberId, string $weekDay, string $meal) {
+        $db = $this->dbConnect();
+
+        $selectIngredientsCountQuery = "SELECT COUNT(*) AS ingredientsCount FROM food_plans WHERE user_id = :subscriberId AND day = :weekDay AND meal = :meal";
+        $selectIngredientsCountStatement = $db->prepare($selectIngredientsCountQuery);
+
+        $selectIngredientsCountStatement->execute([
+            'subscriberId' => $subscriberId,
+            'weekDay' => $weekDay,
+            'meal' => $meal
+        ]);
+
+        return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -975,26 +975,19 @@ try {
                         $subscriberId = intval($programFile->getParam('id'));
                         
                         if ($programFile->isSubscriberIdValid($subscriberId)) {
-                            // At this point, costumer is supposed to have a dedicated line in program_file table, created when subscribing
                             $programFileStatus = $programFile->getProgramFileStatus($subscriberId);
                             
                             if ($programFile->isProgramFileUpdatable($subscriberId)) {
-                                $pdfFileBuilder = new Dodie_Coaching\Services\PdfFileBuilder;
+                                $programData = $programFile->getProgramData($subscriberId);
 
-                                if ($pdfFileBuilder) {
-                                    $programData = $programFile->getProgramData($subscriberId);
+                                if ($programData) {
+                                    $programFile->buildFile($twig, $subscriberId, $programData);
 
-                                    if ($programData) {
-                                        $programFile->buildFile($twig, $subscriberId, $programData);
-                                    }
-    
-                                    else {
-                                        throw new Data_Exception('NO PROGRAM DATA FOUND FOR THIS USER');
-                                    }
+                                    header("location:index.php?page=subscriber-program&id=" . $subscriberId);
                                 }
-                                
+
                                 else {
-                                    throw new PdfGenerator_Exception('COULD NOT INSTANCIATE PDF BUILDER SERVICE');
+                                    throw new Data_Exception('NO PROGRAM DATA FOUND FOR THIS USER');
                                 }
                             }
                             

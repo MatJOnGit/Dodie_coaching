@@ -1,0 +1,66 @@
+/*********************************/
+/*             THEME             */
+/*********************************/
+
+table {
+    border: 1px solid #000000;
+}
+
+tr {
+    border-bottom: 1px solid #000000;
+}
+
+th, td {
+    border: 1px solid #808080;
+}
+
+.table-headers,
+.week-days {
+    background-color: #0A7D8F;
+    border-bottom: 1px solid #FFFFFF;
+    color: #FFFFFF;
+}
+
+/******************************/
+/*           FONTS            */
+/******************************/
+
+h1 {
+    font-size: 1.4em;
+}
+
+li {
+    font-size: 0.5em;
+}
+
+/********************************/
+/*           GLOBALS            */
+/********************************/
+
+header {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.logo {
+    height: 70px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 70px;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    height: 530px;
+    margin: 70px 10% 30px 10%;
+    text-align: center;
+    width: 80%;
+}

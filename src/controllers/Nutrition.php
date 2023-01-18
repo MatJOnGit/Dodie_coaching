@@ -8,7 +8,7 @@ use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
 use Dodie_Coaching\Models\Subscribers as SubscribersModels;
 use DatePeriod, DateTime, DateInterval;
 
-class Nutrition extends UserPanels {    
+class Nutrition extends UserPanels {
     private $_programsFolderRoute = './../var/nutrition_programs/';
     
     public function areMealParamsValid(array $mealData): bool {
@@ -80,14 +80,14 @@ class Nutrition extends UserPanels {
         ]);
     }
     
-    public function renderNutritionMenu(object $twig) {
+    public function renderNutritionMenu(object $twig, $subscriberId) {
         echo $twig->render('user_panels/nutrition.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'Nutrition',
             'appSection' => 'userPanels',
             'prevPanel' => ['dashboard', 'Tableau de bord'],
             'nextDays' => $this->_getNextDates(),
-            'meals' => $this->_getProgramMeals(),
+            'meals' => $this->_getProgramMeals($subscriberId),
             'mealsTranslations' => $this->_getMealsTranslations(),
             'programFilePath' => $this->_getProgramsFilePath()
         ]);
@@ -163,17 +163,7 @@ class Nutrition extends UserPanels {
         return $mealData;
     }
 
-    public function _getProgramMeals() {
-        $subscribers = new SubscribersModels;
-
-        $subscriberId = $this->_getUserId()['id'];
-
-        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
-
-        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
-    }
-
-    private function _getUserId() {
+    public function getUserId() {
         $account = new AccountsModel;
 
         return $account->selectId($_SESSION['email']);

@@ -2,6 +2,8 @@
 
 namespace Dodie_Coaching\Controllers;
 
+use Dodie_Coaching\Models\Subscribers as SubscribersModel;
+
 class Main {
     private $_mealsTranslations = [
         ['english' => 'breakfast', 'french' => 'petit-déjeuner'],
@@ -87,6 +89,15 @@ class Main {
 
     protected function _getMealsTranslations() {
         return $this->_mealsTranslations;
+    }
+
+    // Build an array out of a subscriber's program meals list. Return NULL if no meal is found. 
+    protected function _getProgramMeals($subscriberId) {
+        $subscribers = new SubscribersModel;
+        
+        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
+        
+        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
     }
 
     private function _getRoutingURL(string $panel): string {

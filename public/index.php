@@ -13,13 +13,14 @@ class DB_Exception extends Exception { }
 class URL_Exception extends Exception { }
 class Data_Exception extends Exception { }
 class Mailer_Exception extends Exception { }
+class PdfGenerator_Exception extends Exception { }
 
 try {
     require_once ('./../vendor/autoload.php');
     
     $loader = new \Twig\Loader\FilesystemLoader('./../src/templates/');
     
-    $twig = new \Twig\Environment($loader, [
+    $twig = new Twig\Environment($loader, [
         'cache' => false,
         'debug' => true
     ]);
@@ -155,7 +156,8 @@ try {
                         $nutrition = new Dodie_Coaching\Controllers\Nutrition;
                         
                         if ($nutrition->isMenuRequested()) {
-                            $nutrition->renderNutritionMenu($twig);
+                            $subscriberId = $nutrition->getUserId()['id'];
+                            $nutrition->renderNutritionMenu($twig, $subscriberId);
                         }
                         
                         elseif ($nutrition->isMealRequested()) {
@@ -280,17 +282,17 @@ try {
                     }
                     
                     elseif ($adminPanels->isRequestMatching($page, 'subscriber-program')) {
-                        $programIntakes = new Dodie_Coaching\Controllers\programIntakes;
+                        $program = new Dodie_Coaching\Controllers\program;
                         
                         if ($adminPanels->areParamsSet(['id'])) {
-                            $subscriberId = intval($programIntakes->getParam('id'));
+                            $subscriberId = intval($program->getParam('id'));
                             
-                            if ($programIntakes->isSubscriberIdValid($subscriberId)) {
-                                $programIntakes->renderSubscriberProgramPage($twig, $subscriberId);
+                            if ($program->isSubscriberIdValid($subscriberId)) {
+                                $program->renderSubscriberProgramPage($twig, $subscriberId);
                             }
                             
                             else {
-                                $programIntakes->routeTo('subscribersList');
+                                $program->routeTo('subscribersList');
                             }
                         }
                         
@@ -925,18 +927,18 @@ try {
         }
         
         elseif (in_array($action, $Urls['actions']['program-intakes'])) {
-            $programIntakes = new Dodie_Coaching\Controllers\programIntakes;
+            $program = new Dodie_Coaching\Controllers\program;
             
             if ($user->isLogged()) {
-                if ($programIntakes->isRequestMatching($action, 'generate-meals')) {
-                    if ($programIntakes->areParamsSet(['id'])) {
-                        $subscriberId = intval($programIntakes->getParam('id'));
+                if ($program->isRequestMatching($action, 'generate-meals')) {
+                    if ($program->areParamsSet(['id'])) {
+                        $subscriberId = intval($program->getParam('id'));
                         
-                        if ($programIntakes->isSubscriberIdValid($subscriberId)) {
-                            $mealsList = $programIntakes->getCheckedMeals();
+                        if ($program->isSubscriberIdValid($subscriberId)) {
+                            $mealsList = $program->getCheckedMeals();
                             
                             if ($mealsList) {
-                                if (!$programIntakes->addProgramMeals($subscriberId, $mealsList)) {
+                                if (!$program->addProgramMeals($subscriberId, $mealsList)) {
                                     throw new DB_Exception('échec de la mise à jour des repas du programme');
                                 }
                                 
@@ -976,18 +978,28 @@ try {
                             // At this point, costumer is supposed to have a dedicated line in program_file table, created when subscribing
                             $programFileStatus = $programFile->getProgramFileStatus($subscriberId);
                             
-                            if ($programFileStatus) {
-                                if ($programFile->isFileUpdatePending($programFileStatus)) {
-                                    echo 'Nous avons une mise à jour à faire !';
+                            if ($programFile->isProgramFileUpdatable($subscriberId)) {
+                                $pdfFileBuilder = new Dodie_Coaching\Services\PdfFileBuilder;
+
+                                if ($pdfFileBuilder) {
+                                    $programData = $programFile->getProgramData($subscriberId);
+
+                                    if ($programData) {
+                                        $programFile->buildFile($twig, $subscriberId, $programData);
+                                    }
+    
+                                    else {
+                                        throw new Data_Exception('NO PROGRAM DATA FOUND FOR THIS USER');
+                                    }
                                 }
                                 
                                 else {
-                                    throw new Data_Exception('PROGRAM FILE IS ALREADY UP-TO-DATE');
+                                    throw new PdfGenerator_Exception('COULD NOT INSTANCIATE PDF BUILDER SERVICE');
                                 }
                             }
                             
                             else {
-                                throw new Data_Exception('NO PROGRAM FILE LINE FOUND FOR THIS USER IN PROGRAM_FILES TABLE');
+                                throw new Data_Exception('PROGRAM FILE IS NOT UPDATABLE');
                             }
                         }
                         
@@ -1019,6 +1031,10 @@ try {
 
 catch(Mailer_Exception $e) {
     echo "New MAILER exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
+}
+
+catch(PdfGenerator_Exception $e) {
+    echo "New PDF GENERATOR exception caught: '" . $e->getMessage() . "' in index file \non line " . $e->getLine();
 }
 
 catch(DB_Exception $e) {

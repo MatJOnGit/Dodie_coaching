@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ frenchTitle | capitalize }}</title>
+
+    <!-- SEO -->
+    <meta name="description" content="Dodie coaching app">
+    <meta name="keyworks" content="nutrition, coach, dodie, food, eat, better, help, support">
+    <meta name="author" content="Mathieu Jourdan">
+    
+    <!-- global CSS -->
+
+    <link rel='stylesheet' href='http://localhost:8080/Dodie_coaching/assets/css/globals/normalize.css' type='text/css'>
+    <link rel='stylesheet' href='http://localhost:8080/Dodie_coaching/assets/css/globals/main.css' type='text/css'>
+
+    <!-- custom CSS -->
+    <link rel='stylesheet' href='http://localhost:8080/Dodie_coaching/assets/css/pages/pdf-file.css' type='text/css'>
+</head>
+
+<body>
+    <header>
+        <img src='./../public/img/temporary-favicon.png' class='logo' alt='desperate-man' />
+        <h1>Programme nutritionnel de {{ subscriberHeaders['name'] }}</h1>
+    </header>
+
+    <table>
+        <tr>
+            <th class='table-headers'>Jour</th>
+            
+            {% for programMeal in programMeals %}
+                {% for mealTranslation in mealsTranslations %}
+                    {% if mealTranslation['english'] == programMeal %}
+                        <th class='table-headers'>{{ mealTranslation['french'] | capitalize }}</th>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+
+        {% for dayKey, dayItem in programData %}
+            <tr>
+                {% for weekDayTranslation in weekDaysTranslations %}
+                    {% if weekDayTranslation['english'] == dayKey %}
+                        <td class='week-days'>{{ weekDayTranslation['french'] }}</td>
+                    {% endif %}
+                {% endfor %}
+                
+                
+                {% for mealKey, mealItem in dayItem %}
+                    <td>
+                        <ul>
+                            {% for ingredientKey, ingredientItem in mealItem %}
+                                <li>
+                                    {{ ingredientItem['quantity'] }}
+                                
+                                    {% if ingredientItem['measure'] is not empty %}
+                                        {{ ingredientItem['measure'] }} de
+                                    {% endif %}
+                                    
+                                    {{ ingredientItem['french_name'] }}
+                                    
+                                    {% if ingredientItem['recipe'] is not null %}
+                                        {{ ingredientItem['recipe'] }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                {% endfor %}
+        {% endfor %}
+    </table>
+</body>

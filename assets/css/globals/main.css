@@ -210,3 +210,7 @@ input::placeholder,
 select {
     border: none;
 }
+
+th {
+    color: blue;
+}

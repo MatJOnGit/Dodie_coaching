@@ -1,0 +1,67 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright Copyright (c) Font Awesome
+FontName Font Awesome v4 Compatibility Regular
+FontSubfamily Regular
+UniqueID Font Awesome v4 Compatibility Regular-6.1.1
+FullName Font Awesome v4 Compatibility Regular
+Version Version 769.01171875 (Font Awesome version: 6.1.1)
+PostScriptName FontAwesomev4Compatibility-Regular
+Description The web's most popular icon set and toolkit.
+FontVendorURL https://fontawesome.com
+PreferredFamily Font Awesome v4 Compatibility
+PreferredSubfamily Regular
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 49
+UnderlinePosition -72
+FontHeightOffset 0
+Ascender 875
+Descender -125
+FontBBox 0 -125 1250 875
+StartCharMetrics 41
+U 61505 ; WX 750 ; N location-dot ; G 1
+U 61511 ; WX 1000 ; N up-down-left-right ; G 2
+U 61541 ; WX 1000 ; N up-right-and-down-left-from-center ; G 3
+U 61542 ; WX 1000 ; N down-left-and-up-right-to-center ; G 4
+U 61565 ; WX 500 ; N up-down ; G 5
+U 61566 ; WX 1000 ; N left-right ; G 6
+U 61568 ; WX 1000 ; N chart-column ; G 7
+U 61579 ; WX 1000 ; N right-from-bracket ; G 8
+U 61582 ; WX 1000 ; N up-right-from-square ; G 9
+U 61584 ; WX 1000 ; N right-to-bracket ; G 10
+U 61594 ; WX 625 ; N facebook-f ; G 11
+U 61612 ; WX 1000 ; N earth-americas ; G 12
+U 61614 ; WX 1000 ; N bars-progress ; G 13
+U 61618 ; WX 875 ; N maximize ; G 14
+U 61648 ; WX 1125 ; N wand-magic-sparkles ; G 15
+U 61654 ; WX 1125 ; N money-bill-1 ; G 16
+U 61668 ; WX 1000 ; N gauge-high ; G 17
+U 61676 ; WX 1000 ; N right-left ; G 18
+U 61706 ; WX 875 ; N tablet-screen-button ; G 19
+U 61707 ; WX 750 ; N mobile-screen-button ; G 20
+U 61731 ; WX 1125 ; N star-half-stroke ; G 21
+U 61758 ; WX 875 ; N unlock ; G 22
+U 61768 ; WX 750 ; N turn-up ; G 23
+U 61769 ; WX 750 ; N turn-down ; G 24
+U 61772 ; WX 875 ; N square-up-right ; G 25
+U 61782 ; WX 625 ; N indian-rupee-sign ; G 26
+U 61790 ; WX 1000 ; N arrow-down-z-a ; G 27
+U 61792 ; WX 1125 ; N arrow-down-short-wide ; G 28
+U 61793 ; WX 1125 ; N arrow-down-wide-short ; G 29
+U 61795 ; WX 1000 ; N arrow-down-9-1 ; G 30
+U 61813 ; WX 625 ; N down-long ; G 31
+U 61814 ; WX 625 ; N up-long ; G 32
+U 61815 ; WX 1000 ; N left-long ; G 33
+U 61816 ; WX 1000 ; N right-long ; G 34
+U 61845 ; WX 750 ; N turkish-lira-sign ; G 35
+U 61944 ; WX 875 ; N trash-can ; G 36
+U 61977 ; WX 1000 ; N gem ; G 37
+U 62032 ; WX 750 ; N hourglass-empty ; G 38
+U 62034 ; WX 750 ; N hourglass ; G 39
+U 62074 ; WX 1000 ; N comment-dots ; G 40
+EndCharMetrics
+EndFontMetrics

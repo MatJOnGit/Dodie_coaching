@@ -84,15 +84,6 @@ class Subscribers extends AdminPanels {
 
         return $subscriber->selectSubscriberDetails($subscriberId);
     }
-
-    // Build an array out of a subscriber's program meals list. Return NULL if no meal is found. 
-    protected function _getProgramMeals($subscriberId) {
-        $subscribers = new SubscriberModel;
-        
-        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
-        
-        return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
-    }
     
     protected function _getSubscriberHeaders(int $subscriberId) {
         $subscriber = new SubscriberModel;

@@ -5,7 +5,7 @@ namespace Dodie_Coaching\Controllers;
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
 use DatePeriod, DateTime, DateInterval;
 
-class ProgramIntakes extends Subscribers {
+class Program extends Subscribers {
     private $_programScripts = [
         'classes/UserPanels.model',
         'classes/ProgramDisplayer.model',
@@ -39,6 +39,13 @@ class ProgramIntakes extends Subscribers {
 
         return $checkedMeals;
     }
+
+    public function getProgramData($subscriberId) {
+        $weekDays = $this->_getRegularWeekDays();
+        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
+        
+        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
+    }
     
     public function renderSubscriberProgramPage(object $twig, int $subscriberId) {
         echo $twig->render('admin_panels/subscriber-program.html.twig', [
@@ -47,13 +54,27 @@ class ProgramIntakes extends Subscribers {
             'appSection' => 'userPanels',
             'prevPanel' => ['subscriber-profile&id=' . $subscriberId, 'Profil abonnés'],
             'subscriberHeaders' => $this->_getSubscriberHeaders($subscriberId),
-            'programData' => $this->_getProgramData($subscriberId),
+            'programData' => $this->getProgramData($subscriberId),
             'programMeals' => $this->_getProgramMeals($subscriberId),
             'isProgramFileUpdatable' => $this->isProgramFileUpdatable($subscriberId),
             'weekDaysTranslations' => $this->_buildWeekDaysTranslations(),
             'mealsTranslations' => $this->_getMealsTranslations(),
             'pageScripts' => $this->_getProgramScripts()
         ]);
+    }
+
+    // Build an associative array containing the translation of meal in english and french
+    protected function _buildWeekDaysTranslations() {
+        $weekDays = $this->_getWeekDays();
+
+        $orderedEnglishWeekDaysList = [];
+        $orderedWeekIndex = [1, 2, 3, 4, 5, 6, 0];
+        foreach($orderedWeekIndex as $key => $dayIndex) {
+
+            $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
+        }
+
+        return $orderedEnglishWeekDaysList;
     }
 
     // Build an associative array containing ingredients for each meal and for each day of the week
@@ -79,20 +100,6 @@ class ProgramIntakes extends Subscribers {
         return $programIngredients;
     }
 
-    // Build an associative array containing the translation of meal in english and french
-    private function _buildWeekDaysTranslations() {
-        $weekDays = $this->_getWeekDays();
-
-        $orderedEnglishWeekDaysList = [];
-        $orderedWeekIndex = [1, 2, 3, 4, 5, 6, 0];
-        foreach($orderedWeekIndex as $key => $dayIndex) {
-
-            $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
-        }
-
-        return $orderedEnglishWeekDaysList;
-    }
-
     private function _getFrenchWeekDay(string $date): string {
         return $this->_getWeekDays()[explode(' ', $date)[0]]['french'];
     }
@@ -101,13 +108,6 @@ class ProgramIntakes extends Subscribers {
         $nutrition = new NutritionModel;
 
         return $nutrition->selectSubscriberMealsIndexes($subscriberId);
-    }
-
-    private function _getProgramData($subscriberId) {
-        $weekDays = $this->_getRegularWeekDays();
-        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
-        
-        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
     }
     
     private function _getProgramScripts(): array {

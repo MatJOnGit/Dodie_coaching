@@ -5,7 +5,6 @@ namespace Dodie_Coaching\Controllers;
 use Dodie_Coaching\Models\Accounts as AccountsModel;
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
 use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
-use Dodie_Coaching\Models\Subscribers as SubscribersModels;
 use DatePeriod, DateTime, DateInterval;
 
 class Nutrition extends UserPanels {
@@ -132,9 +131,9 @@ class Nutrition extends UserPanels {
     
     private function _getProgramsFilePath() {
         $programFile = new ProgramFilesModel;
-        $programsFilePath = $programFile->selectFileName($_SESSION['email']);
-
-        return $programsFilePath ? $this->_getProgramsFolderRoute() . $programsFilePath[0] . '.txt' : null;
+        $fileName = $programFile->selectFileName($_SESSION['email']);
+        
+        return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.pdf' : null;
     }
     
     private function _getProgramsFolderRoute(): string {

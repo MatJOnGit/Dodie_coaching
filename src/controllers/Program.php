@@ -53,7 +53,7 @@ class Program extends Subscribers {
             'frenchTitle' => 'Programme',
             'appSection' => 'userPanels',
             'prevPanel' => ['subscriber-profile&id=' . $subscriberId, 'Profil abonnés'],
-            'subscriberHeaders' => $this->_getSubscriberHeaders($subscriberId),
+            'subscriberHeaders' => $this->getSubscriberHeaders($subscriberId),
             'programData' => $this->getProgramData($subscriberId),
             'programMeals' => $this->_getProgramMeals($subscriberId),
             'isProgramFileUpdatable' => $this->isProgramFileUpdatable($subscriberId),

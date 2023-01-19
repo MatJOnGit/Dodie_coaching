@@ -76,7 +76,7 @@ class Notes extends Subscribers {
             'frenchTitle' => "Notes de suivi",
             'appSection' => 'userPanels',
             'prevPanel' => ['subscriber-profile&id=' . $subscriberId, 'Profil abonnés'],
-            'subscriberHeaders' => $this->_getSubscriberHeaders($subscriberId),
+            'subscriberHeaders' => $this->getSubscriberHeaders($subscriberId),
             'attendedMeetings' => $this->getAttendedMeetings($subscriberId),
             'notes' => $this->_getSubscriberNotes($subscriberId),
             'pageScripts' => $this->_getNotesScripts()

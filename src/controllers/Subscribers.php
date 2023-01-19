@@ -23,6 +23,12 @@ class Subscribers extends AdminPanels {
 
         return $subscriber->selectSubscriberData($subscriberId);
     }
+    
+    public function getSubscriberHeaders(int $subscriberId) {
+        $subscriber = new SubscriberModel;
+
+        return $subscriber->selectSubscriberHeader($subscriberId);
+    }
 
     public function isProgramFileUpdatable($subscriberId) {
         $programFileStatus = $this->getProgramFileStatus($subscriberId);
@@ -83,12 +89,6 @@ class Subscribers extends AdminPanels {
         $subscriber = new SubscriberModel;
 
         return $subscriber->selectSubscriberDetails($subscriberId);
-    }
-    
-    protected function _getSubscriberHeaders(int $subscriberId) {
-        $subscriber = new SubscriberModel;
-
-        return $subscriber->selectSubscriberHeader($subscriberId);
     }
     
     private function _getSubscribersHeaders() {

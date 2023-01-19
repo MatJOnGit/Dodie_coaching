@@ -979,13 +979,32 @@ try {
                             
                             if ($programFile->isProgramFileUpdatable($subscriberId)) {
                                 $programData = $programFile->getProgramData($subscriberId);
+                                $subscriberHeaders = $programFile->getSubscriberHeaders($subscriberId);
 
-                                if ($programData) {
-                                    $programFile->buildFile($twig, $subscriberId, $programData);
+                                if ($programData && $subscriberHeaders) {
+                                    $output = $programFile->buildFile($twig, $subscriberId, $programData, $subscriberHeaders);
 
-                                    header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                    if ($output) {
+                                        if ($programFile->saveDataToPdf($output, $subscriberHeaders)) {
+                                            $programFileAlerter = new Dodie_Coaching\Services\ProgramFileAlerter;
+                                            
+                                            $programFile->setProgramFileStatus($subscriberId, 'updated');
+                                            
+                                            $programFileAlerter->sendProgramFileNotification($subscriberHeaders);
+                                            
+                                            header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                        }
+
+                                        else {
+                                            throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
+                                        }
+                                    }
+
+                                    else {
+                                        throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
+                                    }
                                 }
-
+                                
                                 else {
                                     throw new Data_Exception('NO PROGRAM DATA FOUND FOR THIS USER');
                                 }

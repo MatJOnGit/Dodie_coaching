@@ -69,7 +69,8 @@ class Subscribers extends Main {
         $selectSubscriberHeaderQuery =
             "SELECT
                 CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
-                -- usd.daily_meals,
+                acc.first_name,
+                acc.email,
                 usd.user_id
             FROM subscribers_data sub
             INNER JOIN accounts acc ON sub.user_id = acc.id

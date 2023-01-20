@@ -3,19 +3,11 @@
 namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Subscribers as SubscriberModel;
-use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
 
 class Subscribers extends AdminPanels {
     public function getMessageType() {
         return empty($_POST['rejection-message']) ? 'default' : 'custom';
-    }
-
-    public function getProgramFileStatus($subscriberId) {
-        $programFile = new ProgramFilesModel;
-
-        $programFileStatus = $programFile->selectFileStatus($subscriberId);
-        return $programFileStatus ? $programFileStatus['file_status'] : NULL;
     }
     
     public function getSubscriberData(int $subscriberId) {

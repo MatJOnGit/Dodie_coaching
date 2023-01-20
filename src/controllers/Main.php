@@ -3,6 +3,7 @@
 namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Subscribers as SubscribersModel;
+use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
 
 class Main {
     private $_mealsTranslations = [
@@ -61,6 +62,13 @@ class Main {
 
     public function getParam(string $param) {
         return htmlspecialchars($_GET[$param]);
+    }
+
+    public function getProgramFileStatus($subscriberId) {
+        $programFile = new ProgramFilesModel;
+
+        $programFileStatus = $programFile->selectFileStatus($subscriberId);
+        return $programFileStatus ? $programFileStatus['file_status'] : NULL;
     }
 
     public function routeTo(string $page) {

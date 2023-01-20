@@ -88,7 +88,7 @@ class Nutrition extends UserPanels {
             'nextDays' => $this->_getNextDates(),
             'meals' => $this->_getProgramMeals($subscriberId),
             'mealsTranslations' => $this->_getMealsTranslations(),
-            'programFilePath' => $this->_getProgramsFilePath()
+            'programFilePath' => $this->_getProgramsFilePath($subscriberId)
         ]);
     }
     
@@ -129,11 +129,12 @@ class Nutrition extends UserPanels {
         return $nextDates;
     }
     
-    private function _getProgramsFilePath() {
+    private function _getProgramsFilePath($subscriberId) {
         $programFile = new ProgramFilesModel;
         $fileName = $programFile->selectFileName($_SESSION['email']);
+        $fileStatus = $this->getProgramFileStatus($subscriberId);
         
-        return $fileName ? $this->_getProgramsFolderRoute() . $fileName[0] . '.pdf' : null;
+        return ($fileName && $fileStatus) ? $this->_getProgramsFolderRoute() . $fileName[0] . '.pdf' : null;
     }
     
     private function _getProgramsFolderRoute(): string {

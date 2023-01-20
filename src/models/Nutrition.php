@@ -34,13 +34,13 @@ class Nutrition extends Main {
         $selectMealsIngredientsQuery =
             "SELECT
                 ingr.french_name,
-                ingr.measure_unit ,
+                ingr.measure,
                 SUM(fp.quantity) AS ingredient_quantity
             FROM ingredients ingr
             INNER JOIN food_plans fp ON fp.ingredient_id = ingr.id
             INNER JOIN accounts acc ON fp.user_id = acc.id
             WHERE acc.email = ?
-            GROUP BY ingr.french_name, ingr.measure_unit";
+            GROUP BY ingr.french_name, ingr.measure";
         $selectMealsIngredientsStatement = $db->prepare($selectMealsIngredientsQuery);
         $selectMealsIngredientsStatement->execute([$email]);
         

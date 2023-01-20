@@ -14,7 +14,7 @@
                             {{ shoppingListItem['french_name'] }}
                             (
                                 {{ shoppingListItem['ingredient_quantity'] }}
-                                {% if shoppingListItem['measure_unit'] is not null %}{{ shoppingListItem['measure_unit'] }}{% endif %}
+                                {% if shoppingListItem['measure'] is not null %}{{ shoppingListItem['measure'] }}{% endif %}
                             )
                         </label>
                     </li>

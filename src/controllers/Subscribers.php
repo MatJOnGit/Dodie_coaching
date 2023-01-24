@@ -5,52 +5,52 @@ namespace Dodie_Coaching\Controllers;
 use Dodie_Coaching\Models\Subscribers as SubscriberModel;
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
 
-class Subscribers extends AdminPanels {
-    public function getMessageType() {
-        return empty($_POST['rejection-message']) ? 'default' : 'custom';
-    }
-    
+class Subscribers extends AdminPanels {    
     public function getSubscriberData(int $subscriberId) {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectSubscriberData($subscriberId);
     }
     
     public function getSubscriberHeaders(int $subscriberId) {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectSubscriberHeader($subscriberId);
     }
-
-    public function isProgramFileUpdatable($subscriberId) {
+    
+    /***********************************************************************************
+    Return the value of the possibility to update the subscriber's program file based on
+    its status and meals completion
+    ***********************************************************************************/
+    public function isProgramFileUpdatable(int $subscriberId): bool {
         $programFileStatus = $this->getProgramFileStatus($subscriberId);
         $updatableFileStatus = ['unhosted', 'depleted'];
-        $isProgramFileUpdatable = in_array($programFileStatus, $updatableFileStatus);
-
+        $isFileStatusFlawed = in_array($programFileStatus, $updatableFileStatus);
+        
         $weekDays = $this->_getWeekDays();
         $meals = $this->_getProgramMeals($subscriberId);
         $isProgramCompleted = true;
-
+        
         foreach($weekDays as $weekDay) {
             $englishWeekDay = $weekDay['english'];
-
+            
             foreach($meals as $meal) {
                 if (!$this->_isMealCompleted($subscriberId, $englishWeekDay, $meal)) {
                     $isProgramCompleted = false;
                 }
             }
         }
-
-        return ($isProgramFileUpdatable && $isProgramCompleted);
+        
+        return ($isFileStatusFlawed && $isProgramCompleted);
     }
     
     public function isSubscriberIdValid(int $subscriberId) {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectSubscriberId($subscriberId);
     }
     
-    public function renderSubscriberProfilePage(object $twig, int $subscriberId) {
+    public function renderSubscriberProfilePage(object $twig, int $subscriberId): void {
         echo $twig->render('admin_panels/subscriber-profile.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => "Profil abonné",
@@ -61,7 +61,7 @@ class Subscribers extends AdminPanels {
         ]);
     }
     
-    public function renderSubscribersListPage(object $twig) {
+    public function renderSubscribersListPage(object $twig): void {
         echo $twig->render('admin_panels/subscribers-list.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Liste des abonnés',
@@ -73,33 +73,33 @@ class Subscribers extends AdminPanels {
     
     private function _getAccountDetails(int $subscriberId) {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectAccountDetails($subscriberId);
     }
     
     private function _getSubscriberDetails(int $subscriberId) {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectSubscriberDetails($subscriberId);
     }
     
     private function _getSubscribersHeaders() {
         $subscriber = new SubscriberModel;
-
+        
         return $subscriber->selectSubscribersHeaders();
     }
-
-    private function _isMealCompleted($subscriberId, $weekDay, $meal) {
+    
+    private function _isMealCompleted(int $subscriberId, string $weekDay, string $meal): bool {
         $nutrition = new NutritionModel;
-
+        
         $isMealCompleted = true;
-
+        
         $ingredientsCountPerMeal = $nutrition->selectIngredientsCount($subscriberId, $weekDay, $meal);
         
         if ($ingredientsCountPerMeal[0]['ingredientsCount'] === '0') {
             $isMealCompleted = false;
         }
-
+        
         return $isMealCompleted;
     }
 }

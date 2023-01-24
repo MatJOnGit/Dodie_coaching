@@ -11,14 +11,18 @@ class Notes extends Subscribers {
         'classes/NotesHelper.model',
         'notesHelperApp'
     ];
-
-    public function buildNoteData(int $subscriberId) {
+    
+    /*********************************************************************
+    Builds an associative array containing the previous form message along
+    with its associated data, depending on the form optionnal parameters
+    *********************************************************************/
+    public function buildNoteData(int $subscriberId): array {
         $this->_setTimeZone();
 
         $noteMessage = htmlspecialchars($_POST['note-message']);
         $noteDateIndex = htmlspecialchars($_POST['attached-meeting-date']);
         $attendedMeetings = $this->getAttendedMeetings($subscriberId);
-
+        
         if (is_numeric($noteDateIndex) && array_key_exists($noteDateIndex, $attendedMeetings)) {
             $noteData = [
                 'message' => $noteMessage,
@@ -27,7 +31,7 @@ class Notes extends Subscribers {
                 'attached_to_meeting' => true
             ];
         }
-
+        
         else {
             $noteData = [
                 'message' => $noteMessage,
@@ -36,41 +40,41 @@ class Notes extends Subscribers {
                 'attached_to_meeting' => false
             ];
         }
-
+        
         return $noteData;
     }
-
+    
     public function editNote(array $noteData, int $noteId) {
         $notes = new NotesModel;
-
+        
         return $notes->updateNote($noteData['message'], $noteData['date'], $noteData['attached_to_meeting'], $noteId);
     }
-
+    
     public function eraseNote(int $noteId) {
         $notes = new NotesModel;
-
+        
         return $notes->deleteNote($noteId);
     }
-
+    
     public function getAttendedMeetings(int $subscriberId) {
         $meetings = new Meetings;
-
+        
         return $meetings->selectAttendedMeetings($subscriberId);
     }
-
+    
     public function isNoteIdValid(int $noteId) {
         $notes = new NotesModel;
-
+        
         return $notes->selectNote($noteId);
     }
-
+    
     public function logNote(array $noteData) {
         $notes = new NotesModel;
-
+        
         return $notes->insertNote($noteData['message'], $noteData['date'], $noteData['subscriber_id'], $noteData['attached_to_meeting']);
     }
-
-    public function renderSubscriberNotesPage(object $twig, int $subscriberId) {
+    
+    public function renderSubscriberNotesPage(object $twig, int $subscriberId): void {
         echo $twig->render('admin_panels/subscriber-notes.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => "Notes de suivi",
@@ -86,10 +90,10 @@ class Notes extends Subscribers {
     private function _getNotesScripts(): array {
         return $this->_notesScripts;
     }
-
+    
     private function _getSubscriberNotes(int $subscriberId) {
         $notes = new NotesModel;
-
+        
         return $notes->selectNotes($subscriberId);
     }
 }

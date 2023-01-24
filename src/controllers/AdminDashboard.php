@@ -7,7 +7,7 @@ use Dodie_Coaching\Models\Appliances;
 use Dodie_Coaching\Models\Meetings;
 
 class AdminDashboard extends AdminPanels {
-    public function renderAdminDashboardPage(object $twig) {
+    public function renderAdminDashboardPage(object $twig): void {
         echo $twig->render('admin_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Tableau de bord',
@@ -18,17 +18,21 @@ class AdminDashboard extends AdminPanels {
         ]);
     }
     
-    private function _filterTodayMeetingsData(array $incomingMeetings) {
+    /******************************************************
+    Remove data from an array containing incoming meetings
+    to keep only those that are attended on the current day
+    ******************************************************/
+    private function _filterTodayMeetingsData(array $incomingMeetings): array {
         $this->_setTimeZone();
         $currentDate = date('d/m/Y');
         $todayMeetingsData = [];
-
+        
         if ($incomingMeetings) {
             foreach ($incomingMeetings as $incomingMeeting) {
                 $incomingMeetingDay = $incomingMeeting['day'];
                 $incomingMeetingTime = $incomingMeeting['starting_time'];
                 $costumerName = $incomingMeeting['name'];
-
+                
                 if ($incomingMeetingDay === $currentDate) {
                     array_push($todayMeetingsData, [
                         'meetingTime' => $incomingMeetingTime,
@@ -40,24 +44,24 @@ class AdminDashboard extends AdminPanels {
         
         return $todayMeetingsData;
     }
-
+    
     private function _getAppliancesCount() {
         $appliances = new Appliances;
-
+        
         return $appliances->selectAppliancesCount();
     }
-
+    
     private function _getSubscribersCount() {
         $subscribers = new Subscribers;
-
+        
         return $subscribers->selectSubscribersCount();
     }
     
     private function _getTodayMeetingsData() {
         $meetings = new Meetings;
-
+        
         $incomingMeetings = $meetings->selectNextBookedMeetings();
-
+        
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }
 }

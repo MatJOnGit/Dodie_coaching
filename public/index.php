@@ -45,8 +45,8 @@ try {
         ]
     ];
     
-    $user = new Dodie_Coaching\Controllers\User;
-    if ($user->isGetParamSet('page')) {
+    $user = new Dodie_Coaching\Controllers\Users;
+    if ($user->areParamsSet(['page'])) {
         $page = $user->getParam('page');
         
         if (in_array($page, $Urls['pages']['showcase'])) {
@@ -157,14 +157,14 @@ try {
                         
                         if ($nutrition->isMenuRequested()) {
                             $subscriberId = $nutrition->getUserId()['id'];
-                            $nutrition->renderNutritionMenu($twig, $subscriberId);
+                            $nutrition->renderNutritionMenuPage($twig, $subscriberId);
                         }
                         
                         elseif ($nutrition->isMealRequested()) {
                             $mealData = $nutrition->getMealData();
                             
                             if ($nutrition->areMealParamsValid($mealData)) {
-                                $nutrition->renderMealDetails($twig, $mealData);
+                                $nutrition->renderMealDetailsPage($twig, $mealData);
                             }
                             
                             else {
@@ -177,7 +177,7 @@ try {
                             $request = $nutrition->getRequest();
                             
                             if ($nutrition->isShoppingListRequested($request)) {
-                                $nutrition->renderShoppingList($twig);
+                                $nutrition->renderShoppingListPage($twig);
                             }
                             
                             else {
@@ -192,17 +192,17 @@ try {
                     
                     elseif ($userPanels->isRequestMatching($page, 'progress')) {
                         $progress = new Dodie_Coaching\Controllers\Progress;
-                        $progress->renderProgress($twig);
+                        $progress->renderProgressPage($twig);
                     }
                     
                     elseif ($userPanels->isRequestMatching($page, 'meetings-booking')){
                         $meetingsBooking = new Dodie_Coaching\Controllers\MeetingsBooking;
-                        $meetingsBooking->renderMeetingsBooking($twig);
+                        $meetingsBooking->renderMeetingsBookingPage($twig);
                     }
                     
                     elseif ($userPanels->isRequestMatching($page, 'subscription')) {
                         $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
-                        $subscriptions->renderSubscriptions($twig);
+                        $subscriptions->renderSubscriptionPage($twig);
                     }
                     
                     else {
@@ -326,7 +326,7 @@ try {
                     else if ($adminPanels->isRequestMatching($page, 'meetings-management')) {
                         $meetingsManagement = new Dodie_Coaching\Controllers\MeetingsManagement;
                         
-                        $meetingsManagement->renderMeetingsManagement($twig);
+                        $meetingsManagement->renderMeetingsManagementPage($twig);
                     }
                 }
                 
@@ -348,8 +348,8 @@ try {
         }
     }
     
-    elseif ($user->isGetParamSet('action')) {
-        $user = new Dodie_Coaching\Controllers\User;
+    elseif ($user->areParamsSet(['action'])) {
+        $user = new Dodie_Coaching\Controllers\Users;
         $action = $user->getParam('action');
         
         if (in_array($action, $Urls['actions']['connection'])) {
@@ -425,10 +425,10 @@ try {
                     
                     if ($user->areFormDataValid($userData)) {
                         if ($user->isEmailExisting($userData['email'])) {
-                            $token = $user->getTokenDate($userData['email']);
+                            $tokenData = $user->getTokenDate($userData['email']);
                             
-                            if ($token) {
-                                if ($user->isLastTokenOld($token)) {
+                            if ($tokenData) {
+                                if ($user->isLastTokenOld($tokenData)) {
                                     if ($user->eraseToken($userData['email'])) {
                                         $user->logUser($userData);
                                         $user->routeTo('send-token');
@@ -618,7 +618,7 @@ try {
                             $progressHistory = $progress->getHistory();
                             
                             if ($progress->isReportIdExisting($progressHistory, $reportId)) {
-                                if (!$progress->eraseProgress($progressHistory, $reportId)) {
+                                if (!$progress->eraseProgressItem($progressHistory, $reportId)) {
                                     throw new DB_Exception ("FAILED TO DELETE REPORT");
                                 }
                             }
@@ -709,7 +709,7 @@ try {
                     $userRole = $user->getRole();
                     
                     if ($user->isRoleMatching($userRole, ['admin'])) {
-                        if ($user->isGetParamSet('id')) {
+                        if ($user->areParamsSet(['id'])) {
                             $meeting = new Dodie_Coaching\Controllers\MeetingsManagement;
                             $meetingId = $meeting->getParam('id');
                             
@@ -938,7 +938,7 @@ try {
                             $mealsList = $program->getCheckedMeals();
                             
                             if ($mealsList) {
-                                if (!$program->addProgramMeals($subscriberId, $mealsList)) {
+                                if (!$program->saveProgramMeals($subscriberId, $mealsList)) {
                                     throw new DB_Exception('échec de la mise à jour des repas du programme');
                                 }
                                 
@@ -978,7 +978,7 @@ try {
                             $programFileStatus = $programFile->getProgramFileStatus($subscriberId);
                             
                             if ($programFile->isProgramFileUpdatable($subscriberId)) {
-                                $programData = $programFile->getProgramData($subscriberId);
+                                $programData = $programFile->buildProgramData($subscriberId);
                                 $subscriberHeaders = $programFile->getSubscriberHeaders($subscriberId);
 
                                 if ($programData && $subscriberHeaders) {
@@ -989,12 +989,11 @@ try {
                                             $programFileAlerter = new Dodie_Coaching\Services\ProgramFileAlerter;
                                             
                                             $programFile->setProgramFileStatus($subscriberId, 'updated');
-                                            
                                             $programFileAlerter->sendProgramFileNotification($subscriberHeaders);
                                             
                                             header("location:index.php?page=subscriber-program&id=" . $subscriberId);
                                         }
-
+                                        
                                         else {
                                             throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
                                         }

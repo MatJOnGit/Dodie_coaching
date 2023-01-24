@@ -29,7 +29,7 @@ class Appliances extends AdminPanels {
         return $appliance->selectApplicantData($applicantId);
     }
     
-    public function getMessageType() {
+    public function getMessageType(): string {
         return empty($_POST['rejection-message']) ? 'default' : 'custom';
     }
     
@@ -45,11 +45,11 @@ class Appliances extends AdminPanels {
         return $appliance->selectApplicantId($applicantId);
     }
     
-    public function isRejectionMessageEmpty() {
+    public function isRejectionMessageEmpty(): bool {
         return empty($_POST['rejection-message']);
     }
     
-    public function renderApplianceDetailsPage(object $twig, string $applianceId) {
+    public function renderApplianceDetailsPage(object $twig, string $applianceId): void {
         echo $twig->render('admin_panels/appliance-details.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Profil du demandeur',
@@ -60,7 +60,7 @@ class Appliances extends AdminPanels {
         ]);
     }
     
-    public function renderAppliancesListPage(object $twig) {
+    public function renderAppliancesListPage(object $twig): void {
         echo $twig->render('admin_panels/appliances-list.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Liste des demandes',
@@ -72,7 +72,7 @@ class Appliances extends AdminPanels {
     
     private function _getApplianceDetails(string $applianceId) {
         $appliance = new AppliancesModel;
-
+        
         return $appliance->selectApplianceDetails($applianceId);
     }
     

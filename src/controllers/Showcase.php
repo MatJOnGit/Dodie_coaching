@@ -1,7 +1,6 @@
 <?php
 
 namespace Dodie_Coaching\Controllers;
-use Dodie_Coaching\Controllers\User;
 
 class Showcase extends Main {
     private $_programsList = [
@@ -35,7 +34,7 @@ class Showcase extends Main {
         //     'description' => ""
         // ]
     ];
-
+    
     private $_routingURLs = [
         'presentation' => 'index.php?page=presentation',
         'coaching' => 'index.php?page=coaching',
@@ -43,30 +42,28 @@ class Showcase extends Main {
         'program-details' => 'index.php?page=program-details',
         '404' => 'index.php?page=showcase-404'
     ];
-
+    
     private $_showcasePanelsStyles = [
         'pages/showcase-panels',
         'components/header',
         'components/footer'
     ];
-
+    
     private $_showcaseScripts = [
         'classes/UserPanels.model',
         'classes/DynamicMenu.model',
         'dynamicMenu'
     ];
-  
+    
     public function isProgramAvailable(string $requestedProgram): bool {
         return in_array($requestedProgram, array_keys($this->_programsList));
     }
-
+    
     public function isProgramsListAvailable(): bool {
         return count($this->_getProgramsList()) > 0;
     }
     
-    public function renderCoachingPage(object $twig, $isLogged) {
-        $user = new User;
-
+    public function renderCoachingPage(object $twig, bool $isLogged): void {
         echo $twig->render('showcase_panels/coaching.html.twig', [
             'frenchTitle' => 'coaching',
             'appSection' => 'showcasePanels',
@@ -76,8 +73,8 @@ class Showcase extends Main {
             'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
-
-    public function renderPresentationPage(object $twig, $isLogged) {
+    
+    public function renderPresentationPage(object $twig, bool $isLogged): void {
         echo $twig->render('showcase_panels/presentation.html.twig', [
             'frenchTitle' => 'présentation',
             'appSection' => 'showcasePanels',
@@ -88,9 +85,7 @@ class Showcase extends Main {
         ]);
     }
     
-    public function renderProgramDetailsPage(object $twig, string $program, $isLogged) {
-        $user = new User;
-
+    public function renderProgramDetailsPage(object $twig, string $program, bool $isLogged): void {
         echo $twig->render('showcase_panels/program-details.html.twig', [
             'frenchTitle' => 'programmes',
             'appSection' => 'showcasePanels',
@@ -102,9 +97,7 @@ class Showcase extends Main {
         ]);
     }
     
-    public function renderProgramsListPage(object $twig, $isLogged) {
-        $user = new User;
-
+    public function renderProgramsListPage(object $twig, bool $isLogged): void {
         echo $twig->render('showcase_panels/programs-list.html.twig', [
             'frenchTitle' => 'programmes',
             'appSection' => 'showcasePanels',
@@ -116,9 +109,7 @@ class Showcase extends Main {
         ]);
     }
 
-    public function renderShowcase404Page(object $twig, $isLogged) {
-        $user = new User;
-
+    public function renderShowcase404Page(object $twig, bool $isLogged): void {
         echo $twig->render('showcase_panels/404.html.twig', [
             'frenchTitle' => '404',
             'appSection' => 'showcasePanels',
@@ -128,23 +119,23 @@ class Showcase extends Main {
             'pageScripts' => $this->_getShowcaseScripts()
         ]);
     }
-
+    
     private function _getProgramDetails(string $program): array {
         return $this->_programsList[$program];
     }
-
+    
     private function _getProgramsList(): array {
         return $this->_programsList;
     }
-
+    
     private function _getRoutingURLs(): array {
         return $this->_routingURLs;
     }
-
+    
     private function _getShowcasePanelsStyles(): array {
         return $this->_showcasePanelsStyles;
     }
-
+    
     private function _getShowcaseScripts(): array {
         return $this->_showcaseScripts;
     }

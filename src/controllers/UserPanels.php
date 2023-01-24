@@ -5,9 +5,9 @@ namespace Dodie_Coaching\Controllers;
 class UserPanels extends Main {
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
-        'progress' => 'index.php?page=progress',
-        'nutrition' => 'index.php?page=nutrition',
         'meetingsBooking' => 'index.php?page=meetings-booking',
+        'nutrition' => 'index.php?page=nutrition',
+        'progress' => 'index.php?page=progress',
         'subscription' => 'index.php?page=subscription',
     ];
     
@@ -17,25 +17,25 @@ class UserPanels extends Main {
         'components/form',
         'components/footer'
     ];
-
+    
     protected $_userPanelsSubpanels = [
         'nutrition' => 'Programme nutritionnel',
         'progress' => 'Progression',
         'meetings' => 'Rendez-vous',
         'subscriptions' => 'Abonnement'
     ];
-
+    
     private $_userPanels = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
-
-    protected function _getUserPanels() {
+    
+    protected function _getUserPanels(): array {
         return $this->_userPanels;
     }
-
-    protected function _getUserPanelsStyles() {
+    
+    protected function _getUserPanelsStyles(): array {
         return $this->_userPanelsStyles;
     }
-
-    protected function _getUserPanelsSubpanels(string $page) {
+    
+    protected function _getUserPanelsSubpanels(string $page): string {
         return $this->_userPanelsSubpanels[$page];
     }
 }

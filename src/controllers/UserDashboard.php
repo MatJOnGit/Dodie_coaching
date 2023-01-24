@@ -25,8 +25,8 @@ class UserDashboard extends UserPanels {
             'link' => 'subscription'
         ]
     ];
-
-    public function renderUserDashboardPage(object $twig) {
+    
+    public function renderUserDashboardPage(object $twig): void {
         echo $twig->render('user_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),
             'frenchTitle' => 'tableau de bord',
@@ -34,8 +34,8 @@ class UserDashboard extends UserPanels {
             'dashboardMenuItems' => $this->_getDashboardMenuItems()
         ]);
     }
-
-    private function _getDashboardMenuItems() {
+    
+    private function _getDashboardMenuItems(): array {
         return $this->_dashboardMenuItems;
     }
 }

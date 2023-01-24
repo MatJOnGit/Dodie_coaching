@@ -2,8 +2,8 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Subscribers as SubscribersModel;
-use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
+use Dodie_Coaching\Models\Subscriber;
+use Dodie_Coaching\Models\ProgramFile;
 
 class Main {
     private $_mealsTranslations = [
@@ -65,7 +65,7 @@ class Main {
     }
     
     public function getProgramFileStatus($subscriberId) {
-        $programFile = new ProgramFilesModel;
+        $programFile = new ProgramFile;
         
         $programFileStatus = $programFile->selectFileStatus($subscriberId);
         return $programFileStatus ? $programFileStatus['file_status'] : NULL;
@@ -107,9 +107,9 @@ class Main {
     program into an associated array containing each meals
     *****************************************************/ 
     protected function _getProgramMeals(int $subscriberId) {
-        $subscribers = new SubscribersModel;
+        $subscriber = new Subscriber;
         
-        $generatedMeals = $subscribers->selectProgramMeals($subscriberId);
+        $generatedMeals = $subscriber->selectProgramMeals($subscriberId);
         
         return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
     }

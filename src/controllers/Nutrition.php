@@ -2,12 +2,12 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Accounts as AccountsModel;
+use Dodie_Coaching\Models\Account;
 use Dodie_Coaching\Models\Nutrition as NutritionModel;
-use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
+use Dodie_Coaching\Models\ProgramFile;
 use DatePeriod, DateTime, DateInterval;
 
-class Nutrition extends UserPanels {
+class Nutrition extends UserPanel {
     private $_programsFolderRoute = './../var/nutrition_programs/';
     
     /***************************************************************
@@ -59,7 +59,7 @@ class Nutrition extends UserPanels {
     }
     
     public function getUserId() {
-        $account = new AccountsModel;
+        $account = new Account;
         
         return $account->selectId($_SESSION['email']);
     }
@@ -156,7 +156,7 @@ class Nutrition extends UserPanels {
     Builds the full path to subscriber's program file if existing and if the file has a status
     *****************************************************************************************/
     private function _getProgramsFilePath(int $subscriberId) {
-        $programFile = new ProgramFilesModel;
+        $programFile = new ProgramFile;
         $fileName = $programFile->selectFileName($_SESSION['email']);
         $fileStatus = $this->getProgramFileStatus($subscriberId);
         

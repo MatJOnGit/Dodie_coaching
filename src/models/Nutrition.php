@@ -5,9 +5,18 @@ namespace Dodie_Coaching\Models;
 use PDO;
 
 class Nutrition extends Main {
+    public function selectIngredientsCount(int $subscriberId, string $weekDay, string $meal) {
+        $db = $this->dbConnect();
+        $selectIngredientsCountQuery = "SELECT COUNT(*) AS ingredientsCount FROM food_plans WHERE user_id = ? AND day = ? AND meal = ?";
+        $selectIngredientsCountStatement = $db->prepare($selectIngredientsCountQuery);
+        $selectIngredientsCountStatement->execute([$subscriberId, $weekDay, $meal]);
+        
+        return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function selectMealDetails(string $day, string $meal, string $email) {                
         $db = $this->dbConnect();
-        $selectMealQuery =
+        $selectMealDetailsQuery =
             "SELECT
                 ingr.name,
                 ingr.french_name,
@@ -21,33 +30,13 @@ class Nutrition extends Main {
             WHERE fp.day = ?
             AND fp.meal = ?
             AND acc.email = ?";
-        $selectMealStatement = $db->prepare($selectMealQuery);
-        $selectMealStatement->execute([$day, $meal, $email]);
+        $selectMealDetailsStatement = $db->prepare($selectMealDetailsQuery);
+        $selectMealDetailsStatement->execute([$day, $meal, $email]);
         
-        // var_dump($selectMealStatement->fetchAll(PDO::FETCH_ASSOC));
-
-        return $selectMealStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectMealsIngredients(string $email) {
-        $db = $this->dbConnect();
-        $selectMealsIngredientsQuery =
-            "SELECT
-                ingr.french_name,
-                ingr.measure,
-                SUM(fp.quantity) AS ingredient_quantity
-            FROM ingredients ingr
-            INNER JOIN food_plans fp ON fp.ingredient_id = ingr.id
-            INNER JOIN accounts acc ON fp.user_id = acc.id
-            WHERE acc.email = ?
-            GROUP BY ingr.french_name, ingr.measure";
-        $selectMealsIngredientsStatement = $db->prepare($selectMealsIngredientsQuery);
-        $selectMealsIngredientsStatement->execute([$email]);
-        
-        return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function selectMealIngredients($subscriberId, $day, $mealOrder) {
+    public function selectMealIngredients(int $subscriberId, string $day, string $mealOrder) {
         $db = $this->dbConnect();
         $selectProgramIngredientsQuery = 
             "SELECT
@@ -72,52 +61,47 @@ class Nutrition extends Main {
             FROM food_plans fp
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
-            WHERE fp.user_id = :subscriberId
-            AND fp.day = :day
-            AND fp.meal_index = :mealOrder";
+            WHERE fp.user_id = ?
+            AND fp.day = ?
+            AND fp.meal_index = ?";
         $selectProgramIngredientsStatement = $db->prepare($selectProgramIngredientsQuery);
-        $selectProgramIngredientsStatement->execute([
-            'subscriberId' => $subscriberId,
-            'day' => $day,
-            'mealOrder' => $mealOrder
-        ]);
-
+        $selectProgramIngredientsStatement->execute([$subscriberId, $day, $mealOrder]);
+        
         return $selectProgramIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function selectSubscriberMealsIndexes($subscriberId) {
+    
+    public function selectMealsIndexes(int $subscriberId) {
         $db = $this->dbConnect();
         $selectSubscriberMealsQuery = "SELECT DISTINCT(meal_index) FROM food_plans WHERE user_id = ? ORDER BY meal_index";
         $selectSubscriberMealsStatement = $db->prepare($selectSubscriberMealsQuery);
         $selectSubscriberMealsStatement->execute([$subscriberId]);
-
+        
         return $selectSubscriberMealsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function updateMealsList($subscriberId, $meals) {
+    
+    public function selectMealsIngredients(string $email) {
         $db = $this->dbConnect();
-
-        $updateMealsListQuery = "UPDATE subscribers_data SET meals_list = :meals WHERE user_id = :subscriberId";
-        $updateMealsListStatement = $db->prepare($updateMealsListQuery);
-
-        return $updateMealsListStatement->execute([
-            'subscriberId' => $subscriberId,
-            'meals' => $meals
-        ]);
+        $selectMealsIngredientsQuery =
+            "SELECT
+                ingr.french_name,
+                ingr.measure,
+                SUM(fp.quantity) AS ingredient_quantity
+            FROM ingredients ingr
+            INNER JOIN food_plans fp ON fp.ingredient_id = ingr.id
+            INNER JOIN accounts acc ON fp.user_id = acc.id
+            WHERE acc.email = ?
+            GROUP BY ingr.french_name, ingr.measure";
+        $selectMealsIngredientsStatement = $db->prepare($selectMealsIngredientsQuery);
+        $selectMealsIngredientsStatement->execute([$email]);
+        
+        return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function selectIngredientsCount(int $subscriberId, string $weekDay, string $meal) {
+    
+    public function updateMealsList(int $subscriberId, string $meals) {
         $db = $this->dbConnect();
-
-        $selectIngredientsCountQuery = "SELECT COUNT(*) AS ingredientsCount FROM food_plans WHERE user_id = :subscriberId AND day = :weekDay AND meal = :meal";
-        $selectIngredientsCountStatement = $db->prepare($selectIngredientsCountQuery);
-
-        $selectIngredientsCountStatement->execute([
-            'subscriberId' => $subscriberId,
-            'weekDay' => $weekDay,
-            'meal' => $meal
-        ]);
-
-        return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
+        $updateMealsListQuery = "UPDATE subscribers_data SET meals_list = ? WHERE user_id = ?";
+        $updateMealsListStatement = $db->prepare($updateMealsListQuery);
+        
+        return $updateMealsListStatement->execute([$meals, $subscriberId]);
     }
 }

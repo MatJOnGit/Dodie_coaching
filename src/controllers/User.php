@@ -2,11 +2,11 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Accounts;
-use Dodie_Coaching\Models\ResetTokens;
+use Dodie_Coaching\Models\Account;
+use Dodie_Coaching\Models\ResetToken;
 use Dodie_Coaching\Models\StaticData;
 
-class Users extends Main {
+class User extends Main {
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
         'login' => 'index.php?page=login',
@@ -20,7 +20,7 @@ class Users extends Main {
         'token-signing' => 'index.php?page=token-signing'
     ];
     
-    private $_connectionPagesStyles = [
+    private $_connectionPanelsStyles = [
         'pages/connection-panels',
         'components/header',
         'components/form',
@@ -30,7 +30,7 @@ class Users extends Main {
     
     private $_emailRegex = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     
-    private $_pageScripts = [
+    private $_authPanelsScripts = [
         'login' => [
             'classes/UserPanels.model',
             'classes/ConnectionHelper.model',
@@ -91,7 +91,7 @@ class Users extends Main {
     }
     
     public function eraseToken(string $email) {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         return $resetToken->deleteToken($email);
     }
@@ -111,7 +111,7 @@ class Users extends Main {
     }
     
     public function getRole() {
-        $account = new Accounts;
+        $account = new Account;
         
         return $account->selectRole($_SESSION['email']);
     }
@@ -121,13 +121,13 @@ class Users extends Main {
     }
     
     public function getTokenDate(string $email) {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         return $resetToken->selectTokenDate($email);
     }
     
     public function isAccountExisting(array $userData): bool {
-        $account = new Accounts;
+        $account = new Account;
         
         $accountPassword = $account->selectPassword($userData['email']);
         $isAccountExisting = false;
@@ -144,7 +144,7 @@ class Users extends Main {
     }
     
     public function isEmailExisting(string $email) {
-        $account = new Accounts;
+        $account = new Account;
         
         return $account->selectEmail($email);
     }
@@ -179,7 +179,7 @@ class Users extends Main {
     }
     
     public function isTokenMatching(): bool {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         $correctToken = $resetToken->selectToken($_SESSION['email']);
         $postedToken = htmlspecialchars($_POST['token']);
@@ -208,7 +208,7 @@ class Users extends Main {
     }
     
     public function registerAccount(array $userData) {
-        $account = new Accounts;
+        $account = new Account;
         
         return $account->insertAccount(
             $userData['email'],
@@ -217,7 +217,7 @@ class Users extends Main {
     }
     
     public function registerPassword(array $userData) {
-        $account = new Accounts;
+        $account = new Account;
         
         return $account->updatePassword(
             $_SESSION['email'],
@@ -226,7 +226,7 @@ class Users extends Main {
     }
     
     public function registerToken(string $token) {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         return $resetToken->insertToken(
             password_hash($token, PASSWORD_DEFAULT),
@@ -236,16 +236,16 @@ class Users extends Main {
     
     public function renderLoginPage(object $twig): void {
         echo $twig->render('connection_panels/login.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'connection',
             'appSection' => 'connectionPanels',
-            'pageScripts' => $this->_getPageScripts('login')
+            'pageScripts' => $this->_authPanelsScripts('login')
         ]);
     }
     
     public function renderMailNotificationPage(object $twig): void {
         echo $twig->render('connection_panels/mail-notification.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => "Notification d'email",
             'appSection' => 'connectionPanels'
         ]);
@@ -253,34 +253,34 @@ class Users extends Main {
     
     public function renderPasswordEditingPage(object $twig): void {
         echo $twig->render('connection_panels/password-edition.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'Edition de votre mot de passe',
             'appSection' => 'connectionPanels',
-            'pageScripts' => $this->_getPageScripts('pwdEditing')
+            'pageScripts' => $this->_authPanelsScripts('pwdEditing')
         ]);
     }
     
     public function renderPasswordRetrievingPage(object $twig): void {
         echo $twig->render('connection_panels/password-retrieving.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'mot de passe perdu',
             'appSection' => 'connectionPanels',
-            'pageScripts' => $this->_getPageScripts('pwdRetrieving')
+            'pageScripts' => $this->_authPanelsScripts('pwdRetrieving')
         ]);
     }
     
     public function renderRegisteringPage(object $twig): void {
         echo $twig->render('connection_panels/registering.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'création de compte',
             'appSection' => 'connectionPanels',
-            'pageScripts' => $this->_getPageScripts('registering')
+            'pageScripts' => $this->_authPanelsScripts('registering')
         ]);
     }
     
     public function renderRetrievedPasswordPage(object $twig): void {
         echo $twig->render('connection_panels/retrieved-password.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => "Mot de passe modifié",
             'passSection' => 'connectionPanels'
         ]);
@@ -288,11 +288,11 @@ class Users extends Main {
     
     public function renderTokenSigningPage(object $twig): void {
         echo $twig->render('connection_panels/token-signing.html.twig', [
-            'stylePaths' => $this->_getConnectionPagesStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'réinitialisation de mot de passe',
             'appSection' => 'connectionPanels',
             'remainingAttempts' => $this->_getTokenSigningRemainingAttempts(),
-            'pageScripts' => $this->_getPageScripts('tokenSigning')
+            'pageScripts' => $this->_authPanelsScripts('tokenSigning')
         ]);
     }
     
@@ -303,7 +303,7 @@ class Users extends Main {
     }
     
     public function subtractTokenAttempt() {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         return $resetToken->updateRemainingAttempts($_SESSION['email']);
     }
@@ -315,21 +315,21 @@ class Users extends Main {
     }
     
     public function updateLoginData(array $userData): bool {
-        $account = new Accounts;
+        $account = new Account;
         
         return $account->updateLoginDate($userData['email']);
     }
     
-    private function _getConnectionPagesStyles(): array {
-        return $this->_connectionPagesStyles;
+    private function _getConnectionPanelsStyles(): array {
+        return $this->_connectionPanelsStyles;
     }
     
     private function _getEmailRegex(): string {
         return $this->_emailRegex;
     }
     
-    private function _getPageScripts(string $page): array {
-        return $this->_pageScripts[$page];
+    private function _authPanelsScripts(string $page): array {
+        return $this->_authPanelsScripts[$page];
     }
     
     private function _getPasswordRegex(): string {
@@ -345,7 +345,7 @@ class Users extends Main {
     }
     
     private function _getTokenSigningRemainingAttempts() {
-        $resetToken = new ResetTokens;
+        $resetToken = new ResetToken;
         
         return $resetToken->selectRemainingAttempts($_SESSION['email'])['remaining_atpt'];
     }

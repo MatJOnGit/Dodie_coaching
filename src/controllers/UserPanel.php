@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class UserPanels extends Main {
+class UserPanel extends Main {
     protected $_routingURLs = [
         'dashboard' => 'index.php?page=dashboard',
         'meetingsBooking' => 'index.php?page=meetings-booking',

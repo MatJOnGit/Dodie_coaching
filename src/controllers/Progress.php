@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Progress as ProgressModel,  DateTime;
 
-class Progress extends UserPanels {
+class Progress extends UserPanel {
     private $_dateTypes = ['current-weight', 'old-weight'];
     
     private $_minWeight = 0;

@@ -10,13 +10,13 @@ class PdfFileBuilder extends Mailer {
         $options = new Options;
         $options->setChroot('D:\Programs\Dev\MAMP\htdocs\Dodie_coaching');
         $options->setIsRemoteEnabled(true);
-
+        
         $dompdf = new Dompdf($options);
         
         $dompdf->loadHtml($fileContent);
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-
+        
         $dompdf->addInfo("Author", 'Dodie_Coaching');
         
         return $dompdf->output();

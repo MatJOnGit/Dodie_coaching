@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\Asset\UrlPackage;
-
 session_start();
 
 // session_destroy();
@@ -45,7 +43,7 @@ try {
         ]
     ];
     
-    $user = new Dodie_Coaching\Controllers\Users;
+    $user = new Dodie_Coaching\Controllers\User;
     if ($user->areParamsSet(['page'])) {
         $page = $user->getParam('page');
         
@@ -145,18 +143,18 @@ try {
                 $userRole = $user->getRole();
                 
                 if ($userRole && $user->isRoleMatching($userRole, ['member', 'subscriber'])) {
-                    $userPanels = new Dodie_Coaching\Controllers\UserPanels;
+                    $userPanel = new Dodie_Coaching\Controllers\UserPanel;
                     
-                    if ($userPanels->isRequestMatching($page, 'dashboard')) {
+                    if ($userPanel->isRequestMatching($page, 'dashboard')) {
                         $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
                         $userDashboard->renderUserDashboardPage($twig);
                     }
                     
-                    elseif ($userPanels->isRequestMatching($page, 'nutrition')) {
+                    elseif ($userPanel->isRequestMatching($page, 'nutrition')) {
                         $nutrition = new Dodie_Coaching\Controllers\Nutrition;
                         
                         if ($nutrition->isMenuRequested()) {
-                            $subscriberId = $nutrition->getUserId()['id'];
+                            $subscriberId = intval($nutrition->getUserId()['id']);
                             $nutrition->renderNutritionMenuPage($twig, $subscriberId);
                         }
                         
@@ -181,28 +179,28 @@ try {
                             }
                             
                             else {
-                                $userPanels->routeTo('nutrition');
+                                $userPanel->routeTo('nutrition');
                             }
                         }
                         
                         else {
-                            $userPanels->routeTo('nutrition');
+                            $userPanel->routeTo('nutrition');
                         }
                     }
                     
-                    elseif ($userPanels->isRequestMatching($page, 'progress')) {
+                    elseif ($userPanel->isRequestMatching($page, 'progress')) {
                         $progress = new Dodie_Coaching\Controllers\Progress;
                         $progress->renderProgressPage($twig);
                     }
                     
-                    elseif ($userPanels->isRequestMatching($page, 'meetings-booking')){
-                        $meetingsBooking = new Dodie_Coaching\Controllers\MeetingsBooking;
-                        $meetingsBooking->renderMeetingsBookingPage($twig);
+                    elseif ($userPanel->isRequestMatching($page, 'meetings-booking')){
+                        $meetingBooking = new Dodie_Coaching\Controllers\MeetingBooking;
+                        $meetingBooking->renderMeetingsBookingPage($twig);
                     }
                     
-                    elseif ($userPanels->isRequestMatching($page, 'subscription')) {
-                        $subscriptions = new Dodie_Coaching\Controllers\Subscriptions;
-                        $subscriptions->renderSubscriptionPage($twig);
+                    elseif ($userPanel->isRequestMatching($page, 'subscription')) {
+                        $subscription = new Dodie_Coaching\Controllers\Subscription;
+                        $subscription->renderSubscriptionPage($twig);
                     }
                     
                     else {
@@ -230,23 +228,23 @@ try {
                 $userRole = $user->getRole();
                 
                 if ($userRole && $user->isRoleMatching($userRole, ['admin'])) {
-                    $adminPanels = new Dodie_Coaching\Controllers\AdminPanels;
+                    $adminPanel = new Dodie_Coaching\Controllers\AdminPanel;
                     
-                    if ($adminPanels->isRequestMatching($page, 'admin-dashboard')) {
+                    if ($adminPanel->isRequestMatching($page, 'admin-dashboard')) {
                         $adminDashboard = new Dodie_Coaching\Controllers\AdminDashboard;
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'appliances-list')) {
-                        $appliances = new Dodie_Coaching\Controllers\Appliances;
-                        $appliances->renderAppliancesListPage($twig);
+                    elseif ($adminPanel->isRequestMatching($page, 'appliances-list')) {
+                        $appliance = new Dodie_Coaching\Controllers\Appliance;
+                        $appliance->renderAppliancesListPage($twig);
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'appliance-details') && $adminPanels->areParamsSet(['id'])) {
-                        $appliance = new Dodie_Coaching\Controllers\Appliances;
-                        $applicantId = $appliance->getParam('id');
+                    elseif ($adminPanel->isRequestMatching($page, 'appliance-details') && $adminPanel->areParamsSet(['id'])) {
+                        $appliance = new Dodie_Coaching\Controllers\Appliance;
+                        $applicantId = intval($appliance->getParam('id'));
                         
-                        if ($appliance->isApplianceAvailable($applicantId)) {
+                        if ($appliance->isApplianceIdValid($applicantId)) {
                             $appliance->renderApplianceDetailsPage($twig, $applicantId);
                         }
                         
@@ -255,36 +253,36 @@ try {
                         }
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'subscribers-list')) {
-                        $subscribers = new Dodie_Coaching\Controllers\Subscribers;
-                        $subscribers->renderSubscribersListPage($twig);
+                    elseif ($adminPanel->isRequestMatching($page, 'subscribers-list')) {
+                        $subscriber = new Dodie_Coaching\Controllers\Subscriber;
+                        $subscriber->renderSubscribersListPage($twig);
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-profile')) {
-                        $subscribers = new Dodie_Coaching\Controllers\Subscribers;
+                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-profile')) {
+                        $subscriber = new Dodie_Coaching\Controllers\Subscriber;
                         
-                        if ($adminPanels->areParamsSet(['id'])) {
-                            $subscriberId = intval($subscribers->getParam('id'));
+                        if ($adminPanel->areParamsSet(['id'])) {
+                            $subscriberId = intval($subscriber->getParam('id'));
                             
-                            if ($subscribers->isSubscriberIdValid($subscriberId)) {
-                                $subscribers->renderSubscriberProfilePage($twig, $subscriberId);
+                            if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                                $subscriber->renderSubscriberProfilePage($twig, $subscriberId);
                             }
                             
                             else {
-                                $subscribers->routeTo('subscribersList');
+                                $subscriber->routeTo('subscribersList');
                             }
                         }
                         
                         else {
                             throw new Url_Exception('MISSING ID PARAMETER IN URL');
-                            // $subscribers->routeTo('subscribersList');
+                            // $subscriber->routeTo('subscribersList');
                         }
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-program')) {
-                        $program = new Dodie_Coaching\Controllers\program;
+                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-program')) {
+                        $program = new Dodie_Coaching\Controllers\Program;
                         
-                        if ($adminPanels->areParamsSet(['id'])) {
+                        if ($adminPanel->areParamsSet(['id'])) {
                             $subscriberId = intval($program->getParam('id'));
                             
                             if ($program->isSubscriberIdValid($subscriberId)) {
@@ -298,35 +296,35 @@ try {
                         
                         else {
                             throw new Url_Exception('MISSING ID PARAMETER IN URL');
-                            // $programs->routeTo('subscribersList');
+                            // $program->routeTo('subscribersList');
                         }
                     }
                     
-                    elseif ($adminPanels->isRequestMatching($page, 'subscriber-notes')) {
-                        $notes = new Dodie_Coaching\Controllers\Notes;
+                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-notes')) {
+                        $note = new Dodie_Coaching\Controllers\Note;
                         
-                        if ($notes->areParamsSet(['id'])) {
-                            $subscriberId = intval($notes->getParam('id'));
+                        if ($note->areParamsSet(['id'])) {
+                            $subscriberId = intval($note->getParam('id'));
                             
-                            if ($notes->isSubscriberIdValid($subscriberId)) {
-                                $notes->renderSubscriberNotesPage($twig, $subscriberId);
+                            if ($note->isSubscriberIdValid($subscriberId)) {
+                                $note->renderSubscriberNotesPage($twig, $subscriberId);
                             }
                             
                             else {
-                                $notes->routeTo('subscribersList');
+                                $note->routeTo('subscribersList');
                             }
                         }
                         
                         else {
                             throw new Url_Exception('MISSING ID PARAMETER IN URL');
-                            // $notes->routeTo('subscribersList');
+                            // $note->routeTo('subscribersList');
                         }
                     }
                     
-                    else if ($adminPanels->isRequestMatching($page, 'meetings-management')) {
-                        $meetingsManagement = new Dodie_Coaching\Controllers\MeetingsManagement;
+                    else if ($adminPanel->isRequestMatching($page, 'meetings-management')) {
+                        $meetingManagement = new Dodie_Coaching\Controllers\MeetingManagement;
                         
-                        $meetingsManagement->renderMeetingsManagementPage($twig);
+                        $meetingManagement->renderMeetingsManagementPage($twig);
                     }
                 }
                 
@@ -349,7 +347,7 @@ try {
     }
     
     elseif ($user->areParamsSet(['action'])) {
-        $user = new Dodie_Coaching\Controllers\Users;
+        $user = new Dodie_Coaching\Controllers\User;
         $action = $user->getParam('action');
         
         if (in_array($action, $Urls['actions']['connection'])) {
@@ -647,17 +645,17 @@ try {
         }
         
         elseif (in_array($action, $Urls['actions']['meeting'])) {
-            $meetings = new Dodie_Coaching\Controllers\MeetingsBooking;
+            $meeting = new Dodie_Coaching\Controllers\MeetingBooking;
             
             if ($user->isLogged()) {
-                if ($meetings->isRequestMatching($action, 'book-appointment')) {
-                    $dateData = $meetings->getDateData();
+                if ($meeting->isRequestMatching($action, 'book-appointment')) {
+                    $dateData = $meeting->getDateData();
                     
-                    if ($meetings->areDateDataValid($dateData)) {
-                        $formatedDate = $meetings->getFormatedDate($dateData);
-                        
-                        if ($meetings->isMeetingsSlotAvailable($formatedDate)) {
-                            if (!$meetings->bookAppointment($formatedDate)) {
+                    if ($meeting->areDateDataValid($dateData)) {
+                        $formatedDate = $meeting->getFormatedDate($dateData);
+
+                        if ($meeting->isMeetingsSlotAvailable($formatedDate)) {
+                            if (!$meeting->bookAppointment($formatedDate)) {
                                 throw new DB_Exception('FAILED TO BOOK APPOINTMENT');
                             }
                         }
@@ -671,24 +669,25 @@ try {
                         throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
                     
-                    $meetings->routeTo('meetingsBooking');
+                    $meeting->routeTo('meetingsBooking');
                 }
                 
-                elseif ($meetings->isRequestMatching($action, 'cancel-appointment')) {
-                    if (!$meetings->cancelAppointment()) {
+                elseif ($meeting->isRequestMatching($action, 'cancel-appointment')) {
+                    if (!$meeting->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
-                    $meetings->routeTo('meetingsBooking');
+
+                    $meeting->routeTo('meetingsBooking');
                 }
                 
-                elseif ($meetings->isRequestMatching($action, 'save-meeting')) {
+                elseif ($meeting->isRequestMatching($action, 'save-meeting')) {
                     $userRole = $user->getRole();
                     
                     if ($user->isRoleMatching($userRole, ['admin'])) {
                         $meetingData = $user->getFormData(['meeting-day', 'meeting-time']);
                         
                         if ($meetingData) {
-                            $meeting = new Dodie_Coaching\Controllers\MeetingsManagement;
+                            $meeting = new Dodie_Coaching\Controllers\MeetingManagement;
                             
                             if ($meeting->areDateDataValid($meetingData)) {
                                 if (!$meeting->addMeetingSlot($meetingData)) {
@@ -705,12 +704,12 @@ try {
                     }
                 }
                 
-                elseif ($meetings->isRequestMatching($action, 'delete-meeting')) {
+                elseif ($meeting->isRequestMatching($action, 'delete-meeting')) {
                     $userRole = $user->getRole();
                     
                     if ($user->isRoleMatching($userRole, ['admin'])) {
                         if ($user->areParamsSet(['id'])) {
-                            $meeting = new Dodie_Coaching\Controllers\MeetingsManagement;
+                            $meeting = new Dodie_Coaching\Controllers\MeetingManagement;
                             $meetingId = $meeting->getParam('id');
                             
                             if ($meeting->isMeetingIdValid($meetingId)) {
@@ -723,10 +722,6 @@ try {
                                     if (!$canceledMeetingAlerter->sendCancelMeetingNotification($attendeeData[0])) {
                                         throw new Mailer_Exception('FAILED TO SEND MEETING DELETION NOTIFICATION');
                                     }
-                                }
-                                
-                                else {
-                                    throw new DB_Exception('FAILED TO DELETE MEETING');
                                 }
                                 
                                 $meeting->routeTo('meetingsManagement');
@@ -754,30 +749,30 @@ try {
         }
         
         elseif (in_array($action, $Urls['actions']['appliance'])) {
-            $appliances = new Dodie_Coaching\Controllers\Appliances;
+            $appliance = new Dodie_Coaching\Controllers\Appliance;
             
             if ($user->isLogged()) {
-                if ($appliances->isRequestMatching($action, 'reject-appliance')) {
-                    if ($appliances->areParamsSet(['id'])) {
-                        $applicantId = $appliances->getParam('id');
+                if ($appliance->isRequestMatching($action, 'reject-appliance')) {
+                    if ($appliance->areParamsSet(['id'])) {
+                        $applicantId = intval($appliances->getParam('id'));
                         
-                        if ($appliances->isApplianceIdValid($applicantId)) {
+                        if ($appliance->isApplianceIdValid($applicantId)) {
                             $appResponder = new Dodie_Coaching\Services\ApplianceResponder;
                             
                             $applicantData = $appliances->getApplicantData($applicantId);
                             $messageType = $appliances->getMessageType();
                             
-                            if ($appliances->eraseAppliance($applicantId)) {
+                            if ($appliance->eraseAppliance($applicantId)) {
                                 if (!$appResponder->sendRejectionNotification($messageType, $applicantData)) {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
                                 }
-
-                                $appliances->routeTo('appliancesList');
+                                
+                                $appliance->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $appliances->routeTo('appliancesList');
+                            $appliance->routeTo('appliancesList');
                         }
                     }
                     
@@ -787,24 +782,24 @@ try {
                 }
                 
                 elseif ($appliances->isRequestMatching($action, 'approve-appliance')) {
-                    if ($appliances->areParamsSet(['id'])) {
-                        $applicantId = $appliances->getParam('id');
+                    if ($appliance->areParamsSet(['id'])) {
+                        $applicantId = intval($appliances->getParam('id'));
                         
-                        if ($appliances->isApplianceIdValid($applicantId)) {
+                        if ($appliance->isApplianceIdValid($applicantId)) {
                             $applianceResponder = new Dodie_Coaching\Services\ApplianceResponder;
-                            $applicantData = $appliances->getApplicantData($applicantId);
+                            $applicantData = $appliance->getApplicantData($applicantId);
                             
-                            if ($appliances->acceptAppliance($applicantId, 'payment_pending')) {
+                            if ($appliance->acceptAppliance($applicantId, 'payment_pending')) {
                                 if (!$applianceResponder->sendApprovalNotification($applicantData)) {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
                                 }
                                 
-                                $appliances->routeTo('appliancesList');
+                                $appliance->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $appliances->routeTo('appliancesList');
+                            $appliance->routeTo('appliancesList');
                         }
                     }
                     
@@ -824,19 +819,19 @@ try {
         }
         
         elseif (in_array($action, $Urls['actions']['notes'])) {
-            $notes = new Dodie_Coaching\Controllers\Notes;
+            $note = new Dodie_Coaching\Controllers\Note;
             
             if ($user->isLogged()) {
-                if ($notes->isRequestMatching($action, 'save-note')) {
-                    if ($notes->areParamsSet(['id'])) {
-                        $subscriberId = intval($notes->getParam('id'));
+                if ($note->isRequestMatching($action, 'save-note')) {
+                    if ($note->areParamsSet(['id'])) {
+                        $subscriberId = intval($note->getParam('id'));
                         
-                        if ($notes->isSubscriberIdValid($subscriberId)) {
-                            if ($notes->areDataPosted(['note-message', 'attached-meeting-date'])) {
-                                $noteData = $notes->buildNoteData($subscriberId);
+                        if ($note->isSubscriberIdValid($subscriberId)) {
+                            if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                                $noteData = $note->buildNoteData($subscriberId);
                                 
                                 if ($noteData) {
-                                    $notes->logNote($noteData);
+                                    $note->logNote($noteData);
                                     
                                     header("location:index.php?page=subscriber-notes&id=" . $noteData['subscriber_id']);
                                 }
@@ -849,13 +844,13 @@ try {
                             
                             else {
                                 throw new Data_Exception('MISSING NOTE PARAMETERS IN NOTE FORM');
-                                // $notes->routeTo('appliancesList');
+                                // $note->routeTo('appliancesList');
                             }
                         }
                         
                         else {
                             throw new Url_Exception('INVALID ID PARAMETER IN URL');
-                            // $notes->routeTo('appliancesList');
+                            // $note->routeTo('appliancesList');
                         }
                     }
                     
@@ -864,18 +859,18 @@ try {
                     }
                 }
                 
-                elseif ($notes->isRequestMatching($action, 'edit-note')) {
-                    if ($notes->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = intval($notes->getParam('id'));
-                        $noteId = intval($notes->getParam('note-id'));
+                elseif ($note->isRequestMatching($action, 'edit-note')) {
+                    if ($note->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($note->getParam('id'));
+                        $noteId = intval($note->getParam('note-id'));
                         
-                        if ($notes->isSubscriberIdValid($subscriberId) && $notes->isNoteIdValid($noteId)) {
-                            if ($notes->areDataPosted(['note-message', 'attached-meeting-date'])) {
-                                $noteData = $notes->buildNoteData($subscriberId);
-
+                        if ($note->isSubscriberIdValid($subscriberId) && $note->isNoteIdValid($noteId)) {
+                            if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                                $noteData = $note->buildNoteData($subscriberId);
+                                
                                 if ($noteData) {
-                                    $notes->editNote($noteData, $noteId);
-
+                                    $note->editNote($noteData, $noteId);
+                                    
                                     header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
                                 }
                                 
@@ -899,13 +894,13 @@ try {
                     }
                 }
                 
-                elseif ($notes->isRequestMatching($action, 'delete-note')) {
-                    if ($notes->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = intval($notes->getParam('id'));
-                        $noteId = intval($notes->getParam('note-id'));
+                elseif ($note->isRequestMatching($action, 'delete-note')) {
+                    if ($note->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($note->getParam('id'));
+                        $noteId = intval($note->getParam('note-id'));
                         
-                        if ($notes->isNoteIdValid($noteId)) {
-                            $notes->eraseNote($noteId);
+                        if ($note->isNoteIdValid($noteId)) {
+                            $note->eraseNote($noteId);
                             
                             header("location:index.php?page=subscriber-notes&id=" . $subscriberId);
                         }
@@ -944,7 +939,7 @@ try {
                                 
                                 header("location:index.php?page=subscriber-program&id=" . $subscriberId);
                             }
-
+                            
                             else {
                                 throw new Data_Exception('MISSING CHECKED ELEMENT IN MEALS FORM');
                             }
@@ -980,10 +975,10 @@ try {
                             if ($programFile->isProgramFileUpdatable($subscriberId)) {
                                 $programData = $programFile->buildProgramData($subscriberId);
                                 $subscriberHeaders = $programFile->getSubscriberHeaders($subscriberId);
-
+                                
                                 if ($programData && $subscriberHeaders) {
                                     $output = $programFile->buildFile($twig, $subscriberId, $programData, $subscriberHeaders);
-
+                                    
                                     if ($output) {
                                         if ($programFile->saveDataToPdf($output, $subscriberHeaders)) {
                                             $programFileAlerter = new Dodie_Coaching\Services\ProgramFileAlerter;
@@ -998,7 +993,7 @@ try {
                                             throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
                                         }
                                     }
-
+                                    
                                     else {
                                         throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
                                     }

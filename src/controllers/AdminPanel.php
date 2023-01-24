@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class AdminPanels extends Main {
+class AdminPanel extends Main {
     protected $_routingURLs = [
         'meetingsManagement' => 'index.php?page=meetings-management'
     ];

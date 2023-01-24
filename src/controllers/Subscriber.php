@@ -2,10 +2,10 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Subscribers as SubscriberModel;
-use Dodie_Coaching\Models\Nutrition as NutritionModel;
+use Dodie_Coaching\Models\Subscriber as SubscriberModel;
+use Dodie_Coaching\Models\Nutrition;
 
-class Subscribers extends AdminPanels {    
+class Subscriber extends AdminPanel {    
     public function getSubscriberData(int $subscriberId) {
         $subscriber = new SubscriberModel;
         
@@ -90,7 +90,7 @@ class Subscribers extends AdminPanels {
     }
     
     private function _isMealCompleted(int $subscriberId, string $weekDay, string $meal): bool {
-        $nutrition = new NutritionModel;
+        $nutrition = new Nutrition;
         
         $isMealCompleted = true;
         

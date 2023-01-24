@@ -4,31 +4,13 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class Appliances extends Main {
+class Appliance extends Main {
     public function deleteAppliance(int $applicantId) {
         $db = $this->dbConnect();
         $deleteApplianceQuery = "DELETE FROM appliances WHERE user_id = ?";
         $deleteApplianceStatement = $db->prepare($deleteApplianceQuery);
         
         return $deleteApplianceStatement->execute([$applicantId]);
-    }
-    
-    public function selectApplicantData(int $applicantId) {
-        $db = $this->dbConnect();
-        $selectApplicantDataQuery = "SELECT email, first_name FROM accounts acc INNER JOIN appliances app ON acc.id = app.user_id WHERE app.user_id = ?";
-        $selectApplicantDataStatement = $db->prepare($selectApplicantDataQuery);
-        $selectApplicantDataStatement->execute([$applicantId]);
-        
-        return $selectApplicantDataStatement->fetch(PDO::FETCH_ASSOC);
-    }
-    
-    public function selectApplicantId(string $applicantId) {
-        $db = $this->dbConnect();
-        $selectApplicantIdQuery = "SELECT user_id FROM appliances WHERE user_id = ?";
-        $selectApplicantIdStatement = $db->prepare($selectApplicantIdQuery);
-        $selectApplicantIdStatement->execute([$applicantId]);
-        
-        return $selectApplicantIdStatement->fetch();
     }
     
     public function selectApplianceDetails(string $applianceId) {
@@ -85,6 +67,24 @@ class Appliances extends Main {
         $selectAppliancesHeadersStatement->execute();
         
         return $selectAppliancesHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectApplicantData(int $applicantId) {
+        $db = $this->dbConnect();
+        $selectApplicantDataQuery = "SELECT email, first_name FROM accounts acc INNER JOIN appliances app ON acc.id = app.user_id WHERE app.user_id = ?";
+        $selectApplicantDataStatement = $db->prepare($selectApplicantDataQuery);
+        $selectApplicantDataStatement->execute([$applicantId]);
+        
+        return $selectApplicantDataStatement->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectApplicantId(string $applicantId) {
+        $db = $this->dbConnect();
+        $selectApplicantIdQuery = "SELECT user_id FROM appliances WHERE user_id = ?";
+        $selectApplicantIdStatement = $db->prepare($selectApplicantIdQuery);
+        $selectApplicantIdStatement->execute([$applicantId]);
+        
+        return $selectApplicantIdStatement->fetch();
     }
     
     public function updateApplianceStatus(string $applicantId, string $newApplianceStatus) {

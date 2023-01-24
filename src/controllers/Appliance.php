@@ -2,29 +2,29 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Appliances as AppliancesModel;
+use Dodie_Coaching\Models\Appliance as ApplianceModel;
 
-class Appliances extends AdminPanels {
-    private $_appliancesScripts = [
+class Appliance extends AdminPanel {
+    private $_applianceScripts = [
         'classes/UserPanels.model',
         'classes/ApplianceDetails.model',
         'applianceDetailsApp'
     ];
     
-    public function acceptAppliance(string $applianceId, string $newApplianceStatus) {
-        $appliance = new AppliancesModel;
+    public function acceptAppliance(int $applianceId, string $newApplianceStatus) {
+        $appliance = new ApplianceModel;
         
         return $appliance->updateApplianceStatus($applianceId, $newApplianceStatus);
     }
     
-    public function eraseAppliance(string $applicantId) {
-        $appliance = new AppliancesModel;
+    public function eraseAppliance(int $applicantId) {
+        $appliance = new ApplianceModel;
         
         return $appliance->deleteAppliance($applicantId);
     }
     
-    public function getApplicantData(string $applicantId) {
-        $appliance = new AppliancesModel;
+    public function getApplicantData(int $applicantId) {
+        $appliance = new ApplianceModel;
         
         return $appliance->selectApplicantData($applicantId);
     }
@@ -33,14 +33,8 @@ class Appliances extends AdminPanels {
         return empty($_POST['rejection-message']) ? 'default' : 'custom';
     }
     
-    public function isApplianceAvailable(string $applianceId) {
-        $appliance = new AppliancesModel;
-        
-        return $appliance->selectApplicantId($applianceId);
-    }
-    
-    public function isApplianceIdValid(string $applicantId) {
-        $appliance = new AppliancesModel;
+    public function isApplianceIdValid(int $applicantId) {
+        $appliance = new ApplianceModel;
         
         return $appliance->selectApplicantId($applicantId);
     }
@@ -49,7 +43,7 @@ class Appliances extends AdminPanels {
         return empty($_POST['rejection-message']);
     }
     
-    public function renderApplianceDetailsPage(object $twig, string $applianceId): void {
+    public function renderApplianceDetailsPage(object $twig, int $applianceId): void {
         echo $twig->render('admin_panels/appliance-details.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
             'frenchTitle' => 'Profil du demandeur',
@@ -71,18 +65,18 @@ class Appliances extends AdminPanels {
     }
     
     private function _getApplianceDetails(string $applianceId) {
-        $appliance = new AppliancesModel;
+        $appliance = new ApplianceModel;
         
         return $appliance->selectApplianceDetails($applianceId);
     }
     
     private function _getAppliancesHeaders() {
-        $appliance = new AppliancesModel;
+        $appliance = new ApplianceModel;
         
         return $appliance->selectAppliancesHeaders();
     }
     
     private function _getAppliancesScripts(): array {
-        return $this->_appliancesScripts;
+        return $this->_applianceScripts;
     }
 }

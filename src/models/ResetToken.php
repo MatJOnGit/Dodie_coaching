@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class ResetTokens extends Main {
+class ResetToken extends Main {
     public function deleteToken(string $email) {
         $db = $this->dbConnect();
         $deleteTokenQuery = "DELETE rt FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
@@ -50,9 +50,9 @@ class ResetTokens extends Main {
     
     public function updateRemainingAttempts(string $email) {
         $db = $this->dbConnect();
-        $updateRemainingAtptQuery = "UPDATE reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id SET rt.remaining_atpt = rt.remaining_atpt - 1 WHERE acc.email = ?";
-        $updateRemainingAtptStatement = $db->prepare($updateRemainingAtptQuery);
+        $updateRemainingAttemptsQuery = "UPDATE reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id SET rt.remaining_atpt = rt.remaining_atpt - 1 WHERE acc.email = ?";
+        $updateRemainingAttemptsStatement = $db->prepare($updateRemainingAttemptsQuery);
         
-        return $updateRemainingAtptStatement->execute([$email]);
+        return $updateRemainingAttemptsStatement->execute([$email]);
     }
 }

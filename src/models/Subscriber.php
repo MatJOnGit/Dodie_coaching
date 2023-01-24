@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class Subscribers extends Main {
+class Subscriber extends Main {
     public function selectAccountDetails(int $subscriberId) {
         $db = $this->dbConnect();
         $selectAccountDetailsQuery =
@@ -121,13 +121,13 @@ class Subscribers extends Main {
         
         return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function selectProgramMeals($subscriberId) {
+    
+    public function selectProgramMeals(int $subscriberId) {
         $db = $this->dbConnect();
         $selectProgramMealsQuery = "SELECT meals_list FROM subscribers_data WHERE user_id = ?";
         $selectProgramMealsStatement = $db->prepare($selectProgramMealsQuery);
         $selectProgramMealsStatement->execute([$subscriberId]);
-
+        
         return $selectProgramMealsStatement->fetch(PDO::FETCH_ASSOC);
     }
 }

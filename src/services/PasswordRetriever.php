@@ -5,8 +5,6 @@ namespace Dodie_Coaching\Services;
 class PasswordRetriever extends Mailer {
     private $_subject = 'Récupération de votre mot de passe';
     
-    protected $_tokenSigningLink = 'http://localhost:8080/Dodie_coaching/public/index.php?page=token-signing';
-    
     public function sendToken(string $token) {
         return mail($this->_getMailTo(), $this->_subject, $this->_getPwdRetrievingMessage($token), $this->headers);
     }

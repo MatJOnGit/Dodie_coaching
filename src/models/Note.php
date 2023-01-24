@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class Notes extends Main {
+class Note extends Main {
     public function deleteNote(int $noteId) {
         $db = $this->dbConnect();
         $deleteNoteQuery = "DELETE FROM followup_notes WHERE id = ?";
@@ -15,15 +15,10 @@ class Notes extends Main {
     
     public function insertNote(string $message, string $date, int $subscriberId, int $attached_to_meeting) {
         $db = $this->dbConnect();
-        $insertNoteQuery = "INSERT INTO followup_notes (date, user_id, note_entry, attached_to_meeting) VALUES (:date, :user_id, :message, :attached_to_meeting)";
+        $insertNoteQuery = "INSERT INTO followup_notes (date, user_id, note_entry, attached_to_meeting) VALUES (?, ?, ?, ?)";
         $insertNoteStatement = $db->prepare($insertNoteQuery);
         
-        return $insertNoteStatement->execute([
-            'date' => $date,
-            'user_id' => $subscriberId,
-            'message' => $message,
-            'attached_to_meeting' => $attached_to_meeting
-        ]);
+        return $insertNoteStatement->execute([$date, $subscriberId, $message, $attached_to_meeting]);
     }
     
     public function selectNote(int $noteId) {

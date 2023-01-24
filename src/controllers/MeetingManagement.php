@@ -2,21 +2,21 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Meetings as MeetingsModel;
+use Dodie_Coaching\Models\Meeting;
 
-class MeetingsManagement extends AdminPanels {
-    private $_meetingsManagementScripts = [
+class MeetingManagement extends AdminPanel {
+    private $_meetingManagementScripts = [
         'classes/UserPanels.model',
         'classes/MeetingsManagementHelper.model',
         'meetingsManagementHelper'
     ];
     
     public function addMeetingSlot(array $meetingData) {
-        $meetings = new MeetingsModel;
+        $meeting = new Meeting;
         
         $meetingDate = $meetingData['meeting-day'] . ' ' . $meetingData['meeting-time'] . ':00';
         
-        return $meetings->insertMeeting($meetingDate);
+        return $meeting->insertMeeting($meetingDate);
     }
     
     public function areDateDataValid(array $meetingData): bool {
@@ -26,17 +26,17 @@ class MeetingsManagement extends AdminPanels {
     }
     
     public function eraseMeetingSlot(string $meetingId) {
-        $meetings = new MeetingsModel;
+        $meeting = new Meeting;
         
-        return $meetings->deleteMeeting($meetingId);
+        return $meeting->deleteMeeting($meetingId);
     }
     
     public function isMeetingIdValid(string $meetingId): bool {
-        $meetings = new MeetingsModel;
+        $meeting = new Meeting;
         
         $isMeetingIdValid = false;
         
-        foreach ($meetings->selectNextMeetings() as $meeting) {
+        foreach ($meeting->selectNextMeetings() as $meeting) {
             if ($meeting['slot_id'] === $meetingId) {
                 $isMeetingIdValid = true;
             }
@@ -46,13 +46,13 @@ class MeetingsManagement extends AdminPanels {
     }
     
     public function getAttendeeData(string $meetingId) {
-        $meetings = new MeetingsModel;
+        $meeting = new Meeting;
         
-        return $meetings->selectAttendeeData($meetingId);
+        return $meeting->selectAttendeeData($meetingId);
     }
     
     public function isMeetingBooked(array $attendeeData): bool {
-        return $attendeeData[0]['user_id'] > 0;
+        return !empty($attendeeData) ? $attendeeData[0]['user_id'] > 0 : false;
     }
     
     public function renderMeetingsManagementPage(object $twig): void {        
@@ -62,7 +62,7 @@ class MeetingsManagement extends AdminPanels {
             'appSection' => 'userPanels',
             'prevPanel' => ['admin-dashboard', 'Tableau de bord'],
             'meetingSlots' => $this->_getSortedMeetingSlots(),
-            'pageScripts' => $this->_getMeetingsManagementScripts()
+            'pageScripts' => $this->_getMeetingManagementScripts()
         ]);
     }
     
@@ -87,15 +87,15 @@ class MeetingsManagement extends AdminPanels {
     }
     
     private function _getSortedMeetingSlots() {
-        $meetings = new MeetingsModel;
+        $meeting = new Meeting;
         
-        $nextMeetings = $meetings->selectNextMeetings();
+        $nextMeetings = $meeting->selectNextMeetings();
         
         return $this->_sortNextMeetings($nextMeetings);
     }
     
-    private function _getMeetingsManagementScripts(): array {
-        return $this->_meetingsManagementScripts;
+    private function _getMeetingManagementScripts(): array {
+        return $this->_meetingManagementScripts;
     }
     
     /**************************************************************************************

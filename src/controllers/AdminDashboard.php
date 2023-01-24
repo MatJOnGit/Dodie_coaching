@@ -2,11 +2,11 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Subscribers;
-use Dodie_Coaching\Models\Appliances;
-use Dodie_Coaching\Models\Meetings;
+use Dodie_Coaching\Models\Subscriber;
+use Dodie_Coaching\Models\Appliance;
+use Dodie_Coaching\Models\Meeting;
 
-class AdminDashboard extends AdminPanels {
+class AdminDashboard extends AdminPanel {
     public function renderAdminDashboardPage(object $twig): void {
         echo $twig->render('admin_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyle(),
@@ -25,6 +25,7 @@ class AdminDashboard extends AdminPanels {
     private function _filterTodayMeetingsData(array $incomingMeetings): array {
         $this->_setTimeZone();
         $currentDate = date('d/m/Y');
+        
         $todayMeetingsData = [];
         
         if ($incomingMeetings) {
@@ -46,21 +47,21 @@ class AdminDashboard extends AdminPanels {
     }
     
     private function _getAppliancesCount() {
-        $appliances = new Appliances;
+        $appliance = new Appliance;
         
-        return $appliances->selectAppliancesCount();
+        return $appliance->selectAppliancesCount();
     }
     
     private function _getSubscribersCount() {
-        $subscribers = new Subscribers;
+        $subscriber = new Subscriber;
         
-        return $subscribers->selectSubscribersCount();
+        return $subscriber->selectSubscribersCount();
     }
     
     private function _getTodayMeetingsData() {
-        $meetings = new Meetings;
+        $meeting = new Meeting;
         
-        $incomingMeetings = $meetings->selectNextBookedMeetings();
+        $incomingMeetings = $meeting->selectNextBookedMeetings();
         
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

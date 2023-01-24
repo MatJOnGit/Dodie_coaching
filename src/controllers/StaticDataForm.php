@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class StaticDataForm extends UserPanels {
+class StaticDataForm extends UserPanel {
     public function renderStaticDataForm(object $twig): void {
         echo $twig->render('user_panels/static-data-form.html.twig', [
             'stylePaths' => $this->_getUserPanelsStyles(),

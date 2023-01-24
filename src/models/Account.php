@@ -4,25 +4,13 @@ namespace Dodie_Coaching\Models;
 
 use PDO;
 
-class Accounts extends Main {
+class Account extends Main {
     public function insertAccount(string $email, string $hashedPassword) {
         $db = $this->dbConnect();
-        $insertAccountQuery = "INSERT INTO accounts (email, password) VALUES (:email, :password)";
+        $insertAccountQuery = "INSERT INTO accounts (email, password) VALUES (?, ?)";
         $insertAccountStatement = $db->prepare($insertAccountQuery);
         
-        return $insertAccountStatement->execute([
-            'email' => $email,
-            'password' => $hashedPassword
-        ]);
-    }
-    
-    public function selectPassword (string $email) {
-        $db = $this->dbConnect();
-        $selectPasswordQuery = "SELECT password FROM accounts WHERE email = ?";
-        $selectPasswordStatement = $db->prepare($selectPasswordQuery);
-        $selectPasswordStatement->execute([$email]);
-        
-        return $selectPasswordStatement->fetch();
+        return $insertAccountStatement->execute([$email, $hashedPassword]);
     }
     
     public function selectEmail(string $email) {
@@ -33,14 +21,23 @@ class Accounts extends Main {
         
         return $selectEmailStatement->fetch(PDO::FETCH_ASSOC);
     }
-
+    
     public function selectId(string $email) {
         $db = $this->dbConnect();
         $selectIdQuery = "SELECT id FROM accounts WHERE email = ?";
         $selectIdStatement = $db->prepare($selectIdQuery);
         $selectIdStatement->execute([$email]);
-
+        
         return $selectIdStatement->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectPassword (string $email) {
+        $db = $this->dbConnect();
+        $selectPasswordQuery = "SELECT password FROM accounts WHERE email = ?";
+        $selectPasswordStatement = $db->prepare($selectPasswordQuery);
+        $selectPasswordStatement->execute([$email]);
+        
+        return $selectPasswordStatement->fetch();
     }
     
     public function selectRole(string $email) {
@@ -60,7 +57,7 @@ class Accounts extends Main {
         return $updateLoginDateStatement->execute([$email]);
     }
     
-    public function updatePassword($email, $hashedPassword) {
+    public function updatePassword(string $email, string $hashedPassword) {
         $db = $this->dbConnect();
         $updatePasswordQuery = "UPDATE accounts SET password = ? WHERE email = ?";
         $updatePasswordStatement = $db->prepare($updatePasswordQuery);

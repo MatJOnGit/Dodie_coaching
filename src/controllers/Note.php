@@ -2,11 +2,11 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Meetings;
-use Dodie_Coaching\Models\Notes as NotesModel;
+use Dodie_Coaching\Models\Meeting;
+use Dodie_Coaching\Models\Note as NoteModel;
 
-class Notes extends Subscribers {
-    private $_notesScripts = [
+class Note extends Subscriber {
+    private $_noteScripts = [
         'classes/UserPanels.model',
         'classes/NotesHelper.model',
         'notesHelperApp'
@@ -45,33 +45,33 @@ class Notes extends Subscribers {
     }
     
     public function editNote(array $noteData, int $noteId) {
-        $notes = new NotesModel;
+        $note = new NoteModel;
         
-        return $notes->updateNote($noteData['message'], $noteData['date'], $noteData['attached_to_meeting'], $noteId);
+        return $note->updateNote($noteData['message'], $noteData['date'], $noteData['attached_to_meeting'], $noteId);
     }
     
     public function eraseNote(int $noteId) {
-        $notes = new NotesModel;
+        $note = new NoteModel;
         
-        return $notes->deleteNote($noteId);
+        return $note->deleteNote($noteId);
     }
     
     public function getAttendedMeetings(int $subscriberId) {
-        $meetings = new Meetings;
+        $meeting = new Meeting;
         
-        return $meetings->selectAttendedMeetings($subscriberId);
+        return $meeting->selectAttendedMeetings($subscriberId);
     }
     
     public function isNoteIdValid(int $noteId) {
-        $notes = new NotesModel;
+        $note = new NoteModel;
         
-        return $notes->selectNote($noteId);
+        return $note->selectNote($noteId);
     }
     
     public function logNote(array $noteData) {
-        $notes = new NotesModel;
+        $note = new NoteModel;
         
-        return $notes->insertNote($noteData['message'], $noteData['date'], $noteData['subscriber_id'], $noteData['attached_to_meeting']);
+        return $note->insertNote($noteData['message'], $noteData['date'], $noteData['subscriber_id'], $noteData['attached_to_meeting']);
     }
     
     public function renderSubscriberNotesPage(object $twig, int $subscriberId): void {
@@ -88,12 +88,12 @@ class Notes extends Subscribers {
     }
     
     private function _getNotesScripts(): array {
-        return $this->_notesScripts;
+        return $this->_noteScripts;
     }
     
     private function _getSubscriberNotes(int $subscriberId) {
-        $notes = new NotesModel;
+        $note = new NoteModel;
         
-        return $notes->selectNotes($subscriberId);
+        return $note->selectNotes($subscriberId);
     }
 }

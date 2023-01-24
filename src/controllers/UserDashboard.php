@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-class UserDashboard extends UserPanels {
+class UserDashboard extends UserPanel {
     private $_dashboardMenuItems = [
         'nutrition' => [
             'icon' => 'fa-utensils',

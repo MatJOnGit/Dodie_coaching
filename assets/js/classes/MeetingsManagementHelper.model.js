@@ -148,7 +148,7 @@ class MeetingsManagementHelper extends UserPanels {
         saveMeetingBtn.value = "Enregistrer";
         saveMeetingBtn.id = 'submit-meeting-btn';
         saveMeetingBtn.type = 'submit';
-        saveMeetingBtn.classList.add('btn', 'rounded-btn', 'tiny-btn');
+        saveMeetingBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
 
         dateContainer.appendChild(meetingDayLabel);
         dateContainer.appendChild(meetingDayInput);
@@ -185,13 +185,13 @@ class MeetingsManagementHelper extends UserPanels {
 
                 meetingItem.classList.add('meeting-item');
                 meetingBtn.id = incomingMeetingData['slot_id'];
-                meetingBtn.classList.add('btn', 'large-btn', 'edit-meeting');
+                meetingBtn.classList.add('btn', 'large-btn', 'edit-meeting', 'blue-bkgd');
                 meetingBtn.textContent = incomingMeetingData['starting_time'] + ' : ';
                 meetingBtn.textContent += bookedMeeting ? incomingMeetingData['name'] : 'disponible';
-                cancelEditionBtn.classList.add('btn', 'rounded-btn', 'hidden');
+                cancelEditionBtn.classList.add('btn', 'rounded-btn', 'blue-bkgd', 'hidden');
                 cancelEditionBtn.textContent = 'Annuler';
                 cancelEditionBtn.href = 'index.php?page=meetings-management';
-                deleteMeetingBtn.classList.add('btn', 'rounded-btn', 'hidden', 'red-bkgd');
+                deleteMeetingBtn.classList.add('btn', 'rounded-btn', 'red-bkgd', 'hidden');
                 deleteMeetingBtn.textContent = bookedMeeting ? 'Supprimer le rendez-vous' : 'Supprimer le créneau';
                 deleteMeetingBtn.href = 'index.php?action=delete-meeting&id=' + incomingMeetingData['slot_id'];
 

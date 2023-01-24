@@ -3,7 +3,7 @@
 namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Services\PdfFileBuilder as PdfFileBuilder;
-use Dodie_Coaching\Models\ProgramFiles as ProgramFilesModel;
+use Dodie_Coaching\Models\ProgramFile as ProgramFileModel;
 
 class ProgramFile extends Program {
     private $_pdfFilesPath = './../var/nutrition_programs/';
@@ -27,7 +27,7 @@ class ProgramFile extends Program {
     }
     
     public function setProgramFileStatus(int $subscriberId, string $fileStatus): void {
-        $programFiles = new ProgramFilesModel;
+        $programFiles = new ProgramFileModel;
         
         $programFiles->updateFileStatus($subscriberId, $fileStatus, $this->_fileName);
     }

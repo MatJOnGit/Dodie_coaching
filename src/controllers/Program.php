@@ -2,10 +2,10 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Nutrition as NutritionModel;
+use Dodie_Coaching\Models\Nutrition;
 use DatePeriod, DateTime, DateInterval;
 
-class Program extends Subscribers {
+class Program extends Subscriber {
     private $_programScripts = [
         'classes/UserPanels.model',
         'classes/ProgramDisplayer.model',
@@ -56,7 +56,7 @@ class Program extends Subscribers {
     Converts an array of meals into a string separated with commas, then set it in database
     **************************************************************************************/
     public function saveProgramMeals(int $subscriberId, array $mealsList) {
-        $nutrition = new NutritionModel;
+        $nutrition = new Nutrition;
         
         $meals = '';
         
@@ -71,7 +71,7 @@ class Program extends Subscribers {
     Builds an associative array containing ingredients for each meal and for each day of the week
     ********************************************************************************************/
     private function _buildProgramIngredients (int $subscriberId, array $weekDays, array $meals): array {
-        $nutrition = new NutritionModel;
+        $nutrition = new Nutrition;
         
         $programIngredients = [];
         
@@ -112,9 +112,9 @@ class Program extends Subscribers {
     }
     
     private function _getMealsIndexes(int $subscriberId) {
-        $nutrition = new NutritionModel;
+        $nutrition = new Nutrition;
         
-        return $nutrition->selectSubscriberMealsIndexes($subscriberId);
+        return $nutrition->selectMealsIndexes($subscriberId);
     }
     
     /************************************************************************************

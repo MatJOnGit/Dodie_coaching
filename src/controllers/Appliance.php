@@ -6,9 +6,9 @@ use Dodie_Coaching\Models\Appliance as ApplianceModel;
 
 class Appliance extends AdminPanel {
     private $_applianceScripts = [
-        'classes/UserPanels.model',
-        'classes/ApplianceDetails.model',
-        'applianceDetailsApp'
+        'classes/Fader.model',
+        'classes/ApplianceManager.model',
+        'applianceManagementApp'
     ];
     
     public function acceptAppliance(int $applianceId, string $newApplianceStatus) {

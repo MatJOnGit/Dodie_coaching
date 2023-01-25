@@ -20,51 +20,48 @@ class User extends Main {
         'token-signing' => 'index.php?page=token-signing'
     ];
     
-    private $_connectionPanelsStyles = [
-        'pages/connection-panels',
-        'components/header',
-        'components/form',
-        'components/buttons',
-        'components/footer'
-    ];
-    
-    private $_emailRegex = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
-    
     private $_authPanelsScripts = [
         'login' => [
-            'classes/UserPanels.model',
+            'classes/Fader.model',
             'classes/ConnectionHelper.model',
             'classes/LoginHelper.model',
-            'loginHelper'
+            'loginApp'
         ],
         'registering' => [
-            'classes/UserPanels.model',
+            'classes/Fader.model',
             'classes/ConnectionHelper.model',
             'classes/RegisteringHelper.model',
-            'registeringHelper'
+            'registeringApp'
         ],
         'pwdRetrieving' => [
-            'classes/UserPanels.model',
+            'classes/Fader.model',
             'classes/ConnectionHelper.model',
             'classes/PwdRetrievingHelper.model',
             'pwdRetrievingHelper'
         ],
         'tokenSigning' => [
-            'classes/UserPanels.model',
+            'classes/Fader.model',
             'classes/ConnectionHelper.model',
             'classes/TokenSigningHelper.model',
-            'tokenSigningHelper'
+            'tokenSigningApp'
         ],
         'pwdEditing' => [
-            'classes/UserPanels.model',
+            'classes/Fader.model',
             'classes/ConnectionHelper.model',
             'classes/PasswordEditingHelper.model',
-            'passwordEditingHelper'
+            'passwordEditionApp'
         ]
     ];
     
-    private $_passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
+    private $_authPanelsStyles = [
+        'pages/connection-panels',
+        'components/header',
+        'components/form',
+        'components/footer'
+    ];
     
+    private $_emailRegex = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
+    private $_passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
     private $_tokenRegex = '/^[A-Z0-9]{6}$/';
     
     private $_tokenGeneratorTimeOut = 3600;
@@ -236,7 +233,7 @@ class User extends Main {
     
     public function renderLoginPage(object $twig): void {
         echo $twig->render('connection_panels/login.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => 'connection',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_authPanelsScripts('login')
@@ -245,7 +242,7 @@ class User extends Main {
     
     public function renderMailNotificationPage(object $twig): void {
         echo $twig->render('connection_panels/mail-notification.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => "Notification d'email",
             'appSection' => 'connectionPanels'
         ]);
@@ -253,7 +250,7 @@ class User extends Main {
     
     public function renderPasswordEditingPage(object $twig): void {
         echo $twig->render('connection_panels/password-edition.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => 'Edition de votre mot de passe',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_authPanelsScripts('pwdEditing')
@@ -262,7 +259,7 @@ class User extends Main {
     
     public function renderPasswordRetrievingPage(object $twig): void {
         echo $twig->render('connection_panels/password-retrieving.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => 'mot de passe perdu',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_authPanelsScripts('pwdRetrieving')
@@ -271,7 +268,7 @@ class User extends Main {
     
     public function renderRegisteringPage(object $twig): void {
         echo $twig->render('connection_panels/registering.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => 'création de compte',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_authPanelsScripts('registering')
@@ -280,7 +277,7 @@ class User extends Main {
     
     public function renderRetrievedPasswordPage(object $twig): void {
         echo $twig->render('connection_panels/retrieved-password.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => "Mot de passe modifié",
             'passSection' => 'connectionPanels'
         ]);
@@ -288,7 +285,7 @@ class User extends Main {
     
     public function renderTokenSigningPage(object $twig): void {
         echo $twig->render('connection_panels/token-signing.html.twig', [
-            'stylePaths' => $this->_getConnectionPanelsStyles(),
+            'stylePaths' => $this->_getAuthPanelsStyles(),
             'frenchTitle' => 'réinitialisation de mot de passe',
             'appSection' => 'connectionPanels',
             'remainingAttempts' => $this->_getTokenSigningRemainingAttempts(),
@@ -320,8 +317,8 @@ class User extends Main {
         return $account->updateLoginDate($userData['email']);
     }
     
-    private function _getConnectionPanelsStyles(): array {
-        return $this->_connectionPanelsStyles;
+    private function _getAuthPanelsStyles(): array {
+        return $this->_authPanelsStyles;
     }
     
     private function _getEmailRegex(): string {

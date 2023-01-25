@@ -11,9 +11,9 @@ class MeetingBooking extends UserPanel {
     private $_dateNeededSpaces = 4;
     
     private $_meetingsScripts = [
-        'classes/UserPanels.model',
-        'classes/MeetingsBooking.model',
-        'meetingsBookingHelper'
+        'classes/Fader.model',
+        'classes/MeetingBooker.model',
+        'meetingBookingApp'
     ];
     
     private $_subMenuPage = 'meetings';

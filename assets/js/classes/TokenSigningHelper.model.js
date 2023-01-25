@@ -5,19 +5,19 @@ class TokenSigningHelper {
         this._form = document.getElementsByTagName('form')[0];
         this._tokenField = document.getElementById('user-token');
     }
-
-    get tokenRegex() {
-        return this._tokenRegex;
-    }
-
-    get tokenField() {
-        return this._tokenField;
-    }
-
+    
     get form() {
         return this._form;
     }
-
+    
+    get tokenField() {
+        return this._tokenField;
+    }
+    
+    get tokenRegex() {
+        return this._tokenRegex;
+    }
+    
     init() {
         this.form.addEventListener('submit', (e) => {
             if (!this.tokenRegex.test(this.tokenField.value.toUpperCase())) {

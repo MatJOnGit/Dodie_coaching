@@ -6,9 +6,9 @@ use Dodie_Coaching\Models\Meeting;
 
 class MeetingManagement extends AdminPanel {
     private $_meetingManagementScripts = [
-        'classes/UserPanels.model',
-        'classes/MeetingsManagementHelper.model',
-        'meetingsManagementHelper'
+        'classes/Fader.model',
+        'classes/MeetingManager.model',
+        'meetingManagementApp'
     ];
     
     public function addMeetingSlot(array $meetingData) {

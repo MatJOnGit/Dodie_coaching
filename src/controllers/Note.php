@@ -7,9 +7,9 @@ use Dodie_Coaching\Models\Note as NoteModel;
 
 class Note extends Subscriber {
     private $_noteScripts = [
-        'classes/UserPanels.model',
-        'classes/NotesHelper.model',
-        'notesHelperApp'
+        'classes/Fader.model',
+        'classes/NoteManager.model',
+        'noteManagementApp'
     ];
     
     /*********************************************************************

@@ -1,12 +1,12 @@
-class PwdRetrievingHelper extends ConnectionHelper {
+class PasswordRetriever extends ConnectionHelper {
     constructor() {
         super();
-
+        
         this._inputElts = [
             this._emailInputElt
         ];
     }
-
+    
     addSubmitButtonListener() {
         this._form.addEventListener('submit', (e) => {
             if (!this.isEmailValid) {
@@ -14,11 +14,11 @@ class PwdRetrievingHelper extends ConnectionHelper {
             }
         })
     }
-
+    
     isBlurredInputValid(inputElt) {
         const inputValue = inputElt.value;
         this.isEmailValid = this.emailRegex.test(inputValue);
-
+        
         return this.isEmailValid;
     }
 }

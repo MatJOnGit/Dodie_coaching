@@ -58,9 +58,9 @@ class Appliance extends Main {
                 udd.job_style,
                 usd.program_goal
             FROM appliances app
-            INNER JOIN users_static_data usd ON app.user_id = usd.user_id
             INNER JOIN accounts acc ON app.user_id = acc.id
             INNER JOIN users_dynamic_data udd ON app.user_id = udd.user_id
+            INNER JOIN users_static_data usd ON app.user_id = usd.user_id
             WHERE app.staging = 'support_confirmation'
             ORDER BY app.appliance_date ASC";
         $selectAppliancesHeadersStatement = $db->prepare($selectAppliancesHeadersQuery);

@@ -1,61 +1,61 @@
-class DynamicMenu extends UserPanels {
+class DynamicMenuDisplayer extends Fader {
     constructor() {
         super();
-
+        
         this._menuTriggerBtn = document.getElementById('dynamic-menu-button');
         this._bodyElt = document.getElementsByTagName('body')[0];
-
+        
         this._dynamicMenuContainer;
         this._closeDynamicMenuLayer;
         this._dynamicMenu;
-    }
-    
-    get dynamicMenuContainer() {
-        return this._dynamicMenuContainer;
-    }
-    
-    get dynamicMenu() {
-        return this._dynamicMenu;
-    }
-    
-    get closeDynamicMenuLayer() {
-        return this._closeDynamicMenuLayer;
-    }
-    
-    get menuTriggerBtn() {
-        return this._menuTriggerBtn;
     }
     
     get bodyElt() {
         return this._bodyElt;
     }
     
-    set dynamicMenuContainer(item) {
-        this._dynamicMenuContainer = item;
+    get closeDynamicMenuLayer() {
+        return this._closeDynamicMenuLayer;
     }
     
-    set dynamicMenu(item) {
-        this._dynamicMenu = item;
+    get dynamicMenu() {
+        return this._dynamicMenu;
+    }
+    
+    get dynamicMenuContainer() {
+        return this._dynamicMenuContainer;
+    }
+    
+    get menuTriggerBtn() {
+        return this._menuTriggerBtn;
     }
     
     set closeDynamicMenuLayer(item) {
         this._closeDynamicMenuLayer = item;
     }
     
+    set dynamicMenu(item) {
+        this._dynamicMenu = item;
+    }
+    
+    set dynamicMenuContainer(item) {
+        this._dynamicMenuContainer = item;
+    }
+    
     addCloseMenuEltsListener() {
         const closeMenuBtn = document.getElementById('close-menu-button');
         const blurryLayer = document.getElementsByClassName('blurry-layer')[0];
         const clickableElts = [closeMenuBtn, blurryLayer];
-
+        
         clickableElts.forEach((clickedElt) => {
             clickedElt.addEventListener('click', () => {
                 this.fadeOutItem(this.dynamicMenuContainer, 1000);
                 
                 setTimeout(() => {
                     this.bodyElt.removeChild(this.dynamicMenuContainer);
-                }, 100)
-            })
-        })
+                }, 100);
+            });
+        });
     }
     
     addDefaultMenu() {
@@ -80,7 +80,7 @@ class DynamicMenu extends UserPanels {
         linkListElt.appendChild(loginSpan);
         linkListElt.appendChild(contactListItem);
         linkListElt.appendChild(contactSpan);
-        this.dynamicMenu.appendChild(linkListElt)
+        this.dynamicMenu.appendChild(linkListElt);
     }
     
     addLoggedUserMenu() {
@@ -117,7 +117,7 @@ class DynamicMenu extends UserPanels {
         linkListElt.appendChild(contactSpan);
         linkListElt.appendChild(logoutListItem);
         linkListElt.appendChild(logoutSpan);
-        this.dynamicMenu.appendChild(linkListElt)
+        this.dynamicMenu.appendChild(linkListElt);
     }
     
     addMenuTriggerBtnListener() {
@@ -171,13 +171,16 @@ class DynamicMenu extends UserPanels {
     slideInItem(item, timer) {
         let intervalId = setInterval(() => {
             let itemWidth = item.getBoundingClientRect().width;
+            
             if (item.getBoundingClientRect().width < 225) {
                 item.style.width = (itemWidth + 5 + 'px');
             }
+            
             else {
                 clearInterval(intervalId);
             }
-        }, timer/1000)
+            
+        }, timer/1000);
     }
     
     triggerCorrectMenuButtons() {

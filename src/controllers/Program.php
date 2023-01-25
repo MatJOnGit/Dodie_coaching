@@ -7,10 +7,10 @@ use DatePeriod, DateTime, DateInterval;
 
 class Program extends Subscriber {
     private $_programScripts = [
-        'classes/UserPanels.model',
+        'classes/Fader.model',
         'classes/ProgramDisplayer.model',
-        'classes/ProgramBuildingHelper.model',
-        'programsApp'
+        'classes/ProgramInitializer.model',
+        'programManagementApp'
     ];
     
     public function buildProgramData(int $subscriberId) {

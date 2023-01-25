@@ -50,9 +50,9 @@ class Showcase extends Main {
     ];
     
     private $_showcaseScripts = [
-        'classes/UserPanels.model',
-        'classes/DynamicMenu.model',
-        'dynamicMenu'
+        'classes/Fader.model',
+        'classes/DynamicMenuDisplayer.model',
+        'dynamicMenuApp'
     ];
     
     public function isProgramAvailable(string $requestedProgram): bool {

@@ -1,4 +1,4 @@
-class UserPanels {
+class Fader {
     fadeInItem (item, timer, maxOpacity) {
         let intervalId = setInterval(() => {
             let itemOpacity = Number(window.getComputedStyle(item).getPropertyValue('opacity'));
@@ -10,7 +10,7 @@ class UserPanels {
             }
         }, timer/100)
     }
-
+    
     fadeOutItem (item, timer) {
         let intervalId = setInterval(() => {
             let itemOpacity = Number(window.getComputedStyle(item).getPropertyValue('opacity'));

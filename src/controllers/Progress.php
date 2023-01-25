@@ -10,9 +10,9 @@ class Progress extends UserPanel {
     private $_minWeight = 0;
     
     private $_progressScripts = [
-        'classes/UserPanels.model',
-        'classes/Progress.model',
-        'progressApp'
+        'classes/Fader.model',
+        'classes/ProgressManager.model',
+        'progressManagementApp'
     ];
     
     private $_subMenuPage = 'progress';

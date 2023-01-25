@@ -66,7 +66,6 @@ class ApplianceManager extends Fader {
         
         this.adminPanel.appendChild(rejectApplianceForm);
         
-        console.log(this.adminPanel);
         this.fadeInItem(rejectApplianceForm, 4000, 1);
     }
     

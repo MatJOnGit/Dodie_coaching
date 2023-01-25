@@ -69,8 +69,7 @@ class MeetingManager extends Fader {
             if (enteredDateIndex >= 0) {
                 this.removePreviousDates();
                 this.displayDailyMeetingList(enteredDateIndex);
-            }
-            
+            }            
             else {
                 this.removePreviousDates();
             }
@@ -94,7 +93,7 @@ class MeetingManager extends Fader {
                         if (!this.verifyMeetingTime(meetingItem['starting_time'], timeValue)) {
                             isMeetingTimeAllowed = false;
                         }
-                    })
+                    });
                 }
             });
             
@@ -235,7 +234,7 @@ class MeetingManager extends Fader {
             
             dailyMeetingsList.appendChild(dailyMeetingItem);
             
-        })
+        });
         
         this.meetingPanel.appendChild(dailyMeetingsTitle);
         this.meetingPanel.appendChild(dailyMeetingsList);
@@ -308,7 +307,6 @@ class MeetingManager extends Fader {
                 linkItem.classList.replace('tiny-btn', 'hidden');
             });
         }
-        
         else {
             clickedElt.classList.add('selected');
             clickedEltLinks.forEach(linkItem => {
@@ -337,7 +335,6 @@ class MeetingManager extends Fader {
                     
                     saveMeetingBtn.style.display = 'flex';
                 }
-                
                 else {
                     if (cancelBtn.classList.contains('tiny-btn')) {
                         cancelBtn.classList.replace('tiny-btn', 'large-btn');

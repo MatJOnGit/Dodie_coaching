@@ -43,11 +43,12 @@ class ProgramInitializer extends Fader {
             Object.keys(this.checkboxInputs).forEach(element => {
                 if (this.checkboxInputs[element].checked) {
                     isMealsFormValid = true;
-                };
+                }
             });
             
             if (!isMealsFormValid) {
                 e.preventDefault();
+                
                 if (!isAlertDisplayed) {
                     this.displayNoSelectedMealsAlert();
                 }

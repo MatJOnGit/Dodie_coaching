@@ -175,7 +175,6 @@ class DynamicMenuDisplayer extends Fader {
             if (item.getBoundingClientRect().width < 225) {
                 item.style.width = (itemWidth + 5 + 'px');
             }
-            
             else {
                 clearInterval(intervalId);
             }

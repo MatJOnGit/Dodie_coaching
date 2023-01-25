@@ -36,8 +36,8 @@ class User extends Main {
         'pwdRetrieving' => [
             'classes/Fader.model',
             'classes/ConnectionHelper.model',
-            'classes/PwdRetrievingHelper.model',
-            'pwdRetrievingHelper'
+            'classes/PasswordRetriever.model',
+            'passwordRecoveryApp'
         ],
         'tokenSigning' => [
             'classes/Fader.model',

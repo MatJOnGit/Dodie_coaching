@@ -67,12 +67,11 @@ class RegisteringHelper extends ConnectionHelper {
                 this.isPasswordValid = this.passwordRegex.test(inputValue);
                 isBlurredInputValid = this.isPasswordValid;
             }
-
             else if (inputName === 'confirmation-password') {
                 this.isConfirmationPasswordValid = this.passwordRegex.test(inputValue);
                 isBlurredInputValid = this.isConfirmationPasswordValid;
             }
-
+            
             this.arePasswordIdentical = passwordValue === confirmationPasswordValue
         }
         

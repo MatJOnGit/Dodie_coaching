@@ -37,7 +37,6 @@ class LoginHelper extends ConnectionHelper {
             this.isEmailValid = this.emailRegex.test(inputValue);
             isBlurredInputValid = this.isEmailValid;
         }
-        
         else if (inputType === 'password' && !this.isInputEmpty(inputElt)) {
             this.isPasswordValid = this.passwordRegex.test(inputValue);
             isBlurredInputValid = this.isPasswordValid;

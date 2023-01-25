@@ -52,7 +52,6 @@ class ProgressManager extends Fader {
             if (reportDateExists && !selectedOptionIsOldWeight) {
                 this.hideDatetimeInputs();
             }
-            
             else if (!reportDateExists && selectedOptionIsOldWeight) {
                 this.showDatetimeInputs();
             }

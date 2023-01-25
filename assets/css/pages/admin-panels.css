@@ -3,8 +3,8 @@
 /*********************************/
 
 #title-layer i,
-.selected,
 .wrap-btn,
+.selected,
 footer i {
     color: hsla(185, 51%, 47%, 1);
 }
@@ -22,8 +22,6 @@ caption {
 }
 
 .blue-bkgd,
-.unwrap-btn,
-.admin-link,
 table,
 footer {
     background-color: hsla(185, 51%, 47%, 1);
@@ -37,8 +35,7 @@ footer {
     background-color: hsla(9, 71%, 70%, 1);
 }
 
-.selected,
-.wrap-btn {
+.selected {
     background-color: hsla(0, 0%, 100%, 1);
 }
 

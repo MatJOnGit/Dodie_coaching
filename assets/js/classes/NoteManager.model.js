@@ -66,7 +66,7 @@ class NoteManager extends Fader {
             if (noteMessageTextArea.value.length === 0) {
                 e.preventDefault();
             }
-        })
+        });
     }
     
     buildAddnoteForm() {
@@ -198,19 +198,22 @@ class NoteManager extends Fader {
     
     displayEditNoteElements(clickedElt) {
         const clickedListItem = clickedElt.closest('li');
-        const noteData = this.getNoteData(clickedListItem);
+        const noteData = this.buildNoteData(clickedListItem);
+        
         this.buildEditNoteForm(clickedListItem, noteData);
         this.removeAddNoteBtn();
     }
     
     editPagetitle() {
         const panelTitle = document.getElementsByTagName('h3')[0].innerHTML;
+        
         const ptrn = "Notes de suivi de";
         const replacement = "Ajout de note pour";
+        
         document.getElementsByTagName('h3')[0].innerText = panelTitle.replace(ptrn, replacement);
     }
     
-    getNoteData(clickedListItem) {
+    buildNoteData(clickedListItem) {
         const noteEntryElt = clickedListItem.getElementsByClassName('note-entry')[0];
         const titleElt = clickedListItem.getElementsByTagName('h4')[0];
         const clickedBtn = clickedListItem.getElementsByClassName('edit-note')[0];
@@ -245,6 +248,7 @@ class NoteManager extends Fader {
     
     removePreviousNotes() {
         const notesList = document.getElementsByClassName('notes-list')[0];
+        
         this.profilePanel.removeChild(notesList);
         this.profilePanel.removeChild(this.addNoteBtn);
     }

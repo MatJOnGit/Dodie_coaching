@@ -23,6 +23,6 @@ class TokenSigningHelper {
             if (!this.tokenRegex.test(this.tokenField.value.toUpperCase())) {
                 e.preventDefault();
             }
-        })
+        });
     }
 }

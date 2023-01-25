@@ -124,11 +124,12 @@ class ProgramDisplayer extends Fader {
                 dailyProgramList.classList.add('hidden');
                 dayNutrients.classList.remove('hidden');
             })
-        })
+        });
     }
     
     buildDailyNutrientsData() {
         this.initNutrientsPerDayEntry();
+        
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
             this.mealKey = mealKey;
             let mealData = this.dailyMealsParsedData[this.mealKey];
@@ -155,7 +156,7 @@ class ProgramDisplayer extends Fader {
             const ingredientData = mealData[ingredientKey];
             
             this.buildIngredientsNutrientsData(ingredientData);
-        })
+        });
     }
     
     buildNutrientsTable(nutrientsTab, dataTabElt, dataTabKey) {
@@ -224,7 +225,7 @@ class ProgramDisplayer extends Fader {
         Object.keys(this.dayDataTabs).forEach(dayDataTabKey => {
             let dayDataTabElt = this.dayDataTabs[dayDataTabKey];
             this.buildNutrientsTable(this.nutrientsPerDay, dayDataTabElt, dayDataTabKey);
-        })
+        });
     }
     
     displayMealsDataTab() {
@@ -243,6 +244,7 @@ class ProgramDisplayer extends Fader {
     
     gatherProgramMealsData() {
         let mealElt = this.dailyProgramItems[this.dayKey];
+
         this.dailyMealsParsedData = mealElt.getAttribute('data-daily-program');
     }
     

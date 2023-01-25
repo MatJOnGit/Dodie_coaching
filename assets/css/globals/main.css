@@ -45,7 +45,7 @@ figcaption {
 }
 
 header,
-.prev-page-btn,
+.white-bkgd,
 .blurry-layer,
 footer li {
     background-color: hsla(0, 0%, 100%, 1);
@@ -59,7 +59,7 @@ footer li {
     background-color: hsla(261, 83%, 18%, 1);
 }
 
-.greyed-out-bkgd {
+.grey-bkgd {
     background-color: hsla(0, 1%, 79%, 1);
 }
 

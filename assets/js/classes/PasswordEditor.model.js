@@ -44,11 +44,10 @@ class PasswordEditor extends ConnectionHelper {
             if (!this.isPasswordValid || !this.isConfirmationPasswordValid || !this.arePasswordIdentical) {
                 e.preventDefault();
             }
-        })
+        });
     }
     
-    isBlurredInputValid(inputElt, isInputEmpty) {
-        const inputType = inputElt.type;
+    isBlurredInputValid(inputElt) {
         const inputValue = inputElt.value;
         const inputName = inputElt.name;
         const passwordValue = document.getElementById('user-password').value;
@@ -59,7 +58,6 @@ class PasswordEditor extends ConnectionHelper {
             this.isPasswordValid = this.passwordRegex.test(inputValue);
             isBlurredInputValid = this.isPasswordValid;
         }
-        
         else if (inputName === 'confirmation-password') {
             this.isConfirmationPasswordValid = this.passwordRegex.test(inputValue);
             isBlurredInputValid = this.isConfirmationPasswordValid;

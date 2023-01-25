@@ -91,7 +91,11 @@ class MeetingBooker extends Fader {
             });
         });
     }
-    
+
+    /************************************************************************
+    Builds an array of associative arrays containing the date and every slots
+    available for this date, for every incoming available date of meetings
+    ************************************************************************/
     buildFilteredMeetingArray() {
         let meetingsArray = [];
         
@@ -212,17 +216,14 @@ class MeetingBooker extends Fader {
             if (this.listIndex === 0 ) {
                 this.previousDaysSchedule.innerHTML = '';
             }
-            
             else {
                 this.previousDaysSchedule.innerHTML = "<button class='btn previous-days-btn purple-bkgd'><i class='fa-solid fa-angle-left'></i></button>";
                 let previousDaysScheduleBtn = this.previousDaysSchedule.getElementsByTagName('button')[0];
                 previousDaysScheduleBtn.addEventListener('click', this._displayTabPreviousElements);
             }
-            
             if (this.listIndex >= this.parsedMeetingsSlots.length -2) {
                 this.nextDaysSchedule.innerHTML = '';
             }
-            
             else {
                 this.nextDaysSchedule.innerHTML = "<button class='btn next-days-btn purple-bkgd'><i class='fa-solid fa-angle-right'></i></button>";
                 let nextDaysScheduleBtn = this.nextDaysSchedule.getElementsByTagName('button')[0];
@@ -261,11 +262,9 @@ class MeetingBooker extends Fader {
         if ((index >= 0) && (index <= this.parsedMeetingsSlots.length-2)) {
             this.listIndex = index;
         }
-        
         else if (index < 2) {
             this.listIndex = 0;
         }
-        
         else {
             this.listIndex = this.parsedMeetingsSlots.length - 2;
         }

@@ -97,7 +97,7 @@ class ConnectionHelper extends Fader {
         
         inputHelperDismissBtn.addEventListener('click', () => {
             this.removePreviousInputHelper(inputHelperType);
-        })
+        });
     }
     
     addInputsListeners() {
@@ -114,8 +114,8 @@ class ConnectionHelper extends Fader {
                 e.preventDefault();
                 const inputElt = this.getInfoButtonBoundValue(showHelperBtn);
                 this.showInputHelper(inputElt.type, inputElt.value);
-            })
-        }
+            });
+        };
     }
     
     buildHelper(inputType, inputValue) {
@@ -143,7 +143,6 @@ class ConnectionHelper extends Fader {
         if (inputType === 'password') {
             alert = this.getPasswordAlert(inputType, inputValue);
         }
-        
         else if (inputType === 'email') {
             alert = this.getEmailAlert(inputType, inputValue);
         }
@@ -157,15 +156,12 @@ class ConnectionHelper extends Fader {
         if (this.emailRegex.test(inputValue)) {
             emailAlert = this.inputAlerts[inputType]['valid'];
         }
-        
         else if (!inputValue.includes('@')) {
             emailAlert = this.inputAlerts[inputType]['at-symbol'];
         }
-        
         else if (!this.domainNameRegex.test(inputValue)) {
             emailAlert = this.inputAlerts[inputType]['domain'];
         }
-        
         else {
             emailAlert = this.inputAlerts[inputType]['unknown'];
         }
@@ -183,31 +179,24 @@ class ConnectionHelper extends Fader {
         if (this.passwordRegex.test(inputValue)) {
             passwordAlert = this.inputAlerts[inputType]['valid'];
         }
-        
         else if (inputValue.length < 10) {
             passwordAlert = this.inputAlerts[inputType]['short'];
         }
-        
         else if (inputValue.length > 50) {
             passwordAlert = this.inputAlerts[inputType]['long'];
         }
-        
         else if (!this.numberRegex.test(inputValue)) {
             passwordAlert = this.inputAlerts[inputType]['number'];
         }
-        
         else if (!this.smallCapRegex.test(inputValue)) {
             passwordAlert = this.inputAlerts[inputType]['small-cap'];
         }
-        
         else if (!this.capitalLetterRegex.test(inputValue)) {
             passwordAlert = this.inputAlerts[inputType]['capital-letter'];
         }
-        
         else if (!this.specialCharRegex.test(inputValue)) {
             passwordAlert = this.inputAlerts[inputType]['special-char'];
         }
-        
         else {
             passwordAlert = this.inputAlerts[inputType]['unknown'];
         }
@@ -232,7 +221,6 @@ class ConnectionHelper extends Fader {
         if (!inputHelper) {
             isInputHelperExisting = false;
         }
-        
         else {
             isInputHelperExisting = true;
         }
@@ -267,17 +255,15 @@ class ConnectionHelper extends Fader {
         const inputCheckerElt = inputContainerElt.getElementsByClassName('input-helper')[0];
         
         const isInputEmpty = this.isInputEmpty(inputElt);
-        const isInputValid = this.isBlurredInputValid(inputElt, isInputEmpty);
+        const isInputValid = this.isBlurredInputValid(inputElt);
         
         if (isInputValid) {
             inputCheckerElt.innerHTML = '<i class="fa-solid fa-check correct"></i>';
             this.removePreviousInputHelper(inputElt.type);
         }
-        
         else if (isInputEmpty) {
             inputCheckerElt.innerHTML = '';
         }
-        
         else {
             inputCheckerElt.innerHTML = '<i class="fa-solid fa-xmark wrong"></i>';
         }

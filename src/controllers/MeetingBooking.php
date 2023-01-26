@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Meeting;
+use Dodie_Coaching\Models\MeetingBooking as MeetingBookingModel;
 use DateTime;
 
 class MeetingBooking extends UserPanel {
@@ -28,15 +28,15 @@ class MeetingBooking extends UserPanel {
     }
     
     public function bookAppointment(string $meetingDate): bool {
-        $meeting = new Meeting;
+        $meetingBookingModel = new MeetingBookingModel;
         
-        return $meeting->updateMeetingToBooked($_SESSION['email'], $meetingDate);
+        return $meetingBookingModel->updateMeetingToBooked($_SESSION['email'], $meetingDate);
     }
     
     public function cancelAppointment(): bool {
-        $meeting = new Meeting;
+        $meetingBookingModel = new MeetingBookingModel;
         
-        return $meeting->updateMeetingToAvailable($_SESSION['email']);
+        return $meetingBookingModel->updateMeetingToAvailable($_SESSION['email']);
     }
     
     public function getDateData(): array {
@@ -106,17 +106,17 @@ class MeetingBooking extends UserPanel {
     }
     
     private function _getAvailableMeetings() {
-        $meeting = new Meeting;
+        $meetingBookingModel = new MeetingBookingModel;
         
-        $availableMeetings = $meeting->selectAvailableMeetings($this->_getAppointmentDelay());
+        $availableMeetings = $meetingBookingModel->selectAvailableMeetings($this->_getAppointmentDelay());
 
         return $this->_getMeetingsSlotsArray($availableMeetings);
     }
     
     private function _getBookedMeetingDate() {
-        $meeting = new Meeting;
+        $meetingBookingModel = new MeetingBookingModel;
         
-        $userScheduledMeeting = $meeting->selectScheduledMeeting($_SESSION['email']);
+        $userScheduledMeeting = $meetingBookingModel->selectScheduledMeeting($_SESSION['email']);
         
         return (!empty($userScheduledMeeting) ? $userScheduledMeeting[0] : NULL);
     }
@@ -140,9 +140,9 @@ class MeetingBooking extends UserPanel {
     }
     
     private function _getSortedMeetingsSlots(): array {
-        $meeting = new Meeting;
+        $meetingBookingModel = new MeetingBookingModel;
         
-        $availableMeetingsSlots = $meeting->selectAvailableMeetings($this->_getAppointmentDelay());
+        $availableMeetingsSlots = $meetingBookingModel->selectAvailableMeetings($this->_getAppointmentDelay());
         $meetingsSlotsArray = $this->_getMeetingsSlotsArray($availableMeetingsSlots);
         
         return $this->_sortMeetingsSlots($meetingsSlotsArray);

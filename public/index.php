@@ -653,7 +653,7 @@ try {
                     
                     if ($meeting->areDateDataValid($dateData)) {
                         $formatedDate = $meeting->getFormatedDate($dateData);
-
+                        
                         if ($meeting->isMeetingsSlotAvailable($formatedDate)) {
                             if (!$meeting->bookAppointment($formatedDate)) {
                                 throw new DB_Exception('FAILED TO BOOK APPOINTMENT');
@@ -676,7 +676,7 @@ try {
                     if (!$meeting->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
-
+                    
                     $meeting->routeTo('meetingsBooking');
                 }
                 

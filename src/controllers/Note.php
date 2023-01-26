@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Meeting;
+use Dodie_Coaching\Models\MeetingManagement;
 use Dodie_Coaching\Models\Note as NoteModel;
 
 class Note extends Subscriber {
@@ -57,9 +57,9 @@ class Note extends Subscriber {
     }
     
     public function getAttendedMeetings(int $subscriberId) {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagement;
         
-        return $meeting->selectAttendedMeetings($subscriberId);
+        return $meetingManagement->selectAttendedMeetings($subscriberId);
     }
     
     public function isNoteIdValid(int $noteId) {

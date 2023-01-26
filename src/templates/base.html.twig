@@ -10,7 +10,7 @@
     <meta name="description" content="Dodie coaching app">
     <meta name="keyworks" content="nutrition, coach, dodie, food, eat, better, help, support">
     <meta name="author" content="Mathieu Jourdan">
-
+    
     <!-- Social metas -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://www.projet5.m-jourdan.fr">
@@ -18,7 +18,7 @@
     <meta property="og:description" content="Réappropriez-vous votre corps">
     <meta property='og:creator' content="@Dodie_coaching"/>
     <meta property="og:locale" content="fr_FR">
-
+    
     <meta name="twitter:title" content="Dodie_Coaching">
     <meta name="twitter:description" content="Réappropriez-vous votre corps">
     <meta name="twitter:url" content="http://www.projet5.m-jourdan.fr">
@@ -31,7 +31,7 @@
     <!-- global CSS -->
     <link rel='stylesheet' href='./../assets/css/globals/normalize.css' type='text/css'>
     <link rel='stylesheet' href='./../assets/css/globals/main.css' type='text/css'>
-
+    
     <!-- custom CSS -->
     {% block styles %}{% endblock styles %}
 </head>
@@ -42,16 +42,14 @@
             <a href='index.php?page=presentation'>
                 <h1>Dodie Coaching</h1>
             </a>
-
+            
             {% block header %}{% endblock header %}
         </div>
-
+        
         {% block headerLayer %}{% endblock headerLayer %}
     </header>
-
+    
     {% block pageContent %}{% endblock pageContent %}
-
     {% block footer %}{% endblock footer %}
-
     {% block scripts %}{% endblock scripts %}
 </body>

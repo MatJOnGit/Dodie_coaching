@@ -2,7 +2,7 @@
 
 namespace Dodie_Coaching\Controllers;
 
-use Dodie_Coaching\Models\Meeting;
+use Dodie_Coaching\Models\MeetingManagement as MeetingManagementModel;
 
 class MeetingManagement extends AdminPanel {
     private $_meetingManagementScripts = [
@@ -12,11 +12,11 @@ class MeetingManagement extends AdminPanel {
     ];
     
     public function addMeetingSlot(array $meetingData) {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagementModel;
         
         $meetingDate = $meetingData['meeting-day'] . ' ' . $meetingData['meeting-time'] . ':00';
         
-        return $meeting->insertMeeting($meetingDate);
+        return $meetingManagement->insertMeeting($meetingDate);
     }
     
     public function areDateDataValid(array $meetingData): bool {
@@ -26,18 +26,18 @@ class MeetingManagement extends AdminPanel {
     }
     
     public function eraseMeetingSlot(string $meetingId) {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagementModel;
         
-        return $meeting->deleteMeeting($meetingId);
+        return $meetingManagement->deleteMeeting($meetingId);
     }
     
     public function isMeetingIdValid(string $meetingId): bool {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagementModel;
         
         $isMeetingIdValid = false;
         
-        foreach ($meeting->selectNextMeetings() as $meeting) {
-            if ($meeting['slot_id'] === $meetingId) {
+        foreach ($meetingManagement->selectNextMeetings() as $meetingManagement) {
+            if ($meetingManagement['slot_id'] === $meetingId) {
                 $isMeetingIdValid = true;
             }
         }
@@ -46,9 +46,9 @@ class MeetingManagement extends AdminPanel {
     }
     
     public function getAttendeeData(string $meetingId) {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagementModel;
         
-        return $meeting->selectAttendeeData($meetingId);
+        return $meetingManagement->selectAttendeeData($meetingId);
     }
     
     public function isMeetingBooked(array $attendeeData): bool {
@@ -87,9 +87,9 @@ class MeetingManagement extends AdminPanel {
     }
     
     private function _getSortedMeetingSlots() {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagementModel;
         
-        $nextMeetings = $meeting->selectNextMeetings();
+        $nextMeetings = $meetingManagement->selectNextMeetings();
         
         return $this->_sortNextMeetings($nextMeetings);
     }

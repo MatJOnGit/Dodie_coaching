@@ -4,7 +4,7 @@ namespace Dodie_Coaching\Controllers;
 
 use Dodie_Coaching\Models\Subscriber;
 use Dodie_Coaching\Models\Appliance;
-use Dodie_Coaching\Models\Meeting;
+use Dodie_Coaching\Models\MeetingManagement;
 
 class AdminDashboard extends AdminPanel {
     public function renderAdminDashboardPage(object $twig): void {
@@ -59,9 +59,9 @@ class AdminDashboard extends AdminPanel {
     }
     
     private function _getTodayMeetingsData() {
-        $meeting = new Meeting;
+        $meetingManagement = new MeetingManagement;
         
-        $incomingMeetings = $meeting->selectNextBookedMeetings();
+        $incomingMeetings = $meetingManagement->selectNextBookedMeetings();
         
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

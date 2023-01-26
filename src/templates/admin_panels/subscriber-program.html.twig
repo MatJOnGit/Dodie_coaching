@@ -42,7 +42,7 @@
                         <div class='day-nutrients'>
                             <table class='btn day-data-tab'>
                             </table>
-
+                            
                             <button class='btn rounded-btn unwrap-btn nutrients-toggle large-btn blue-bkgd'><i class='fa-solid fa-angle-down'></i></button>
                         </div>
                     </li>
@@ -64,7 +64,7 @@
                 <button type='submit' id='meals-submit-btn' class='btn rounded-btn tiny-btn blue-bkgd'>Suivant</button>
             </form>
         {% endif %}
-
+        
         {% if isProgramFileUpdatable == true %}
             <a href='index.php?action=generate-program-file&id={{ subscriberHeaders['user_id'] }}' class='btn circle-btn blue-bkgd' id='pdf-btn'>
                 <i class='fa-solid fa-file-export'></i>

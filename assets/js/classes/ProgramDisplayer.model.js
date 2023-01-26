@@ -88,11 +88,11 @@ class ProgramDisplayer extends Fader {
         this._nutrientKey = nutrientKey;
     }
     
-    set nutrientPerDayValue(nutrientValue) {
+    set nutrientsPerDayValue(nutrientValue) {
         this._nutrientsPerDay[this.dayKey][this.nutrientKey] = nutrientValue;
     }
     
-    set nutrientPerMealValue(nutrientValue) {
+    set nutrientsPerMealValue(nutrientValue) {
         this._nutrientsPerMeal[this.nutrientsPerMealIndex][this.nutrientKey] = nutrientValue;
     }
     
@@ -132,8 +132,8 @@ class ProgramDisplayer extends Fader {
         
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
             this.mealKey = mealKey;
-            let mealData = this.dailyMealsParsedData[this.mealKey];
             
+            let mealData = this.dailyMealsParsedData[this.mealKey];
             this.buildMealNutrientsData(mealData);
         });
     }
@@ -204,6 +204,7 @@ class ProgramDisplayer extends Fader {
     buildProgramArrays() {
         Object.keys(this.dailyProgramItems).forEach(dayKey => {
             this.dayKey = dayKey;
+            
             this.gatherProgramMealsData();
             this.buildDailyNutrientsData();
         });
@@ -280,7 +281,7 @@ class ProgramDisplayer extends Fader {
     }
     
     initNutrientsPerMealEntry() {
-        this.nutrientsPerMealIndex = (parseInt(this.dayKey) * this.dailyMealsParsedData.length + parseInt(this.mealKey));
+        this.nutrientsPerMealIndex = (parseInt(this.dayKey) * Object.keys(this.dailyMealsParsedData).length + parseInt(this.mealKey)) - 1;
         this.nutrientsPerMeal[this.nutrientsPerMealIndex] = {};
         
         this.nutrientsList.forEach((nutrient) => {            
@@ -289,14 +290,12 @@ class ProgramDisplayer extends Fader {
     }
     
     updateNutrientsPerDayData(rationNutrientValue) {
-        let newNutrientPerDayValue = this.computeNewNutrientPerDayValue(rationNutrientValue);
-        
-        this.nutrientPerDayValue = newNutrientPerDayValue;
+        let newNutrientsPerDayValue = this.computeNewNutrientPerDayValue(rationNutrientValue);
+        this.nutrientsPerDayValue = newNutrientsPerDayValue;
     }
     
     updateNutrientsPerMealData(rationNutrientValue) {
-        let newNutientPerMealValue = this.computeNewNutrientPerMealValue(rationNutrientValue);
-        
-        this.nutrientPerMealValue = newNutientPerMealValue;
+        let newNutientsPerMealValue = this.computeNewNutrientPerMealValue(rationNutrientValue);
+        this.nutrientsPerMealValue = newNutientsPerMealValue;
     }
 }

@@ -7,10 +7,10 @@ class NoteManager extends Fader {
         this._editNoteBtns = document.querySelectorAll('.edit-note');
         this._profilePanel = document.getElementsByClassName('profile-panel')[0];
         this._prevPageBtn = document.getElementsByClassName('prev-page-btn')[0];
-
-        this._subscriberId = this._prevPageBtn.href.split('id=')[1];
-        this._attendedMeetingsData = JSON.parse(this._attendedMeetingsSpanElt.getAttribute('data-attended-slots'));
         
+        this._subscriberId = this._prevPageBtn.href.split('id=')[1];
+        
+        this._attendedMeetingsData;
         this._mappedAttendedMeetings = [];
         this._addNoteLink = 'index.php?action=reject-appliance&id=';
         this._timezone = 'Europe/Paris';
@@ -18,6 +18,10 @@ class NoteManager extends Fader {
     
     get addNoteBtn() {
         return this._addNoteBtn;
+    }
+    
+    get attendedMeetingsSpanElt() {
+        return this._attendedMeetingsSpanElt;
     }
     
     get attendedMeetingsData() {
@@ -120,6 +124,11 @@ class NoteManager extends Fader {
         this.fadeInItem(addNoteForm, 4000, 1);
     }
     
+    /*********************************************************************************
+    Implements elements that enable the admin to add a follow-up note to a subscriber.
+    If subscriber has already attended to a meeting, those meeting dates will be an
+    option, so the admin can associate the note to a specific attended meeting.
+    *********************************************************************************/
     buildEditNoteForm(clickedListItem, noteData) {
         const clickedBtn = clickedListItem.getElementsByClassName('edit-note')[0];
         
@@ -146,7 +155,7 @@ class NoteManager extends Fader {
         editNoteTitle.textContent = noteData.title;
         
         editNoteForm.classList.add('admin-form');
-        editNoteForm.action = 'index.php?action=edit-note&id=' + this.attendedMeetingsData[0]['user_id'] + '&note-id=' + noteData.id;
+        editNoteForm.action = 'index.php?action=edit-note&id=' + this.subscriberId + '&note-id=' + noteData.id;
         editNoteForm.method = 'post';
         
         editMeetingDateSelect.name = 'attached-meeting-date';
@@ -158,7 +167,7 @@ class NoteManager extends Fader {
         cancelEditionBtn.textContent = 'Annuler';
         cancelEditionBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
         
-        deleteNoteBtn.href = 'index.php?action=delete-note&id=' + this.attendedMeetingsData[0]['user_id'] + '&note-id=' + noteData.id;
+        deleteNoteBtn.href = 'index.php?action=delete-note&id=' + this.subscriberId + '&note-id=' + noteData.id;
         deleteNoteBtn.textContent = 'Supprimer';
         deleteNoteBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'red-bkgd');
         
@@ -171,13 +180,15 @@ class NoteManager extends Fader {
         editMeetingDateSelect.appendChild(editMeetingDefaultDateOption);
         editNoteForm.appendChild(editMeetingDateSelect);
         
-        this.mappedAttendedMeetings.forEach((attendedMeeting, index) => {
-            let attendedMeetingsOption = document.createElement('option');
-            attendedMeetingsOption.value = index;
-            attendedMeetingsOption.innerText = attendedMeeting;
-            
-            editMeetingDateSelect.appendChild(attendedMeetingsOption);
-        });
+        if (this.attendedMeetingsData) {
+            this.mappedAttendedMeetings.forEach((attendedMeeting, index) => {
+                let attendedMeetingsOption = document.createElement('option');
+                attendedMeetingsOption.value = index;
+                attendedMeetingsOption.innerText = attendedMeeting;
+                
+                editMeetingDateSelect.appendChild(attendedMeetingsOption);
+            });
+        }
         
         editNoteForm.appendChild(cancelEditionBtn);
         editNoteForm.appendChild(deleteNoteBtn);
@@ -231,7 +242,11 @@ class NoteManager extends Fader {
     }
     
     init() {
-        this.mapAttendedMeetings();
+        if (this.attendedMeetingsSpanElt) {
+            this.setAttendedMeetingsData();
+            this.mapAttendedMeetings();
+        }
+        
         this.addAddNoteBtnListener();
         this.addEditBtnsListeners();
     }
@@ -249,7 +264,14 @@ class NoteManager extends Fader {
     removePreviousNotes() {
         const notesList = document.getElementsByClassName('notes-list')[0];
         
-        this.profilePanel.removeChild(notesList);
+        if (notesList) {
+            this.profilePanel.removeChild(notesList);
+        }
+        
         this.profilePanel.removeChild(this.addNoteBtn);
+    }
+    
+    setAttendedMeetingsData() {
+        this._attendedMeetingsData = JSON.parse(this._attendedMeetingsSpanElt.getAttribute('data-attended-slots'));
     }
 }

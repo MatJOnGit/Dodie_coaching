@@ -30,7 +30,7 @@
             <p>Vous n'avez pas encore entré de note pour cet abonné</p>
         {% endif %}
         
-        {% if attendedMeetings %}
+        {% if notes %}
             <span id='attended-meetings' data-attended-slots='{{ attendedMeetings | json_encode() }}'></span>
         {% endif %}
         

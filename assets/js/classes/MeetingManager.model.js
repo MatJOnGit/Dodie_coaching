@@ -38,7 +38,11 @@ class MeetingManager extends Fader {
         this.addMeetingBtn.addEventListener('click', () => {
             this.displayAddMeetingElements();
             this.triggerMeetingAdditionButtons();
-            this.addMeetingDayListener();
+
+            if (this.incomingMeetingsTab) {
+                this.addMeetingDayListener();
+            }
+
             this.addMeetingSlotSubmitTest();
         })
     }
@@ -210,7 +214,9 @@ class MeetingManager extends Fader {
     }
     
     displayAddMeetingElements() {
-        this.removeMeetingsTab();
+        if (this.incomingMeetingsTab) {
+            this.removeMeetingsTab();
+        }
         this.editPageTitle();
         this.buildAddMeetingForm();
     }
@@ -275,8 +281,9 @@ class MeetingManager extends Fader {
             this.buildParsedMeetingsData();
             this.buildMeetingsList();
             this.addMeetingButtonsListeners();
-            this.addAddMeetingButtonListener();
         }
+        
+        this.addAddMeetingButtonListener();
     }
     
     removeMeetingsTab() {

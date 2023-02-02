@@ -15,5 +15,5 @@ return array(
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
-    'Dodie_Coaching\\' => array($baseDir . '/src'),
+    'App\\' => array($baseDir . '/src'),
 );

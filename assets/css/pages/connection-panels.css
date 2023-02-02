@@ -166,12 +166,12 @@ input[type=submit] {
 }
 
 .notification-box p {
-    margin: 0 1%;
+    margin-bottom: 10%;
     text-align: center;
 }
 
 .notification-box .btn {
-    margin-top: 5vh;
+    margin-top: 2vh;
 }
 
 /****************************/

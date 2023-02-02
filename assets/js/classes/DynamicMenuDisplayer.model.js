@@ -1,4 +1,4 @@
-class DynamicMenuDisplayer extends Fader {
+class DynamicMenuDisplayer extends ElementFader {
     constructor() {
         super();
         

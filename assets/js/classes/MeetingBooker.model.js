@@ -1,4 +1,4 @@
-class MeetingBooker extends Fader {
+class MeetingBooker extends ElementFader {
     constructor() {
         super();
         

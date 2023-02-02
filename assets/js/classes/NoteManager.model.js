@@ -1,4 +1,4 @@
-class NoteManager extends Fader {
+class NoteManager extends ElementFader {
     constructor() {
         super();
         

@@ -1,4 +1,4 @@
-class ProgressManager extends Fader {
+class ProgressManager extends ElementFader {
     constructor() {
         super();
         

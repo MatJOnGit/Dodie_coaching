@@ -1,4 +1,4 @@
-class ProgramInitializer extends Fader {
+class ProgramInitializer extends ElementFader {
     constructor() {
         super();
         

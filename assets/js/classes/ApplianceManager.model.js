@@ -1,4 +1,4 @@
-class ApplianceManager extends Fader {
+class ApplianceManager extends ElementFader {
     constructor() {
         super();
         

@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 session_start();
-
 // session_destroy();
-// echo $_SESSION['user-email'];
 
 class DB_Exception extends Exception { }
 class URL_Exception extends Exception { }
@@ -16,8 +14,7 @@ class PdfGenerator_Exception extends Exception { }
 try {
     require_once ('./../vendor/autoload.php');
     
-    $loader = new \Twig\Loader\FilesystemLoader('./../src/templates/');
-    
+    $loader = new \Twig\Loader\FilesystemLoader('./../src/domain/templates/');
     $twig = new Twig\Environment($loader, [
         'cache' => false,
         'debug' => true
@@ -25,41 +22,26 @@ try {
     
     $twig->addExtension(new \Twig\Extension\DebugExtension());
     
-    $Urls = [
-        'pages' => [
-            'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
-            'connection' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
-            'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings-booking', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management']
-        ],
-        'actions' => [
-            'connection' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
-            'progress' => ['add-report', 'delete-report'],
-            'meeting' => ['book-appointment', 'cancel-appointment', 'save-meeting', 'delete-meeting'],
-            'appliance' => ['reject-appliance', 'approve-appliance'],
-            'notes' => ['save-note', 'edit-note', 'delete-note'],
-            'program-intakes' => ['generate-meals'],
-            'program-file' => ['generate-program-file']
-        ]
-    ];
+    $routing = new App\Entities\Routing;
     
-    $user = new Dodie_Coaching\Controllers\User;
-    if ($user->areParamsSet(['page'])) {
-        $page = $user->getParam('page');
+    if ($routing->areParamsSet(['page'])) {
+        $session = new App\Entities\Session;
+
+        $page = $routing->getParam('page');
         
-        if (in_array($page, $Urls['pages']['showcase'])) {
-            $showcase = new Dodie_Coaching\Controllers\Showcase;
-            $isLogged = $user->isLogged();
+        if (in_array($page, $routing::URLS['pages']['showcase'])) {
+            $showcase = new App\Domain\Controllers\ShowcasePanels\Showcase;
+            $isLogged = $session->isUserLogged();
             
-            if ($showcase->isRequestMatching($page, 'presentation')) {
-                $showcase->renderPresentationPage($twig, $isLogged);
+            if ($routing->isRequestMatching($page, 'presentation')) {
+                $showcase::renderPresentationPage($twig, $isLogged);
             }
             
-            elseif ($showcase->isRequestMatching($page, 'coaching')) {
+            elseif ($routing->isRequestMatching($page, 'coaching')) {
                 $showcase->renderCoachingPage($twig, $isLogged);
             }
             
-            elseif ($showcase->isRequestMatching($page, 'programs-list')) {
+            elseif ($routing->isRequestMatching($page, 'programs-list')) {
                 if ($showcase->isProgramsListAvailable()) {
                     $showcase->renderProgramsListPage($twig, $isLogged);
                 }
@@ -70,10 +52,10 @@ try {
                 }
             }
             
-            elseif ($showcase->isRequestMatching($page, 'program-details')) {
+            elseif ($routing->isRequestMatching($page, 'program-details')) {
                 if ($showcase->isProgramsListAvailable()) {
-                    if ($showcase->areParamsSet(['program'])) {
-                        $requestedProgram = $showcase->getParam('program');
+                    if ($routing->areParamsSet(['program'])) {
+                        $requestedProgram = $routing->getParam('program');
                         
                         if ($showcase->isProgramAvailable($requestedProgram)) {
                             $showcase->renderProgramDetailsPage($twig, $requestedProgram, $isLogged);
@@ -81,7 +63,7 @@ try {
                         
                         else {
                             throw new URL_Exception('INVALID PROGRAM PARAMETER');
-                            // $showcase->routeTo('programsList');
+                            // $showcase->renderShowcase404Page($twig, $isLogged);
                         }
                     }
                     
@@ -102,56 +84,57 @@ try {
             }
         }
         
-        elseif (in_array($page, $Urls['pages']['connection'])) {
-            if (!$user->isLogged()) {
-                if ($user->isRequestMatching($page, 'login')) {
-                    $user->renderLoginPage($twig);
+        elseif (in_array($page, $routing::URLS['pages']['authentification'])) {
+            if (!$session->isUserLogged()) {
+                if ($routing->isRequestMatching($page, 'login')) {
+                    $loginPanel = new App\Domain\Controllers\AuthPanels\LoginPanel;
+                    $loginPanel->renderLoginPage($twig);
                 }
                 
-                elseif ($user->isRequestMatching($page, 'registering')) {
-                    $user->renderRegisteringPage($twig);
+                elseif ($routing->isRequestMatching($page, 'registering')) {
+                    $registeringPanel = new App\Domain\Controllers\AuthPanels\RegisteringPanel;
+                    $registeringPanel->renderRegisteringPage($twig);
                 }
                 
-                elseif ($user->isRequestMatching($page, 'mail-notification')) {
-                    $user->renderMailNotificationPage($twig);
+                elseif ($routing->isRequestMatching($page, 'password-retrieving')) {
+                    $passwordRetrievingPanel = new App\Domain\Controllers\AuthPanels\PasswordRetrievingPanel;
+                    $passwordRetrievingPanel->renderPasswordRetrievingPage($twig);
                 }
                 
-                elseif ($user->isRequestMatching($page, 'token-signing')) {
-                    $user->renderTokenSigningPage($twig);
+                elseif ($routing->isRequestMatching($page, 'password-editing')) {
+                    $passwordEditingPanel = new App\Domain\Controllers\AuthPanels\PasswordEditingPanel;
+                    $passwordEditingPanel->renderPasswordEditingPage($twig);
                 }
                 
-                elseif ($user->isRequestMatching($page, 'password-retrieving')) {
-                    $user->renderPasswordRetrievingPage($twig);
+                elseif ($routing->isRequestMatching($page, 'mail-notification')) {
+                    $passwordNotificationPanel = new App\Domain\Controllers\AuthPanels\PasswordNotificationPanel;
+                    $passwordNotificationPanel->renderMailNotificationPage($twig);
                 }
                 
-                elseif ($user->isRequestMatching($page, 'password-editing')) {
-                    $user->renderPasswordEditingPage($twig);
+                elseif ($routing->isRequestMatching($page, 'token-signing')) {
+                    $tokenSigningPanel = new App\Domain\Controllers\AuthPanels\TokenSigningPanel;
+                    $tokenSigningPanel->renderTokenSigningPage($twig);
                 }
-            }
-            
-            elseif ($user->isRequestMatching($page, 'retrieved-password')) {
-                $user->renderRetrievedPasswordPage($twig);
             }
             
             else {
-                $user->routeTo('dashboard');
+                $userDashboard = new App\Domain\Controllers\CostumerPanels\UserDashboard;
+                $userDashboard->routeTo('dashboard');
             }
         }
         
-        elseif (in_array($page, $Urls['pages']['userPanels'])) {
-            if ($user->isLogged()) {
-                $userRole = $user->getRole();
+        elseif (in_array($page, $routing::URLS['pages']['userPanels'])) {
+            if ($session->isUserLogged()) {
+                $userRole = $routing->getRole();
                 
-                if ($userRole && $user->isRoleMatching($userRole, ['member', 'subscriber'])) {
-                    $userPanel = new Dodie_Coaching\Controllers\UserPanel;
-                    
-                    if ($userPanel->isRequestMatching($page, 'dashboard')) {
-                        $userDashboard = new Dodie_Coaching\Controllers\UserDashboard;
+                if ($userRole && $routing->isRoleMatching($userRole, ['member', 'subscriber'])) {
+                    if ($routing->isRequestMatching($page, 'dashboard')) {
+                        $userDashboard = new App\Domain\Controllers\CostumerPanels\CostumerDashboard;
                         $userDashboard->renderUserDashboardPage($twig);
                     }
                     
-                    elseif ($userPanel->isRequestMatching($page, 'nutrition')) {
-                        $nutrition = new Dodie_Coaching\Controllers\Nutrition;
+                    elseif ($routing->isRequestMatching($page, 'nutrition')) {
+                        $nutrition = new App\Domain\Controllers\CostumerPanels\Nutrition;
                         
                         if ($nutrition->isMenuRequested()) {
                             $subscriberId = intval($nutrition->getUserId()['id']);
@@ -179,27 +162,27 @@ try {
                             }
                             
                             else {
-                                $userPanel->routeTo('nutrition');
+                                $routeDispatcher->routeTo('nutrition');
                             }
                         }
                         
                         else {
-                            $userPanel->routeTo('nutrition');
+                            $routeDispatcher->routeTo('nutrition');
                         }
                     }
                     
-                    elseif ($userPanel->isRequestMatching($page, 'progress')) {
-                        $progress = new Dodie_Coaching\Controllers\Progress;
+                    elseif ($routing->isRequestMatching($page, 'progress')) {
+                        $progress = new \App\Domain\Controllers\CostumerPanels\Progress;
                         $progress->renderProgressPage($twig);
                     }
                     
-                    elseif ($userPanel->isRequestMatching($page, 'meetings-booking')){
-                        $meetingBooking = new Dodie_Coaching\Controllers\MeetingBooking;
+                    elseif ($routing->isRequestMatching($page, 'meetings-booking')){
+                        $meetingBooking = new App\Domain\Controllers\CostumerPanels\MeetingBooking;
                         $meetingBooking->renderMeetingsBookingPage($twig);
                     }
                     
-                    elseif ($userPanel->isRequestMatching($page, 'subscription')) {
-                        $subscription = new Dodie_Coaching\Controllers\Subscription;
+                    elseif ($routing->isRequestMatching($page, 'subscription')) {
+                        $subscription = new \App\Controllers\Subscription;
                         $subscription->renderSubscriptionPage($twig);
                     }
                     
@@ -208,68 +191,69 @@ try {
                     }
                 }
                 
-                elseif ($userRole && $user->isRoleMatching($userRole, ['admin'])) {
-                    $user->routeTo('admin-dashboard');
+                elseif ($userRole && $routing->isRoleMatching($userRole, ['admin'])) {
+                    $routeDispatcher->routeTo('admin-dashboard');
                 }
                 
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
-                    // $user->logoutUser();
+                    // $routing->logoutUser();
+                    $this->routeTo('presentation');
                 }
             }
             
             else {
-                $user->logoutUser();
+                $session->logoutUser();
             }
         }
         
-        elseif (in_array($page, $Urls['pages']['adminPanels'])) {
-            if ($user->isLogged()) {
-                $userRole = $user->getRole();
+        elseif (in_array($page, $routing::URLS['pages']['adminPanels'])) {
+            if ($session->isUserLogged()) {
+                $userRole = $routing->getRole();
                 
-                if ($userRole && $user->isRoleMatching($userRole, ['admin'])) {
-                    $adminPanel = new Dodie_Coaching\Controllers\AdminPanel;
+                if ($userRole && $routing->isRoleMatching($userRole, ['admin'])) {
+                    $adminPanel = new App\Controllers\AdminPanel;
                     
-                    if ($adminPanel->isRequestMatching($page, 'admin-dashboard')) {
-                        $adminDashboard = new Dodie_Coaching\Controllers\AdminDashboard;
+                    if ($routing->isRequestMatching($page, 'admin-dashboard')) {
+                        $adminDashboard = new App\Controllers\AdminDashboard;
                         $adminDashboard->renderAdminDashboardPage($twig);
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'appliances-list')) {
-                        $appliance = new Dodie_Coaching\Controllers\Appliance;
+                    elseif ($routing->isRequestMatching($page, 'appliances-list')) {
+                        $appliance = new App\Controllers\Appliance;
                         $appliance->renderAppliancesListPage($twig);
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'appliance-details') && $adminPanel->areParamsSet(['id'])) {
-                        $appliance = new Dodie_Coaching\Controllers\Appliance;
-                        $applicantId = intval($appliance->getParam('id'));
+                    elseif ($routing->isRequestMatching($page, 'appliance-details') && $routing->areParamsSet(['id'])) {
+                        $appliance = new App\Controllers\Appliance;
+                        $applicantId = intval($routing->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
                             $appliance->renderApplianceDetailsPage($twig, $applicantId);
                         }
                         
                         else {
-                            $appliance->routeTo('appliancesList');
+                            $routeDispatcher->routeTo('appliancesList');
                         }
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'subscribers-list')) {
-                        $subscriber = new Dodie_Coaching\Controllers\Subscriber;
+                    elseif ($routing->isRequestMatching($page, 'subscribers-list')) {
+                        $subscriber = new App\Controllers\Subscriber;
                         $subscriber->renderSubscribersListPage($twig);
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-profile')) {
-                        $subscriber = new Dodie_Coaching\Controllers\Subscriber;
+                    elseif ($routing->isRequestMatching($page, 'subscriber-profile')) {
+                        $subscriber = new App\Controllers\Subscriber;
                         
-                        if ($adminPanel->areParamsSet(['id'])) {
-                            $subscriberId = intval($subscriber->getParam('id'));
+                        if ($routing->areParamsSet(['id'])) {
+                            $subscriberId = intval($routing->getParam('id'));
                             
                             if ($subscriber->isSubscriberIdValid($subscriberId)) {
                                 $subscriber->renderSubscriberProfilePage($twig, $subscriberId);
                             }
                             
                             else {
-                                $subscriber->routeTo('subscribersList');
+                                $routeDispatcher->routeTo('subscribersList');
                             }
                         }
                         
@@ -279,18 +263,18 @@ try {
                         }
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-program')) {
-                        $program = new Dodie_Coaching\Controllers\Program;
+                    elseif ($routing->isRequestMatching($page, 'subscriber-program')) {
+                        $program = new App\Controllers\Program;
                         
-                        if ($adminPanel->areParamsSet(['id'])) {
-                            $subscriberId = intval($program->getParam('id'));
+                        if ($routing->areParamsSet(['id'])) {
+                            $subscriberId = intval($routing->getParam('id'));
                             
                             if ($program->isSubscriberIdValid($subscriberId)) {
                                 $program->renderSubscriberProgramPage($twig, $subscriberId);
                             }
                             
                             else {
-                                $program->routeTo('subscribersList');
+                                $routeDispatcher->routeTo('subscribersList');
                             }
                         }
                         
@@ -300,18 +284,18 @@ try {
                         }
                     }
                     
-                    elseif ($adminPanel->isRequestMatching($page, 'subscriber-notes')) {
-                        $note = new Dodie_Coaching\Controllers\Note;
+                    elseif ($routing->isRequestMatching($page, 'subscriber-notes')) {
+                        $note = new App\Controllers\Note;
                         
-                        if ($note->areParamsSet(['id'])) {
-                            $subscriberId = intval($note->getParam('id'));
+                        if ($routing->areParamsSet(['id'])) {
+                            $subscriberId = intval($routing->getParam('id'));
                             
                             if ($note->isSubscriberIdValid($subscriberId)) {
                                 $note->renderSubscriberNotesPage($twig, $subscriberId);
                             }
                             
                             else {
-                                $note->routeTo('subscribersList');
+                                $routeDispatcher->routeTo('subscribersList');
                             }
                         }
                         
@@ -321,8 +305,8 @@ try {
                         }
                     }
                     
-                    else if ($adminPanel->isRequestMatching($page, 'meetings-management')) {
-                        $meetingManagement = new Dodie_Coaching\Controllers\MeetingManagement;
+                    else if ($routing->isRequestMatching($page, 'meetings-management')) {
+                        $meetingManagement = new App\Controllers\MeetingManagement;
                         
                         $meetingManagement->renderMeetingsManagementPage($twig);
                     }
@@ -330,47 +314,52 @@ try {
                 
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
-                    // $user->logoutUser();
+                    // $routing->logoutUser();
                 }
             }
             
             else {
-                $user->logoutUser();
+                $routing->logoutUser();
             }
         }
         
         else {
             throw new URL_Exception('INVALID PAGE PARAMETER');
-            // $user = new Dodie_Coaching\Controllers\User;
-            // $user->logoutUser();
+            // $routing = new App\Controllers\User;
+            // $routing->logoutUser();
         }
     }
     
-    elseif ($user->areParamsSet(['action'])) {
-        $user = new Dodie_Coaching\Controllers\User;
-        $action = $user->getParam('action');
+    elseif ($routing->areParamsSet(['action'])) {
+        $session = new App\Entities\Session;
+
+        $action = $routing->getParam('action');
         
-        if (in_array($action, $Urls['actions']['connection'])) {
+        if (in_array($action, $routing::URLS['actions']['authentification'])) {
+            $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
+            $form = new App\Entities\Form;
             
-            if ($user->isRequestMatching($action, 'log-account') && !$user->isLogged()) {
-                if ($user->areDataPosted(['email', 'password'])) {
-                    $userData = $user->getFormData(['email', 'password']);
+            if ($routing->isRequestMatching($action, 'log-account') && !$session->isUserLogged()) {
+                if ($form->areDataPosted(['email', 'password'])) {
+                    $routingData = $form->getData(['email', 'password']);
                     
-                    if ($user->areFormDataValid($userData)) {
-                        if ($user->isAccountExisting($userData)) {
-                            if ($user->updateLoginData($userData)) {
-                                $user->logUser($userData);
-                                $user->routeTo('dashboard');
+                    if ($form->areDataValid($routingData)) {
+                        $account = new App\Entities\Account;
+
+                        if ($account->isAccountExisting($routingData)) {
+                            if ($account->updateLoginData($routingData)) {
+                                $session->logUser($routingData);
+                                $authPanel->routeTo('dashboard');
                             }
                             
                             else {
                                 throw new DB_Exception('FAILED TO UPDATE LOGGING DATE');
-                                // $user->routeTo('login');
+                                // $authPanel->routeTo('login');
                             }
                         }
                         
                         else {
-                            $user->routeTo('login');
+                            $authPanel->routeTo('login');
                         }
                     }
                     
@@ -384,26 +373,28 @@ try {
                 }
             }
             
-            elseif ($user->isRequestMatching($action, 'register-account') && !$user->isLogged()) {
-                if ($user->areDataPosted(['email', 'password', 'confirmation-password'])) {
-                    $userData = $user->getFormData(['email', 'password', 'confirmation-password']);
+            elseif ($routing->isRequestMatching($action, 'register-account') && !$session->isUserLogged()) {
+                if ($form->areDataPosted(['email', 'password', 'confirmation-password'])) {
+                    $routingData = $form->getData(['email', 'password', 'confirmation-password']);
                     
-                    if ($user->areFormDataValid($userData)) {
-                        if (!$user->isEmailExisting($userData['email'])) {            
-                            if ($user->registerAccount($userData)) {
-                                $user->createStaticData($userData);
-                                $user->logUser($userData);
-                                $user->routeTo('dashboard');
+                    if ($form->areDataValid($routingData)) {
+                        $account = new App\Entities\Account;
+
+                        if (!$account->isEmailExisting($routingData['email'])) {
+                            if ($account->registerAccount($routingData)) {
+                                $routing->createStaticData($routingData);
+                                $session->logUser($routingData);
+                                $authPanel->routeTo('dashboard');
                             }
                             
                             else {
                                 throw new DB_Exception('FAILED TO REGISTER ACCOUNT');
-                                // $user->routeTo('registering');
+                                // $authPanel->routeTo('registering');
                             }
                         }
                         
                         else {
-                            $user->routeTo('registering');
+                            $authPanel->routeTo('registering');
                         }
                     }
                     
@@ -417,40 +408,48 @@ try {
                 }
             }
             
-            elseif ($user->isRequestMatching($action, 'send-token') && !$user->isLogged()) {
-                if ($user->areDataPosted(['email'])) {
-                    $userData = $user->getFormData(['email']);
+            elseif ($routing->isRequestMatching($action, 'send-token') && !$session->isUserLogged()) {
+                $token = new App\Entities\ResetToken;
+                $form = new App\Entities\Form;
+                if ($form->areDataPosted(['email'])) {
+                    $userData = $form->getData(['email']);
                     
-                    if ($user->areFormDataValid($userData)) {
-                        if ($user->isEmailExisting($userData['email'])) {
-                            $tokenData = $user->getTokenDate($userData['email']);
+                    if ($form->areDataValid($userData)) {
+                        $account = new App\Entities\Account;
+
+                        if ($account->isEmailExisting($userData['email'])) {
+                            $tokenData = $token->getTokenDate($userData['email']);
                             
                             if ($tokenData) {
-                                if ($user->isLastTokenOld($tokenData)) {
-                                    if ($user->eraseToken($userData['email'])) {
-                                        $user->logUser($userData);
-                                        $user->routeTo('send-token');
+                                $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
+                                if ($token->isLastTokenOld($tokenData)) {
+                                    if ($token->eraseToken($userData['email'])) {
+                                        $session->logUser($userData);
+                                        $authPanel->routeTo('send-token');
                                     }
                                     
                                     else {
                                         throw new DB_Exception('FAILED TO DELETE PREVIOUS TOKEN');
-                                        // $user->routeTo('mail-notification');
+                                        // $routeDispatcher->routeTo('mail-notification');
                                     }
                                 }
                                 
                                 else {
-                                    $user->routeTo('mail-notification');
+
+                                    $authPanel->routeTo('mail-notification');
                                 }
                             }
                             
                             else {
-                                $user->sessionize($userData, ['email']);
-                                $user->routeTo('send-token');
+                                $passwordRetrievingPanel = new App\Domain\Controllers\AuthPanels\PasswordRetrievingPanel;
+
+                                $session->sessionize($userData, ['email']);
+                                $passwordRetrievingPanel->routeTo('send-token');
                             }
                         }
                         
                         else {
-                            $user->routeTo('mail-notification');
+                            $routeDispatcher->routeTo('mail-notification');
                         }
                     }
                     
@@ -459,18 +458,19 @@ try {
                     }
                 }
                 
-                elseif ($user->isDataSessionized('email')) {
-                    $newToken = $user->generateToken();
+                elseif ($session->isDataSessionized('email')) {
+                    $tokenData = $token->generateToken();
                     
-                    if ($user->registerToken($newToken)) {
-                        $pwdRetriever = new Dodie_Coaching\Services\PasswordRetriever;
+                    if ($token->registerToken($tokenData)) {
+                        $passwordRetriever = new App\Domain\Services\PasswordRetriever;
                         
-                        if (!$pwdRetriever->sendToken($newToken)) {
+                        if (!$passwordRetriever->sendToken($tokenData)) {
                             throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
                         }
                         
                         else {
-                            $user->routeTo('mail-notification');
+                            $passwordNotificationPanel = new App\Domain\Controllers\AuthPanels\PasswordNotificationPanel;
+                            $passwordNotificationPanel->routeTo('mail-notification');
                         }
                     }
                     
@@ -484,22 +484,26 @@ try {
                 }
             }
             
-            elseif ($user->isRequestMatching($action, 'verify-token') && !$user->isLogged()) {
-                if ($user->isDataSessionized('email') && $user->areDataPosted(['token'])) {
-                    $userData = $user->getFormData(['token']);
+            elseif ($routing->isRequestMatching($action, 'verify-token') && !$session->isUserLogged()) {
+                $token = new App\Entities\ResetToken;
+                $form = new App\Entities\Form;
+                if ($session->isDataSessionized('email') && $form->areDataPosted(['token'])) {
+                    $routingData = $form->getData(['token']);
                     
-                    if ($user->areFormDataValid($userData)) {
-                        if ($user->isTokenMatching()) {
-                            $user->sessionize($userData, ['token']);
-                            $user->routeTo('edit-password');
+                    if ($form->areDataValid($routingData)) {
+                        $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
+                        
+                        if ($token->isTokenMatching()) {
+                            $session->sessionize($routingData, ['token']);
+                            $authPanel->routeTo('edit-password');
                         }
                         
                         else {
-                            if (!$user->subtractTokenAttempt()) {
+                            if (!$token->subtractTokenAttempt()) {
                                 throw new DB_Exception('FAILED TO SUBTRACT A TOKEN ATTEMPT');                                
                             }
                             
-                            $user->routeTo('token-signing');
+                            $authPanel->routeTo('token-signing');
                         }
                     }
                     
@@ -513,19 +517,27 @@ try {
                 }
             }
             
-            elseif ($user->isRequestMatching($action, 'register-password') && !$user->isLogged()) {
-                if ($user->areDataPosted(['password', 'confirmation-password'])) {
-                    $userData = $user->getFormData(['password', 'confirmation-password']);
+            elseif ($routing->isRequestMatching($action, 'register-password') && !$session->isUserLogged()) {
+                $form = new App\Entities\Form;
+
+                if ($form->areDataPosted(['password', 'confirmation-password'])) {
+                    $routingData = $form->getData(['password', 'confirmation-password']);
                     
-                    if ($user->areFormDataValid($userData)) {
-                        if ($user->isDataSessionized('email')) {
-                            $userEmail = $user->getSessionizedParam('email');
+                    if ($form->areDataValid($routingData)) {
+                        $session = new App\Entities\Session;
+
+                        if ($session->isDataSessionized('email')) {
+                            $account = new App\Entities\Account;
+
+                            $routingEmail = $session->getSessionizedParam('email');
                             
-                            if ($user->registerPassword($userData)) {
-                                if ($user->eraseToken($userEmail)) {
-                                    $user->unsessionizeData(['token']);
-                                    $user->sessionize($userData, ['password']);
-                                    $user->routeTo('retrieved-password');
+                            if ($account->registerPassword($routingData)) {
+                                $token = new App\Entities\ResetToken;
+
+                                if ($token->eraseToken($routingEmail)) {
+                                    $session->unsessionizeData(['token']);
+                                    $session->sessionize($routingData, ['password']);
+                                    $routeDispatcher->routeTo('retrieved-password');
                                 }
                                 
                                 else {
@@ -553,35 +565,40 @@ try {
                 }
             }
             
-            elseif ($user->isRequestMatching($action, 'logout') && $user->isLogged()) {
-                $user->logoutUser();
+            elseif ($routing->isRequestMatching($action, 'logout') && $session->isUserLogged()) {
+                $showcase = new App\Domain\Controllers\ShowCasePanels\Showcase;
+                $session->logoutUser();
+                $showcase->routeTo('presentation');
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['progress'])) {
-            $progress = new Dodie_Coaching\Controllers\Progress;
+        elseif (in_array($action, $routing::URLS['actions']['progress'])) {
+            $progress = new App\Domain\Controllers\CostumerPanels\Progress;
+            $progressItem = new App\Entities\ProgressItem;
             
-            if ($user->isLogged()) {
-                if ($progress->isRequestMatching($action, 'add-report')) {
-                    if ($progress->areBaseFormDataSet()) {
-                        $baseFormData = $progress->getBaseFormData();
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'add-report')) {
+                    $progressForm = new App\Entities\ProgressForm;
+
+                    if ($progressForm->areBaseFormDataSet()) {
+                        $baseFormData = $progressForm->getBaseFormData();
                         
-                        if ($progress->areBaseFormDataValid($baseFormData)) {
-                            if ($progress->isCurrentWeightReport($baseFormData)) {
-                                $formatedFormData = $progress->getFormatedBaseFormData($baseFormData);
+                        if ($progressForm->areBaseFormDataValid($baseFormData)) {
+                            if ($progressItem->isCurrentWeight($baseFormData)) {
+                                $formatedFormData = $progressForm->getFormatedBaseFormData($baseFormData);
                                 
-                                if (!$progress->logProgress($formatedFormData)) {
+                                if (!$progressItem->logProgress($formatedFormData)) {
                                     throw new DB_Exception('FAILED TO LOG CURRENT WEIGHT REPORT');
                                 }
                             }
                             
-                            elseif ($progress->areExtendedFormDataSet()) {
-                                $extendedFormData = $progress->getExtendedFormData($baseFormData);
+                            elseif ($progressForm->areExtendedFormDataSet()) {
+                                $extendedFormData = $progressForm->getExtendedFormData($baseFormData);
                                 
-                                if ($progress->areExtendedFormDataValid($extendedFormData)) {
-                                    $formatedFormData = $progress->getFormatedExtendedFormData($extendedFormData);
+                                if ($progressForm->areExtendedFormDataValid($extendedFormData)) {
+                                    $formatedFormData = $progressForm->getFormatedExtendedFormData($extendedFormData);
                                     
-                                    if (!$progress->logProgress($formatedFormData)) {
+                                    if (!$progressItem->logProgress($formatedFormData)) {
                                         throw new DB_Exception('FAILED TO LOG OLD WEIGHT REPORT');
                                     }
                                 }
@@ -608,15 +625,15 @@ try {
                     $progress->routeTo('progress');
                 }
                 
-                elseif ($progress->isRequestMatching($action, 'delete-report')) {
-                    if ($progress->areParamsSet(['id'])) {
-                        $reportId = $progress->getParam('id');
-                        
-                        if ($progress->isReportIdValid($reportId)) {
+                elseif ($routing->isRequestMatching($action, 'delete-report')) {
+                    if ($routing->areParamsSet(['id'])) {
+                        $reportId = $routing->getParam('id');
+
+                        if ($progressItem->isReportIdValid($reportId)) {
                             $progressHistory = $progress->getHistory();
                             
-                            if ($progress->isReportIdExisting($progressHistory, $reportId)) {
-                                if (!$progress->eraseProgressItem($progressHistory, $reportId)) {
+                            if ($progressItem->isReportIdExisting($progressHistory, $reportId)) {
+                                if (!$progressItem->eraseProgressItem($progressHistory, $reportId)) {
                                     throw new DB_Exception ("FAILED TO DELETE REPORT");
                                 }
                             }
@@ -640,15 +657,15 @@ try {
             }
             
             else {
-                $user->logoutUser();
+                $session->logoutUser();
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['meeting'])) {
-            $meeting = new Dodie_Coaching\Controllers\MeetingBooking;
+        elseif (in_array($action, $routing::URLS['actions']['meeting'])) {
+            $meeting = new App\Domain\Controllers\CostumerPanels\MeetingBooking;
             
-            if ($user->isLogged()) {
-                if ($meeting->isRequestMatching($action, 'book-appointment')) {
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'book-appointment')) {
                     $dateData = $meeting->getDateData();
                     
                     if ($meeting->areDateDataValid($dateData)) {
@@ -669,62 +686,62 @@ try {
                         throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
                     
-                    $meeting->routeTo('meetingsBooking');
+                    $routeDispatcher->routeTo('meetingsBooking');
                 }
                 
-                elseif ($meeting->isRequestMatching($action, 'cancel-appointment')) {
+                elseif ($routing->isRequestMatching($action, 'cancel-appointment')) {
                     if (!$meeting->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
                     
-                    $meeting->routeTo('meetingsBooking');
+                    $routeDispatcher->routeTo('meetingsBooking');
                 }
                 
-                elseif ($meeting->isRequestMatching($action, 'save-meeting')) {
-                    $userRole = $user->getRole();
+                elseif ($routing->isRequestMatching($action, 'save-meeting')) {
+                    $userRole = $routing->getRole();
                     
-                    if ($user->isRoleMatching($userRole, ['admin'])) {
-                        $meetingData = $user->getFormData(['meeting-day', 'meeting-time']);
+                    if ($routing->isRoleMatching($userRole, ['admin'])) {
+                        $meetingData = $routing->getFormData(['meeting-day', 'meeting-time']);
                         
                         if ($meetingData) {
-                            $meeting = new Dodie_Coaching\Controllers\MeetingManagement;
+                            $meeting = new App\Controllers\MeetingManagement;
                             
                             if ($meeting->areDateDataValid($meetingData)) {
                                 if (!$meeting->addMeetingSlot($meetingData)) {
                                     throw new DB_Exception('FAILED TO INSERT A NEW MEETING');
                                 }
                                 
-                                $meeting->routeTo('meetingsManagement');
-                            }        
+                                $routeDispatcher->routeTo('meetingsManagement');
+                            }
                         }
                     }
                     
                     else {
-                        $user->logoutUser();
+                        $routing->logoutUser();
                     }
                 }
                 
-                elseif ($meeting->isRequestMatching($action, 'delete-meeting')) {
-                    $userRole = $user->getRole();
+                elseif ($routing->isRequestMatching($action, 'delete-meeting')) {
+                    $userRole = $routing->getRole();
                     
-                    if ($user->isRoleMatching($userRole, ['admin'])) {
-                        if ($user->areParamsSet(['id'])) {
-                            $meeting = new Dodie_Coaching\Controllers\MeetingManagement;
-                            $meetingId = $meeting->getParam('id');
+                    if ($routing->isRoleMatching($userRole, ['admin'])) {
+                        if ($routing->areParamsSet(['id'])) {
+                            $meeting = new App\Controllers\MeetingManagement;
+                            $meetingId = $routing->getParam('id');
                             
                             if ($meeting->isMeetingIdValid($meetingId)) {
                                 $attendeeData = $meeting->getAttendeeData($meetingId);
                                 $isMeetingBooked = $meeting->isMeetingBooked($attendeeData);
                                 
                                 if ($meeting->eraseMeetingSlot($meetingId) && $isMeetingBooked) {
-                                    $canceledMeetingAlerter = new Dodie_Coaching\Services\CanceledMeetingAlerter;
+                                    $canceledMeetingAlerter = new App\Services\CanceledMeetingAlerter;
                                     
                                     if (!$canceledMeetingAlerter->sendCancelMeetingNotification($attendeeData[0])) {
                                         throw new Mailer_Exception('FAILED TO SEND MEETING DELETION NOTIFICATION');
                                     }
                                 }
                                 
-                                $meeting->routeTo('meetingsManagement');
+                                $routeDispatcher->routeTo('meetingsManagement');
                             }
                             
                             else {
@@ -738,26 +755,26 @@ try {
                     }
                     
                     else {
-                        $user->logoutUser();
+                        $routing->logoutUser();
                     }
                 }
             }
             
             else {
-                $user->logoutUser();
+                $routing->logoutUser();
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['appliance'])) {
-            $appliance = new Dodie_Coaching\Controllers\Appliance;
+        elseif (in_array($action, $routing::URLS['actions']['appliance'])) {
+            $appliance = new App\Controllers\Appliance;
             
-            if ($user->isLogged()) {
-                if ($appliance->isRequestMatching($action, 'reject-appliance')) {
-                    if ($appliance->areParamsSet(['id'])) {
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'reject-appliance')) {
+                    if ($routing->areParamsSet(['id'])) {
                         $applicantId = intval($appliances->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
-                            $appResponder = new Dodie_Coaching\Services\ApplianceResponder;
+                            $appResponder = new App\Services\ApplianceResponder;
                             
                             $applicantData = $appliances->getApplicantData($applicantId);
                             $messageType = $appliances->getMessageType();
@@ -767,12 +784,12 @@ try {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
                                 }
                                 
-                                $appliance->routeTo('appliancesList');
+                                $routeDispatcher->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $appliance->routeTo('appliancesList');
+                            $routeDispatcher->routeTo('appliancesList');
                         }
                     }
                     
@@ -782,11 +799,11 @@ try {
                 }
                 
                 elseif ($appliances->isRequestMatching($action, 'approve-appliance')) {
-                    if ($appliance->areParamsSet(['id'])) {
+                    if ($routing->areParamsSet(['id'])) {
                         $applicantId = intval($appliances->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
-                            $applianceResponder = new Dodie_Coaching\Services\ApplianceResponder;
+                            $applianceResponder = new App\Services\ApplianceResponder;
                             $applicantData = $appliance->getApplicantData($applicantId);
                             
                             if ($appliance->acceptAppliance($applicantId, 'payment_pending')) {
@@ -794,12 +811,12 @@ try {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
                                 }
                                 
-                                $appliance->routeTo('appliancesList');
+                                $routeDispatcher->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $appliance->routeTo('appliancesList');
+                            $routeDispatcher->routeTo('appliancesList');
                         }
                     }
                     
@@ -814,17 +831,17 @@ try {
             }
             
             else {
-                $user->logoutUser();
+                $routing->logoutUser();
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['notes'])) {
-            $note = new Dodie_Coaching\Controllers\Note;
+        elseif (in_array($action, $routing::URLS['actions']['notes'])) {
+            $note = new App\Controllers\Note;
             
-            if ($user->isLogged()) {
-                if ($note->isRequestMatching($action, 'save-note')) {
-                    if ($note->areParamsSet(['id'])) {
-                        $subscriberId = intval($note->getParam('id'));
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'save-note')) {
+                    if ($routing->areParamsSet(['id'])) {
+                        $subscriberId = intval($routing->getParam('id'));
                         
                         if ($note->isSubscriberIdValid($subscriberId)) {
                             if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
@@ -859,10 +876,10 @@ try {
                     }
                 }
                 
-                elseif ($note->isRequestMatching($action, 'edit-note')) {
-                    if ($note->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = intval($note->getParam('id'));
-                        $noteId = intval($note->getParam('note-id'));
+                elseif ($routing->isRequestMatching($action, 'edit-note')) {
+                    if ($routing->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($routing->getParam('id'));
+                        $noteId = intval($routing->getParam('note-id'));
                         
                         if ($note->isSubscriberIdValid($subscriberId) && $note->isNoteIdValid($noteId)) {
                             if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
@@ -894,10 +911,10 @@ try {
                     }
                 }
                 
-                elseif ($note->isRequestMatching($action, 'delete-note')) {
-                    if ($note->areParamsSet(['note-id', 'id'])) {
-                        $subscriberId = intval($note->getParam('id'));
-                        $noteId = intval($note->getParam('note-id'));
+                elseif ($routing->isRequestMatching($action, 'delete-note')) {
+                    if ($routing->areParamsSet(['note-id', 'id'])) {
+                        $subscriberId = intval($routing->getParam('id'));
+                        $noteId = intval($routing->getParam('note-id'));
                         
                         if ($note->isNoteIdValid($noteId)) {
                             $note->eraseNote($noteId);
@@ -917,17 +934,17 @@ try {
             }
             
             else {
-                $user->logoutUser();
+                $session->logoutUser();
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['program-intakes'])) {
-            $program = new Dodie_Coaching\Controllers\program;
+        elseif (in_array($action, $routing::URLS['actions']['program-intakes'])) {
+            $program = new App\Controllers\program;
             
-            if ($user->isLogged()) {
-                if ($program->isRequestMatching($action, 'generate-meals')) {
-                    if ($program->areParamsSet(['id'])) {
-                        $subscriberId = intval($program->getParam('id'));
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'generate-meals')) {
+                    if ($routing->areParamsSet(['id'])) {
+                        $subscriberId = intval($routing->getParam('id'));
                         
                         if ($program->isSubscriberIdValid($subscriberId)) {
                             $mealsList = $program->getCheckedMeals();
@@ -957,17 +974,17 @@ try {
             }
             
             else {
-                $user->logoutUser();
+                $routing->logoutUser();
             }
         }
         
-        elseif (in_array($action, $Urls['actions']['program-file'])) {
-            $programFile = new Dodie_Coaching\Controllers\ProgramFile;
+        elseif (in_array($action, $routing::URLS['actions']['program-file'])) {
+            $programFile = new App\Controllers\ProgramFile;
             
-            if ($user->isLogged()) {
-                if ($programFile->isRequestMatching($action, 'generate-program-file')) {
-                    if ($programFile->areParamsSet(['id'])) {
-                        $subscriberId = intval($programFile->getParam('id'));
+            if ($session->isUserLogged()) {
+                if ($routing->isRequestMatching($action, 'generate-program-file')) {
+                    if ($routing->areParamsSet(['id'])) {
+                        $subscriberId = intval($routing->getParam('id'));
                         
                         if ($programFile->isSubscriberIdValid($subscriberId)) {
                             $programFileStatus = $programFile->getProgramFileStatus($subscriberId);
@@ -981,7 +998,7 @@ try {
                                     
                                     if ($output) {
                                         if ($programFile->saveDataToPdf($output, $subscriberHeaders)) {
-                                            $programFileAlerter = new Dodie_Coaching\Services\ProgramFileAlerter;
+                                            $programFileAlerter = new App\Services\ProgramFileAlerter;
                                             
                                             $programFile->setProgramFileStatus($subscriberId, 'updated');
                                             $programFileAlerter->sendProgramFileNotification($subscriberHeaders);
@@ -1021,12 +1038,12 @@ try {
             }
             
             else {
-                $user->logoutUser();
+                $routing->logoutUser();
             }
         }
         
         else {
-            $user->logoutUser();
+            $routing->logoutUser();
         }
     }
     

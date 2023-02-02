@@ -1,4 +1,4 @@
-class ProgramDisplayer extends Fader {
+class ProgramDisplayer extends ElementFader {
     constructor() {
         super();
         

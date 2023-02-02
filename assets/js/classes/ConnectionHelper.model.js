@@ -1,4 +1,4 @@
-class ConnectionHelper extends Fader {
+class ConnectionHelper extends ElementFader {
     constructor() {
         super();
         

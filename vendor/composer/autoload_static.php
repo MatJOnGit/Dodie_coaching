@@ -38,7 +38,10 @@ class ComposerStaticInitc0ff4f09e9b3123b499062ef405cb0f2
         'D' => 
         array (
             'Dompdf\\' => 7,
-            'Dodie_Coaching\\' => 15,
+        ),
+        'A' => 
+        array (
+            'App\\' => 4,
         ),
     );
 
@@ -79,7 +82,7 @@ class ComposerStaticInitc0ff4f09e9b3123b499062ef405cb0f2
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
-        'Dodie_Coaching\\' => 
+        'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

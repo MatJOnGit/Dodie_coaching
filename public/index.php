@@ -23,10 +23,9 @@ try {
     $twig->addExtension(new \Twig\Extension\DebugExtension());
     
     $routing = new App\Entities\Routing;
+    $session = new App\Entities\Session;
     
     if ($routing->areParamsSet(['page'])) {
-        $session = new App\Entities\Session;
-
         $page = $routing->getParam('page');
         
         if (in_array($page, $routing::URLS['pages']['showcase'])) {
@@ -118,7 +117,7 @@ try {
             }
             
             else {
-                $userDashboard = new App\Domain\Controllers\CostumerPanels\UserDashboard;
+                $userDashboard = new App\Domain\Controllers\CostumerPanels\CostumerDashboard;
                 $userDashboard->routeTo('dashboard');
             }
         }
@@ -129,23 +128,28 @@ try {
                 
                 if ($userRole && $routing->isRoleMatching($userRole, ['member', 'subscriber'])) {
                     if ($routing->isRequestMatching($page, 'dashboard')) {
-                        $userDashboard = new App\Domain\Controllers\CostumerPanels\CostumerDashboard;
-                        $userDashboard->renderUserDashboardPage($twig);
+                        $dashboard = new App\Domain\Controllers\CostumerPanels\Dashboard;
+                        $dashboard->renderCostumerDashboardPage($twig);
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'nutrition')) {
-                        $nutrition = new App\Domain\Controllers\CostumerPanels\Nutrition;
+                        $program = new App\Entities\Program;
+                        $meal = new App\Entities\Meal;
                         
-                        if ($nutrition->isMenuRequested()) {
-                            $subscriberId = intval($nutrition->getUserId()['id']);
-                            $nutrition->renderNutritionMenuPage($twig, $subscriberId);
+                        if ($program->isMenuRequested()) {
+                            $programMenu = new App\Domain\Controllers\CostumerPanels\ProgramMenu;
+                            $programFile = new App\Entities\ProgramFile;
+                            
+                            $subscriberId = intval($routing->getUserId()['id']);
+                            $programMenu->renderNutritionMenuPage($twig, $meal, $programFile, $subscriberId);
                         }
                         
-                        elseif ($nutrition->isMealRequested()) {
-                            $mealData = $nutrition->getMealData();
+                        elseif ($program->isMealRequested()) {
+                            $mealData = $program->getMealData();
                             
-                            if ($nutrition->areMealParamsValid($mealData)) {
-                                $nutrition->renderMealDetailsPage($twig, $mealData);
+                            if ($program->areMealParamsValid($mealData)) {
+                                $mealDetails = new App\Domain\Controllers\CostumerPanels\MealDetails;
+                                $mealDetails->renderMealDetailsPage($twig, $meal, $mealData);
                             }
                             
                             else {
@@ -154,11 +158,12 @@ try {
                             }
                         }
                         
-                        elseif ($nutrition->isRequestSet()) {
-                            $request = $nutrition->getRequest();
+                        elseif ($program->isRequestSet()) {
+                            $request = $program->getRequest();
                             
-                            if ($nutrition->isShoppingListRequested($request)) {
-                                $nutrition->renderShoppingListPage($twig);
+                            if ($program->isShoppingListRequested($request)) {
+                                $shoppingList = new App\Domain\Controllers\CostumerPanels\ShoppingList;
+                                $shoppingList->renderShoppingListPage($twig);
                             }
                             
                             else {
@@ -182,7 +187,7 @@ try {
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'subscription')) {
-                        $subscription = new \App\Controllers\Subscription;
+                        $subscription = new \App\Domain\Controllers\CostumerPanels\Subscription;
                         $subscription->renderSubscriptionPage($twig);
                     }
                     
@@ -198,7 +203,6 @@ try {
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
                     // $routing->logoutUser();
-                    $this->routeTo('presentation');
                 }
             }
             
@@ -568,13 +572,12 @@ try {
             elseif ($routing->isRequestMatching($action, 'logout') && $session->isUserLogged()) {
                 $showcase = new App\Domain\Controllers\ShowCasePanels\Showcase;
                 $session->logoutUser();
-                $showcase->routeTo('presentation');
             }
         }
         
         elseif (in_array($action, $routing::URLS['actions']['progress'])) {
             $progress = new App\Domain\Controllers\CostumerPanels\Progress;
-            $progressItem = new App\Entities\ProgressItem;
+            $progressReport = new App\Entities\ProgressReport;
             
             if ($session->isUserLogged()) {
                 if ($routing->isRequestMatching($action, 'add-report')) {
@@ -584,10 +587,10 @@ try {
                         $baseFormData = $progressForm->getBaseFormData();
                         
                         if ($progressForm->areBaseFormDataValid($baseFormData)) {
-                            if ($progressItem->isCurrentWeight($baseFormData)) {
+                            if ($progressReport->isCurrentWeight($baseFormData)) {
                                 $formatedFormData = $progressForm->getFormatedBaseFormData($baseFormData);
                                 
-                                if (!$progressItem->logProgress($formatedFormData)) {
+                                if (!$progressReport->logProgress($formatedFormData)) {
                                     throw new DB_Exception('FAILED TO LOG CURRENT WEIGHT REPORT');
                                 }
                             }
@@ -598,7 +601,7 @@ try {
                                 if ($progressForm->areExtendedFormDataValid($extendedFormData)) {
                                     $formatedFormData = $progressForm->getFormatedExtendedFormData($extendedFormData);
                                     
-                                    if (!$progressItem->logProgress($formatedFormData)) {
+                                    if (!$progressReport->logProgress($formatedFormData)) {
                                         throw new DB_Exception('FAILED TO LOG OLD WEIGHT REPORT');
                                     }
                                 }
@@ -629,11 +632,11 @@ try {
                     if ($routing->areParamsSet(['id'])) {
                         $reportId = $routing->getParam('id');
 
-                        if ($progressItem->isReportIdValid($reportId)) {
+                        if ($progressReport->isReportIdValid($reportId)) {
                             $progressHistory = $progress->getHistory();
                             
-                            if ($progressItem->isReportIdExisting($progressHistory, $reportId)) {
-                                if (!$progressItem->eraseProgressItem($progressHistory, $reportId)) {
+                            if ($progressReport->isReportIdExisting($progressHistory, $reportId)) {
+                                if (!$progressReport->eraseProgressReport($progressHistory, $reportId)) {
                                     throw new DB_Exception ("FAILED TO DELETE REPORT");
                                 }
                             }
@@ -662,17 +665,20 @@ try {
         }
         
         elseif (in_array($action, $routing::URLS['actions']['meeting'])) {
-            $meeting = new App\Domain\Controllers\CostumerPanels\MeetingBooking;
+            $meetingBooking = new App\Domain\Controllers\CostumerPanels\MeetingBooking;
             
             if ($session->isUserLogged()) {
+                $meetingBookingForm = new App\Entities\MeetingBookingForm;
+
                 if ($routing->isRequestMatching($action, 'book-appointment')) {
-                    $dateData = $meeting->getDateData();
+                    $dateData = $meetingBookingForm->getDateData();
                     
-                    if ($meeting->areDateDataValid($dateData)) {
-                        $formatedDate = $meeting->getFormatedDate($dateData);
+                    if ($meetingBookingForm->areDateDataValid($dateData)) {
+                        $appointment = new App\Entities\Appointment;
+                        $formatedDate = $meetingBookingForm->getFormatedDate($dateData);
                         
-                        if ($meeting->isMeetingsSlotAvailable($formatedDate)) {
-                            if (!$meeting->bookAppointment($formatedDate)) {
+                        if ($appointment->isMeetingsSlotAvailable($formatedDate)) {
+                            if (!$appointment->bookAppointment($formatedDate)) {
                                 throw new DB_Exception('FAILED TO BOOK APPOINTMENT');
                             }
                         }
@@ -686,22 +692,23 @@ try {
                         throw new URL_Exception('INVALID "DATE DATA" PARAMETER');
                     }
                     
-                    $routeDispatcher->routeTo('meetingsBooking');
+                    $meetingBooking->routeTo('meetingsBooking');
                 }
                 
                 elseif ($routing->isRequestMatching($action, 'cancel-appointment')) {
-                    if (!$meeting->cancelAppointment()) {
+                    $appointment = new App\Entities\Appointment;
+                    if (!$appointment->cancelAppointment()) {
                         throw new DB_Exception('FAILED TO CANCEL APPOINTMENT');
                     }
                     
-                    $routeDispatcher->routeTo('meetingsBooking');
+                    $meetingBooking->routeTo('meetingsBooking');
                 }
                 
                 elseif ($routing->isRequestMatching($action, 'save-meeting')) {
                     $userRole = $routing->getRole();
                     
                     if ($routing->isRoleMatching($userRole, ['admin'])) {
-                        $meetingData = $routing->getFormData(['meeting-day', 'meeting-time']);
+                        $meetingData = $routing->getData(['meeting-day', 'meeting-time']);
                         
                         if ($meetingData) {
                             $meeting = new App\Controllers\MeetingManagement;
@@ -717,7 +724,7 @@ try {
                     }
                     
                     else {
-                        $routing->logoutUser();
+                        $session->logoutUser();
                     }
                 }
                 
@@ -1048,7 +1055,7 @@ try {
     }
     
     else {
-        header("location:index.php?page=presentation");
+        $session->logoutUser();
     }
 }
 

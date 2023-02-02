@@ -1,6 +1,6 @@
 <?php
 
-namespace Dodie_Coaching\Services;
+namespace App\Services;
 
 class CanceledMeetingAlerter extends Mailer {
     private string $_SUBJECT = 'Votre rendez-vous de suivi';

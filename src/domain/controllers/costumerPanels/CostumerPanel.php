@@ -27,6 +27,8 @@ class CostumerPanel implements Dispatcher {
         'subscriptions' => 'Abonnement'
     ];
 
+    
+
     private array $_USERPANELS = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
 
     protected function _getUserPanels(): array {

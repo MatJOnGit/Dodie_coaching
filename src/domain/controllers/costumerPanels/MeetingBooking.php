@@ -3,11 +3,10 @@
 namespace App\Domain\Controllers\CostumerPanels;
 
 use App\Domain\Models\Meeting;
+use App\Entities\Appointment;
 use DateTime;
 
 class MeetingBooking extends CostumerPanel {
-    private const APPOINTMENT_DELAY = 24;
-
     private const MEETING_BOOKING_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/MeetingBooker.model',
@@ -40,25 +39,14 @@ class MeetingBooking extends CostumerPanel {
     
     private function _getSortedMeetingsSlots(): array {
         $meeting = new Meeting;
+        $appointment = new Appointment;
+
+        $appointmentDelay = $appointment->_getAppointmentDelay();
         
-        $availableMeetingsSlots = $meeting->selectAvailableMeetings($this->_getAppointmentDelay());
-        $meetingsSlotsArray = $this->_getMeetingsSlotsArray($availableMeetingsSlots);
+        $availableMeetingsSlots = $meeting->selectAvailableMeetings($appointmentDelay);
+        $meetingsSlotsArray = $appointment->_getMeetingsSlotsArray($availableMeetingsSlots);
         
         return $this->_sortMeetingsSlots($meetingsSlotsArray);
-    }
-    
-    private function _getMeetingsSlotsArray(array $meetings): array {
-        $meetingsSlotsArray = [];
-        
-        foreach($meetings as $meeting) {
-            array_push($meetingsSlotsArray, $meeting['slot_date']);
-        }
-        
-        return $meetingsSlotsArray;
-    }
-    
-    private function _getAppointmentDelay(): int {
-        return self::APPOINTMENT_DELAY;
     }
     
     /************************************************************************

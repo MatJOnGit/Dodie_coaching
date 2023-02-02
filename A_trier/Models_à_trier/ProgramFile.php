@@ -14,14 +14,7 @@ class ProgramFile extends Main {
         return $selectFileNameStatement->fetch();
     }
     
-    public function selectFileStatus(int $subscriberId) {
-        $db = $this->dbConnect();
-        $selectFileStatusQuery = "SELECT file_status FROM program_files WHERE user_id = ?";
-        $selectFileStatusStatement = $db->prepare($selectFileStatusQuery);
-        $selectFileStatusStatement->execute([$subscriberId]);
-        
-        return $selectFileStatusStatement->fetch(PDO::FETCH_ASSOC);
-    }
+    
     
     public function updateFileStatus(int $subscriberId, $fileStatus, $fileName) {
         $db = $this->dbConnect();

@@ -58,4 +58,10 @@ class Routing {
         
         return $isRoleMatching;
     }
+    
+    public function getUserId() {
+        $account = new Account;
+        
+        return $account->selectId($_SESSION['email']);
+    }
 }

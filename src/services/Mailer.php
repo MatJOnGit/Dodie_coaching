@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Services;
+namespace App\Services;
 
 class Mailer {
     protected const HEADERS = 'Content-Type: text/html; charset=UTF-8' . "\r\n" . 'From: Dodie Coaching <ma.jourdan@hotmail.fr>' . "\r\n";

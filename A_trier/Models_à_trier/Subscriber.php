@@ -121,13 +121,4 @@ class Subscriber extends Main {
         
         return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function selectProgramMeals(int $subscriberId) {
-        $db = $this->dbConnect();
-        $selectProgramMealsQuery = "SELECT meals_list FROM subscribers_data WHERE user_id = ?";
-        $selectProgramMealsStatement = $db->prepare($selectProgramMealsQuery);
-        $selectProgramMealsStatement->execute([$subscriberId]);
-        
-        return $selectProgramMealsStatement->fetch(PDO::FETCH_ASSOC);
-    }
 }

@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use App\Domain\Models\Progress;
 
-class ProgressItem {
+class ProgressReport {
     public function isCurrentWeight(array $baseFormData): bool {
         return ($baseFormData['dateType'] === 'current-weight');
     }
@@ -26,7 +26,7 @@ class ProgressItem {
         return (is_numeric($reportId) && $reportId>=1);
     }
 
-    public function eraseProgressItem(array $progressHistory, string $reportId) {
+    public function eraseProgressReport(array $progressHistory, string $reportId) {
         $progress = new Progress;
         $reportDate = $progressHistory[$reportId - 1]['date'];
         

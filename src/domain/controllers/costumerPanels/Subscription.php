@@ -1,11 +1,11 @@
 <?php
 
-namespace Dodie_Coaching\Controllers;
+namespace App\Domain\Controllers\CostumerPanels;
 
-class Subscription extends UserPanel {
+class Subscription extends CostumerPanel {
     public function renderSubscriptionPage(object $twig): void {
         echo $twig->render('user_panels/subscriptions.html.twig', [
-            'stylePaths' => $this->_getUserPanelsStyles(),
+            'stylePaths' => $this->_getCostumerPanelsStyles(),
             'frenchTitle' => 'abonnements',
             'appSection' => 'userPanels',
             'prevPanel' => ['dashboard', 'Tableau de bord']

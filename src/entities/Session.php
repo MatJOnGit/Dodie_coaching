@@ -34,5 +34,6 @@ final class Session {
 
     public function logoutUser(): void {
         session_destroy();
+        header("location:'index.php'");
     }
 }

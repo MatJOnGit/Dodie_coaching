@@ -2,9 +2,7 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-use App\Domain\Interfaces\Dispatcher;
-
-class CostumerDashboard extends CostumerPanel {
+class Dashboard extends CostumerPanel {
     private const DASHBOARD_MENU_ITEMS = [
         'nutrition' => [
             'icon' => 'fa-utensils',
@@ -28,7 +26,7 @@ class CostumerDashboard extends CostumerPanel {
         ]
     ];
     
-    public function renderUserDashboardPage(object $twig): void {
+    public function renderCostumerDashboardPage(object $twig): void {
         echo $twig->render('user_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),
             'frenchTitle' => 'tableau de bord',

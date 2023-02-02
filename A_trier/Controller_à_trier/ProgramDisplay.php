@@ -167,12 +167,6 @@ class ProgramDisplay extends Program {
         return self::PROGRAMS_FOLDER_ROUTE;
     }
     
-    private function _getShoppingList() {
-        $nutrition = new NutritionModel;
-        
-        return $nutrition->selectMealsIngredients($_SESSION['email']);
-    }
-    
     /*************************************************************************************
     Builds an associative array containing the french date and the translation of the meal
     *************************************************************************************/

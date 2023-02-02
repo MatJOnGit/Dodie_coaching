@@ -7,7 +7,6 @@ use DateTime;
 class ProgressForm extends Form {
     private const DATE_TYPES = ['current-weight', 'old-weight'];
     private const MIN_WEIGHT = 0;
-    private const TIMEZONE = 'Europe/Paris';
 
     public function areBaseFormDataSet(): bool {
         return (isset($_POST['weight']) && (isset($_POST['date-type'])));
@@ -64,7 +63,8 @@ class ProgressForm extends Form {
     }
     
     public function getFormatedBaseFormData(array $reportBaseFormData): array {
-        $this->_setTimeZone();
+        $timezone = new Timezone;
+        $timezone->setTimeZone();
         
         return [
             'formatedUserWeight' => floatval(number_format($reportBaseFormData['userWeight'], 2)),
@@ -73,7 +73,8 @@ class ProgressForm extends Form {
     }
     
     public function getFormatedExtendedFormData(array $reportExtendedFormData): array {
-        $this->_setTimeZone();
+        $timezone = new Timezone;
+        $timezone->setTimeZone();
         
         return [
             'formatedUserWeight' => $reportExtendedFormData['userWeight'],
@@ -81,7 +82,5 @@ class ProgressForm extends Form {
         ];
     }
     
-    protected function _setTimeZone() {
-        date_default_timezone_set(self::TIMEZONE);
-    }
+    
 }

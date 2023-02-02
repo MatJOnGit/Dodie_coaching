@@ -1,6 +1,6 @@
 <?php
 
-namespace Dodie_Coaching\Services;
+namespace App\Services;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;

@@ -13,7 +13,7 @@ class ProgramPanel extends CostumerPanel {
     *****************************************************************************/
     protected function _getNextDates(): array {
         $timezone = new Timezone;
-        $timezone->setTimeZone();
+        $timezone->setTimezone();
 
         $nextDates[] = [];
         

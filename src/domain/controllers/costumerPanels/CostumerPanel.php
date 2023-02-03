@@ -27,8 +27,6 @@ class CostumerPanel implements Dispatcher {
         'subscriptions' => 'Abonnement'
     ];
 
-    
-
     private array $_USERPANELS = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
 
     protected function _getUserPanels(): array {
@@ -42,11 +40,11 @@ class CostumerPanel implements Dispatcher {
     protected function _getUserPanelsSubpanels(string $page): string {
         return self::USER_PANELS_SUBPANELS[$page];
     }
-
+    
     public function getRoutingURL(string $panel): string {
         return self::ROUTING_URLS[$panel];
     }
-    
+
     public function routeTo(string $page): void {
         header("location:{$this->getRoutingURL($page)}");
     }

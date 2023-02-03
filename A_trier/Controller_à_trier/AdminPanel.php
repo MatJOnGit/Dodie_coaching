@@ -13,15 +13,4 @@ class AdminPanel extends Main {
         'programs' => 'Programmes',
         'users' => 'Utilisateurs'
     ];
-    
-    private const ADMIN_PANELS_STYLES = [
-        'pages/admin-panels',
-        'components/header',
-        'components/form',
-        'components/footer'
-    ];
-    
-    protected function _getAdminPanelsStyle(): array {
-        return self::ADMIN_PANELS_STYLES;
-    }
 }

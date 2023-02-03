@@ -91,15 +91,6 @@ class Subscriber extends Main {
         return $selectSubscriberIdStatement->fetch();
     }
     
-    public function selectSubscribersCount() {
-        $db = $this->dbConnect();
-        $selectSubscribersCountQuery = "SELECT COUNT(id) as subscribersCount FROM accounts WHERE status = 'subscriber'";
-        $selectSubscribersCountStatement = $db->prepare($selectSubscribersCountQuery);
-        $selectSubscribersCountStatement->execute();
-        
-        return $selectSubscribersCountStatement->fetch(PDO::FETCH_ASSOC);
-    }
-    
     public function selectSubscribersHeaders() {
         $db = $this->dbConnect();
         $selectSubscribersHeadersQuery =

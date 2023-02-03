@@ -33,7 +33,7 @@ try {
             $isLogged = $session->isUserLogged();
             
             if ($routing->isRequestMatching($page, 'presentation')) {
-                $showcase::renderPresentationPage($twig, $isLogged);
+                $showcase->renderPresentationPage($twig, $isLogged);
             }
             
             elseif ($routing->isRequestMatching($page, 'coaching')) {
@@ -41,8 +41,10 @@ try {
             }
             
             elseif ($routing->isRequestMatching($page, 'programs-list')) {
-                if ($showcase->isProgramsListAvailable()) {
-                    $showcase->renderProgramsListPage($twig, $isLogged);
+                $programsList = new App\Entities\ProgramsList;
+
+                if ($programsList->isProgramsListAvailable()) {
+                    $showcase->renderProgramsListPage($twig, $programsList, $isLogged);
                 }
                 
                 else {
@@ -52,12 +54,14 @@ try {
             }
             
             elseif ($routing->isRequestMatching($page, 'program-details')) {
-                if ($showcase->isProgramsListAvailable()) {
+                $programsList = new App\Entities\ProgramsList;
+
+                if ($programsList->isProgramsListAvailable()) {
                     if ($routing->areParamsSet(['program'])) {
                         $requestedProgram = $routing->getParam('program');
                         
-                        if ($showcase->isProgramAvailable($requestedProgram)) {
-                            $showcase->renderProgramDetailsPage($twig, $requestedProgram, $isLogged);
+                        if ($programsList->isProgramAvailable($requestedProgram)) {
+                            $showcase->renderProgramDetailsPage($twig, $programsList, $requestedProgram, $isLogged);
                         }
                         
                         else {
@@ -117,8 +121,8 @@ try {
             }
             
             else {
-                $userDashboard = new App\Domain\Controllers\CostumerPanels\CostumerDashboard;
-                $userDashboard->routeTo('dashboard');
+                $dashboard = new App\Domain\Controllers\CostumerPanels\Dashboard;
+                $dashboard->routeTo('dashboard');
             }
         }
         
@@ -197,7 +201,8 @@ try {
                 }
                 
                 elseif ($userRole && $routing->isRoleMatching($userRole, ['admin'])) {
-                    $routeDispatcher->routeTo('admin-dashboard');
+                    $dashboard = new App\Domain\Controllers\AdminPanels\Dashboard;
+                    $dashboard->routeTo('admin-dashboard');
                 }
                 
                 else {
@@ -216,11 +221,11 @@ try {
                 $userRole = $routing->getRole();
                 
                 if ($userRole && $routing->isRoleMatching($userRole, ['admin'])) {
-                    $adminPanel = new App\Controllers\AdminPanel;
+                    $adminPanel = new App\Domain\Controllers\AdminPanels\AdminPanel;
                     
                     if ($routing->isRequestMatching($page, 'admin-dashboard')) {
-                        $adminDashboard = new App\Controllers\AdminDashboard;
-                        $adminDashboard->renderAdminDashboardPage($twig);
+                        $dashboard = new App\Domain\Controllers\AdminPanels\Dashboard;
+                        $dashboard->renderAdminDashboardPage($twig);
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'appliances-list')) {
@@ -1055,7 +1060,8 @@ try {
     }
     
     else {
-        $session->logoutUser();
+        $showcase = new App\Domain\Controllers\ShowCasePanels\Showcase;
+        $showcase->routeTo('presentation');
     }
 }
 

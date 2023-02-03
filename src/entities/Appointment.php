@@ -9,7 +9,7 @@ class Appointment {
 
     public function isMeetingsSlotAvailable(string $formatedDate): bool {
         $timezone = new Timezone;
-        $timezone->setTimeZone();
+        $timezone->setTimezone();
         
         $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->_getAppointmentDelay() . 'hours'));
         

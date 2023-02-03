@@ -64,7 +64,7 @@ class ProgressForm extends Form {
     
     public function getFormatedBaseFormData(array $reportBaseFormData): array {
         $timezone = new Timezone;
-        $timezone->setTimeZone();
+        $timezone->setTimezone();
         
         return [
             'formatedUserWeight' => floatval(number_format($reportBaseFormData['userWeight'], 2)),

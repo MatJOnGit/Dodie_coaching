@@ -3,7 +3,6 @@
 namespace App\Entities;
 
 use App\Entities\Calendar;
-use App\Entities\Meals;
 
 class Program {
     public function isMenuRequested(): bool {

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-class Subscription extends CostumerPanel {
+final class Subscription extends CostumerPanel {
     public function renderSubscriptionPage(object $twig): void {
         echo $twig->render('user_panels/subscriptions.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),

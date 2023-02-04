@@ -9,7 +9,7 @@ final class PasswordEditingPanel extends AuthPanel {
         'classes/PasswordEditor.model',
         'passwordEditionApp'
     ];
-
+    
     public function renderPasswordEditingPage(object $twig): void {
         echo $twig->render('connection_panels/password-edition.html.twig', [
             'stylePaths' => $this->_getAuthPanelsStyles(),
@@ -18,7 +18,7 @@ final class PasswordEditingPanel extends AuthPanel {
             'pageScripts' => $this->_getPasswordEditingPanelScripts('pwdEditing')
         ]);
     }
-
+    
     private function _getPasswordEditingPanelScripts(): array {
         return self::PASSWORD_EDITING_PANEL_SCRIPTS;
     }

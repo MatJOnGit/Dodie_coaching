@@ -24,13 +24,13 @@ final class SubscriberNote extends AdminPanel {
         ]);
     }
     
+    private function _getNotesScripts(): array {
+        return self::NOTE_SCRIPTS;
+    }
+    
     private function _getSubscriberNotes(int $subscriberId) {
         $note = new Note;
         
         return $note->selectNotes($subscriberId);
-    }
-    
-    private function _getNotesScripts(): array {
-        return self::NOTE_SCRIPTS;
     }
 }

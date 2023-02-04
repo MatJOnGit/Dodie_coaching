@@ -16,15 +16,15 @@ final class SubscriberProfile extends AdminPanel {
         ]);
     }
     
-    private function _getSubscriberDetails(int $subscriberId) {
-        $subscriber = new Subscriber;
-        
-        return $subscriber->selectSubscriberDetails($subscriberId);
-    }
-    
     private function _getAccountDetails(int $subscriberId) {
         $subscriber = new Subscriber;
         
         return $subscriber->selectAccountDetails($subscriberId);
+    }
+    
+    private function _getSubscriberDetails(int $subscriberId) {
+        $subscriber = new Subscriber;
+        
+        return $subscriber->selectSubscriberDetails($subscriberId);
     }
 }

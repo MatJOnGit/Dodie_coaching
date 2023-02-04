@@ -7,7 +7,7 @@ use DateTime;
 final class ProgressForm extends Form {
     private const DATE_TYPES = ['current-weight', 'old-weight'];
     private const MIN_WEIGHT = 0;
-
+    
     public function areBaseFormDataSet(): bool {
         return (isset($_POST['weight']) && (isset($_POST['date-type'])));
     }
@@ -32,6 +32,13 @@ final class ProgressForm extends Form {
         return $this->_isDateValid($date, 'Y-m-d H:i');
     }
     
+    public function getBaseFormData(): array {
+        return [
+            'userWeight' => floatval(htmlspecialchars($_POST['weight'])),
+            'dateType' => htmlspecialchars($_POST['date-type'])
+        ];
+    }
+    
     public function getExtendedFormData(array $baseFormData): array {
         $baseFormData += [
             'day' => htmlspecialchars($_POST['report-day']),
@@ -39,27 +46,6 @@ final class ProgressForm extends Form {
         ];
         
         return $baseFormData;
-    }
-    
-    private function _isDateValid(string $date, string $format): bool {
-        $dateFormat = DateTime::createFromFormat($format, $date);
-        
-        return ($dateFormat && $dateFormat->format($format) == $date);
-    }
-    
-    private function _getDateTypes(): array {
-        return self::DATE_TYPES;
-    }
-    
-    private function _getMinWeight(): int {
-        return self::MIN_WEIGHT;
-    }
-    
-    public function getBaseFormData(): array {
-        return [
-            'userWeight' => floatval(htmlspecialchars($_POST['weight'])),
-            'dateType' => htmlspecialchars($_POST['date-type'])
-        ];
     }
     
     public function getFormatedBaseFormData(array $reportBaseFormData): array {
@@ -82,5 +68,17 @@ final class ProgressForm extends Form {
         ];
     }
     
+    private function _getDateTypes(): array {
+        return self::DATE_TYPES;
+    }
     
+    private function _getMinWeight(): int {
+        return self::MIN_WEIGHT;
+    }
+    
+    private function _isDateValid(string $date, string $format): bool {
+        $dateFormat = DateTime::createFromFormat($format, $date);
+        
+        return ($dateFormat && $dateFormat->format($format) == $date);
+    }
 }

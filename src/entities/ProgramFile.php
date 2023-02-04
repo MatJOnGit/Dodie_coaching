@@ -8,12 +8,16 @@ use App\Domain\Models\FoodPlan;
 final class ProgramFile {
     private const PROGRAMS_FOLDER_ROUTE = './../var/nutrition_programs/';
     
+    public function getFileName(array $subscriberHeaders): string {
+        return 'Programme_nutritionnel_' . str_replace(' ', '_', $subscriberHeaders['name']);
+    }
+    
     /*****************************************************************************************
     Builds the full path to subscriber's program file if existing and if the file has a status
     *****************************************************************************************/
     public function getProgramsFilePath(int $subscriberId) {
         $programFile = new ProgramFileModel;
-
+        
         $fileName = $programFile->selectFileName($_SESSION['email']);
         $fileStatus = $this->getProgramFileStatus($subscriberId);
         
@@ -26,7 +30,7 @@ final class ProgramFile {
         $programFileStatus = $programFile->selectFileStatus($subscriberId);
         return $programFileStatus ? $programFileStatus['file_status'] : NULL;
     }
-
+    
     /***********************************************************************************
     Return the value of the possibility to update the subscriber's program file based on
     its status and meals completion
@@ -34,7 +38,7 @@ final class ProgramFile {
     public function isProgramFileUpdatable(string $programFileStatus, int $subscriberId): bool {
         $calendar = new Calendar;
         $program = new Program;
-
+        
         $updatableFileStatus = ['unhosted', 'depleted'];
         $isFileStatusFlawed = in_array($programFileStatus, $updatableFileStatus);
         
@@ -55,6 +59,32 @@ final class ProgramFile {
         return ($isFileStatusFlawed && $isProgramCompleted);
     }
     
+    public function renderFileContent(object $twig, object $program, object $meal, array $programData, array $subscriberHeaders, int $subscriberId) {
+        return $twig->render('pdf_files/printable_program.html.twig', [
+            'programData' => $programData,
+            'subscriberHeaders' => $subscriberHeaders,
+            'programMeals' => $program->getProgramMeals($subscriberId),
+            'weekDaysTranslations' => $program->buildWeekDaysTranslations(),
+            'mealsTranslations' => $meal->getMealsTranslations()
+        ]);
+    }
+    
+    public function savePdf(string $fileContent, string $fileName) {
+        $filePath = self::PROGRAMS_FOLDER_ROUTE . $fileName . '.pdf';
+        
+        return file_put_contents($filePath, $fileContent);
+    }
+    
+    public function setProgramFileData(int $subscriberId, string $fileName, string $fileStatus): void {
+        $programFile = new ProgramFileModel;
+        
+        $programFile->updateProgramFileData($subscriberId, $fileStatus, $fileName);
+    }
+    
+    private function _getProgramsFolderRoute(): string {
+        return self::PROGRAMS_FOLDER_ROUTE;
+    }
+    
     private function _isMealCompleted(int $subscriberId, string $weekDay, string $meal): bool {
         $foodPlan = new FoodPlan;
         
@@ -67,35 +97,5 @@ final class ProgramFile {
         }
         
         return $isMealCompleted;
-    }
-    
-    private function _getProgramsFolderRoute(): string {
-        return self::PROGRAMS_FOLDER_ROUTE;
-    }
-
-    public function setProgramFileData(int $subscriberId, string $fileName, string $fileStatus): void {
-        $programFile = new ProgramFileModel;
-        
-        $programFile->updateProgramFileData($subscriberId, $fileStatus, $fileName);
-    }
-
-    public function savePdf(string $fileContent, string $fileName) {
-        $filePath = self::PROGRAMS_FOLDER_ROUTE . $fileName . '.pdf';
-        
-        return file_put_contents($filePath, $fileContent);
-    }
-    
-    public function renderFileContent(object $twig, object $program, object $meal, array $programData, array $subscriberHeaders, int $subscriberId) {
-        return $twig->render('pdf_files/printable_program.html.twig', [
-            'programData' => $programData,
-            'subscriberHeaders' => $subscriberHeaders,
-            'programMeals' => $program->getProgramMeals($subscriberId),
-            'weekDaysTranslations' => $program->buildWeekDaysTranslations(),
-            'mealsTranslations' => $meal->getMealsTranslations()
-        ]);
-    }
-    
-    public function getFileName(array $subscriberHeaders): string {
-        return 'Programme_nutritionnel_' . str_replace(' ', '_', $subscriberHeaders['name']);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\MeetingSlot;
 use App\Domain\Models\Note as NoteModel;
 
 final class Note {
@@ -13,9 +12,9 @@ final class Note {
     public function buildNoteData(int $subscriberId): array {
         $timezone = new Timezone;
         $timezone->setTimeZone();
-
+        
         $meeting = new Meeting;
-
+        
         $noteMessage = htmlspecialchars($_POST['note-message']);
         $noteDateIndex = htmlspecialchars($_POST['attached-meeting-date']);
         $attendedMeetings = $meeting->getAttendedMeetings($subscriberId);
@@ -41,10 +40,16 @@ final class Note {
         return $noteData;
     }
     
-    public function logNote(array $noteData) {
+    public function editNote(array $noteData, int $noteId) {
         $note = new NoteModel;
         
-        return $note->insertNote($noteData['message'], $noteData['date'], $noteData['subscriber_id'], $noteData['attached_to_meeting']);
+        return $note->updateNote($noteData['message'], $noteData['date'], $noteData['attached_to_meeting'], $noteId);
+    }
+    
+    public function eraseNote(int $noteId) {
+        $note = new NoteModel;
+        
+        return $note->deleteNote($noteId);
     }
     
     public function isNoteIdValid(int $noteId) {
@@ -52,16 +57,10 @@ final class Note {
         
         return $note->selectNote($noteId);
     }
-
-    public function editNote(array $noteData, int $noteId) {
+    
+    public function logNote(array $noteData) {
         $note = new NoteModel;
         
-        return $note->updateNote($noteData['message'], $noteData['date'], $noteData['attached_to_meeting'], $noteId);
-    }
-
-    public function eraseNote(int $noteId) {
-        $note = new NoteModel;
-        
-        return $note->deleteNote($noteId);
+        return $note->insertNote($noteData['message'], $noteData['date'], $noteData['subscriber_id'], $noteData['attached_to_meeting']);
     }
 }

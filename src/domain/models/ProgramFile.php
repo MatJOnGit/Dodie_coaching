@@ -5,9 +5,13 @@ namespace App\Domain\Models;
 use App\Mixins;
 use PDO;
 
-class ProgramFile {
+final class ProgramFile {
     use Mixins\Database;
-
+    
+    public function dbConnect() {
+        return $this->connect();
+    }
+    
     public function selectFileName(string $email) {
         $db = $this->dbConnect();
         $selectFileNameQuery = "SELECT pf.nutrition_file_name FROM program_files pf INNER JOIN accounts acc ON acc.id = pf.user_id WHERE acc.email = ?";
@@ -16,7 +20,7 @@ class ProgramFile {
         
         return $selectFileNameStatement->fetch();
     }
-
+    
     public function selectFileStatus(int $subscriberId) {
         $db = $this->dbConnect();
         $selectFileStatusQuery = "SELECT file_status FROM program_files WHERE user_id = ?";
@@ -25,16 +29,12 @@ class ProgramFile {
         
         return $selectFileStatusStatement->fetch(PDO::FETCH_ASSOC);
     }
-
+    
     public function updateProgramFileData(int $subscriberId, string $fileStatus, string $fileName) {
         $db = $this->dbConnect();
         $updateFileStatusQuery = "UPDATE program_files SET nutrition_file_name = ?, file_status = ? WHERE user_id = ?";
         $updateFileStatusStatement = $db->prepare($updateFileStatusQuery);
         
         $updateFileStatusStatement->execute([$fileName, $fileStatus, $subscriberId]);
-    }
-
-    public function dbConnect() {
-        return $this->connect();
     }
 }

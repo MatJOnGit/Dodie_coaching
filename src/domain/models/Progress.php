@@ -4,17 +4,19 @@ namespace App\Domain\Models;
 
 use App\Mixins;
 
-class Progress {
+final class Progress {
     use Mixins\Database;
-
-    public function selectReports(string $userEmail) {
+    
+    public function dbConnect() {
+        return $this->connect();
+    }
+    
+    public function deleteReport(string $reportDate, string $email) {
         $db = $this->dbConnect();
-        $selectReportsQuery = 
-        "SELECT uwr.date, uwr.weight FROM users_weight_reports uwr INNER JOIN accounts acc ON uwr.user_id = acc.id WHERE acc.email = ? ORDER BY date DESC LIMIT 10";
-        $selectReportsStatement = $db->prepare($selectReportsQuery);
-        $selectReportsStatement->execute([$userEmail]);
+        $deleteReportQuery = "DELETE FROM users_weight_reports WHERE date = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)";
+        $deleteReportStatement = $db->prepare($deleteReportQuery);
         
-        return $selectReportsStatement->fetchAll();
+        return $deleteReportStatement->execute([$reportDate, $email]);
     }
     
     public function insertReport(string $email, float $userWeight, string $reportDate) {
@@ -25,15 +27,13 @@ class Progress {
         return $insertReportStatement->execute([$reportDate, $email, $userWeight]);
     }
     
-    public function deleteReport(string $reportDate, string $email) {
+    public function selectReports(string $userEmail) {
         $db = $this->dbConnect();
-        $deleteReportQuery = "DELETE FROM users_weight_reports WHERE date = ? AND user_id = (SELECT id FROM accounts WHERE email = ?)";
-        $deleteReportStatement = $db->prepare($deleteReportQuery);
+        $selectReportsQuery = 
+        "SELECT uwr.date, uwr.weight FROM users_weight_reports uwr INNER JOIN accounts acc ON uwr.user_id = acc.id WHERE acc.email = ? ORDER BY date DESC LIMIT 10";
+        $selectReportsStatement = $db->prepare($selectReportsQuery);
+        $selectReportsStatement->execute([$userEmail]);
         
-        return $deleteReportStatement->execute([$reportDate, $email]);
-    }
-
-    public function dbConnect() {
-        return $this->connect();
+        return $selectReportsStatement->fetchAll();
     }
 }

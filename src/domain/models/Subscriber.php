@@ -5,38 +5,28 @@ namespace App\Domain\Models;
 use App\Mixins;
 use PDO;
 
-class Subscriber {
+final class Subscriber {
     use Mixins\Database;
     
-    public function selectSubscribersCount() {
-        $db = $this->dbConnect();
-        $selectSubscribersCountQuery = "SELECT COUNT(id) as subscribersCount FROM accounts WHERE status = 'subscriber'";
-        $selectSubscribersCountStatement = $db->prepare($selectSubscribersCountQuery);
-        $selectSubscribersCountStatement->execute();
-        
-        return $selectSubscribersCountStatement->fetch(PDO::FETCH_ASSOC);
+    public function dbConnect() {
+        return $this->connect();
     }
     
-    public function selectSubscribersHeaders() {
+    public function selectAccountDetails(int $subscriberId) {
         $db = $this->dbConnect();
-        $selectSubscribersHeadersQuery =
+        $selectAccountDetailsQuery =
             "SELECT
-                CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
-                sub.user_id,
-                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age',
-                usd.program_goal,
-                udd.job_style,
-                sub.program_status
+                sub.first_subscription_date,
+                sl.program_type,
+                sl.date
             FROM subscribers_data sub
-            INNER JOIN users_static_data usd ON sub.user_id = usd.user_id
-            INNER JOIN accounts acc ON sub.user_id = acc.id
-            INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id
-            INNER JOIN appliances app ON sub.user_id = app.user_id
-            WHERE app.staging = 'confirmed'";
-        $selectSubscribersHeadersStatement = $db->prepare($selectSubscribersHeadersQuery);
-        $selectSubscribersHeadersStatement->execute();
+            LEFT JOIN subscription_logs sl ON sub.user_id = sl.user_id
+            WHERE sub.user_id = ?
+            ORDER BY sl.date DESC";
+        $selectAccountDetailsStatement = $db->prepare($selectAccountDetailsQuery);
+        $selectAccountDetailsStatement ->execute([$subscriberId]);
         
-        return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectAccountDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function selectSubscriberDetails(int $subscriberId) {
@@ -72,32 +62,6 @@ class Subscriber {
         return $selectSubscriberDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectAccountDetails(int $subscriberId) {
-        $db = $this->dbConnect();
-        $selectAccountDetailsQuery =
-            "SELECT
-                sub.first_subscription_date,
-                sl.program_type,
-                sl.date
-            FROM subscribers_data sub
-            LEFT JOIN subscription_logs sl ON sub.user_id = sl.user_id
-            WHERE sub.user_id = ?
-            ORDER BY sl.date DESC";
-        $selectAccountDetailsStatement = $db->prepare($selectAccountDetailsQuery);
-        $selectAccountDetailsStatement ->execute([$subscriberId]);
-        
-        return $selectAccountDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
-    public function selectSubscriberId(int $subscriberId) {
-        $db = $this->dbConnect();
-        $selectSubscriberIdQuery = "SELECT user_id FROM subscribers_data WHERE user_id = ?";
-        $selectSubscriberIdStatement = $db->prepare($selectSubscriberIdQuery);
-        $selectSubscriberIdStatement->execute([$subscriberId]);
-        
-        return $selectSubscriberIdStatement->fetch();
-    }
-    
     public function selectSubscriberHeader(int $subscriberId) {
         $db = $this->dbConnect();
         $selectSubscriberHeaderQuery =
@@ -116,15 +80,51 @@ class Subscriber {
         return $selectSubscriberHeaderStatement->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function selectSubscriberId(int $subscriberId) {
+        $db = $this->dbConnect();
+        $selectSubscriberIdQuery = "SELECT user_id FROM subscribers_data WHERE user_id = ?";
+        $selectSubscriberIdStatement = $db->prepare($selectSubscriberIdQuery);
+        $selectSubscriberIdStatement->execute([$subscriberId]);
+        
+        return $selectSubscriberIdStatement->fetch();
+    }
+    
+    public function selectSubscribersCount() {
+        $db = $this->dbConnect();
+        $selectSubscribersCountQuery = "SELECT COUNT(id) as subscribersCount FROM accounts WHERE status = 'subscriber'";
+        $selectSubscribersCountStatement = $db->prepare($selectSubscribersCountQuery);
+        $selectSubscribersCountStatement->execute();
+        
+        return $selectSubscribersCountStatement->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectSubscribersHeaders() {
+        $db = $this->dbConnect();
+        $selectSubscribersHeadersQuery =
+            "SELECT
+                CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
+                sub.user_id,
+                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), usd.birthdate)), '%Y') + 0 AS 'age',
+                usd.program_goal,
+                udd.job_style,
+                sub.program_status
+            FROM subscribers_data sub
+            INNER JOIN users_static_data usd ON sub.user_id = usd.user_id
+            INNER JOIN accounts acc ON sub.user_id = acc.id
+            INNER JOIN users_dynamic_data udd ON sub.user_id = udd.user_id
+            INNER JOIN appliances app ON sub.user_id = app.user_id
+            WHERE app.staging = 'confirmed'";
+        $selectSubscribersHeadersStatement = $db->prepare($selectSubscribersHeadersQuery);
+        $selectSubscribersHeadersStatement->execute();
+        
+        return $selectSubscribersHeadersStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function updateSubscriberMeals(int $subscriberId, string $meals) {
         $db = $this->dbConnect();
         $updateMealsListQuery = "UPDATE subscribers_data SET meals_list = ? WHERE user_id = ?";
         $updateMealsListStatement = $db->prepare($updateMealsListQuery);
         
         return $updateMealsListStatement->execute([$meals, $subscriberId]);
-    }
-    
-    public function dbConnect() {
-        return $this->connect();
     }
 }

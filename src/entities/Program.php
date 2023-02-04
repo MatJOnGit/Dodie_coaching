@@ -7,44 +7,6 @@ use App\Domain\Models\FoodPlan;
 use DateTime, DatePeriod, DateInterval;
 
 final class Program {
-    public function isMenuRequested(): bool {
-        return (!isset($_GET['meal']) && !isset($_GET['request']));
-    }
-    
-    public function isMealRequested(): bool {
-        return (isset($_GET['meal']) && !isset($_GET['request']));
-    }
-    
-    public function isRequestSet(): bool {
-        return (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request']));
-    }
-    
-    public function getRequest(): string {
-        return htmlspecialchars($_GET['request']);
-    }
-    
-    public function isShoppingListRequested(string $request): bool {
-        return $request === 'shopping-list';
-    }
-
-    /*************************************************************************************
-    Converts url parameters into a associative array containing the day and meal requested
-    *************************************************************************************/
-    public function getMealData(): array {
-        $meal = htmlspecialchars($_GET['meal']);
-        $mealData = [
-            'day' => false,
-            'meal' => false
-        ];
-        
-        if (is_string($meal) && strpos($meal, '-')) {
-            $mealData['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
-            $mealData['meal'] = explode('-', htmlspecialchars($_GET['meal']))[1];
-        }
-        
-        return $mealData;
-    }
-    
     /***************************************************************
     Tests if 'day' and 'meal' url parameters are known (respectively
     in weekDays and mealsTranslations of Main controller variables)
@@ -52,7 +14,7 @@ final class Program {
     public function areMealParamsValid(array $mealData): bool {
         $calendar = new Calendar;
         $meal = new Meal;
-
+        
         $requestedDay = $mealData['day'];
         $requestedMeal = str_replace('_', ' #', $mealData['meal']);
         
@@ -73,24 +35,79 @@ final class Program {
         
         return ($isDayValid && $isMealValid);
     }
-
-    public function getEnglishWeekDay(string $date): string {
-        $calendar = new Calendar;
-
-        return $calendar->getWeekDays()[explode(' ', $date)[0]]['english'];
-    }
-
-    /******************************************************************
-    Transforms a date into a string of weekday, day and month in french
-    ******************************************************************/ 
-    public function getFrenchDate(string $date): string {
-        $calendar = new Calendar;
-
-        $frenchDateWeekDay = $calendar->getWeekDays()[explode(' ', $date)[0]]['french'];
-        $dateDay = explode(' ', $date)[1];
-        $dateMonth = $calendar->getMonths()[explode(' ',  $date)[2] -1];
+    
+    public function buildProgramData(int $subscriberId) {
+        $weekDays = $this->_getNextWeekDays();
+        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
         
-        return "{$frenchDateWeekDay} {$dateDay} {$dateMonth}";
+        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
+    }
+    
+    /***********************************************************************************
+    Builds an associative array containing the translation of meal in english and french
+    ***********************************************************************************/
+    public function buildWeekDaysTranslations(): array {
+        $calendar = new Calendar;
+        
+        $orderedEnglishWeekDaysList = [];
+        $orderedWeekIndex = [1, 2, 3, 4, 5, 6, 0];
+        
+        $weekDays = $calendar->getWeekDays();
+        
+        foreach($orderedWeekIndex as $key => $dayIndex) {
+            $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
+        }
+        
+        return $orderedEnglishWeekDaysList;
+    }
+    
+    /*************************************************************************************
+    Converts url parameters into a associative array containing the day and meal requested
+    *************************************************************************************/
+    public function getMealData(): array {
+        $meal = htmlspecialchars($_GET['meal']);
+        $mealData = [
+            'day' => false,
+            'meal' => false
+        ];
+        
+        if (is_string($meal) && strpos($meal, '-')) {
+            $mealData['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
+            $mealData['meal'] = explode('-', htmlspecialchars($_GET['meal']))[1];
+        }
+        
+        return $mealData;
+    }
+    
+    /*****************************************************************************
+    Builds an array of associative arrays containing the 7 days to come (including
+    the actual day) with the language as key and the formated date as value
+    *****************************************************************************/
+    public function getNextDates(): array {
+        $timezone = new Timezone;
+        $timezone->setTimezone();
+        
+        $program = new Program;
+        
+        $nextDates[] = [];
+        
+        $period = new DatePeriod (
+            new DateTime(),
+            new DateInterval('P1D'),
+            6
+        );
+        
+        foreach ($period as $key => $day) {
+            $date = $day->format('w d n Y H:i:s');
+            $englishWeekDay = $program->_getEnglishWeekDay($date);
+            $frenchFullDate = $program->_getFrenchDate($date);
+            $nextDates[$key] = [
+                'englishWeekDay' => $englishWeekDay,
+                'frenchFullDate' => $frenchFullDate
+            ];
+        };
+        
+        return $nextDates;
     }
     
     /*****************************************************
@@ -105,41 +122,24 @@ final class Program {
         return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
     }
     
-    /***********************************************************************************
-    Builds an associative array containing the translation of meal in english and french
-    ***********************************************************************************/
-    public function buildWeekDaysTranslations(): array {
-        $calendar = new Calendar;
-
-        $orderedEnglishWeekDaysList = [];
-        $orderedWeekIndex = [1, 2, 3, 4, 5, 6, 0];
-
-        $weekDays = $calendar->getWeekDays();
-        
-        foreach($orderedWeekIndex as $key => $dayIndex) {
-            $orderedEnglishWeekDaysList += [$key => ['english' => $weekDays[$dayIndex]['english'], 'french' => $weekDays[$dayIndex]['french']]];
-        }
-        
-        return $orderedEnglishWeekDaysList;
+    public function getRequest(): string {
+        return htmlspecialchars($_GET['request']);
     }
     
-    public function buildProgramData(int $subscriberId) {
-        $weekDays = $this->_getNextWeekDays();
-        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
-
-        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
+    public function isMealRequested(): bool {
+        return (isset($_GET['meal']) && !isset($_GET['request']));
     }
     
-    private function _getFrenchWeekDay(string $date): string {
-        $calendar = new Calendar;
-
-        return $calendar->getWeekDays()[explode(' ', $date)[0]]['french'];
+    public function isMenuRequested(): bool {
+        return (!isset($_GET['meal']) && !isset($_GET['request']));
     }
     
-    private function _getMealsIndexes(int $subscriberId) {
-        $foodPlan = new FoodPlan;
-        
-        return $foodPlan->selectMealsIndexes($subscriberId);
+    public function isRequestSet(): bool {
+        return (!isset($_GET['day']) && !isset($_GET['meal']) && isset($_GET['request']));
+    }
+    
+    public function isShoppingListRequested(string $request): bool {
+        return $request === 'shopping-list';
     }
     
     /********************************************************************************************
@@ -167,6 +167,37 @@ final class Program {
         return $programIngredients;
     }
     
+    private function _getEnglishWeekDay(string $date): string {
+        $calendar = new Calendar;
+        
+        return $calendar->getWeekDays()[explode(' ', $date)[0]]['english'];
+    }
+    
+    /******************************************************************
+    Transforms a date into a string of weekday, day and month in french
+    ******************************************************************/ 
+    private function _getFrenchDate(string $date): string {
+        $calendar = new Calendar;
+        
+        $frenchDateWeekDay = $this->_getFrenchWeekDay($date);
+        $dateDay = explode(' ', $date)[1];
+        $dateMonth = $calendar->getMonths()[explode(' ',  $date)[2] -1];
+        
+        return "{$frenchDateWeekDay} {$dateDay} {$dateMonth}";
+    }
+    
+    private function _getFrenchWeekDay(string $date): string {
+        $calendar = new Calendar;
+        
+        return $calendar->getWeekDays()[explode(' ', $date)[0]]['french'];
+    }
+    
+    private function _getMealsIndexes(int $subscriberId) {
+        $foodPlan = new FoodPlan;
+        
+        return $foodPlan->selectMealsIndexes($subscriberId);
+    }
+    
     /************************************************************************************
     Builds an array of associative arrays containing next week days in english and french
     ************************************************************************************/
@@ -176,7 +207,7 @@ final class Program {
         
         $lastMonday = new DateTime();
         $lastMonday->modify('last Monday');
-
+        
         $program = new Program;
         
         $weekDays[] = [];
@@ -189,7 +220,7 @@ final class Program {
         
         foreach($period as $key => $day) {
             $date = $day->format('w d');
-            $englishWeekDay = $program->getEnglishWeekDay($date);
+            $englishWeekDay = $program->_getEnglishWeekDay($date);
             $frenchWeekDay = $this->_getFrenchWeekDay($date);
             $weekDays[$key] = [
                 'englishWeekDay' => $englishWeekDay,

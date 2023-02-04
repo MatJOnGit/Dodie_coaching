@@ -6,7 +6,7 @@ abstract class Form {
     public const EMAIL_REGEX = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     public const PASSWORD_REGEX = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
     public const TOKEN_REGEX = '/^[A-Z0-9]{6}$/';
-
+    
     public function areDataPosted(array $postedData) {
         $areDataPosted = true;
         
@@ -17,16 +17,6 @@ abstract class Form {
         }
         
         return $areDataPosted;
-    }
-
-    public function getData(array $formData): array {
-        $userData = [];
-        
-        foreach($formData as $formDataItem) {
-            $userData += [$formDataItem => htmlspecialchars($_POST[$formDataItem])];
-        }
-        
-        return $userData;
     }
     
     public function areDataValid(array $userData): bool {
@@ -42,6 +32,16 @@ abstract class Form {
         }
         
         return $areFormDataValid;
+    }
+    
+    public function getData(array $formData): array {
+        $userData = [];
+        
+        foreach($formData as $formDataItem) {
+            $userData += [$formDataItem => htmlspecialchars($_POST[$formDataItem])];
+        }
+        
+        return $userData;
     }
     
     private function _getEmailRegex(): string {

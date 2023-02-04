@@ -7,7 +7,7 @@ use App\Domain\Models\Appliance;
 use App\Domain\Models\MeetingSlot;
 use App\Entities\Timezone;
 
-class Dashboard extends AdminPanel {
+final class Dashboard extends AdminPanel {
     public function renderAdminDashboardPage(object $twig): void {
         echo $twig->render('admin_panels/dashboard.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyles(),
@@ -18,26 +18,6 @@ class Dashboard extends AdminPanel {
             'todayMeetingsData' => $this->_getTodayMeetingsData()
         ]);
     }
-
-    private function _getAppliancesCount() {
-        $appliance = new Appliance;
-        
-        return $appliance->selectAppliancesCount();
-    }
-
-    private function _getSubscribersCount() {
-        $subscriber = new Subscriber;
-
-        return $subscriber->selectSubscribersCount();
-    }
-    
-    private function _getTodayMeetingsData() {
-        $meetingSlot = new MeetingSlot;
-        
-        $incomingMeetings = $meetingSlot->selectNextBookedMeetings();
-        
-        return $this->_filterTodayMeetingsData($incomingMeetings);
-    }
     
     /******************************************************
     Remove data from an array containing incoming meetings
@@ -46,7 +26,7 @@ class Dashboard extends AdminPanel {
     private function _filterTodayMeetingsData(array $incomingMeetings): array {
         $timezone = new Timezone;
         $timezone->setTimezone();
-
+        
         $currentDate = date('d/m/Y');
         
         $todayMeetingsData = [];
@@ -67,5 +47,25 @@ class Dashboard extends AdminPanel {
         }
         
         return $todayMeetingsData;
+    }
+    
+    private function _getAppliancesCount() {
+        $appliance = new Appliance;
+        
+        return $appliance->selectAppliancesCount();
+    }
+    
+    private function _getSubscribersCount() {
+        $subscriber = new Subscriber;
+        
+        return $subscriber->selectSubscribersCount();
+    }
+    
+    private function _getTodayMeetingsData() {
+        $meetingSlot = new MeetingSlot;
+        
+        $incomingMeetings = $meetingSlot->selectNextBookedMeetings();
+        
+        return $this->_filterTodayMeetingsData($incomingMeetings);
     }
 }

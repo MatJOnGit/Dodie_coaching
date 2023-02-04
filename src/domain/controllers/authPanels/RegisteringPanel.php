@@ -9,7 +9,7 @@ final class RegisteringPanel extends AuthPanel {
         'classes/LoginHelper.model',
         'loginApp'
     ];
-
+    
     public function renderRegisteringPage(object $twig): void {
         echo $twig->render('connection_panels/registering.html.twig', [
             'stylePaths' => $this->_getAuthPanelsStyles(),
@@ -18,7 +18,7 @@ final class RegisteringPanel extends AuthPanel {
             'pageScripts' => $this->_getRegisteringPanelScripts()
         ]);
     }
-
+    
     private function _getRegisteringPanelScripts(): array {
         return self::REGISTERING_PANEL_SCRIPTS;
     }

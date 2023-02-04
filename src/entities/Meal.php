@@ -13,10 +13,6 @@ final class Meal {
         ['english' => 'diner', 'french' => 'dîner']
     ];
     
-    public function getMealsTranslations() {
-        return self::MEALS_TRANSLATIONS;
-    }
-
     /*********************************************************************
     Builds an array containing meals selected for the subscriber's program
     *********************************************************************/
@@ -31,7 +27,11 @@ final class Meal {
         
         return $checkedMeals;
     }
-
+    
+    public function getMealsTranslations() {
+        return self::MEALS_TRANSLATIONS;
+    }
+    
     /**************************************************************************************
     Converts an array of meals into a string separated with commas, then set it in database
     **************************************************************************************/
@@ -47,4 +47,3 @@ final class Meal {
         return $subscriber->updateSubscriberMeals($subscriberId, $meals);
     }
 }
-

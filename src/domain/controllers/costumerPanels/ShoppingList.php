@@ -4,7 +4,7 @@ namespace App\Domain\Controllers\CostumerPanels;
 
 use App\Domain\Models\Program as ProgramModel;
 
-class ShoppingList extends ProgramPanel {
+final class ShoppingList extends CostumerPanel {
     public function renderShoppingListPage(object $twig): void {
         echo $twig->render('user_panels/shopping-list.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),

@@ -5,30 +5,6 @@ namespace App\Entities;
 use App\Domain\Models\Account as AccountModel;
 
 final class Account {
-    public function registerAccount(array $userData) {
-        $account = new AccountModel;
-        
-        return $account->insertAccount(
-            $userData['email'],
-            password_hash($userData['password'], PASSWORD_DEFAULT)
-        );
-    }
-
-    public function updateLoginData(array $userData): bool {
-        $account = new AccountModel;
-        
-        return $account->updateLoginDate($userData['email']);
-    }
-
-    public function registerPassword(array $userData) {
-        $account = new AccountModel;
-        
-        return $account->updatePassword(
-            $_SESSION['email'],
-            password_hash($userData['password'], PASSWORD_DEFAULT)
-        );
-    }
-    
     public function isAccountExisting(array $userData): bool {
         $account = new AccountModel;
         
@@ -44,7 +20,31 @@ final class Account {
     
     public function isEmailExisting(string $email) {
         $account = new AccountModel;
-
+        
         return $account->selectEmail($email);
+    }
+    
+    public function registerAccount(array $userData) {
+        $account = new AccountModel;
+        
+        return $account->insertAccount(
+            $userData['email'],
+            password_hash($userData['password'], PASSWORD_DEFAULT)
+        );
+    }
+    
+    public function registerPassword(array $userData) {
+        $account = new AccountModel;
+        
+        return $account->updatePassword(
+            $_SESSION['email'],
+            password_hash($userData['password'], PASSWORD_DEFAULT)
+        );
+    }
+    
+    public function updateLoginData(array $userData): bool {
+        $account = new AccountModel;
+        
+        return $account->updateLoginDate($userData['email']);
     }
 }

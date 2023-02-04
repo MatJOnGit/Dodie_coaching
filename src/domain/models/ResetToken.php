@@ -5,16 +5,19 @@ namespace App\Domain\Models;
 use App\Mixins;
 use PDO;
 
-class ResetToken {
+final class ResetToken {
     use Mixins\Database;
-
-    public function selectTokenDate(string $email) {
+    
+    public function dbConnect() {
+        return $this->connect();
+    }
+    
+    public function deleteToken(string $email) {
         $db = $this->dbConnect();
-        $selectTokenDateQuery = "SELECT generation_date FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
-        $selectTokenDateStatement = $db->prepare($selectTokenDateQuery);
-        $selectTokenDateStatement->execute([$email]);
+        $deleteTokenQuery = "DELETE rt FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
+        $deleteTokenStatement = $db->prepare($deleteTokenQuery);
         
-        return $selectTokenDateStatement->fetch(PDO::FETCH_ASSOC);
+        return $deleteTokenStatement->execute([$email]);
     }
     
     public function insertToken(string $token, string $email) {
@@ -34,14 +37,6 @@ class ResetToken {
         return $selectRemainingAttemptsStatement->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function deleteToken(string $email) {
-        $db = $this->dbConnect();
-        $deleteTokenQuery = "DELETE rt FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
-        $deleteTokenStatement = $db->prepare($deleteTokenQuery);
-        
-        return $deleteTokenStatement->execute([$email]);
-    }
-    
     public function selectToken(string $email) {
         $db = $this->dbConnect();
         $selectTokenQuery = "SELECT token FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
@@ -51,15 +46,20 @@ class ResetToken {
         return $selectTokenStatement->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function selectTokenDate(string $email) {
+        $db = $this->dbConnect();
+        $selectTokenDateQuery = "SELECT generation_date FROM reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id WHERE acc.email = ?";
+        $selectTokenDateStatement = $db->prepare($selectTokenDateQuery);
+        $selectTokenDateStatement->execute([$email]);
+        
+        return $selectTokenDateStatement->fetch(PDO::FETCH_ASSOC);
+    }
+    
     public function updateRemainingAttempts(string $email) {
         $db = $this->dbConnect();
         $updateRemainingAttemptsQuery = "UPDATE reset_tokens rt INNER JOIN accounts acc ON rt.user_id = acc.id SET rt.remaining_atpt = rt.remaining_atpt - 1 WHERE acc.email = ?";
         $updateRemainingAttemptsStatement = $db->prepare($updateRemainingAttemptsQuery);
         
         return $updateRemainingAttemptsStatement->execute([$email]);
-    }
-
-    public function dbConnect() {
-        return $this->connect();
     }
 }

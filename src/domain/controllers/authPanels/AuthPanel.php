@@ -24,16 +24,16 @@ class AuthPanel implements Dispatcher {
         'send-token' => 'index.php?action=send-token',
         'token-signing' => 'index.php?page=token-signing'
     ];
-
-    protected function _getAuthPanelsStyles(): array {
-        return self::AUTH_PANELS_STYLES;
-    }
     
     public function getRoutingURL(string $panel): string {
         return self::ROUTING_URLS[$panel];
     }
-
+    
     public function routeTo(string $page): void {
         header("location:{$this->getRoutingURL($page)}");
+    }
+    
+    protected function _getAuthPanelsStyles(): array {
+        return self::AUTH_PANELS_STYLES;
     }
 }

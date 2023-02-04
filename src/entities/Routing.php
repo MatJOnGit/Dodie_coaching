@@ -18,11 +18,11 @@ final class Routing {
             'meeting' => ['book-appointment', 'cancel-appointment', 'save-meeting', 'delete-meeting'],
             'appliance' => ['reject-appliance', 'approve-appliance'],
             'notes' => ['save-note', 'edit-note', 'delete-note'],
-            'program' => ['generate-meals'],
+            'program-intakes' => ['generate-meals'],
             'program-file' => ['generate-program-file']
         ]
     ];
-
+    
     public function areParamsSet(array $params): bool {
         $areParamsSet = true;
         
@@ -39,14 +39,20 @@ final class Routing {
         return htmlspecialchars($_GET[$param]);
     }
     
-    public function isRequestMatching(string $request, string $toMatch) {
-        return $request === $toMatch;
-    }
-    
     public function getRole() {
         $account = new Account;
         
         return $account->selectRole($_SESSION['email']);
+    }
+    
+    public function getUserId() {
+        $account = new Account;
+        
+        return $account->selectId($_SESSION['email']);
+    }
+    
+    public function isRequestMatching(string $request, string $toMatch) {
+        return $request === $toMatch;
     }
     
     public function isRoleMatching(array $userRole, array $toMatch): bool {
@@ -57,11 +63,5 @@ final class Routing {
         }
         
         return $isRoleMatching;
-    }
-    
-    public function getUserId() {
-        $account = new Account;
-        
-        return $account->selectId($_SESSION['email']);
     }
 }

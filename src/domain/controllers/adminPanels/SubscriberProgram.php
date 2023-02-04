@@ -9,7 +9,7 @@ final class SubscriberProgram extends AdminPanel {
         'classes/ProgramInitializer.model',
         'programManagementApp'
     ];
-
+    
     public function renderSubscriberProgramPage(object $twig, object $subscriber, object $program, object $programFile, object $meal, string $fileStatus, int $subscriberId): void {
         echo $twig->render('admin_panels/subscriber-program.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyles(),

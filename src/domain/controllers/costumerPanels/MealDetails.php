@@ -2,9 +2,10 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-use App\Domain\Models\Program;
+use App\Domain\Models\Program as ProgramModel;
+use App\Entities\Program;;
 
-class MealDetails extends ProgramPanel {
+final class MealDetails extends CostumerPanel {
     public function renderMealDetailsPage(object $twig, object $meal, array $mealData): void {
         echo $twig->render('user_panels/meal-details.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),
@@ -16,12 +17,23 @@ class MealDetails extends ProgramPanel {
             'ingredients' => $this->_getMealDetails($mealData)
         ]);
     }
-
+    
+    private function _getMealDetails(array $mealData) {
+        $program = new ProgramModel;
+        
+        $day = $mealData['day'];
+        $meal = str_replace('_', ' #', $mealData['meal']);
+        
+        return $program->selectMealDetails($day, $meal, $_SESSION['email']);
+    }
+    
     /*************************************************************************************
     Builds an associative array containing the french date and the translation of the meal
     *************************************************************************************/
     private function _getTranslatedMealData(object $meal, array $mealData): array {
-        foreach($this->_getNextDates() as $day) {
+        $program = new Program;
+        
+        foreach($program->getNextDates() as $day) {
             if ($mealData['day'] === $day['englishWeekDay']) {
                 $mealData['day'] = $day['frenchFullDate'];
             }
@@ -34,14 +46,5 @@ class MealDetails extends ProgramPanel {
         }
         
         return $mealData;
-    }
-    
-    private function _getMealDetails(array $mealData) {
-        $program = new Program;
-        
-        $day = $mealData['day'];
-        $meal = str_replace('_', ' #', $mealData['meal']);
-        
-        return $program->selectMealDetails($day, $meal, $_SESSION['email']);
     }
 }

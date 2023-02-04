@@ -25,6 +25,14 @@ class ShowcasePanel implements Dispatcher {
         'dynamicMenuApp'
     ];
     
+    public function getRoutingURL(string $panel): string {
+        return self::ROUTING_URLS[$panel];
+    }
+    
+    public function routeTo(string $page): void {
+        header("location:{$this->getRoutingURL($page)}");
+    }
+    
     protected function _getRoutingURLs(): array {
         return self::ROUTING_URLS;
     }
@@ -35,13 +43,5 @@ class ShowcasePanel implements Dispatcher {
     
     protected function _getShowcaseScripts(): array {
         return self::SHOWCASE_SCRIPTS;
-    }
-    
-    public function getRoutingURL(string $panel): string {
-        return self::ROUTING_URLS[$panel];
-    }
-
-    public function routeTo(string $page): void {
-        header("location:{$this->getRoutingURL($page)}");
     }
 }

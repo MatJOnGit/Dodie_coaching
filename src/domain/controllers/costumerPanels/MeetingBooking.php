@@ -6,13 +6,13 @@ use App\Domain\Models\MeetingSlot;
 use App\Entities\Appointment;
 use DateTime;
 
-class MeetingBooking extends CostumerPanel {
+final class MeetingBooking extends CostumerPanel {
     private const MEETING_BOOKING_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/MeetingBooker.model',
         'meetingBookingApp'
     ];
-
+    
     public function renderMeetingsBookingPage(object $twig): void {
         echo $twig->render('user_panels/meetings-booking.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),
@@ -25,10 +25,6 @@ class MeetingBooking extends CostumerPanel {
         ]);
     }
     
-    private function _getMeetingBookingScripts(): array {
-        return self::MEETING_BOOKING_SCRIPTS;
-    }
-    
     private function _getBookedMeetingDate() {
         $meetingSlot = new MeetingSlot;
         
@@ -37,14 +33,18 @@ class MeetingBooking extends CostumerPanel {
         return (!empty($userScheduledMeeting) ? $userScheduledMeeting[0] : NULL);
     }
     
+    private function _getMeetingBookingScripts(): array {
+        return self::MEETING_BOOKING_SCRIPTS;
+    }
+    
     private function _getSortedMeetingsSlots(): array {
         $meetingSlot = new MeetingSlot;
         $appointment = new Appointment;
-
-        $appointmentDelay = $appointment->_getAppointmentDelay();
+        
+        $appointmentDelay = $appointment->getAppointmentDelay();
         
         $availableMeetingsSlots = $meetingSlot->selectAvailableMeetings($appointmentDelay);
-        $meetingsSlotsArray = $appointment->_getMeetingsSlotsArray($availableMeetingsSlots);
+        $meetingsSlotsArray = $appointment->getMeetingsSlotsArray($availableMeetingsSlots);
         
         return $this->_sortMeetingsSlots($meetingsSlotsArray);
     }

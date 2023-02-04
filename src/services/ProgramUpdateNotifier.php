@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-class ProgramUpdateNotifier extends Mailer {
+final class ProgramUpdateNotifier extends Mailer {
     private const SUBJECT = 'Votre nouveau programme nutritionnel';
     
     public function sendProgramFileNotification(array $subscriberHeaders) {
-        return mail($subscriberHeaders['email'], self::SUBJECT, $this->_getProgramFileMessage($subscriberHeaders), parent::HEADERS);
+        return mail($subscriberHeaders['email'], $this->getSubject(), $this->_getProgramFileMessage($subscriberHeaders), $this->getHeaders());
     }
     
     private function _getProgramFileMessage($subscriberHeaders) {
@@ -18,6 +18,10 @@ class ProgramUpdateNotifier extends Mailer {
             <p>Nous vous invitons à en prendre connaissance dans votre espace personnel.</p>
             
             <p>A tout de suite !</p>"
-            . parent::SIGNATURE;
+            . $this->getSignature();
+    }
+
+    private function getSubject() {
+        return self::SUBJECT;
     }
 }

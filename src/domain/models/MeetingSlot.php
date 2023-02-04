@@ -7,66 +7,25 @@ use PDO;
 
 final class MeetingSlot {
     use Mixins\Database;
-
-    public function selectAvailableMeetings(int $appointmentDelay) {
-        $db = $this->dbConnect();
-        $selectAvailableMeetingsQuery =
-            "SELECT slot_date
-            FROM meeting_slots
-            WHERE slot_date >= (CURRENT_TIMESTAMP + interval ? DAY_HOUR)
-            AND slot_status = 'available'
-            AND user_id = 0 
-            ORDER BY slot_date";
-        $selectAvailableMeetingsStatement = $db->prepare($selectAvailableMeetingsQuery);
-        $selectAvailableMeetingsStatement->execute([$appointmentDelay]);
-        
-        return $selectAvailableMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
     
-    public function selectScheduledMeeting(string $email) {
-        $db = $this->dbConnect();
-        $selectScheduledMeetingQuery =
-            "SELECT ms.slot_date
-            FROM meeting_slots ms
-            INNER JOIN accounts acc ON ms.user_id = acc.id
-            WHERE acc.email= ?
-            AND ms.slot_date > (CURRENT_TIMESTAMP)
-            ORDER BY ms.slot_date DESC
-            LIMIT 1";
-        $selectScheduledMeetingStatement = $db->prepare($selectScheduledMeetingQuery);
-        $selectScheduledMeetingStatement->execute([$email]);
-        
-        return $selectScheduledMeetingStatement->fetchAll();
-    }
-
     public function dbConnect() {
         return $this->connect();
     }
     
-    public function updateMeetingToBooked(string $email, string $meetingDate): bool {
+    public function deleteMeeting(int $meetingId) {
         $db = $this->dbConnect();
-        $updateMeetingToBookedQuery =
-            "UPDATE meeting_slots
-            SET
-                user_id = (SELECT id FROM accounts WHERE email = ?),
-                slot_status = 'booked'
-            WHERE slot_date = ?";
-        $updateMeetingToBookedStatement = $db->prepare($updateMeetingToBookedQuery);
+        $deleteMeetingQuery = 'DELETE FROM meeting_slots WHERE slot_id = ?';
+        $deleteMeetingStatement = $db->prepare($deleteMeetingQuery);
         
-        return $updateMeetingToBookedStatement->execute([$email, $meetingDate]);
+        return $deleteMeetingStatement->execute([$meetingId]);
     }
-
-    public function updateMeetingToAvailable(string $email): bool {
+    
+    public function insertMeeting(string $meetingDate) {
         $db = $this->dbConnect();
-        $updateMeetingToAvailableQuery =
-            "UPDATE meeting_slots
-            SET
-                user_id = 0,
-                slot_status = 'available'
-            WHERE user_id = (SELECT id FROM accounts WHERE email = ?)";
-        $updateMeetingToAvailableStatement = $db->prepare($updateMeetingToAvailableQuery);
+        $insertMeetingQuery = 'INSERT INTO meeting_slots (slot_date) VALUES (?)';
+        $insertMeetingStatement = $db->prepare($insertMeetingQuery);
         
-        return $updateMeetingToAvailableStatement->execute([$email]);
+        return $insertMeetingStatement->execute([$meetingDate]);
     }
     
     public function selectAttendedMeetings(int $subscriberId) {
@@ -88,22 +47,37 @@ final class MeetingSlot {
         return $selectAttendedMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectNextMeetings() {
+    public function selectAttendeeData(string $meetingId) {
         $db = $this->dbConnect();
-        $selectNextMeetingsQuery =
+        $selectAttendeeDataQuery =
             "SELECT
-                DATE_FORMAT(slot_date, '%d/%m/%Y') AS 'day',
-                DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'starting_time',
-                CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
-                slot_id
+                CAST(ms.user_id AS UNSIGNED) as 'user_id',
+                DATE_FORMAT(ms.slot_date, '%d/%m/%Y') AS 'day',
+                DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'time',
+                acc.first_name,
+                acc.email
             FROM meeting_slots ms
-            LEFT JOIN accounts acc
-            ON ms.user_id = acc.id
-            WHERE ms.slot_date > CURRENT_TIMESTAMP";
-        $selectNextMeetingsStatement = $db->prepare($selectNextMeetingsQuery);
-        $selectNextMeetingsStatement->execute();
+            LEFT JOIN accounts acc ON ms.user_id = acc.id
+            WHERE ms.slot_id = ?";
+        $selectAttendeeDataStatement = $db->prepare($selectAttendeeDataQuery);
+        $selectAttendeeDataStatement->execute([$meetingId]);
         
-        return $selectNextMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectAttendeeDataStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectAvailableMeetings(int $appointmentDelay) {
+        $db = $this->dbConnect();
+        $selectAvailableMeetingsQuery =
+            "SELECT slot_date
+            FROM meeting_slots
+            WHERE slot_date >= (CURRENT_TIMESTAMP + interval ? DAY_HOUR)
+            AND slot_status = 'available'
+            AND user_id = 0 
+            ORDER BY slot_date";
+        $selectAvailableMeetingsStatement = $db->prepare($selectAvailableMeetingsQuery);
+        $selectAvailableMeetingsStatement->execute([$appointmentDelay]);
+        
+        return $selectAvailableMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function selectNextBookedMeetings() {
@@ -125,37 +99,63 @@ final class MeetingSlot {
         return $selectNextBookedMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function insertMeeting(string $meetingDate) {
+    public function selectNextMeetings() {
         $db = $this->dbConnect();
-        $insertMeetingQuery = 'INSERT INTO meeting_slots (slot_date) VALUES (?)';
-        $insertMeetingStatement = $db->prepare($insertMeetingQuery);
+        $selectNextMeetingsQuery =
+            "SELECT
+                DATE_FORMAT(slot_date, '%d/%m/%Y') AS 'day',
+                DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'starting_time',
+                CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
+                slot_id
+            FROM meeting_slots ms
+            LEFT JOIN accounts acc
+            ON ms.user_id = acc.id
+            WHERE ms.slot_date > CURRENT_TIMESTAMP";
+        $selectNextMeetingsStatement = $db->prepare($selectNextMeetingsQuery);
+        $selectNextMeetingsStatement->execute();
         
-        return $insertMeetingStatement->execute([$meetingDate]);
+        return $selectNextMeetingsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectAttendeeData(string $meetingId) {
+    public function selectScheduledMeeting(string $email) {
         $db = $this->dbConnect();
-        $selectAttendeeDataQuery =
-            "SELECT
-                CAST(ms.user_id AS int),
-                DATE_FORMAT(ms.slot_date, '%d/%m/%Y') AS 'day',
-                DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'time',
-                acc.first_name,
-                acc.email
+        $selectScheduledMeetingQuery =
+            "SELECT ms.slot_date
             FROM meeting_slots ms
-            LEFT JOIN accounts acc ON ms.user_id = acc.id
-            WHERE ms.slot_id = ?";
-        $selectAttendeeDataStatement = $db->prepare($selectAttendeeDataQuery);
-        $selectAttendeeDataStatement->execute([$meetingId]);
+            INNER JOIN accounts acc ON ms.user_id = acc.id
+            WHERE acc.email= ?
+            AND ms.slot_date > (CURRENT_TIMESTAMP)
+            ORDER BY ms.slot_date DESC
+            LIMIT 1";
+        $selectScheduledMeetingStatement = $db->prepare($selectScheduledMeetingQuery);
+        $selectScheduledMeetingStatement->execute([$email]);
         
-        return $selectAttendeeDataStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectScheduledMeetingStatement->fetchAll();
     }
-
-    public function deleteMeeting(int $meetingId) {
+    
+    public function updateMeetingToBooked(string $email, string $meetingDate): bool {
         $db = $this->dbConnect();
-        $deleteMeetingQuery = 'DELETE FROM meeting_slots WHERE slot_id = ?';
-        $deleteMeetingStatement = $db->prepare($deleteMeetingQuery);
+        $updateMeetingToBookedQuery =
+            "UPDATE meeting_slots
+            SET
+                user_id = (SELECT id FROM accounts WHERE email = ?),
+                slot_status = 'booked'
+            WHERE slot_date = ?";
+        $updateMeetingToBookedStatement = $db->prepare($updateMeetingToBookedQuery);
         
-        return $deleteMeetingStatement->execute([$meetingId]);
+        return $updateMeetingToBookedStatement->execute([$email, $meetingDate]);
+    }
+    
+    public function updateMeetingToAvailable(string $email): bool {
+        $db = $this->dbConnect();
+        $updateMeetingToAvailableQuery =
+            "UPDATE meeting_slots
+            SET
+                user_id = 0,
+                slot_status = 'available'
+            WHERE user_id = (SELECT id FROM accounts WHERE email = ?)";
+        $updateMeetingToAvailableStatement = $db->prepare($updateMeetingToAvailableQuery);
+        
+        return $updateMeetingToAvailableStatement->execute([$email]);
     }
 }

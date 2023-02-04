@@ -188,8 +188,9 @@ try {
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'progress')) {
-                        $progress = new \App\Domain\Controllers\CostumerPanels\Progress;
-                        $progress->renderProgressPage($twig);
+                        $progress = new App\Domain\Controllers\CostumerPanels\Progress;
+                        $progressReport = new App\Entities\ProgressReport;
+                        $progress->renderProgressPage($twig, $progressReport);
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'meetings-booking')){
@@ -490,7 +491,7 @@ try {
                     $tokenData = $token->generateToken();
                     
                     if ($token->registerToken($tokenData)) {
-                        $passwordRetriever = new App\Domain\Services\PasswordRetriever;
+                        $passwordRetriever = new App\Services\PasswordRetriever;
                         
                         if (!$passwordRetriever->sendToken($tokenData)) {
                             throw new Mailer_Exception('FAILED TO SEND NEW TOKEN TO THE USER MAILBOX');
@@ -657,7 +658,7 @@ try {
                         $reportId = $routing->getParam('id');
 
                         if ($progressReport->isReportIdValid($reportId)) {
-                            $progressHistory = $progress->getHistory();
+                            $progressHistory = $progressReport->getHistory();
                             
                             if ($progressReport->isReportIdExisting($progressHistory, $reportId)) {
                                 if (!$progressReport->eraseProgressReport($progressHistory, $reportId)) {
@@ -760,7 +761,7 @@ try {
                     if ($routing->isRoleMatching($userRole, ['admin'])) {
                         if ($routing->areParamsSet(['id'])) {
                             $meeting = new App\Entities\Meeting;
-
+                            
                             $meetingId = $routing->getParam('id');
                             
                             if ($meeting->isMeetingIdValid($meetingId)) {
@@ -803,11 +804,11 @@ try {
         elseif (in_array($action, $routing::URLS['actions']['appliance'])) {
             if ($session->isUserLogged()) {
                 $adminPanel = new App\Domain\Controllers\AdminPanels\AdminPanel;
+                $appliance = new App\Entities\Appliance;
                 $appResponder = new App\Services\ApplianceResponder;
 
                 if ($routing->isRequestMatching($action, 'reject-appliance')) {
                     if ($routing->areParamsSet(['id'])) {
-                        $appliance = new App\Entities\Appliance;
                         $applicantId = intval($routing->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {

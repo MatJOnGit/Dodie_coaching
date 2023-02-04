@@ -6,24 +6,21 @@ use App\Domain\Models\ResetToken as ResetTokenModel;
 
 final class ResetToken {
     public const TOKEN_GENERATOR_TIMEOUT = 3600;
-
-    public function getTokenDate(string $email) {
+    
+    public function eraseToken(string $email) {
         $resetToken = new ResetTokenModel;
         
-        return $resetToken->selectTokenDate($email);
+        return $resetToken->deleteToken($email);
     }
     
     public function generateToken(): string {
         return substr(str_shuffle(str_repeat("0123456789ABCDEFGHIJKLMNOPKRSTUVWXYZ", 5)), 0, 6);
     }
     
-    public function registerToken(string $token) {
+    public function getTokenDate(string $email) {
         $resetToken = new ResetTokenModel;
         
-        return $resetToken->insertToken(
-            password_hash($token, PASSWORD_DEFAULT),
-            $_SESSION['email']
-        );
+        return $resetToken->selectTokenDate($email);
     }
     
     /***************************************************************************************
@@ -44,16 +41,6 @@ final class ResetToken {
         return $isLastTokenOld;
     }
     
-    public function eraseToken(string $email) {
-        $resetToken = new ResetTokenModel;
-        
-        return $resetToken->deleteToken($email);
-    }
-    
-    private function _getTokenGeneratorTimeOut(): int {
-        return self::TOKEN_GENERATOR_TIMEOUT;
-    }
-    
     public function isTokenMatching(): bool {
         $resetToken = new ResetTokenModel;
         
@@ -63,9 +50,22 @@ final class ResetToken {
         return password_verify(strtoupper($postedToken), $correctToken['token']);
     }
     
+    public function registerToken(string $token) {
+        $resetToken = new ResetTokenModel;
+        
+        return $resetToken->insertToken(
+            password_hash($token, PASSWORD_DEFAULT),
+            $_SESSION['email']
+        );
+    }
+    
     public function subtractTokenAttempt() {
         $resetToken = new ResetTokenModel;
         
         return $resetToken->updateRemainingAttempts($_SESSION['email']);
+    }
+    
+    private function _getTokenGeneratorTimeOut(): int {
+        return self::TOKEN_GENERATOR_TIMEOUT;
     }
 }

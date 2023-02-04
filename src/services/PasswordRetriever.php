@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Domain\Services;
+namespace App\Services;
 
-class PasswordRetriever extends Mailer {
+final class PasswordRetriever extends Mailer {
     private const SUBJECT = 'Récupération de votre mot de passe';
     
     public function sendToken(string $token) {
-        return mail($this->_getMailTo(), self::SUBJECT, $this->_getPwdRetrievingMessage($token), parent::HEADERS);
+        return mail($this->_getMailTo(), $this->getSubject(), $this->_getPwdRetrievingMessage($token), $this->getHeaders());
     }
     
     protected function _getMailTo(): string {
@@ -30,6 +30,10 @@ class PasswordRetriever extends Mailer {
             <p>Vous pourrez par la suite choisir un nouveau mot de passe.</p>
             
             <p>A tout de suite !</p>"
-            . parent::SIGNATURE;
+            . $this->getSignature();
+    }
+
+    private function getSubject() {
+        return self::SUBJECT;
     }
 }

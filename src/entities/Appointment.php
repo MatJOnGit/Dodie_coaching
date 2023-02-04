@@ -6,32 +6,24 @@ use App\Domain\Models\MeetingSlot;
 
 final class Appointment {
     private const APPOINTMENT_DELAY = 24;
-
-    public function isMeetingsSlotAvailable(string $formatedDate): bool {
-        $timezone = new Timezone;
-        $timezone->setTimezone();
+    
+    public function bookAppointment(string $meetingDate): bool {
+        $meetingSlot = new MeetingSlot;
         
-        $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->_getAppointmentDelay() . 'hours'));
-        
-        return (
-            $formatedDate > $bookingLimitDate && 
-            in_array($formatedDate, $this->_getAvailableMeetings())
-        );
+        return $meetingSlot->updateMeetingToBooked($_SESSION['email'], $meetingDate);
     }
     
-    public function _getAppointmentDelay(): int {
+    public function cancelAppointment(): bool {
+        $meetingSlot = new MeetingSlot;
+        
+        return $meetingSlot->updateMeetingToAvailable($_SESSION['email']);
+    }
+    
+    public function getAppointmentDelay(): int {
         return self::APPOINTMENT_DELAY;
     }
     
-    private function _getAvailableMeetings() {
-        $meetingSlot = new MeetingSlot;
-        
-        $availableMeetings = $meetingSlot->selectAvailableMeetings($this->_getAppointmentDelay());
-
-        return $this->_getMeetingsSlotsArray($availableMeetings);
-    }
-
-    public function _getMeetingsSlotsArray(array $meetings): array {
+    public function getMeetingsSlotsArray(array $meetings): array {
         $meetingsSlotsArray = [];
         
         foreach($meetings as $meeting) {
@@ -41,15 +33,23 @@ final class Appointment {
         return $meetingsSlotsArray;
     }
     
-    public function bookAppointment(string $meetingDate): bool {
-        $meetingSlot = new MeetingSlot;
+    public function isMeetingsSlotAvailable(string $formatedDate): bool {
+        $timezone = new Timezone;
+        $timezone->setTimezone();
         
-        return $meetingSlot->updateMeetingToBooked($_SESSION['email'], $meetingDate);
+        $bookingLimitDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . '+' . $this->getAppointmentDelay() . 'hours'));
+        
+        return (
+            $formatedDate > $bookingLimitDate && 
+            in_array($formatedDate, $this->_getAvailableMeetings())
+        );
     }
-
-    public function cancelAppointment(): bool {
+    
+    private function _getAvailableMeetings() {
         $meetingSlot = new MeetingSlot;
         
-        return $meetingSlot->updateMeetingToAvailable($_SESSION['email']);
+        $availableMeetings = $meetingSlot->selectAvailableMeetings($this->getAppointmentDelay());
+        
+        return $this->getMeetingsSlotsArray($availableMeetings);
     }
 }

@@ -5,9 +5,13 @@ namespace App\Domain\Models;
 use App\Mixins;
 use PDO;
 
-class Account {
+final class Account {
     use Mixins\Database;
-
+    
+    public function dbConnect() {
+        return $this->connect();
+    }
+    
     public function insertAccount(string $email, string $hashedPassword) {
         $db = $this->dbConnect();
         $insertAccountQuery = "INSERT INTO accounts (email, password) VALUES (?, ?)";
@@ -66,9 +70,5 @@ class Account {
         $updatePasswordStatement = $db->prepare($updatePasswordQuery);
         
         return $updatePasswordStatement->execute([$hashedPassword, $email]);
-    }
-
-    public function dbConnect() {
-        return $this->connect();
     }
 }

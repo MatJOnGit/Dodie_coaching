@@ -9,7 +9,7 @@ final class PasswordRetrievingPanel extends AuthPanel {
         'classes/PasswordRetriever.model',
         'passwordRecoveryApp'
     ];
-
+    
     public function renderPasswordRetrievingPage(object $twig): void {
         echo $twig->render('connection_panels/password-retrieving.html.twig', [
             'stylePaths' => $this->_getAuthPanelsStyles(),

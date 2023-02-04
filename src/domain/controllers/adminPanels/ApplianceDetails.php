@@ -10,7 +10,7 @@ final class ApplianceDetails extends AdminPanel {
         'classes/ApplianceManager.model',
         'applianceManagementApp'
     ];
-
+    
     public function renderApplianceDetailsPage(object $twig, int $applianceId): void {
         echo $twig->render('admin_panels/appliance-details.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyles(),

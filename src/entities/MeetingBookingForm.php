@@ -2,8 +2,19 @@
 
 namespace App\Entities;
 
-class MeetingBookingForm extends Form {
+final class MeetingBookingForm extends Form {
     private const DATE_NEEDED_SPACES = 4;
+    
+    public function areDateDataValid(array $dateData): bool {
+        $calendar = new Calendar;
+        
+        return (
+            is_numeric($dateData['day']) && 
+            in_array($dateData['month'], $calendar->getMonths()) && 
+            is_numeric($dateData['hour']) && 
+            is_numeric($dateData['minute'])
+        );
+    }
     
     public function getDateData(): array {
         $date = htmlspecialchars($_POST['meeting-date']);
@@ -30,21 +41,6 @@ class MeetingBookingForm extends Form {
         return $dateData;
     }
     
-    private function _getDateNeededSpaces(): int {
-        return self::DATE_NEEDED_SPACES;
-    }
-
-    public function areDateDataValid(array $dateData): bool {
-        $calendar = new Calendar;
-
-        return (
-            is_numeric($dateData['day']) && 
-            in_array($dateData['month'], $calendar->getMonths()) && 
-            is_numeric($dateData['hour']) && 
-            is_numeric($dateData['minute'])
-        );
-    }
-    
     public function getFormatedDate(array $dateData): string {
         $calendar = new Calendar;
         
@@ -56,6 +52,10 @@ class MeetingBookingForm extends Form {
         $date = date('Y') . '-' . $this->_getTwoDigitsNumber($formatedMonth) . '-' . $this->_getTwoDigitsNumber($day) . ' ' . $this->_getTwoDigitsNumber($hour) . ':' . $this->_getTwoDigitsNumber($minute) . ':00';
         
         return $date;
+    }
+    
+    private function _getDateNeededSpaces(): int {
+        return self::DATE_NEEDED_SPACES;
     }
     
     private function _getTwoDigitsNumber(int $dateValue): string {

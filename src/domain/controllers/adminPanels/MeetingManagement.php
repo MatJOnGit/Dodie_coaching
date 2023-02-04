@@ -21,33 +21,6 @@ final class MeetingManagement extends AdminPanel {
             'pageScripts' => $this->_getMeetingManagementScripts()
         ]);
     }
-
-    private function _getSortedMeetingSlots() {
-        $meetingSlot = new MeetingSlot;
-        
-        $nextMeetings = $meetingSlot->selectNextMeetings();
-        
-        return $this->_sortNextMeetings($nextMeetings);
-    }
-    
-    private function _sortNextMeetings($nextMeetings) {
-        $meetingsDatesArray = $this->_getMeetingsUniqueDates($nextMeetings);
-        
-        return $this->_completeSortedNextMeetings($nextMeetings, $meetingsDatesArray);
-    }
-    
-    /**************************************************************************************
-    Builds an associative array containing every different incoming unique dates of meeting
-    **************************************************************************************/
-    private function _getMeetingsUniqueDates(array $nextMeetings) {
-        $arrayOfMeetingsDates = [];
-        
-        foreach ($nextMeetings as $incomingMeeting) {
-            array_push($arrayOfMeetingsDates, [$incomingMeeting['day'] => []]);
-        }
-        
-        return (array_merge(...$arrayOfMeetingsDates));
-    }
     
     /********************************************************************
     Completes sorted incoming meetings associative array with associative
@@ -71,5 +44,32 @@ final class MeetingManagement extends AdminPanel {
     
     private function _getMeetingManagementScripts(): array {
         return self::MEETING_MANAGEMENT_SCRIPTS;
+    }
+    
+    /**************************************************************************************
+    Builds an associative array containing every different incoming unique dates of meeting
+    **************************************************************************************/
+    private function _getMeetingsUniqueDates(array $nextMeetings) {
+        $arrayOfMeetingsDates = [];
+        
+        foreach ($nextMeetings as $incomingMeeting) {
+            array_push($arrayOfMeetingsDates, [$incomingMeeting['day'] => []]);
+        }
+        
+        return (array_merge(...$arrayOfMeetingsDates));
+    }
+    
+    private function _getSortedMeetingSlots() {
+        $meetingSlot = new MeetingSlot;
+        
+        $nextMeetings = $meetingSlot->selectNextMeetings();
+        
+        return $this->_sortNextMeetings($nextMeetings);
+    }
+    
+    private function _sortNextMeetings($nextMeetings) {
+        $meetingsDatesArray = $this->_getMeetingsUniqueDates($nextMeetings);
+        
+        return $this->_completeSortedNextMeetings($nextMeetings, $meetingsDatesArray);
     }
 }

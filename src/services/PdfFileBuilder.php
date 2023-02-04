@@ -5,7 +5,7 @@ namespace App\Services;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class PdfFileBuilder extends Mailer {
+final class PdfFileBuilder extends Mailer {
     public function generateFile($fileContent) {
         $options = new Options;
         $options->setChroot('D:\Programs\Dev\MAMP\htdocs\Dodie_coaching');

@@ -35,19 +35,19 @@ final class ProgramsList {
         // ]
     ];
     
+    public function getProgramDetails(string $program): array {
+        return self::PROGRAMS_LIST[$program];
+    }
+    
     public function getProgramsList(): array {
         return self::PROGRAMS_LIST;
     }
     
-    public function getProgramDetails(string $program): array {
-        return self::PROGRAMS_LIST[$program];
-    }
-
-    public function isProgramsListAvailable(): bool {
-        return count($this->getProgramsList()) > 0;
-    }
-
     public function isProgramAvailable(string $requestedProgram): bool {
         return in_array($requestedProgram, array_keys($this->getProgramsList()));
+    }
+    
+    public function isProgramsListAvailable(): bool {
+        return count($this->getProgramsList()) > 0;
     }
 }

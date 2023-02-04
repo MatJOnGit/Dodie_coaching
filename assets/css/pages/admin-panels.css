@@ -17,7 +17,7 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-caption {
+.meal-header {
     color: hsla(0, 0%, 0%, 1);
 }
 
@@ -362,6 +362,10 @@ h2 {
     text-align: center;
     text-transform: uppercase;
     width: 100%;
+}
+
+.meal-header {
+    font-size: 4.5vmin;
 }
 
 table {

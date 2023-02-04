@@ -20,16 +20,15 @@
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in programMeals %}
                                 <li class='meal-item'>
+                                    <h5 class='meal-header'>
+                                        {% for mealTranslation in mealsTranslations %}
+                                            {% if meals == mealTranslation['english'] %}
+                                                {{ mealTranslation['french'] }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </h5>
                                     <a href='index.php?page=edit-program-menu&day={{ dayKey }}&mealId={{mealKey}}'>
-                                        <table class='btn meal-data-tab'>
-                                            <caption class='meal-header meal-item-title'>
-                                                {% for mealTranslation in mealsTranslations %}
-                                                    {% if meals == mealTranslation['english'] %}
-                                                        {{ mealTranslation['french'] }}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </caption>
-                                        </table>
+                                        <table class='btn meal-data-tab'></table>
                                     </a>
                                 </li>
                             {% endfor %}

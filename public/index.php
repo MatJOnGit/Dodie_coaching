@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 session_start();
-// session_destroy();
 
 class DB_Exception extends Exception { }
 class URL_Exception extends Exception { }
@@ -29,61 +28,67 @@ try {
         $page = $routing->getParam('page');
         
         if (in_array($page, $routing::URLS['pages']['showcase'])) {
-            $showcase = new App\Domain\Controllers\ShowcasePanels\Showcase;
+            $defaultDisplayer = new App\Domain\Controllers\ShowCasePanels\ShowcasePanel;
             $isLogged = $session->isUserLogged();
             
             if ($routing->isRequestMatching($page, 'presentation')) {
-                $showcase->renderPresentationPage($twig, $isLogged);
+                $presentation = new App\Domain\Controllers\ShowCasePanels\Presentation;
+                $presentation->renderPresentationPage($twig, $isLogged);
             }
             
             elseif ($routing->isRequestMatching($page, 'coaching')) {
-                $showcase->renderCoachingPage($twig, $isLogged);
+                $coaching = new App\Domain\Controllers\ShowCasePanels\Coaching;
+                $coaching->renderCoachingPage($twig, $isLogged);
             }
             
             elseif ($routing->isRequestMatching($page, 'programs-list')) {
-                $programsList = new App\Entities\ProgramsList;
-
-                if ($programsList->isProgramsListAvailable()) {
-                    $showcase->renderProgramsListPage($twig, $programsList, $isLogged);
+                $programs = new App\Entities\ProgramsList;
+                
+                if ($programs->isProgramsListAvailable()) {
+                    $programsList = new App\Domain\Controllers\ShowCasePanels\ProgramsList;
+                    $programsList->renderProgramsListPage($twig, $programs, $isLogged);
                 }
                 
                 else {
                     throw new Data_Exception('MISSING PROGRAMS LIST IN DATA');
-                    // $showcase->routeTo('404');
+                    // $defaultDisplayer->routeTo('404');
                 }
             }
             
             elseif ($routing->isRequestMatching($page, 'program-details')) {
-                $programsList = new App\Entities\ProgramsList;
-
-                if ($programsList->isProgramsListAvailable()) {
+                $programs = new App\Entities\ProgramsList;
+                
+                if ($programs->isProgramsListAvailable()) {
                     if ($routing->areParamsSet(['program'])) {
+                        $programDetails = new App\Domain\Controllers\ShowCasePanels\ProgramDetails;
+                        
                         $requestedProgram = $routing->getParam('program');
                         
-                        if ($programsList->isProgramAvailable($requestedProgram)) {
-                            $showcase->renderProgramDetailsPage($twig, $programsList, $requestedProgram, $isLogged);
+                        if ($programs->isProgramAvailable($requestedProgram)) {
+                            $programDetails->renderProgramDetailsPage($twig, $programs, $requestedProgram, $isLogged);
                         }
                         
                         else {
                             throw new URL_Exception('INVALID PROGRAM PARAMETER');
-                            // $showcase->renderShowcase404Page($twig, $isLogged);
+                            // $programDetails->routeTo('404');
                         }
                     }
                     
                     else {
                         throw new URL_Exception('MISSING PROGRAM PARAMETER');
-                        // $showcase->routeTo('404');
+                        // $defaultDisplayer->routeTo('404');
                     }
                 }
                 
                 else {
                     throw new Data_Exception('MISSING PROGRAMS LIST IN DATA');
-                    // $showcase->routeTo('404');
+                    // $defaultDisplayer->routeTo('404');
                 }
             }
             
             else {
-                $showcase->renderShowcase404Page($twig, $isLogged);
+                $showcase404 = new App\Domain\Controllers\ShowCasePanels\Showcase404;
+                $showcase404->renderShowcase404Page($twig, $isLogged);
             }
         }
         
@@ -128,6 +133,7 @@ try {
         
         elseif (in_array($page, $routing::URLS['pages']['userPanels'])) {
             if ($session->isUserLogged()) {
+                $defaultDisplayer = new App\Domain\Controllers\CostumerPanels\CostumerPanel;
                 $userRole = $routing->getRole();
                 
                 if ($userRole && $routing->isRoleMatching($userRole, ['member', 'subscriber'])) {
@@ -143,9 +149,10 @@ try {
                         if ($program->isMenuRequested()) {
                             $programMenu = new App\Domain\Controllers\CostumerPanels\ProgramMenu;
                             $programFile = new App\Entities\ProgramFile;
+                            $program = new App\Entities\Program;
                             
                             $subscriberId = intval($routing->getUserId()['id']);
-                            $programMenu->renderNutritionMenuPage($twig, $meal, $programFile, $subscriberId);
+                            $programMenu->renderNutritionMenuPage($twig, $program, $meal, $programFile, $subscriberId);
                         }
                         
                         elseif ($program->isMealRequested()) {
@@ -158,7 +165,7 @@ try {
                             
                             else {
                                 throw new URL_Exception('INVALID MEAL PARAMETER');
-                                // $nutrition->routeTo('nutrition');
+                                // $defaultDisplayer->routeTo('nutrition');
                             }
                         }
                         
@@ -171,12 +178,12 @@ try {
                             }
                             
                             else {
-                                $routeDispatcher->routeTo('nutrition');
+                                $defaultDisplayer->routeTo('nutrition');
                             }
                         }
                         
                         else {
-                            $routeDispatcher->routeTo('nutrition');
+                            $defaultDisplayer->routeTo('nutrition');
                         }
                     }
                     
@@ -207,7 +214,7 @@ try {
                 
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
-                    // $routing->logoutUser();
+                    // $v->logoutUser();
                 }
             }
             
@@ -218,6 +225,7 @@ try {
         
         elseif (in_array($page, $routing::URLS['pages']['adminPanels'])) {
             if ($session->isUserLogged()) {
+                $defaultDisplayer = new App\Domain\Controllers\AdminPanels\AdminPanel;
                 $userRole = $routing->getRole();
                 
                 if ($userRole && $routing->isRoleMatching($userRole, ['admin'])) {
@@ -229,82 +237,96 @@ try {
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'appliances-list')) {
-                        $appliance = new App\Controllers\Appliance;
-                        $appliance->renderAppliancesListPage($twig);
+                        $appliancesList = new App\Domain\Controllers\AdminPanels\AppliancesList;
+                        $appliancesList->renderAppliancesListPage($twig);
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'appliance-details') && $routing->areParamsSet(['id'])) {
-                        $appliance = new App\Controllers\Appliance;
+                        $applianceDetails = new App\Domain\Controllers\AdminPanels\ApplianceDetails;
+                        $appliance = new App\Entities\Appliance;
+                        
                         $applicantId = intval($routing->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
-                            $appliance->renderApplianceDetailsPage($twig, $applicantId);
+                            $applianceDetails->renderApplianceDetailsPage($twig, $applicantId);
                         }
                         
                         else {
-                            $routeDispatcher->routeTo('appliancesList');
+                            $applianceDetails->routeTo('appliancesList');
                         }
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'subscribers-list')) {
-                        $subscriber = new App\Controllers\Subscriber;
-                        $subscriber->renderSubscribersListPage($twig);
+                        $subscribersList = new App\Domain\Controllers\AdminPanels\SubscribersList;
+                        $subscribersList->renderSubscribersListPage($twig);
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'subscriber-profile')) {
-                        $subscriber = new App\Controllers\Subscriber;
+                        $subscriberProfile = new App\Domain\Controllers\AdminPanels\SubscriberProfile;
+                        
+                        if ($routing->areParamsSet(['id'])) {
+                            $subscriber = new App\Entities\Subscriber;
+                            $subscriberId = intval($routing->getParam('id'));
+                            
+                            if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                                $subscriberProfile->renderSubscriberProfilePage($twig, $subscriberId);
+                            }
+                            
+                            else {
+                                $subscriberProfile->routeTo('subscribersList');
+                            }
+                        }
+                        
+                        else {
+                            throw new Url_Exception('MISSING ID PARAMETER IN URL');
+                            // $defaultDisplayer->routeTo('subscribersList');
+                        }
+                    }
+                    
+                    elseif ($routing->isRequestMatching($page, 'subscriber-program')) {
+                        $subscriberProgram = new App\Domain\Controllers\AdminPanels\SubscriberProgram;
+                        $subscriber = new App\Entities\Subscriber;
                         
                         if ($routing->areParamsSet(['id'])) {
                             $subscriberId = intval($routing->getParam('id'));
                             
                             if ($subscriber->isSubscriberIdValid($subscriberId)) {
-                                $subscriber->renderSubscriberProfilePage($twig, $subscriberId);
+                                $subscriber = new App\Entities\Subscriber;
+                                $program = new App\Entities\Program;
+                                $meal = new App\Entities\Meal;
+                                $programFile = new App\Entities\ProgramFile;
+                                
+                                $fileStatus = $programFile->getProgramFileStatus($subscriberId);
+                                
+                                $subscriberProgram->renderSubscriberProgramPage($twig, $subscriber, $program, $programFile, $meal, $fileStatus, $subscriberId);
                             }
                             
                             else {
-                                $routeDispatcher->routeTo('subscribersList');
+                                $defaultDisplayer->routeTo('subscribersList');
                             }
                         }
                         
                         else {
                             throw new Url_Exception('MISSING ID PARAMETER IN URL');
-                            // $subscriber->routeTo('subscribersList');
-                        }
-                    }
-                    
-                    elseif ($routing->isRequestMatching($page, 'subscriber-program')) {
-                        $program = new App\Controllers\Program;
-                        
-                        if ($routing->areParamsSet(['id'])) {
-                            $subscriberId = intval($routing->getParam('id'));
-                            
-                            if ($program->isSubscriberIdValid($subscriberId)) {
-                                $program->renderSubscriberProgramPage($twig, $subscriberId);
-                            }
-                            
-                            else {
-                                $routeDispatcher->routeTo('subscribersList');
-                            }
-                        }
-                        
-                        else {
-                            throw new Url_Exception('MISSING ID PARAMETER IN URL');
-                            // $program->routeTo('subscribersList');
+                            // $defaultDisplayer->routeTo('subscribersList');
                         }
                     }
                     
                     elseif ($routing->isRequestMatching($page, 'subscriber-notes')) {
-                        $note = new App\Controllers\Note;
-                        
                         if ($routing->areParamsSet(['id'])) {
+                            $subscriberNote = new App\Domain\Controllers\AdminPanels\SubscriberNote;
+                            $subscriber = new App\Entities\Subscriber;
+                            
                             $subscriberId = intval($routing->getParam('id'));
                             
-                            if ($note->isSubscriberIdValid($subscriberId)) {
-                                $note->renderSubscriberNotesPage($twig, $subscriberId);
+                            if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                                $subscriber = new App\Entities\Subscriber;
+                                $meeting = new App\Entities\Meeting;
+                                $subscriberNote->renderSubscriberNotesPage($twig, $subscriber, $meeting, $subscriberId);
                             }
                             
                             else {
-                                $routeDispatcher->routeTo('subscribersList');
+                                $defaultDisplayer->routeTo('subscribersList');
                             }
                         }
                         
@@ -315,7 +337,7 @@ try {
                     }
                     
                     else if ($routing->isRequestMatching($page, 'meetings-management')) {
-                        $meetingManagement = new App\Controllers\MeetingManagement;
+                        $meetingManagement = new App\Domain\Controllers\AdminPanels\MeetingManagement;
                         
                         $meetingManagement->renderMeetingsManagementPage($twig);
                     }
@@ -323,38 +345,35 @@ try {
                 
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
-                    // $routing->logoutUser();
+                    // $session->logoutUser();
                 }
             }
             
             else {
-                $routing->logoutUser();
+                $session->logoutUser();
             }
         }
         
         else {
             throw new URL_Exception('INVALID PAGE PARAMETER');
-            // $routing = new App\Controllers\User;
-            // $routing->logoutUser();
+            // $session->logoutUser();
         }
     }
     
     elseif ($routing->areParamsSet(['action'])) {
-        $session = new App\Entities\Session;
-
         $action = $routing->getParam('action');
         
         if (in_array($action, $routing::URLS['actions']['authentification'])) {
             $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
-            $form = new App\Entities\Form;
+            $authForm = new App\Entities\AuthForm;
             
             if ($routing->isRequestMatching($action, 'log-account') && !$session->isUserLogged()) {
-                if ($form->areDataPosted(['email', 'password'])) {
-                    $routingData = $form->getData(['email', 'password']);
+                if ($authForm->areDataPosted(['email', 'password'])) {
+                    $routingData = $authForm->getData(['email', 'password']);
                     
-                    if ($form->areDataValid($routingData)) {
+                    if ($authForm->areDataValid($routingData)) {
                         $account = new App\Entities\Account;
-
+                        
                         if ($account->isAccountExisting($routingData)) {
                             if ($account->updateLoginData($routingData)) {
                                 $session->logUser($routingData);
@@ -383,15 +402,17 @@ try {
             }
             
             elseif ($routing->isRequestMatching($action, 'register-account') && !$session->isUserLogged()) {
-                if ($form->areDataPosted(['email', 'password', 'confirmation-password'])) {
-                    $routingData = $form->getData(['email', 'password', 'confirmation-password']);
+                if ($authForm->areDataPosted(['email', 'password', 'confirmation-password'])) {
+                    $routingData = $authForm->getData(['email', 'password', 'confirmation-password']);
                     
-                    if ($form->areDataValid($routingData)) {
+                    if ($authForm->areDataValid($routingData)) {
                         $account = new App\Entities\Account;
-
+                        
                         if (!$account->isEmailExisting($routingData['email'])) {
                             if ($account->registerAccount($routingData)) {
-                                $routing->createStaticData($routingData);
+                                $staticData = new App\Entities\StaticData;
+                                
+                                $staticData->createStaticData($routingData);
                                 $session->logUser($routingData);
                                 $authPanel->routeTo('dashboard');
                             }
@@ -419,46 +440,44 @@ try {
             
             elseif ($routing->isRequestMatching($action, 'send-token') && !$session->isUserLogged()) {
                 $token = new App\Entities\ResetToken;
-                $form = new App\Entities\Form;
-                if ($form->areDataPosted(['email'])) {
-                    $userData = $form->getData(['email']);
+                
+                if ($authForm->areDataPosted(['email'])) {
+                    $userData = $authForm->getData(['email']);
                     
-                    if ($form->areDataValid($userData)) {
+                    if ($authForm->areDataValid($userData)) {
                         $account = new App\Entities\Account;
-
+                        
                         if ($account->isEmailExisting($userData['email'])) {
                             $tokenData = $token->getTokenDate($userData['email']);
                             
                             if ($tokenData) {
-                                $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
                                 if ($token->isLastTokenOld($tokenData)) {
                                     if ($token->eraseToken($userData['email'])) {
                                         $session->logUser($userData);
-                                        $authPanel->routeTo('send-token');
+                                        $defaultDisplayer->routeTo('send-token');
                                     }
                                     
                                     else {
                                         throw new DB_Exception('FAILED TO DELETE PREVIOUS TOKEN');
-                                        // $routeDispatcher->routeTo('mail-notification');
+                                        $defaultDisplayer->routeTo('mail-notification');
                                     }
                                 }
                                 
                                 else {
-
-                                    $authPanel->routeTo('mail-notification');
+                                    $defaultDisplayer->routeTo('mail-notification');
                                 }
                             }
                             
                             else {
                                 $passwordRetrievingPanel = new App\Domain\Controllers\AuthPanels\PasswordRetrievingPanel;
-
+                                
                                 $session->sessionize($userData, ['email']);
                                 $passwordRetrievingPanel->routeTo('send-token');
                             }
                         }
                         
                         else {
-                            $routeDispatcher->routeTo('mail-notification');
+                            $defaultDisplayer->routeTo('mail-notification');
                         }
                     }
                     
@@ -495,11 +514,11 @@ try {
             
             elseif ($routing->isRequestMatching($action, 'verify-token') && !$session->isUserLogged()) {
                 $token = new App\Entities\ResetToken;
-                $form = new App\Entities\Form;
-                if ($session->isDataSessionized('email') && $form->areDataPosted(['token'])) {
-                    $routingData = $form->getData(['token']);
+                $authForm = new App\Entities\Form;
+                if ($session->isDataSessionized('email') && $authForm->areDataPosted(['token'])) {
+                    $routingData = $authForm->getData(['token']);
                     
-                    if ($form->areDataValid($routingData)) {
+                    if ($authForm->areDataValid($routingData)) {
                         $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
                         
                         if ($token->isTokenMatching()) {
@@ -527,26 +546,26 @@ try {
             }
             
             elseif ($routing->isRequestMatching($action, 'register-password') && !$session->isUserLogged()) {
-                $form = new App\Entities\Form;
-
-                if ($form->areDataPosted(['password', 'confirmation-password'])) {
-                    $routingData = $form->getData(['password', 'confirmation-password']);
+                $authForm = new App\Entities\Form;
+                
+                if ($authForm->areDataPosted(['password', 'confirmation-password'])) {
+                    $routingData = $authForm->getData(['password', 'confirmation-password']);
                     
-                    if ($form->areDataValid($routingData)) {
+                    if ($authForm->areDataValid($routingData)) {
                         $session = new App\Entities\Session;
-
+                        
                         if ($session->isDataSessionized('email')) {
                             $account = new App\Entities\Account;
-
+                            
                             $routingEmail = $session->getSessionizedParam('email');
                             
                             if ($account->registerPassword($routingData)) {
                                 $token = new App\Entities\ResetToken;
-
+                                
                                 if ($token->eraseToken($routingEmail)) {
                                     $session->unsessionizeData(['token']);
                                     $session->sessionize($routingData, ['password']);
-                                    $routeDispatcher->routeTo('retrieved-password');
+                                    $defaultDisplayer->routeTo('retrieved-password');
                                 }
                                 
                                 else {
@@ -575,7 +594,7 @@ try {
             }
             
             elseif ($routing->isRequestMatching($action, 'logout') && $session->isUserLogged()) {
-                $showcase = new App\Domain\Controllers\ShowCasePanels\Showcase;
+                $showcase = new App\Domain\Controllers\ShowCasePanels\ShowcasePanel;
                 $session->logoutUser();
             }
         }
@@ -713,17 +732,19 @@ try {
                     $userRole = $routing->getRole();
                     
                     if ($routing->isRoleMatching($userRole, ['admin'])) {
-                        $meetingData = $routing->getData(['meeting-day', 'meeting-time']);
+                        $meetingForm = new App\Entities\MeetingBookingForm;
+                        $meetingData = $meetingForm->getData(['meeting-day', 'meeting-time']);
                         
                         if ($meetingData) {
-                            $meeting = new App\Controllers\MeetingManagement;
-                            
+                            $meetingManagement = new App\Domain\Controllers\AdminPanels\MeetingManagement;
+                            $meeting = new App\Entities\Meeting;
+
                             if ($meeting->areDateDataValid($meetingData)) {
                                 if (!$meeting->addMeetingSlot($meetingData)) {
                                     throw new DB_Exception('FAILED TO INSERT A NEW MEETING');
                                 }
                                 
-                                $routeDispatcher->routeTo('meetingsManagement');
+                                $meetingManagement->routeTo('meetingsManagement');
                             }
                         }
                     }
@@ -738,10 +759,12 @@ try {
                     
                     if ($routing->isRoleMatching($userRole, ['admin'])) {
                         if ($routing->areParamsSet(['id'])) {
-                            $meeting = new App\Controllers\MeetingManagement;
+                            $meeting = new App\Entities\Meeting;
+
                             $meetingId = $routing->getParam('id');
                             
                             if ($meeting->isMeetingIdValid($meetingId)) {
+                                $meetingManagement = new App\Domain\Controllers\AdminPanels\MeetingManagement;
                                 $attendeeData = $meeting->getAttendeeData($meetingId);
                                 $isMeetingBooked = $meeting->isMeetingBooked($attendeeData);
                                 
@@ -753,7 +776,7 @@ try {
                                     }
                                 }
                                 
-                                $routeDispatcher->routeTo('meetingsManagement');
+                                $meetingManagement->routeTo('meetingsManagement');
                             }
                             
                             else {
@@ -767,41 +790,41 @@ try {
                     }
                     
                     else {
-                        $routing->logoutUser();
+                        $session->logoutUser();
                     }
                 }
             }
             
             else {
-                $routing->logoutUser();
+                $session->logoutUser();
             }
         }
         
         elseif (in_array($action, $routing::URLS['actions']['appliance'])) {
-            $appliance = new App\Controllers\Appliance;
-            
             if ($session->isUserLogged()) {
+                $adminPanel = new App\Domain\Controllers\AdminPanels\AdminPanel;
+                $appResponder = new App\Services\ApplianceResponder;
+
                 if ($routing->isRequestMatching($action, 'reject-appliance')) {
                     if ($routing->areParamsSet(['id'])) {
-                        $applicantId = intval($appliances->getParam('id'));
+                        $appliance = new App\Entities\Appliance;
+                        $applicantId = intval($routing->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
-                            $appResponder = new App\Services\ApplianceResponder;
-                            
-                            $applicantData = $appliances->getApplicantData($applicantId);
-                            $messageType = $appliances->getMessageType();
+                            $applicantData = $appliance->getApplicantData($applicantId);
+                            $messageType = $appliance->getMessageType();
                             
                             if ($appliance->eraseAppliance($applicantId)) {
                                 if (!$appResponder->sendRejectionNotification($messageType, $applicantData)) {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE REJECTION EMAIL');
                                 }
                                 
-                                $routeDispatcher->routeTo('appliancesList');
+                                $adminPanel->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $routeDispatcher->routeTo('appliancesList');
+                            $adminPanel->routeTo('appliancesList');
                         }
                     }
                     
@@ -810,25 +833,24 @@ try {
                     }
                 }
                 
-                elseif ($appliances->isRequestMatching($action, 'approve-appliance')) {
+                elseif ($routing->isRequestMatching($action, 'approve-appliance')) {
                     if ($routing->areParamsSet(['id'])) {
-                        $applicantId = intval($appliances->getParam('id'));
+                        $applicantId = intval($routing->getParam('id'));
                         
                         if ($appliance->isApplianceIdValid($applicantId)) {
-                            $applianceResponder = new App\Services\ApplianceResponder;
                             $applicantData = $appliance->getApplicantData($applicantId);
                             
                             if ($appliance->acceptAppliance($applicantId, 'payment_pending')) {
-                                if (!$applianceResponder->sendApprovalNotification($applicantData)) {
+                                if (!$appResponder->sendApprovalNotification($applicantData)) {
                                     throw new Mailer_Exception('FAILED TO SEND APPLIANCE APPROVAL EMAIL');
                                 }
                                 
-                                $routeDispatcher->routeTo('appliancesList');
+                                $adminPanel->routeTo('appliancesList');
                             }
                         }
                         
                         else {
-                            $routeDispatcher->routeTo('appliancesList');
+                            $adminPanel->routeTo('appliancesList');
                         }
                     }
                     
@@ -836,27 +858,26 @@ try {
                         throw new Url_Exception('MISSING ID PARAMETER IN URL');
                     }
                 }
-                
-                else {
-                    echo "Page d'action inconnue";
-                }
             }
             
             else {
-                $routing->logoutUser();
+                $session->logoutUser();
             }
         }
         
-        elseif (in_array($action, $routing::URLS['actions']['notes'])) {
-            $note = new App\Controllers\Note;
-            
+        elseif (in_array($action, $routing::URLS['actions']['notes'])) {            
             if ($session->isUserLogged()) {
+                $note = new App\Entities\Note;
+                
                 if ($routing->isRequestMatching($action, 'save-note')) {
                     if ($routing->areParamsSet(['id'])) {
+                        $subscriber = new App\Entities\Subscriber;
                         $subscriberId = intval($routing->getParam('id'));
                         
-                        if ($note->isSubscriberIdValid($subscriberId)) {
-                            if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                        if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                            $noteForm = new App\Entities\NoteForm;
+                            
+                            if ($noteForm->areDataPosted(['note-message', 'attached-meeting-date'])) {
                                 $noteData = $note->buildNoteData($subscriberId);
                                 
                                 if ($noteData) {
@@ -890,11 +911,15 @@ try {
                 
                 elseif ($routing->isRequestMatching($action, 'edit-note')) {
                     if ($routing->areParamsSet(['note-id', 'id'])) {
+                        $subscriber = new App\Entities\Subscriber;
+                        
                         $subscriberId = intval($routing->getParam('id'));
                         $noteId = intval($routing->getParam('note-id'));
                         
-                        if ($note->isSubscriberIdValid($subscriberId) && $note->isNoteIdValid($noteId)) {
-                            if ($note->areDataPosted(['note-message', 'attached-meeting-date'])) {
+                        if ($subscriber->isSubscriberIdValid($subscriberId) && $note->isNoteIdValid($noteId)) {
+                            $noteForm = new App\Entities\NoteForm;
+                            
+                            if ($noteForm->areDataPosted(['note-message', 'attached-meeting-date'])) {
                                 $noteData = $note->buildNoteData($subscriberId);
                                 
                                 if ($noteData) {
@@ -950,20 +975,20 @@ try {
             }
         }
         
-        elseif (in_array($action, $routing::URLS['actions']['program-intakes'])) {
-            $program = new App\Controllers\program;
-            
+        elseif (in_array($action, $routing::URLS['actions']['program'])) {            
             if ($session->isUserLogged()) {
                 if ($routing->isRequestMatching($action, 'generate-meals')) {
                     if ($routing->areParamsSet(['id'])) {
+                        $subscriber = new App\Entities\Subscriber;
                         $subscriberId = intval($routing->getParam('id'));
                         
-                        if ($program->isSubscriberIdValid($subscriberId)) {
-                            $mealsList = $program->getCheckedMeals();
+                        if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                            $meal = new App\Entities\Meal;
+                            $mealsList = $meal->getCheckedMeals();
                             
                             if ($mealsList) {
-                                if (!$program->saveProgramMeals($subscriberId, $mealsList)) {
-                                    throw new DB_Exception('échec de la mise à jour des repas du programme');
+                                if (!$meal->saveProgramMeals($subscriberId, $mealsList)) {
+                                    throw new DB_Exception('FAILED TO UPDATE MEALS LIST');
                                 }
                                 
                                 header("location:index.php?page=subscriber-program&id=" . $subscriberId);
@@ -986,45 +1011,59 @@ try {
             }
             
             else {
-                $routing->logoutUser();
+                $session->logoutUser();
             }
         }
         
         elseif (in_array($action, $routing::URLS['actions']['program-file'])) {
-            $programFile = new App\Controllers\ProgramFile;
-            
             if ($session->isUserLogged()) {
                 if ($routing->isRequestMatching($action, 'generate-program-file')) {
                     if ($routing->areParamsSet(['id'])) {
                         $subscriberId = intval($routing->getParam('id'));
+                        $subscriber = new App\Entities\Subscriber;
                         
-                        if ($programFile->isSubscriberIdValid($subscriberId)) {
+                        if ($subscriber->isSubscriberIdValid($subscriberId)) {
+                            $programFile = new App\Entities\ProgramFile;
                             $programFileStatus = $programFile->getProgramFileStatus($subscriberId);
                             
-                            if ($programFile->isProgramFileUpdatable($subscriberId)) {
-                                $programData = $programFile->buildProgramData($subscriberId);
-                                $subscriberHeaders = $programFile->getSubscriberHeaders($subscriberId);
+                            if ($programFile->isProgramFileUpdatable($programFileStatus, $subscriberId)) {
+                                $program = new App\Entities\Program;
+                                $programData = $program->buildProgramData($subscriberId);
+                                $subscriberHeaders = $subscriber->getSubscriberHeaders($subscriberId);
                                 
                                 if ($programData && $subscriberHeaders) {
-                                    $output = $programFile->buildFile($twig, $subscriberId, $programData, $subscriberHeaders);
+                                    $meal = new App\Entities\Meal;
                                     
-                                    if ($output) {
-                                        if ($programFile->saveDataToPdf($output, $subscriberHeaders)) {
-                                            $programFileAlerter = new App\Services\ProgramFileAlerter;
+                                    $fileContent = $programFile->renderFileContent($twig, $program, $meal, $programData, $subscriberHeaders, $subscriberId);
+                                    
+                                    if ($fileContent) {
+                                        $pdfFileBuilder = new App\Services\PdfFileBuilder;
+                                        $pdfFile = $pdfFileBuilder->generateFile($fileContent);
+                                        $fileName = $programFile->getFileName($subscriberHeaders);
+                                        
+                                        if ($pdfFile & $fileName) {
+                                            if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
+                                                $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
+                                                
+                                                $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
+                                                
+                                                $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);
+                                                
+                                                header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                            }
                                             
-                                            $programFile->setProgramFileStatus($subscriberId, 'updated');
-                                            $programFileAlerter->sendProgramFileNotification($subscriberHeaders);
-                                            
-                                            header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                            else {
+                                                throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
+                                            }
                                         }
                                         
                                         else {
-                                            throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
+                                            throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
                                         }
                                     }
                                     
                                     else {
-                                        throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
+                                        throw new Data_Exception('FAILED TO BUILD FILE DATA');
                                     }
                                 }
                                 
@@ -1050,17 +1089,17 @@ try {
             }
             
             else {
-                $routing->logoutUser();
+                $session->logoutUser();
             }
         }
         
         else {
-            $routing->logoutUser();
+            $session->logoutUser();
         }
     }
     
     else {
-        $showcase = new App\Domain\Controllers\ShowCasePanels\Showcase;
+        $showcase = new App\Domain\Controllers\ShowCasePanels\ShowcasePanel;
         $showcase->routeTo('presentation');
     }
 }

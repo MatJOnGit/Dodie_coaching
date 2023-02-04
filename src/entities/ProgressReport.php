@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use App\Domain\Models\Progress;
 
-class ProgressReport {
+final class ProgressReport {
     public function isCurrentWeight(array $baseFormData): bool {
         return ($baseFormData['dateType'] === 'current-weight');
     }

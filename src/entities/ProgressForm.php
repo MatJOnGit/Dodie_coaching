@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use DateTime;
 
-class ProgressForm extends Form {
+final class ProgressForm extends Form {
     private const DATE_TYPES = ['current-weight', 'old-weight'];
     private const MIN_WEIGHT = 0;
 

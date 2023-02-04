@@ -7,6 +7,7 @@ use App\Domain\Interfaces\Dispatcher;
 class AdminPanel implements Dispatcher {
     private const ROUTING_URLS = [
         'admin-dashboard' => 'index.php?page=admin-dashboard',
+        'appliancesList' => 'index.php?page=appliances-list',
         'meetingsManagement' => 'index.php?page=meetings-management'
     ];
     

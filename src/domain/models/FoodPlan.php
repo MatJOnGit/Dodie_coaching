@@ -1,17 +1,20 @@
 <?php
 
-namespace Dodie_Coaching\Models;
+namespace App\Domain\Models;
 
+use App\Mixins;
 use PDO;
 
-class Nutrition extends Main {
-    public function selectIngredientsCount(int $subscriberId, string $weekDay, string $meal) {
+final class FoodPlan {
+    use Mixins\Database;
+
+    public function selectMealsIndexes(int $subscriberId) {
         $db = $this->dbConnect();
-        $selectIngredientsCountQuery = "SELECT COUNT(*) AS ingredientsCount FROM food_plans WHERE user_id = ? AND day = ? AND meal = ?";
-        $selectIngredientsCountStatement = $db->prepare($selectIngredientsCountQuery);
-        $selectIngredientsCountStatement->execute([$subscriberId, $weekDay, $meal]);
+        $selectSubscriberMealsQuery = "SELECT DISTINCT(meal_index) FROM food_plans WHERE user_id = ? ORDER BY meal_index";
+        $selectSubscriberMealsStatement = $db->prepare($selectSubscriberMealsQuery);
+        $selectSubscriberMealsStatement->execute([$subscriberId]);
         
-        return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectSubscriberMealsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
     public function selectMealIngredients(int $subscriberId, string $day, string $mealOrder) {
@@ -48,20 +51,16 @@ class Nutrition extends Main {
         return $selectProgramIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectMealsIndexes(int $subscriberId) {
+    public function selectIngredientsCount(int $subscriberId, string $weekDay, string $meal) {
         $db = $this->dbConnect();
-        $selectSubscriberMealsQuery = "SELECT DISTINCT(meal_index) FROM food_plans WHERE user_id = ? ORDER BY meal_index";
-        $selectSubscriberMealsStatement = $db->prepare($selectSubscriberMealsQuery);
-        $selectSubscriberMealsStatement->execute([$subscriberId]);
+        $selectIngredientsCountQuery = "SELECT COUNT(*) AS ingredientsCount FROM food_plans WHERE user_id = ? AND day = ? AND meal = ?";
+        $selectIngredientsCountStatement = $db->prepare($selectIngredientsCountQuery);
+        $selectIngredientsCountStatement->execute([$subscriberId, $weekDay, $meal]);
         
-        return $selectSubscriberMealsStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function updateMealsList(int $subscriberId, string $meals) {
-        $db = $this->dbConnect();
-        $updateMealsListQuery = "UPDATE subscribers_data SET meals_list = ? WHERE user_id = ?";
-        $updateMealsListStatement = $db->prepare($updateMealsListQuery);
-        
-        return $updateMealsListStatement->execute([$meals, $subscriberId]);
+
+    public function dbConnect() {
+        return $this->connect();
     }
 }

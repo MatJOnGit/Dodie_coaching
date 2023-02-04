@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-use App\Domain\Models\Meeting;
+use App\Domain\Models\MeetingSlot;
 use App\Entities\Appointment;
 use DateTime;
 
@@ -30,20 +30,20 @@ class MeetingBooking extends CostumerPanel {
     }
     
     private function _getBookedMeetingDate() {
-        $meetingBookingModel = new Meeting;
+        $meetingSlot = new MeetingSlot;
         
-        $userScheduledMeeting = $meetingBookingModel->selectScheduledMeeting($_SESSION['email']);
+        $userScheduledMeeting = $meetingSlot->selectScheduledMeeting($_SESSION['email']);
         
         return (!empty($userScheduledMeeting) ? $userScheduledMeeting[0] : NULL);
     }
     
     private function _getSortedMeetingsSlots(): array {
-        $meeting = new Meeting;
+        $meetingSlot = new MeetingSlot;
         $appointment = new Appointment;
 
         $appointmentDelay = $appointment->_getAppointmentDelay();
         
-        $availableMeetingsSlots = $meeting->selectAvailableMeetings($appointmentDelay);
+        $availableMeetingsSlots = $meetingSlot->selectAvailableMeetings($appointmentDelay);
         $meetingsSlotsArray = $appointment->_getMeetingsSlotsArray($availableMeetingsSlots);
         
         return $this->_sortMeetingsSlots($meetingsSlotsArray);

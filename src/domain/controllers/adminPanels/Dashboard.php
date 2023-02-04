@@ -4,7 +4,7 @@ namespace App\Domain\Controllers\AdminPanels;
 
 use App\Domain\Models\Subscriber;
 use App\Domain\Models\Appliance;
-use App\Domain\Models\MeetingManagement;
+use App\Domain\Models\MeetingSlot;
 use App\Entities\Timezone;
 
 class Dashboard extends AdminPanel {
@@ -32,9 +32,9 @@ class Dashboard extends AdminPanel {
     }
     
     private function _getTodayMeetingsData() {
-        $meetingManagement = new MeetingManagement;
+        $meetingSlot = new MeetingSlot;
         
-        $incomingMeetings = $meetingManagement->selectNextBookedMeetings();
+        $incomingMeetings = $meetingSlot->selectNextBookedMeetings();
         
         return $this->_filterTodayMeetingsData($incomingMeetings);
     }

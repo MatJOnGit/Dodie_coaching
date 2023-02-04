@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use App\Domain\Models\Account;
 
-class Routing {
+final class Routing {
     public const URLS = [
         'pages' => [
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
@@ -18,7 +18,7 @@ class Routing {
             'meeting' => ['book-appointment', 'cancel-appointment', 'save-meeting', 'delete-meeting'],
             'appliance' => ['reject-appliance', 'approve-appliance'],
             'notes' => ['save-note', 'edit-note', 'delete-note'],
-            'program-intakes' => ['generate-meals'],
+            'program' => ['generate-meals'],
             'program-file' => ['generate-program-file']
         ]
     ];

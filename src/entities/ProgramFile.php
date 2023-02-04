@@ -3,8 +3,9 @@
 namespace App\Entities;
 
 use App\Domain\Models\ProgramFile as ProgramFileModel;
+use App\Domain\Models\FoodPlan;
 
-class ProgramFile {
+final class ProgramFile {
     private const PROGRAMS_FOLDER_ROUTE = './../var/nutrition_programs/';
     
     /*****************************************************************************************
@@ -25,8 +26,76 @@ class ProgramFile {
         $programFileStatus = $programFile->selectFileStatus($subscriberId);
         return $programFileStatus ? $programFileStatus['file_status'] : NULL;
     }
+
+    /***********************************************************************************
+    Return the value of the possibility to update the subscriber's program file based on
+    its status and meals completion
+    ***********************************************************************************/
+    public function isProgramFileUpdatable(string $programFileStatus, int $subscriberId): bool {
+        $calendar = new Calendar;
+        $program = new Program;
+
+        $updatableFileStatus = ['unhosted', 'depleted'];
+        $isFileStatusFlawed = in_array($programFileStatus, $updatableFileStatus);
+        
+        $weekDays = $calendar->getWeekDays();
+        $meals = $program->getProgramMeals($subscriberId);
+        $isProgramCompleted = true;
+        
+        foreach($weekDays as $weekDay) {
+            $englishWeekDay = $weekDay['english'];
+            
+            foreach($meals as $meal) {
+                if (!$this->_isMealCompleted($subscriberId, $englishWeekDay, $meal)) {
+                    $isProgramCompleted = false;
+                }
+            }
+        }
+        
+        return ($isFileStatusFlawed && $isProgramCompleted);
+    }
+    
+    private function _isMealCompleted(int $subscriberId, string $weekDay, string $meal): bool {
+        $foodPlan = new FoodPlan;
+        
+        $isMealCompleted = true;
+        
+        $ingredientsCountPerMeal = $foodPlan->selectIngredientsCount($subscriberId, $weekDay, $meal);
+        
+        if ($ingredientsCountPerMeal[0]['ingredientsCount'] === '0') {
+            $isMealCompleted = false;
+        }
+        
+        return $isMealCompleted;
+    }
     
     private function _getProgramsFolderRoute(): string {
         return self::PROGRAMS_FOLDER_ROUTE;
+    }
+
+    public function setProgramFileData(int $subscriberId, string $fileName, string $fileStatus): void {
+        $programFile = new ProgramFileModel;
+        
+        $programFile->updateProgramFileData($subscriberId, $fileStatus, $fileName);
+    }
+
+    public function savePdf(string $fileContent, string $fileName) {
+        $filePath = self::PROGRAMS_FOLDER_ROUTE . $fileName . '.pdf';
+        
+        return file_put_contents($filePath, $fileContent);
+    }
+    
+    public function renderFileContent(object $twig, object $program, object $meal, array $programData, array $subscriberHeaders, int $subscriberId) {
+        return $twig->render('pdf_files/printable_program.html.twig', [
+            'programData' => $programData,
+            'subscriberHeaders' => $subscriberHeaders,
+            'programMeals' => $program->getProgramMeals($subscriberId),
+            'weekDaysTranslations' => $program->buildWeekDaysTranslations(),
+            'mealsTranslations' => $meal->getMealsTranslations()
+        ]);
+    }
+    
+    public function getFileName(array $subscriberHeaders): string {
+        return 'Programme_nutritionnel_' . str_replace(' ', '_', $subscriberHeaders['name']);
     }
 }

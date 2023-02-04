@@ -3,10 +3,10 @@
 namespace App\Services;
 
 class CanceledMeetingAlerter extends Mailer {
-    private string $_SUBJECT = 'Votre rendez-vous de suivi';
+    private const SUBJECT = 'Votre rendez-vous de suivi';
     
     public function sendCancelMeetingNotification(array $attendeeData) {
-        return mail($attendeeData['email'], $this->_SUBJECT, $this->_getMeetingCancellationMessage($attendeeData), $this->HEADERS);
+        return mail($attendeeData['email'], self::SUBJECT, $this->_getMeetingCancellationMessage($attendeeData), parent::HEADERS);
     }
     
     private function _getMeetingCancellationMessage($attendeeData) {
@@ -20,6 +20,6 @@ class CanceledMeetingAlerter extends Mailer {
             <p>Nous vous prions de nous excuser pour la gêne occasionnelle.</p>
             
             <p>A très bientôt !</p>"
-            .$this->SIGNATURE;
+            . parent::SIGNATURE;
     }
 }

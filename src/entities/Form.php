@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-class Form {
+abstract class Form {
     public const EMAIL_REGEX = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     public const PASSWORD_REGEX = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,50}$/';
     public const TOKEN_REGEX = '/^[A-Z0-9]{6}$/';

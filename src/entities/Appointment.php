@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\Meeting;
+use App\Domain\Models\MeetingSlot;
 
-class Appointment {
+final class Appointment {
     private const APPOINTMENT_DELAY = 24;
 
     public function isMeetingsSlotAvailable(string $formatedDate): bool {
@@ -24,9 +24,9 @@ class Appointment {
     }
     
     private function _getAvailableMeetings() {
-        $meeting = new Meeting;
+        $meetingSlot = new MeetingSlot;
         
-        $availableMeetings = $meeting->selectAvailableMeetings($this->_getAppointmentDelay());
+        $availableMeetings = $meetingSlot->selectAvailableMeetings($this->_getAppointmentDelay());
 
         return $this->_getMeetingsSlotsArray($availableMeetings);
     }
@@ -42,14 +42,14 @@ class Appointment {
     }
     
     public function bookAppointment(string $meetingDate): bool {
-        $meetingBookingModel = new Meeting;
+        $meetingSlot = new MeetingSlot;
         
-        return $meetingBookingModel->updateMeetingToBooked($_SESSION['email'], $meetingDate);
+        return $meetingSlot->updateMeetingToBooked($_SESSION['email'], $meetingDate);
     }
 
     public function cancelAppointment(): bool {
-        $meetingBookingModel = new Meeting;
+        $meetingSlot = new MeetingSlot;
         
-        return $meetingBookingModel->updateMeetingToAvailable($_SESSION['email']);
+        return $meetingSlot->updateMeetingToAvailable($_SESSION['email']);
     }
 }

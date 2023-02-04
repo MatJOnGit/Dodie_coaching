@@ -20,13 +20,6 @@ class CostumerPanel implements Dispatcher {
         'components/footer'
     ];
 
-    protected const USER_PANELS_SUBPANELS = [
-        'nutrition' => 'Programme nutritionnel',
-        'progress' => 'Progression',
-        'meetings' => 'Rendez-vous',
-        'subscriptions' => 'Abonnement'
-    ];
-
     private array $_USERPANELS = ['dashboard', 'nutrition', 'progress', 'meetings', 'subscription'];
 
     protected function _getUserPanels(): array {
@@ -35,10 +28,6 @@ class CostumerPanel implements Dispatcher {
     
     protected function _getCostumerPanelsStyles(): array {
         return self::COSTUMER_PANELS_STYLES;
-    }
-    
-    protected function _getUserPanelsSubpanels(string $page): string {
-        return self::USER_PANELS_SUBPANELS[$page];
     }
     
     public function getRoutingURL(string $panel): string {

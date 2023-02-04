@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-class ProgramsList {
+final class ProgramsList {
     private const PROGRAMS_LIST = [
         'monthly' => [
             'name' => 'monthly',

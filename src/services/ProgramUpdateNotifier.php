@@ -1,12 +1,12 @@
 <?php
 
-namespace Dodie_Coaching\Services;
+namespace App\Services;
 
-class ProgramFileAlerter extends Mailer {
-    private string $_SUBJECT = 'Votre nouveau programme nutritionnel';
+class ProgramUpdateNotifier extends Mailer {
+    private const SUBJECT = 'Votre nouveau programme nutritionnel';
     
     public function sendProgramFileNotification(array $subscriberHeaders) {
-        return mail($subscriberHeaders['email'], $this->_SUBJECT, $this->_getProgramFileMessage($subscriberHeaders), $this->HEADERS);
+        return mail($subscriberHeaders['email'], self::SUBJECT, $this->_getProgramFileMessage($subscriberHeaders), parent::HEADERS);
     }
     
     private function _getProgramFileMessage($subscriberHeaders) {
@@ -18,6 +18,6 @@ class ProgramFileAlerter extends Mailer {
             <p>Nous vous invitons à en prendre connaissance dans votre espace personnel.</p>
             
             <p>A tout de suite !</p>"
-            .$this->SIGNATURE;
+            . parent::SIGNATURE;
     }
 }

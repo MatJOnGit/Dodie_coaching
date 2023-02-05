@@ -4,7 +4,7 @@ namespace App\Domain\Models;
 
 use App\Mixins;
 
-final class Progress {
+final class WeightReport {
     use Mixins\Database;
     
     public function dbConnect() {

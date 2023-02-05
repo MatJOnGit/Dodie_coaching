@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-use App\Domain\Models\Program as ProgramModel;
+use App\Domain\Models\FoodPlan;
 use App\Entities\Program;;
 
 final class MealDetails extends CostumerPanel {
@@ -19,12 +19,12 @@ final class MealDetails extends CostumerPanel {
     }
     
     private function _getMealDetails(array $mealData) {
-        $program = new ProgramModel;
+        $foodPlan = new FoodPlan;
         
         $day = $mealData['day'];
         $meal = str_replace('_', ' #', $mealData['meal']);
         
-        return $program->selectMealDetails($day, $meal, $_SESSION['email']);
+        return $foodPlan->selectMealDetails($day, $meal, $_SESSION['email']);
     }
     
     /*************************************************************************************

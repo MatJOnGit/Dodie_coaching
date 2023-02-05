@@ -35,8 +35,8 @@ final class MeetingSlot {
                 ms.slot_date,
                 ms.user_id,
                 ms.slot_id
-            FROM subscribers_data sub
-            INNER JOIN meeting_slots ms ON sub.user_id = ms.user_id
+            FROM meeting_slots ms
+            INNER JOIN subscribers_data sub ON sub.user_id = ms.user_id
             WHERE ms.slot_status = 'attended'
             AND sub.user_id = ?
             AND ms.slot_date < NOW()

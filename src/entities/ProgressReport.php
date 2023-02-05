@@ -2,20 +2,20 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\Progress;
+use App\Domain\Models\WeightReport;
 
 final class ProgressReport {
     public function eraseProgressReport(array $progressHistory, string $reportId) {
-        $progress = new Progress;
+        $progress = new WeightReport;
         $reportDate = $progressHistory[$reportId - 1]['date'];
         
         return $progress->deleteReport($reportDate, $_SESSION['email']);
     }
     
     public function getHistory(): array {
-        $progress = new Progress;
+        $weightReport = new WeightReport;
         
-        return $progress->selectReports($_SESSION['email']);
+        return $weightReport->selectReports($_SESSION['email']);
     }
     
     public function isCurrentWeight(array $baseFormData): bool {
@@ -31,11 +31,11 @@ final class ProgressReport {
     }
     
     public function logProgress(array $formatedFormData) {
-        $progress = new Progress;
+        $weightReport = new WeightReport;
         
         $userWeight = $formatedFormData['formatedUserWeight'];
         $reportDate = $formatedFormData['formatedDate'];
         
-        return $progress->insertReport($_SESSION['email'], $userWeight, $reportDate);
+        return $weightReport->insertReport($_SESSION['email'], $userWeight, $reportDate);
     }
 }

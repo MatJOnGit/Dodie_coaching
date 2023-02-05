@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-use App\Domain\Models\Program as ProgramModel;
+use App\Domain\Models\Ingredient;
 
 final class ShoppingList extends CostumerPanel {
     public function renderShoppingListPage(object $twig): void {
@@ -17,8 +17,8 @@ final class ShoppingList extends CostumerPanel {
     }
     
     private function _getShoppingList() {
-        $program = new ProgramModel;
+        $ingredient = new Ingredient;
         
-        return $program->selectMealsIngredients($_SESSION['email']);
+        return $ingredient->selectMealsIngredients($_SESSION['email']);
     }
 }

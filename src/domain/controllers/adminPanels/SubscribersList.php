@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AdminPanels;
 
-use App\Domain\Models\Subscriber;
+use App\Domain\Models\SubscriberData;
 
 final class SubscribersList extends AdminPanel {
     public function renderSubscribersListPage(object $twig): void {
@@ -16,8 +16,8 @@ final class SubscribersList extends AdminPanel {
     }
     
     private function _getSubscribersHeaders() {
-        $subscriber = new Subscriber;
+        $subscriberData = new SubscriberData;
         
-        return $subscriber->selectSubscribersHeaders();
+        return $subscriberData->selectSubscribersHeaders();
     }
 }

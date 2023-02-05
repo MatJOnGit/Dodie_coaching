@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\Program as ProgramModel;
+use App\Domain\Models\SubscriberData;
 use App\Domain\Models\FoodPlan;
 use DateTime, DatePeriod, DateInterval;
 
@@ -115,9 +115,9 @@ final class Program {
     program into an associated array containing each meals
     *****************************************************/ 
     public function getProgramMeals(int $subscriberId) {
-        $program = new ProgramModel;
+        $subscriberData = new SubscriberData;
         
-        $generatedMeals = $program->selectProgramMeals($subscriberId);
+        $generatedMeals = $subscriberData->selectProgramMeals($subscriberId);
         
         return strlen($generatedMeals['meals_list']) ? explode(', ', $generatedMeals['meals_list']) : NULL;
     }

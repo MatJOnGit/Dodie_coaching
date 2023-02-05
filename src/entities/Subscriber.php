@@ -2,18 +2,18 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\Subscriber as SubscriberModel;
+use App\Domain\Models\SubscriberData;
 
 final class Subscriber {
     public function getSubscriberHeaders(int $subscriberId) {
-        $subscriber = new SubscriberModel;
+        $subscriberData = new SubscriberData;
         
-        return $subscriber->selectSubscriberHeader($subscriberId);
+        return $subscriberData->selectSubscriberHeader($subscriberId);
     }
     
     public function isSubscriberIdValid(int $subscriberId) {
-        $subscriber = new SubscriberModel;
+        $subscriberData = new SubscriberData;
         
-        return $subscriber->selectSubscriberId($subscriberId);
+        return $subscriberData->selectSubscriberId($subscriberId);
     }
 }

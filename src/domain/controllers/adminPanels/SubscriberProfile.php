@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AdminPanels;
 
-use App\Domain\Models\Subscriber;
+use App\Domain\Models\SubscriberData;
 
 final class SubscriberProfile extends AdminPanel {
     public function renderSubscriberProfilePage(object $twig, int $subscriberId): void {
@@ -17,14 +17,14 @@ final class SubscriberProfile extends AdminPanel {
     }
     
     private function _getAccountDetails(int $subscriberId) {
-        $subscriber = new Subscriber;
+        $subscriberData = new SubscriberData;
         
-        return $subscriber->selectAccountDetails($subscriberId);
+        return $subscriberData->selectAccountDetails($subscriberId);
     }
     
     private function _getSubscriberDetails(int $subscriberId) {
-        $subscriber = new Subscriber;
+        $subscriberData = new SubscriberData;
         
-        return $subscriber->selectSubscriberDetails($subscriberId);
+        return $subscriberData->selectSubscriberDetails($subscriberId);
     }
 }

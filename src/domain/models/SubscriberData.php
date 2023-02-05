@@ -5,7 +5,7 @@ namespace App\Domain\Models;
 use App\Mixins;
 use PDO;
 
-final class Subscriber {
+final class SubscriberData {
     use Mixins\Database;
     
     public function dbConnect() {
@@ -27,6 +27,15 @@ final class Subscriber {
         $selectAccountDetailsStatement ->execute([$subscriberId]);
         
         return $selectAccountDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function selectProgramMeals(int $subscriberId) {
+        $db = $this->dbConnect();
+        $selectProgramMealsQuery = "SELECT meals_list FROM subscribers_data WHERE user_id = ?";
+        $selectProgramMealsStatement = $db->prepare($selectProgramMealsQuery);
+        $selectProgramMealsStatement->execute([$subscriberId]);
+        
+        return $selectProgramMealsStatement->fetch(PDO::FETCH_ASSOC);
     }
     
     public function selectSubscriberDetails(int $subscriberId) {
@@ -87,15 +96,6 @@ final class Subscriber {
         $selectSubscriberIdStatement->execute([$subscriberId]);
         
         return $selectSubscriberIdStatement->fetch();
-    }
-    
-    public function selectSubscribersCount() {
-        $db = $this->dbConnect();
-        $selectSubscribersCountQuery = "SELECT COUNT(id) as subscribersCount FROM accounts WHERE status = 'subscriber'";
-        $selectSubscribersCountStatement = $db->prepare($selectSubscribersCountQuery);
-        $selectSubscribersCountStatement->execute();
-        
-        return $selectSubscribersCountStatement->fetch(PDO::FETCH_ASSOC);
     }
     
     public function selectSubscribersHeaders() {

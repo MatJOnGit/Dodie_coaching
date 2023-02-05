@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AdminPanels;
 
-use App\Domain\Models\Subscriber;
+use App\Domain\Models\Account;
 use App\Domain\Models\Appliance;
 use App\Domain\Models\MeetingSlot;
 use App\Entities\Timezone;
@@ -56,9 +56,9 @@ final class Dashboard extends AdminPanel {
     }
     
     private function _getSubscribersCount() {
-        $subscriber = new Subscriber;
+        $account = new Account;
         
-        return $subscriber->selectSubscribersCount();
+        return $account->selectSubscribersCount();
     }
     
     private function _getTodayMeetingsData() {

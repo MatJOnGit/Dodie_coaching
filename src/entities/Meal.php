@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-use App\Domain\Models\Subscriber;
+use App\Domain\Models\SubscriberData;
 
 final class Meal {
     private const MEALS_TRANSLATIONS = [
@@ -36,7 +36,7 @@ final class Meal {
     Converts an array of meals into a string separated with commas, then set it in database
     **************************************************************************************/
     public function saveProgramMeals(int $subscriberId, array $mealsList) {
-        $subscriber = new Subscriber;
+        $subscriberData = new SubscriberData;
         
         $meals = '';
         
@@ -44,6 +44,6 @@ final class Meal {
             $meals = empty($meals) ? $mealItem : $meals . ', ' . $mealItem;
         }
         
-        return $subscriber->updateSubscriberMeals($subscriberId, $meals);
+        return $subscriberData->updateSubscriberMeals($subscriberId, $meals);
     }
 }

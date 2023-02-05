@@ -78,7 +78,7 @@ final class Appliance {
     
     public function selectApplicantData(int $applicantId) {
         $db = $this->dbConnect();
-        $selectApplicantDataQuery = "SELECT email, first_name FROM accounts acc INNER JOIN appliances app ON acc.id = app.user_id WHERE app.user_id = ?";
+        $selectApplicantDataQuery = "SELECT acc.email, acc.first_name FROM appliances app INNER JOIN accounts acc ON app.user_id = acc.id WHERE app.user_id = ?";
         $selectApplicantDataStatement = $db->prepare($selectApplicantDataQuery);
         $selectApplicantDataStatement->execute([$applicantId]);
         

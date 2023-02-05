@@ -21,6 +21,28 @@ final class FoodPlan {
         return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
+    public function selectMealDetails(string $day, string $meal, string $email) {                
+        $db = $this->dbConnect();
+        $selectMealDetailsQuery =
+            "SELECT
+                ingr.name,
+                ingr.french_name,
+                ingr.recipe,
+                ingr.type,
+                fp.quantity,
+                ingr.measure
+            FROM food_plans fp
+            INNER JOIN ingredients ingr ON fp.ingredient_id = ingr.id
+            INNER JOIN accounts acc ON fp.user_id = acc.id
+            WHERE fp.day = ?
+            AND fp.meal = ?
+            AND acc.email = ?";
+        $selectMealDetailsStatement = $db->prepare($selectMealDetailsQuery);
+        $selectMealDetailsStatement->execute([$day, $meal, $email]);
+        
+        return $selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function selectMealIngredients(int $subscriberId, string $day, string $mealOrder) {
         $db = $this->dbConnect();
         $selectProgramIngredientsQuery = 

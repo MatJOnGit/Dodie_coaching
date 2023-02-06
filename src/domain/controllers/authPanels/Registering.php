@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AuthPanels;
 
-final class RegisteringPanel extends AuthPanel {
+final class Registering extends AuthPanel {
     private const REGISTERING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',

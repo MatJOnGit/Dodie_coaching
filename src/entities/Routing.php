@@ -10,7 +10,7 @@ final class Routing {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'authentification' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings-booking', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management']
+            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management', 'meal-editing']
         ],
         'actions' => [
             'authentification' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],
@@ -19,7 +19,7 @@ final class Routing {
             'appliance' => ['reject-appliance', 'approve-appliance'],
             'notes' => ['save-note', 'edit-note', 'delete-note'],
             'program-intakes' => ['generate-meals'],
-            'program-file' => ['generate-program-file']
+            'program-file' => ['generate-program-file'],
         ]
     ];
     

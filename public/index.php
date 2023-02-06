@@ -95,33 +95,33 @@ try {
         elseif (in_array($page, $routing::URLS['pages']['authentification'])) {
             if (!$session->isUserLogged()) {
                 if ($routing->isRequestMatching($page, 'login')) {
-                    $loginPanel = new App\Domain\Controllers\AuthPanels\LoginPanel;
-                    $loginPanel->renderLoginPage($twig);
+                    $login = new App\Domain\Controllers\AuthPanels\Login;
+                    $login->renderLoginPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'registering')) {
-                    $registeringPanel = new App\Domain\Controllers\AuthPanels\RegisteringPanel;
-                    $registeringPanel->renderRegisteringPage($twig);
+                    $registering = new App\Domain\Controllers\AuthPanels\Registering;
+                    $registering->renderRegisteringPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'password-retrieving')) {
-                    $passwordRetrievingPanel = new App\Domain\Controllers\AuthPanels\PasswordRetrievingPanel;
-                    $passwordRetrievingPanel->renderPasswordRetrievingPage($twig);
+                    $passwordRetrieving = new App\Domain\Controllers\AuthPanels\PasswordRetrieving;
+                    $passwordRetrieving->renderPasswordRetrievingPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'password-editing')) {
-                    $passwordEditingPanel = new App\Domain\Controllers\AuthPanels\PasswordEditingPanel;
-                    $passwordEditingPanel->renderPasswordEditingPage($twig);
+                    $passwordEditing = new App\Domain\Controllers\AuthPanels\PasswordEditing;
+                    $passwordEditing->renderPasswordEditingPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'mail-notification')) {
-                    $passwordNotificationPanel = new App\Domain\Controllers\AuthPanels\PasswordNotificationPanel;
-                    $passwordNotificationPanel->renderMailNotificationPage($twig);
+                    $passwordNotification = new App\Domain\Controllers\AuthPanels\PasswordNotification;
+                    $passwordNotification->renderMailNotificationPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'token-signing')) {
-                    $tokenSigningPanel = new App\Domain\Controllers\AuthPanels\TokenSigningPanel;
-                    $tokenSigningPanel->renderTokenSigningPage($twig);
+                    $tokenSigning = new App\Domain\Controllers\AuthPanels\TokenSigning;
+                    $tokenSigning->renderTokenSigningPage($twig);
                 }
             }
             
@@ -342,6 +342,33 @@ try {
                         
                         $meetingManagement->renderMeetingsManagementPage($twig);
                     }
+
+                    else if ($routing->isRequestMatching($page, 'meal-editing')) {
+                        $mealEditing = new App\Domain\Controllers\AdminPanels\MealEditing;
+                        $program = new App\Entities\Program;
+
+                        if ($routing->areParamsSet(['id', 'meal'])) {
+                            $mealData = $program->getMealData();
+                            $subscriberId = intval($routing->getParam('id'));
+
+                            if ($program->areMealParamsValid($mealData)) {
+                                $subscriber = new App\Entities\Subscriber;
+                                $program = new App\Entities\Program;
+                                $meal = new App\Entities\Meal;
+
+                                $mealEditing->renderMealEdition($twig, $subscriber, $program, $meal, $mealData, $subscriberId);
+                            }
+                            
+                            else {
+                                throw new URL_Exception('INVALID MEAL PARAMETER');
+                            }
+                        }
+
+                        else {
+                            throw new URL_Exception('MISSING ID AND/OR MEAL PARAM IN URL');
+                            // header("location:index.php?page=subscriber-program" . $subscriberId);
+                        }
+                    }
                 }
                 
                 else {
@@ -470,10 +497,10 @@ try {
                             }
                             
                             else {
-                                $passwordRetrievingPanel = new App\Domain\Controllers\AuthPanels\PasswordRetrievingPanel;
+                                $passwordRetrieving = new App\Domain\Controllers\AuthPanels\PasswordRetrieving;
                                 
                                 $session->sessionize($userData, ['email']);
-                                $passwordRetrievingPanel->routeTo('send-token');
+                                $passwordRetrieving->routeTo('send-token');
                             }
                         }
                         
@@ -498,8 +525,8 @@ try {
                         }
                         
                         else {
-                            $passwordNotificationPanel = new App\Domain\Controllers\AuthPanels\PasswordNotificationPanel;
-                            $passwordNotificationPanel->routeTo('mail-notification');
+                            $passwordNotification = new App\Domain\Controllers\AuthPanels\PasswordNotification;
+                            $passwordNotification->routeTo('mail-notification');
                         }
                     }
                     

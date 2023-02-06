@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AuthPanels;
 
-final class PasswordEditingPanel extends AuthPanel {
+final class PasswordEditing extends AuthPanel {
     private const PASSWORD_EDITING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',

@@ -4,7 +4,7 @@ namespace App\Domain\Controllers\AuthPanels;
 
 use App\Domain\Models\ResetToken;
 
-final class TokenSigningPanel extends AuthPanel {
+final class TokenSigning extends AuthPanel {
     private const TOKEN_SIGNING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',

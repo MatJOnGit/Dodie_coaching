@@ -12,7 +12,6 @@
                             {% for weekDay in weekDaysTranslations %}
                                 {% if weekDay['english'] == dayKey %}
                                     {{ weekDay['french'] }} - {{ programMeals | length }} repas
-                                    
                                 {% endif %}
                             {% endfor %}
                         </h4>
@@ -20,14 +19,16 @@
                         <ul class='daily-program-list' data-daily-program='{{ dailyMeals | json_encode() }}'>
                             {% for mealKey, meals in programMeals %}
                                 <li class='meal-item'>
+                                    {% set meal = '' %}
                                     <h5 class='meal-header'>
                                         {% for mealTranslation in mealsTranslations %}
                                             {% if meals == mealTranslation['english'] %}
+                                                {% set meal = mealTranslation['english'] %}
                                                 {{ mealTranslation['french'] }}
                                             {% endif %}
                                         {% endfor %}
                                     </h5>
-                                    <a href='index.php?page=edit-program-menu&day={{ dayKey }}&mealId={{mealKey}}'>
+                                    <a href='index.php?page=meal-editing&id={{ subscriberHeaders['user_id'] }}&meal={{ dayKey }}-{{ meal }}'>
                                         <table class='btn meal-data-tab'></table>
                                     </a>
                                 </li>

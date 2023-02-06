@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AuthPanels;
 
-final class LoginPanel extends AuthPanel {
+final class Login extends AuthPanel {
     private const LOGIN_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',

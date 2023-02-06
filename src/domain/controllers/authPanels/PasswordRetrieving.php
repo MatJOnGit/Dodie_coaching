@@ -2,7 +2,7 @@
 
 namespace App\Domain\Controllers\AuthPanels;
 
-final class PasswordRetrievingPanel extends AuthPanel {
+final class PasswordRetrieving extends AuthPanel {
     private const PASSWORD_RETRIEVING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',

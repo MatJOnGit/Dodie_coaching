@@ -156,11 +156,12 @@ try {
                         }
                         
                         elseif ($program->isMealRequested()) {
-                            $mealData = $program->getMealData();
+                            $mealParams = $program->getMealParams();
                             
-                            if ($program->areMealParamsValid($mealData)) {
+                            if ($program->areMealParamsValid($mealParams)) {
                                 $mealDetails = new App\Domain\Controllers\CostumerPanels\MealDetails;
-                                $mealDetails->renderMealDetailsPage($twig, $meal, $mealData);
+                                $subscriberId = intval($routing->getUserId()['id']);
+                                $mealDetails->renderMealDetailsPage($twig, $program, $meal, $mealParams, $subscriberId);
                             }
                             
                             else {
@@ -342,32 +343,45 @@ try {
                         
                         $meetingManagement->renderMeetingsManagementPage($twig);
                     }
-
-                    else if ($routing->isRequestMatching($page, 'meal-editing')) {
-                        $mealEditing = new App\Domain\Controllers\AdminPanels\MealEditing;
+                    
+                    else if ($routing->isRequestMatching($page, 'subscriber-meal')) {
                         $program = new App\Entities\Program;
-
+                        
                         if ($routing->areParamsSet(['id', 'meal'])) {
-                            $mealData = $program->getMealData();
+                            $mealParams = $program->getMealParams();
                             $subscriberId = intval($routing->getParam('id'));
-
-                            if ($program->areMealParamsValid($mealData)) {
+                            
+                            if ($program->areMealParamsValid($mealParams)) {
+                                $mealEditing = new App\Domain\Controllers\AdminPanels\SubscriberMeal;
                                 $subscriber = new App\Entities\Subscriber;
                                 $program = new App\Entities\Program;
                                 $meal = new App\Entities\Meal;
+                                
+                                $latestMealStatus = $program->getLatestMealStatus($mealParams['meal'], $mealParams['day'], $subscriberId);
+                                
+                                if ($latestMealStatus === 'confirmed') {
+                                    $mealEditing->renderSubscriberMeal($twig, $subscriber, $program, $meal, $subscriberId, $mealParams, $latestMealStatus);
+                                }
 
-                                $mealEditing->renderMealEdition($twig, $subscriber, $program, $meal, $mealData, $subscriberId);
+                                else {
+                                    $mealParam = $routing->getParam('meal');
+                                    header("location:index.php?page=subscriber-meal-editing&id=" . $subscriberId . "meal=" . $mealParam);
+                                }
                             }
                             
                             else {
                                 throw new URL_Exception('INVALID MEAL PARAMETER');
                             }
                         }
-
+                        
                         else {
                             throw new URL_Exception('MISSING ID AND/OR MEAL PARAM IN URL');
-                            // header("location:index.php?page=subscriber-program" . $subscriberId);
+                            // header("location:index.php?page=subscriber-program&id=" . $subscriberId);
                         }
+                    }
+
+                    else if ($routing->isRequestMatching($page, 'subscriber-meal-editing')) {
+                        echo "Edition d'un menu";
                     }
                 }
                 

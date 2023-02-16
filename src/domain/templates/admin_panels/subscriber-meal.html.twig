@@ -1,13 +1,22 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='user-panel'>
-        <h3>{{ mealParams['meal'] | capitalize }} du {{ mealParams['day'] | lower }}</h3>
+    <div class='admin-panel'>
+        <h3>{{ mealParams['meal'] | capitalize }} du {{ mealParams['day'] | split (' ')[0] | lower }}</h3>
         
-        {% if ingredients is iterable %}
-            <ul class='ingredients-list'>
-                {% for ingredient in ingredients %}
-                    <li class='ingredients-list-item'>
+        <div class='meal-summary'>
+            {% if mealNutrientsData %}
+                <h4 class='meal-edition-header orange-bkgd'>Apports nutritionnels</h4>
+                
+                <table class='meal-nutrients-table' id='meal-nutrients' data-daily-program='{{ mealNutrientsData | json_encode() }}'></table>
+            {% endif %}
+            
+            {% if mealDetails is iterable %}
+                <h4 class='meal-edition-header orange-bkgd'>Liste des ingrédients</h4>
+                
+                <ul class='ingredients-list'>
+                    {% for ingredient in mealDetails %}
+                        <li class='ingredients-list-item'>
                         <img src="./../public/img/ingredients/{{ ingredient['type'] }}/{{ ingredient['name'] | lower }}.jpg" alt="{{ ingredient['name'] | lower }}-picture" class='ingredient-picture' />
                         
                         <div class='ingredient-desc'>
@@ -26,8 +35,13 @@
                             </p>
                         </div>
                     </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
     </div>
 {% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

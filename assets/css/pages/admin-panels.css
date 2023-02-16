@@ -356,7 +356,8 @@ h2 {
 }
 
 .day-header,
-.meal-header {
+.meal-header,
+.meal-edition-header {
     margin: 0;
     padding: 1vh 0 ;
     text-align: center;
@@ -450,4 +451,17 @@ tr:not(:first-child) td:not(:first-child) {
 
 .fa-file-export {
     font-size: 1.5em;
+}
+
+/***********************************/
+/*          MEAL-EDITING           */
+/***********************************/
+
+.meal-summary {
+    width: 100%;
+}
+
+.meal-edition-header,
+#meal-nutrients {
+    margin-bottom: 4%;
 }

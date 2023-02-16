@@ -3,7 +3,7 @@
         'name' => 'nevz/dodie_coaching',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '67103d4df060079ddda6023e7ac25955efeaa247',
+        'reference' => 'a7b4ec43380e49c901efd2654023742a2249fbdb',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'dompdf/dompdf' => array(
-            'pretty_version' => 'v2.0.1',
-            'version' => '2.0.1.0',
-            'reference' => 'c5310df0e22c758c85ea5288175fc6cd777bc085',
+            'pretty_version' => 'v2.0.3',
+            'version' => '2.0.3.0',
+            'reference' => 'e8d2d5e37e8b0b30f0732a011295ab80680d7e85',
             'type' => 'library',
             'install_path' => __DIR__ . '/../dompdf/dompdf',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'nevz/dodie_coaching' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '67103d4df060079ddda6023e7ac25955efeaa247',
+            'reference' => 'a7b4ec43380e49c901efd2654023742a2249fbdb',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -83,9 +83,9 @@
             'dev_requirement' => false,
         ),
         'twig/twig' => array(
-            'pretty_version' => 'v3.4.1',
-            'version' => '3.4.1.0',
-            'reference' => 'e939eae92386b69b49cfa4599dd9bead6bf4a342',
+            'pretty_version' => 'v3.5.1',
+            'version' => '3.5.1.0',
+            'reference' => 'a6e0510cc793912b451fd40ab983a1d28f611c15',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twig/twig',
             'aliases' => array(),

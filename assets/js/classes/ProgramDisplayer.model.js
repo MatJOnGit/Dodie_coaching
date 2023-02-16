@@ -152,7 +152,6 @@ class ProgramDisplayer extends ElementFader {
         this.initNutrientsPerMealEntry();
         
         Object.keys(mealData).forEach(ingredientKey => {
-            this.ingredientKey = ingredientKey;
             const ingredientData = mealData[ingredientKey];
             
             this.buildIngredientsNutrientsData(ingredientData);
@@ -202,6 +201,8 @@ class ProgramDisplayer extends ElementFader {
     }
     
     buildProgramArrays() {
+        this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
+        
         Object.keys(this.dailyProgramItems).forEach(dayKey => {
             this.dayKey = dayKey;
             
@@ -254,7 +255,7 @@ class ProgramDisplayer extends ElementFader {
         let isNutrientInGrams = ingredientData['measure'] === 'grammes';
         let isBaseValueNotNull = ingredientData['measure_base_value'] !== '0';
         
-        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredientData[this.nutrientKey] / ingredientData['measure_base_value'] * ingredientData['quantity'] :'Missing data' : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
+        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredientData[this.nutrientKey] / ingredientData['measure_base_value'] * ingredientData['quantity'] : 'Missing data' : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
     }
     
     hideMealTables() {
@@ -266,8 +267,6 @@ class ProgramDisplayer extends ElementFader {
     }
     
     init() {
-        this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
-        
         this.buildProgramArrays();
         this.displayProgramData();
     }
@@ -295,7 +294,6 @@ class ProgramDisplayer extends ElementFader {
     }
     
     updateNutrientsPerMealData(rationNutrientValue) {
-        let newNutientsPerMealValue = this.computeNewNutrientPerMealValue(rationNutrientValue);
-        this.nutrientsPerMealValue = newNutientsPerMealValue;
+        this.nutrientsPerMealValue = this.computeNewNutrientPerMealValue(rationNutrientValue);
     }
 }

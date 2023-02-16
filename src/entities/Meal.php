@@ -9,7 +9,7 @@ final class Meal {
         ['english' => 'breakfast', 'french' => 'petit-déjeuner'],
         ['english' => 'snack #1', 'french' => 'en-cas de 10h'],
         ['english' => 'lunch', 'french' => 'déjeuner'],
-        ['english' => 'snack #2', 'french' => 'goûté'],
+        ['english' => 'snack #2', 'french' => 'goûter'],
         ['english' => 'diner', 'french' => 'dîner']
     ];
     

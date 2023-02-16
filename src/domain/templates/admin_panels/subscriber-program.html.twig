@@ -28,7 +28,7 @@
                                             {% endif %}
                                         {% endfor %}
                                     </h5>
-                                    <a href='index.php?page=meal-editing&id={{ subscriberHeaders['user_id'] }}&meal={{ dayKey }}-{{ meal }}'>
+                                    <a href='index.php?page=subscriber-meal&id={{ subscriberHeaders['user_id'] }}&meal={{ dayKey }}-{{ meal | replace({' #': '_'}) }}'>
                                         <table class='btn meal-data-tab'></table>
                                     </a>
                                 </li>

@@ -36,10 +36,18 @@ final class Program {
         return ($isDayValid && $isMealValid);
     }
     
+    public function buildMealNutrientsData(string $day, string $meal, int $subscriberId) {
+        $foodPlan = new FoodPlan;
+        
+        return $foodPlan->selectMealIntakes($meal, $day, 'confirmed', $subscriberId);
+    }
+    
     public function buildProgramData(int $subscriberId) {
         $weekDays = $this->_getNextWeekDays();
         $mealsIndexes = $this->_getMealsIndexes($subscriberId);
         
+        // var_dump($this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes));
+
         return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
     }
     
@@ -64,19 +72,19 @@ final class Program {
     /*************************************************************************************
     Converts url parameters into a associative array containing the day and meal requested
     *************************************************************************************/
-    public function getMealData(): array {
+    public function getMealParams(): array {
         $meal = htmlspecialchars($_GET['meal']);
-        $mealData = [
+        $mealParams = [
             'day' => false,
             'meal' => false
         ];
         
         if (is_string($meal) && strpos($meal, '-')) {
-            $mealData['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
-            $mealData['meal'] = explode('-', htmlspecialchars($_GET['meal']))[1];
+            $mealParams['day'] = explode('-', htmlspecialchars($_GET['meal']))[0];
+            $mealParams['meal'] = str_replace('_', ' #', explode('-', htmlspecialchars($_GET['meal']))[1]);
         }
         
-        return $mealData;
+        return $mealParams;
     }
     
     /*****************************************************************************
@@ -126,6 +134,25 @@ final class Program {
         return htmlspecialchars($_GET['request']);
     }
     
+    public function getMealDetails(array $mealParams, int $subscriberId) {
+        $foodPlan = new FoodPlan;
+        
+        $day = $mealParams['day'];
+        $meal = str_replace('_', ' #', $mealParams['meal']);
+        
+        return $foodPlan->selectMealDetails($day, $meal, $subscriberId);
+    }
+
+    public function getLatestMealStatus(string $meal, string $day, int $subscriberId) {
+        $foodPlan = new FoodPlan;
+        
+        $meal = str_replace('_', ' #', $meal);
+        
+        $mealPendingIntakes = $foodPlan->selectMealIntakes($meal, $day, 'pending', $subscriberId);
+
+        return $mealPendingIntakes ? 'pending' : 'confirmed';
+    }
+    
     public function isMealRequested(): bool {
         return (isset($_GET['meal']) && !isset($_GET['request']));
     }
@@ -156,13 +183,13 @@ final class Program {
             foreach($meals as $meal) {
                 $programIngredients[$weekDay['englishWeekDay']] += [$meal['meal_index'] => []];
                 
-                $mealIngredients = $foodPlan->selectMealIngredients($subscriberId, $weekDay['englishWeekDay'], $meal['meal_index']);
+                $mealIngredients = $foodPlan->selectDailyMealsIntakes($subscriberId, $weekDay['englishWeekDay'], $meal['meal_index']);
                 
                 foreach($mealIngredients as $ingredientKey => $ingredient) {
                     $programIngredients[$weekDay['englishWeekDay']][$meal['meal_index']] += [$ingredientKey => $ingredient];
-                }
-            }
-        }
+                };
+            };
+        };
         
         return $programIngredients;
     }
@@ -229,5 +256,26 @@ final class Program {
         }
         
         return $weekDays;
+    }
+    
+    /*************************************************************************************
+    Builds an associative array containing the french date and the translation of the meal
+    *************************************************************************************/
+    public function getTranslatedMealParams(object $meal, array $mealParams): array {
+        $program = new Program;
+        
+        foreach($program->getNextDates() as $day) {
+            if ($mealParams['day'] === $day['englishWeekDay']) {
+                $mealParams['day'] = $day['frenchFullDate'];
+            }
+        }
+        
+        foreach($meal->getMealsTranslations() as $meal) {
+            if (str_replace('_', ' #', $mealParams['meal']) === $meal['english']) {
+                $mealParams['meal'] = $meal['french'];
+            }
+        }
+        
+        return $mealParams;
     }
 }

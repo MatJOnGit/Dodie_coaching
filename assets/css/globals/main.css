@@ -216,3 +216,29 @@ select {
 th {
     color: blue;
 }
+
+/******************************************/
+/*           INGREDIENTS LIST             */
+/******************************************/
+
+.ingredients-list {
+    width: 100%;
+}
+
+.ingredients-list-item {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ingredient-picture {
+    height: 100px;
+    margin: 5px 30px 5px 0;
+    object-fit: cover;
+    width: 150px;
+}
+
+.ingredient-desc {
+    width: 150px;
+}

@@ -11,7 +11,7 @@ final class MealDetails extends CostumerPanel {
             'prevPanel' => ['nutrition', 'Nutrition'],
             'subPanel' => 'Composition du repas',
             'mealParams' => $program->getTranslatedMealParams($meal, $mealParams),
-            'ingredients' => $program->getMealDetails($mealParams, $subscriberId)
+            'mealItems' => $program->getMealDetails($mealParams, $subscriberId)
         ]);
     }
 }

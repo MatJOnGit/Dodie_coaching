@@ -453,12 +453,18 @@ tr:not(:first-child) td:not(:first-child) {
     font-size: 1.5em;
 }
 
-/***********************************/
-/*          MEAL-EDITING           */
-/***********************************/
+/**************************************/
+/*          SUBSCRIBER-MEAL           */
+/**************************************/
 
 .meal-summary {
     width: 100%;
+}
+
+.edit-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .meal-edition-header,

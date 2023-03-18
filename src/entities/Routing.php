@@ -10,7 +10,7 @@ final class Routing {
             'showcase' => ['presentation', 'coaching', 'programs-list', 'program-details', 'showcase-404'],
             'authentification' => ['login', 'registering', 'password-retrieving', 'mail-notification', 'token-signing', 'password-editing', 'retrieved-password'],
             'userPanels' => ['dashboard', 'nutrition', 'progress', 'meetings-booking', 'subscription'],
-            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management', 'subscriber-meal', 'subscriber-meal-editing']
+            'adminPanels' => ['admin-dashboard', 'appliances-list', 'appliance-details', 'subscribers-list', 'subscriber-profile', 'subscriber-program', 'subscriber-notes', 'meetings-management', 'subscriber-meal', 'subscriber-meal-editing', 'ingredients-management']
         ],
         'actions' => [
             'authentification' => ['log-account', 'register-account', 'logout', 'send-token', 'verify-token', 'register-password'],

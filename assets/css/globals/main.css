@@ -25,7 +25,8 @@
 .tiny-btn,
 .large-btn,
 input[type=submit],
-.dashboard-btn {
+.dashboard-btn,
+.recipe-btn span {
     color: hsla(0, 0%, 100%, 1);
 }
 
@@ -34,6 +35,10 @@ input[type=submit],
 .cloudy-bkgd a,
 figcaption {
     color: hsla(0, 0%, 0%, 1);
+}
+
+th {
+    color: 	hsla(240, 100%, 50%, 1);
 }
 
 .wrong {
@@ -211,34 +216,4 @@ input,
 input::placeholder,
 select {
     border: none;
-}
-
-th {
-    color: blue;
-}
-
-/******************************************/
-/*           INGREDIENTS LIST             */
-/******************************************/
-
-.ingredients-list {
-    width: 100%;
-}
-
-.ingredients-list-item {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.ingredient-picture {
-    height: 100px;
-    margin: 5px 30px 5px 0;
-    object-fit: cover;
-    width: 150px;
-}
-
-.ingredient-desc {
-    width: 150px;
 }

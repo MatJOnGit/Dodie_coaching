@@ -9,7 +9,7 @@ final class SubscriberMeal extends AdminPanel {
         'mealManagementApp'
     ];
 
-    public function renderSubscriberMeal(object $twig, object $subscriber, object $program, object $meal, int $subscriberId, array $mealParams, string $latestMealStatus) {
+    public function renderSubscriberMeal(object $twig, object $subscriber, object $program, object $meal, int $subscriberId, string $mealParam, array $mealParsedParams, string $latestMealStatus) {
         echo $twig->render('admin_panels/subscriber-meal.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyles(),
             'frenchTitle' => "Informations sur le repas",
@@ -17,9 +17,9 @@ final class SubscriberMeal extends AdminPanel {
             'prevPanel' => ['subscriber-program&id=' . $subscriberId, 'Programme'],
             'latestMealStatus' => $latestMealStatus,
             'subscriberHeaders' => $subscriber->getSubscriberHeaders($subscriberId),
-            'mealNutrientsData' => $program->buildMealNutrientsData($mealParams['day'], $mealParams['meal'], $subscriberId),
-            'mealParams' => $program->getTranslatedMealParams($meal, $mealParams),
-            'mealDetails' => $program->getMealDetails($mealParams, $subscriberId),
+            'mealNutrientsData' => $program->buildMealNutrientsData($mealParsedParams['day'], $mealParsedParams['meal'], $subscriberId),
+            'mealParams' => $program->getTranslatedMealParams($meal, $mealParsedParams),
+            'mealDetails' => $program->getMealDetails($mealParsedParams, $subscriberId),
             'pageScripts' => $this->_getSubscriberMealScripts()
         ]);
     }

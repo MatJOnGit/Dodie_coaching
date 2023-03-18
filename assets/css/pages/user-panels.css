@@ -4,6 +4,7 @@
 
 #title-layer i,
 .settings-btn i,
+.recipe-btn i,
 footer i {
     color: hsla(261, 48%, 51%, 1);
 }
@@ -289,6 +290,35 @@ figcaption {
 
 .no-program-block p {
     margin-bottom: 2vh;
+}
+
+/*****************************************/
+/*           NUTRITION (MEAL)            */
+/*****************************************/
+
+.portions-list {
+    width: 100%;
+}
+
+.recipe-btn {
+    display: flex;
+    flex-direction: row;
+}
+
+.portions-list-item,
+.recipe-btn {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 35px;
+    margin: 8px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.recipe-btn span {
+    font-size: 1.2em;
+    margin-left: 10px;
 }
 
 /**************************************/

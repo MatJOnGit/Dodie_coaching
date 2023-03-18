@@ -1,0 +1,57 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel'>
+        <h3>{{ mealParams['meal'] | capitalize}} du {{ mealParams['day'] | split (' ')[0] | lower }} (Composition)</h3>
+        
+        <div class='meal-summary'>
+            {% if mealNutrientsData %}
+                <div>
+                    <h4 class='meal-edition-header orange-bkgd'>Apports nutritionnels</h4>
+                    
+                    <table class='meal-nutrients-table' id='meal-nutrients' data-daily-program='{{ mealNutrientsData | json_encode() }}'></table>
+                </div>
+            {% endif %}
+            
+            {% if mealDetails is iterable %}
+                <div id='ingredients-block'>
+                    <h4 class='meal-edition-header orange-bkgd'>Liste des ingrédients</h4>
+                
+                    {% if mealDetails | length > 0 %}
+                        <ul class='ingredients-list'>
+                            {% for ingredient in mealDetails %}
+                                <li class='ingredients-list-item'>
+                                    <div class='ingredient-desc'>
+                                        <p>
+                                            {{ ingredient['quantity'] }}
+                                            
+                                            {% if ingredient['measure'] is not empty %}
+                                                {{ ingredient['measure'] }} de
+                                            {% endif %}
+                                            
+                                            {{ ingredient['french_name'] }}
+                                            
+                                            {% if ingredient['recipe'] is not null %}
+                                                {{ ingredient['recipe'] }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        
+                    {% else %}
+                        <p>Aucun ingrédient n'a encore été enregistré pour ce repas</p>
+                        
+                    {% endif %}
+                    
+                    <button class='btn tiny-btn rounded-btn blue-bkgd' id='add-ingredient-btn'>Ajouter un ingrédient</button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

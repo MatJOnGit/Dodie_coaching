@@ -16,7 +16,7 @@ final class Ingredient {
         $db = $this->dbConnect();
         $selectMealsIngredientsQuery =
             "SELECT
-                ingr.french_name,
+                ingr.name AS ing_name,
                 ingr.measure,
                 SUM(fp.quantity) AS ingredient_quantity
             FROM ingredients ingr
@@ -28,5 +28,14 @@ final class Ingredient {
         $selectMealsIngredientsStatement->execute([$email]);
         
         return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectIngredientsTypes() {
+        $db = $this->dbConnect();
+        $selectIngredientsTypesQuery = "SELECT DISTINCT(type) FROM ingredients";
+        $selectIngredientsTypesStatement = $db->prepare($selectIngredientsTypesQuery);
+        $selectIngredientsTypesStatement->execute();
+
+        return $selectIngredientsTypesStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

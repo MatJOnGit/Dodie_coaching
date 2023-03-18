@@ -3,24 +3,24 @@
 {% block pageContent %}
     <div class='admin-panel'>
         {% if (appliancesCount is defined) and (appliancesCount != false) %}
-            <div class='dashboard-card pending-appliances'>
-                <h3>Vos demandes de coaching</h3>
+            <div class='dashboard-card'>
+                <h3>Mes demandes de coaching</h3>
                 <p>Vous avez {{ appliancesCount['appliancesCount'] }} demandes en attente.</p>
                 <a href='index.php?page=appliances-list' class='btn large-btn admin-link blue-bkgd'>Gérer vos demandes de suivi</a>
             </div>
         {% endif %}
         
         {% if subscribersCount is defined %}
-            <div class='dashboard-card current-subscribers'>
-                <h3>Vos coaching en cours</h3>
+            <div class='dashboard-card'>
+                <h3>Mes coaching en cours</h3>
                 <p>Vous suivez actuellement {{ subscribersCount['subscribersCount'] }} abonné(s).</p>
                 <a href='index.php?page=subscribers-list' class='btn large-btn admin-link blue-bkgd'>Gérer vos profils d'abonnés</a>
             </div>
         {% endif %}
         
         {% if todayMeetingsData is defined %}
-            <div class='dashboard-card incoming-meetings'>
-                <h3>Vos rendez-vous</h3>
+            <div class='dashboard-card'>
+                <h3>Mes rendez-vous</h3>
                 
                 {% if todayMeetingsData %}
                     <p>Aujourd'hui, vous avez {{ todayMeetingsData | length }} rendez-vous  :</p>
@@ -40,5 +40,11 @@
                 <a href='index.php?page=meetings-management' class='btn large-btn admin-link blue-bkgd'>Gérer vos rendez-vous</a>
             </div>
         {% endif %}
+
+        <div class='dashboard-card'>
+            <h3>Ma cuisine</h3>
+            <a href='index.php?page=ingredients-management' class='btn large-btn admin-link blue-bkgd'>Gérer mes ingrédients</a>
+            <a href='index.php?page=recipe-management' class='btn large-btn admin-link blue-bkgd'>Gérer mes recettes</a>
+        </div>
     </div>
 {% endblock pageContent %}

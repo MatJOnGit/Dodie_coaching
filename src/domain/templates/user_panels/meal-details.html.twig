@@ -3,29 +3,46 @@
 {% block pageContent %}
     <div class='user-panel'>
         <h3>{{ mealParams['meal'] | capitalize }} du {{ mealParams['day'] | lower }}</h3>
-        
-        {% if ingredients is iterable %}
-            <ul class='ingredients-list'>
-                {% for ingredient in ingredients %}
-                    <li class='ingredients-list-item'>
-                        <img src="./../public/img/ingredients/{{ ingredient['type'] }}/{{ ingredient['name'] | lower }}.jpg" alt="{{ ingredient['name'] | lower }}-picture" class='ingredient-picture' />
+
+        {% if mealItems is iterable %}
+            <ul class='portions-list'>
+                {% for mealItem in mealItems %}
+                    {% if mealItem['item_type'] == 'ingredient' %}
+                        <li class='portions-list-item'>
+                            {{ mealItem['quantity'] }}
+                            
+                            {% if mealItem['measure'] is not null %}
+                                {% if mealItem['ingr_name'] | first in ['a', 'à', 'e', 'é', 'è', 'h', 'i', 'o', 'u', 'y'] %}
+                                    {{ mealItem['measure'] }} d'
+                                {% else %}
+                                    {{ mealItem['measure'] }} de
+                                {% endif %}
+                            {% endif %}
+                            
+                            {{ mealItem['ingr_name'] }}
+
+                            {% if mealItem['preparation'] is not null %}
+                                {{ mealItem['preparation'] }}
+                            {% endif %}
+                        </li>
                         
-                        <div class='ingredient-desc'>
-                            <p>
-                                {{ ingredient['quantity'] }}
-                                
-                                {% if ingredient['measure'] is not empty %}
-                                    {{ ingredient['measure'] }} de
+                    {% elseif mealItem['item_type'] == 'recipe' %}
+                        <li class='portions-list-item'>
+                            <button class='recipe-btn'>
+                                {{ mealItem['quantity'] }}
+                                    
+                                {% if mealItem['quantity'] >= 2 %}
+                                    portions
+                                {% else %}
+                                    portion
                                 {% endif %}
                                 
-                                {{ ingredient['french_name'] }}
-                                
-                                {% if ingredient['recipe'] is not null %}
-                                    {{ ingredient['recipe'] }}
-                                {% endif %}
-                            </p>
-                        </div>
-                    </li>
+                                de {{ mealItem['rec_name'] }}
+                                <span><i class="fa fa-question-circle"></i></span>
+                            </button>
+                        </li>
+                    {% endif %}
+                    
                 {% endfor %}
             </ul>
         {% endif %}

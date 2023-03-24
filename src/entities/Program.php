@@ -44,11 +44,9 @@ final class Program {
     
     public function buildProgramData(int $subscriberId) {
         $weekDays = $this->_getNextWeekDays();
-        $mealsIndexes = $this->_getMealsIndexes($subscriberId);
+        $confirmedMealsData = $this->_getConfirmedMealsData($subscriberId);
         
-        // var_dump($this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes));
-
-        return $this->_buildProgramIngredients($subscriberId, $weekDays, $mealsIndexes);
+        return $this->_buildProgramIngredients($subscriberId, $weekDays, $confirmedMealsData);
     }
     
     /***********************************************************************************
@@ -142,7 +140,7 @@ final class Program {
         
         return $foodPlan->selectMealDetails($day, $meal, $subscriberId);
     }
-
+    
     public function getLatestMealStatus(string $meal, string $day, int $subscriberId) {
         $foodPlan = new FoodPlan;
         
@@ -172,7 +170,8 @@ final class Program {
     /********************************************************************************************
     Builds an associative array containing ingredients for each meal and for each day of the week
     ********************************************************************************************/
-    private function _buildProgramIngredients (int $subscriberId, array $weekDays, array $meals): array {
+
+    private function _buildProgramIngredients (int $subscriberId, array $weekDays, array $confirmedMealsData): array {
         $foodPlan = new FoodPlan;
         
         $programIngredients = [];
@@ -180,13 +179,13 @@ final class Program {
         foreach($weekDays as $weekDay) {
             $programIngredients += [$weekDay['englishWeekDay'] => []];
             
-            foreach($meals as $meal) {
-                $programIngredients[$weekDay['englishWeekDay']] += [$meal['meal_index'] => []];
+            foreach($confirmedMealsData as $confirmedMealData) {
+                $programIngredients[$weekDay['englishWeekDay']] += [$confirmedMealData['meal_index'] => []];
                 
-                $mealIngredients = $foodPlan->selectDailyMealsIntakes($subscriberId, $weekDay['englishWeekDay'], $meal['meal_index']);
+                $mealIngredients = $foodPlan->selectMealDetails($weekDay['englishWeekDay'], $confirmedMealData['meal_name'], $subscriberId);
                 
                 foreach($mealIngredients as $ingredientKey => $ingredient) {
-                    $programIngredients[$weekDay['englishWeekDay']][$meal['meal_index']] += [$ingredientKey => $ingredient];
+                    $programIngredients[$weekDay['englishWeekDay']][$confirmedMealData['meal_index']] += [$ingredientKey => $ingredient];
                 };
             };
         };
@@ -219,10 +218,10 @@ final class Program {
         return $calendar->getWeekDays()[explode(' ', $date)[0]]['french'];
     }
     
-    private function _getMealsIndexes(int $subscriberId) {
+    private function _getConfirmedMealsData(int $subscriberId) {
         $foodPlan = new FoodPlan;
         
-        return $foodPlan->selectMealsIndexes($subscriberId);
+        return $foodPlan->selectConfirmedMeals($subscriberId);
     }
     
     /************************************************************************************

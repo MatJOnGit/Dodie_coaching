@@ -3,7 +3,7 @@ class ProgramDisplayer extends ElementFader {
         super();
         
         this._nutrientDefaultValue = 0;
-        this._nutrientsList = ['calories', 'carbs', 'fat', 'proteins', 'sodium', 'potassium', 'fibers', 'sugar'];
+        this._nutrientsList = ['calories', 'carbs', 'fat', 'proteins', 'sodium', 'fibers', 'sugar'];
         
         this._dayDataTabs = document.getElementsByClassName('day-data-tab');
         this._mealDataTabs = document.getElementsByClassName('meal-data-tab');
@@ -131,6 +131,7 @@ class ProgramDisplayer extends ElementFader {
         this.initNutrientsPerDayEntry();
         
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
+            // console.log('Nouveau repas : ' + mealKey);
             this.mealKey = mealKey;
             
             let mealData = this.dailyMealsParsedData[this.mealKey];
@@ -142,6 +143,8 @@ class ProgramDisplayer extends ElementFader {
         Object.keys(this.nutrientsList).forEach(nutrientKey => {
             this.nutrientKey = this.nutrientsList[nutrientKey];
             const rationNutrientValue = this.getNutrientValue(ingredientData);
+
+            // console.log('Nouveau nutriment (' + this.nutrientsList[nutrientKey] + ') : ' + rationNutrientValue);
             
             this.updateNutrientsPerMealData(rationNutrientValue);
             this.updateNutrientsPerDayData(rationNutrientValue);
@@ -152,6 +155,8 @@ class ProgramDisplayer extends ElementFader {
         this.initNutrientsPerMealEntry();
         
         Object.keys(mealData).forEach(ingredientKey => {
+            // console.log('-- Nouvel ingrédient : ' + mealData[ingredientKey]['name'] + ' --');
+            // console.log(mealData[ingredientKey]);
             const ingredientData = mealData[ingredientKey];
             
             this.buildIngredientsNutrientsData(ingredientData);
@@ -171,18 +176,18 @@ class ProgramDisplayer extends ElementFader {
         caloriesTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['calories'].toFixed(0) + ' calories' : '0 calories';
         caloriesTdElt.setAttribute('colspan', 2);
         const proteinsTdElt = document.createElement('td');
-        proteinsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['proteins'].toFixed(0) + 'g protéines' : '0g protéines';
+        proteinsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['proteins'].toFixed(0) + ' g protéines' : '0g protéines';
         const carbsTdElt = document.createElement('td');
-        carbsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['carbs'].toFixed(0) + 'g glucides' : '0g glucides';
+        carbsTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['carbs'].toFixed(0) + ' g glucides' : '0g glucides';
         const fatTdElt = document.createElement('td');
-        fatTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fat'].toFixed(0) + 'g lipides' : '0g lipides';
+        fatTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fat'].toFixed(0) + ' g lipides' : '0g lipides';
         
         const sugarTdElt = document.createElement('td');
-        sugarTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sugar'].toFixed(0) + 'g sucre' : '0g sucre';
+        sugarTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sugar'].toFixed(0) + ' g sucre' : '0g sucre';
         const fibersTdElt = document.createElement('td');
-        fibersTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fibers'].toFixed(0) + 'g fibres' : '0g fibres';
+        fibersTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['fibers'].toFixed(0) + ' g fibres' : '0g fibres';
         const sodiumTdElt = document.createElement('td');
-        sodiumTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sodium'].toFixed(0) + 'mg sodium' : '0mg sodium';
+        sodiumTdElt.innerText = nutrientsTab.hasOwnProperty(dataTabKey) ? nutrientsTab[dataTabKey]['sodium'].toFixed(0) + ' mg sodium' : '0mg sodium';
         
         firstNutrientsRow.appendChild(caloriesTdElt);
         secondNutrientsRow.appendChild(proteinsTdElt);
@@ -204,6 +209,7 @@ class ProgramDisplayer extends ElementFader {
         this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
         
         Object.keys(this.dailyProgramItems).forEach(dayKey => {
+            // console.log('Nouveau jour : ' + dayKey);
             this.dayKey = dayKey;
             
             this.gatherProgramMealsData();
@@ -253,9 +259,8 @@ class ProgramDisplayer extends ElementFader {
     getNutrientValue(ingredientData) {
         let isNutrientValueSet = ingredientData[this.nutrientKey] !== '-1';
         let isNutrientInGrams = ingredientData['measure'] === 'grammes';
-        let isBaseValueNotNull = ingredientData['measure_base_value'] !== '0';
         
-        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredientData[this.nutrientKey] / ingredientData['measure_base_value'] * ingredientData['quantity'] : 'Missing data' : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
+        return isNutrientValueSet ? isNutrientInGrams ?  ingredientData[this.nutrientKey] / 100 * ingredientData['ingr_quantity'] : ingredientData[this.nutrientKey] * ingredientData['ingr_quantity'] : 'Missing data';
     }
     
     hideMealTables() {

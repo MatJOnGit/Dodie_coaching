@@ -175,7 +175,7 @@ try {
                             
                             if ($program->isShoppingListRequested($request)) {
                                 $shoppingList = new App\Domain\Controllers\CostumerPanels\ShoppingList;
-
+                                
                                 $subscriberId = intval($routing->getUserId()['id']);
                                 $shoppingList->renderShoppingListPage($twig, $subscriberId);
                             }
@@ -208,6 +208,7 @@ try {
                     
                     else {
                         throw new Exception('UNKNOWN PAGE REQUESTED');
+                        // $defaultDisplayer->routeTo('nutrition');
                     }
                 }
                 
@@ -218,7 +219,7 @@ try {
                 
                 else {
                     throw new Data_Exception('INVALID USER ROLE');
-                    // $v->logoutUser();
+                    // $defaultDisplayer->routeTo('login');
                 }
             }
             
@@ -292,6 +293,7 @@ try {
                         $subscriber = new App\Entities\Subscriber;
                         
                         if ($routing->areParamsSet(['id'])) {
+                            $program = new App\Entities\Program;
                             $subscriberId = intval($routing->getParam('id'));
                             
                             if ($subscriber->isSubscriberIdValid($subscriberId)) {
@@ -1050,7 +1052,7 @@ try {
             }
         }
         
-        elseif (in_array($action, $routing::URLS['actions']['program'])) {            
+        elseif (in_array($action, $routing::URLS['actions']['program-intakes'])) {            
             if ($session->isUserLogged()) {
                 if ($routing->isRequestMatching($action, 'generate-meals')) {
                     if ($routing->areParamsSet(['id'])) {
@@ -1116,25 +1118,28 @@ try {
                                         $pdfFile = $pdfFileBuilder->generateFile($fileContent);
                                         $fileName = $programFile->getFileName($subscriberHeaders);
                                         
-                                        if ($pdfFile & $fileName) {
-                                            if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
-                                                $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
+                                        var_dump($fileContent);
+
+                                        // if ($pdfFile & $fileName) {
+                                        //     if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
+                                        //         $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
                                                 
-                                                $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
+                                        //         echo 'Erreur';
+                                        //         $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
                                                 
-                                                $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);
+                                        //         $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);
                                                 
-                                                header("location:index.php?page=subscriber-program&id=" . $subscriberId);
-                                            }
+                                        //         header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                        //     }
                                             
-                                            else {
-                                                throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
-                                            }
-                                        }
+                                        //     else {
+                                        //         throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
+                                        //     }
+                                        // }
                                         
-                                        else {
-                                            throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
-                                        }
+                                        // else {
+                                        //     throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
+                                        // }
                                     }
                                     
                                     else {

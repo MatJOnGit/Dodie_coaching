@@ -32,7 +32,7 @@
             {% for programMeal in programMeals %}
                 {% for mealTranslation in mealsTranslations %}
                     {% if mealTranslation['english'] == programMeal %}
-                        <th class='table-headers'>{{ mealTranslation['french'] | capitalize }}</th>
+                        <th class='table-headers'>{{ mealTranslation['french'] }}</th>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -51,16 +51,26 @@
                         <ul>
                             {% for ingredientKey, ingredientItem in mealItem %}
                                 <li>
-                                    {{ ingredientItem['quantity'] }}
-                                    
-                                    {% if ingredientItem['measure'] is not empty %}
-                                        {{ ingredientItem['measure'] }} de
-                                    {% endif %}
-                                    
-                                    {{ ingredientItem['french_name'] }}
-                                    
-                                    {% if ingredientItem['recipe'] is not null %}
-                                        {{ ingredientItem['recipe'] }}
+                                    {% if ingredientItem['item_type'] == 'ingredient' %}
+                                        {{ ingredientItem['quantity'] }}
+                                        
+                                        {% if ingredientItem['measure'] is not empty %}
+                                            {{ ingredientItem['measure'] }} de
+                                        {% endif %}
+                                        
+                                        {{ ingredientItem['ingr_name'] }}
+                                        
+                                        {% if ingredientItem['recipe'] is not null %}
+                                            {{ ingredientItem['recipe'] }}
+                                        {% endif %}
+                                        
+                                    {% elseif ingredientItem['item_type'] == 'recipe' %}
+                                        {{ ingredientItem['quantity'] }}
+                                        
+                                        portion{% if ingredientItem['quantity'] >= 2 %}s{% endif %} de
+                                        
+                                        {{ ingredientItem['rec_name'] }}
+                                        
                                     {% endif %}
                                 </li>
                             {% endfor %}

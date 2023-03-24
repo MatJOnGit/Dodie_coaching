@@ -40,7 +40,7 @@ final class ProgramFile {
         $program = new Program;
         
         $updatableFileStatus = ['unhosted', 'depleted'];
-        $isFileStatusFlawed = in_array($programFileStatus, $updatableFileStatus);
+        $isFileUpdatable = in_array($programFileStatus, $updatableFileStatus);
         
         $weekDays = $calendar->getWeekDays();
         $meals = $program->getProgramMeals($subscriberId);
@@ -56,7 +56,7 @@ final class ProgramFile {
             }
         }
         
-        return ($isFileStatusFlawed && $isProgramCompleted);
+        return ($isFileUpdatable && $isProgramCompleted);
     }
     
     public function renderFileContent(object $twig, object $program, object $meal, array $programData, array $subscriberHeaders, int $subscriberId) {

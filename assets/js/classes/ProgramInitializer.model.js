@@ -84,7 +84,7 @@ class ProgramInitializer extends ElementFader {
         this.pageTitleElt.textContent = 'Composition du ' + pageTitle.slice(0, 1).toLowerCase() + pageTitle.slice(1);
     }
     
-    init() { 
+    init() {
         this.editPageElts();
         this.addSubmitButtonListener();
     }

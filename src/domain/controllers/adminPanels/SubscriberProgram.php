@@ -10,8 +10,6 @@ final class SubscriberProgram extends AdminPanel {
         'programManagementApp'
     ];
     
-    // page qui affiche les nutriments par repas et par jour
-    // ex : http://localhost:8080/Dodie_coaching/public/index.php?page=subscriber-program&id=2
     public function renderSubscriberProgramPage(object $twig, object $subscriber, object $program, object $programFile, object $meal, string $fileStatus, int $subscriberId): void {
         echo $twig->render('admin_panels/subscriber-program.html.twig', [
             'stylePaths' => $this->_getAdminPanelsStyles(),

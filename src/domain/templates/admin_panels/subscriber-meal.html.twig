@@ -19,9 +19,6 @@
                 <ul class='ingredients-list'>
                     {% for ingredient in mealDetails %}
                         <li class='ingredients-list-item'>
-                        <img src="./../public/img/ingredients/{{ ingredient['type'] }}/{{ ingredient['name'] | lower }}.jpg" alt="{{ ingredient['name'] | lower }}-picture" class='ingredient-picture' />
-                        
-                        <div class='ingredient-desc'>
                             <p>
                                 {{ ingredient['quantity'] }}
                                 
@@ -29,14 +26,13 @@
                                     {{ ingredient['measure'] }} de
                                 {% endif %}
                                 
-                                {{ ingredient['french_name'] }}
+                                {{ ingredient['ingr_name'] }}
                                 
                                 {% if ingredient['recipe'] is not null %}
                                     {{ ingredient['recipe'] }}
                                 {% endif %}
                             </p>
-                        </div>
-                    </li>
+                        </li>
                     {% endfor %}
                 </ul>
             {% endif %}

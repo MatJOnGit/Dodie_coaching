@@ -39,7 +39,7 @@ final class Program {
     public function buildMealNutrientsData(string $day, string $meal, int $subscriberId) {
         $foodPlan = new FoodPlan;
         
-        return $foodPlan->selectMealIntakes($meal, $day, 'confirmed', $subscriberId);
+        return $foodPlan->selectMealIntakes($day, $meal, $subscriberId, 'confirmed');
     }
     
     public function buildProgramData(int $subscriberId) {
@@ -119,7 +119,7 @@ final class Program {
     /*****************************************************
     Transforms the list of meals in a specific subscriber
     program into an associated array containing each meals
-    *****************************************************/ 
+    *****************************************************/
     public function getProgramMeals(int $subscriberId) {
         $subscriberData = new SubscriberData;
         
@@ -138,16 +138,18 @@ final class Program {
         $day = $mealParams['day'];
         $meal = str_replace('_', ' #', $mealParams['meal']);
         
-        return $foodPlan->selectMealDetails($day, $meal, $subscriberId);
+        return $foodPlan->selectConfirmedMealDetails($day, $meal, $subscriberId);
     }
     
+    /*************************************************
+    Return the latest status of the meal in url params
+    *************************************************/
     public function getLatestMealStatus(string $meal, string $day, int $subscriberId) {
         $foodPlan = new FoodPlan;
         
         $meal = str_replace('_', ' #', $meal);
+        $mealPendingIntakes = $foodPlan->selectMealIntakes($day, $meal, $subscriberId, 'pending');
         
-        $mealPendingIntakes = $foodPlan->selectMealIntakes($meal, $day, 'pending', $subscriberId);
-
         return $mealPendingIntakes ? 'pending' : 'confirmed';
     }
     
@@ -167,10 +169,11 @@ final class Program {
         return $request === 'shopping-list';
     }
     
-    /********************************************************************************************
-    Builds an associative array containing ingredients for each meal and for each day of the week
-    ********************************************************************************************/
-
+    /*************************************************
+    Builds an associative array containing ingredients
+    for each meal and for each day of the week
+    *************************************************/
+    
     private function _buildProgramIngredients (int $subscriberId, array $weekDays, array $confirmedMealsData): array {
         $foodPlan = new FoodPlan;
         
@@ -182,7 +185,7 @@ final class Program {
             foreach($confirmedMealsData as $confirmedMealData) {
                 $programIngredients[$weekDay['englishWeekDay']] += [$confirmedMealData['meal_index'] => []];
                 
-                $mealIngredients = $foodPlan->selectMealDetails($weekDay['englishWeekDay'], $confirmedMealData['meal_name'], $subscriberId);
+                $mealIngredients = $foodPlan->selectConfirmedMealDetails($weekDay['englishWeekDay'], $confirmedMealData['meal_name'], $subscriberId);
                 
                 foreach($mealIngredients as $ingredientKey => $ingredient) {
                     $programIngredients[$weekDay['englishWeekDay']][$confirmedMealData['meal_index']] += [$ingredientKey => $ingredient];

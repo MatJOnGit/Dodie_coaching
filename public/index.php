@@ -1118,26 +1118,25 @@ try {
                                         $pdfFile = $pdfFileBuilder->generateFile($fileContent);
                                         $fileName = $programFile->getFileName($subscriberHeaders);
 
-                                        var_dump($fileContent);
-                                        // if ($pdfFile & $fileName) {
-                                        //     if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
-                                        //         $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
+                                        if ($pdfFile & $fileName) {
+                                            if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
+                                                $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
                                                 
-                                        //         $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
+                                                $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
                                                 
-                                        //         $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);
+                                                $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);
                                                 
-                                        //         header("location:index.php?page=subscriber-program&id=" . $subscriberId);
-                                        //     }
+                                                header("location:index.php?page=subscriber-program&id=" . $subscriberId);
+                                            }
                                             
-                                        //     else {
-                                        //         throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
-                                        //     }
-                                        // }
+                                            else {
+                                                throw new PdfGenerator_Exception('FAILED TO SAVE PDF FILE');
+                                            }
+                                        }
                                         
-                                        // else {
-                                        //     throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
-                                        // }
+                                        else {
+                                            throw new PdfGenerator_Exception('FAILED TO GENERATE PDF FILE');
+                                        }
                                     }
                                     
                                     else {

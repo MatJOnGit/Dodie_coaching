@@ -29,10 +29,14 @@ final class FoodPlan {
         
         return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function selectMealDetails(string $day, string $meal, int $subscriberId) {
+
+    /******************************************************************
+    Builds data of a meal with its nutrients value. Used for subscriber
+    program page and subscriber's program file construction
+    ******************************************************************/
+    public function selectConfirmedMealDetails(string $day, string $meal, int $subscriberId) {
         $db = $this->dbConnect();
-        $selectMealDetailsQuery =
+        $selectConfirmedMealDetailsQuery =
             "SELECT DISTINCT
                 fp.item_type,
                 fp.ingredient_id,
@@ -40,32 +44,37 @@ final class FoodPlan {
                 fp.quantity,
                 ingr.name AS ingr_name,
                 ingr.preparation,
-                ingr.type,
                 ingr.measure,
-                rec.name AS rec_name
+                rec.name AS rec_name,
+                nut.calories,
+                nut.fat,
+                nut.proteins,
+                nut.carbs,
+                nut.sodium,
+                nut.fibers,
+                nut.sugar
             FROM food_plans fp
             INNER JOIN accounts acc ON fp.user_id = acc.id
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             LEFT JOIN recipes rec ON fp.recipe_id = rec.recipe_id
+            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
             WHERE fp.day = ?
             AND fp.meal = ?
             AND acc.id = ?
             AND fp.portion_status = 'confirmed'";
-        $selectMealDetailsStatement = $db->prepare($selectMealDetailsQuery);
-        $selectMealDetailsStatement->execute([$day, $meal, $subscriberId]);
+        $selectConfirmedMealDetailsStatement = $db->prepare($selectConfirmedMealDetailsQuery);
+        $selectConfirmedMealDetailsStatement->execute([$day, $meal, $subscriberId]);
         
-        // var_dump($selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC));
-        return $selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $selectConfirmedMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function selectMealIntakes(string $meal, string $day, string $ingredientsStatus, int $subscriberId) {
+    public function selectMealIntakes(string $day, string $meal, int $subscriberId, string $ingredientsStatus) {
         $db = $this->dbConnect();
         $selectMealIntakesQuery = 
             "SELECT
                 fp.quantity,
-                ingr.french_name,
+                ingr.name,
                 ingr.measure,
-                nut.measure_base_value,
                 nut.calories,
                 nut.fat,
                 nut.proteins,
@@ -76,12 +85,12 @@ final class FoodPlan {
             FROM food_plans fp
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
-            WHERE fp.user_id = ?
-            AND fp.day = ?
+            WHERE fp.day = ?
             AND fp.meal = ?
+            AND fp.user_id = ?
             AND fp.portion_status = ?";
         $selectMealIntakesStatement = $db->prepare($selectMealIntakesQuery);
-        $selectMealIntakesStatement->execute([$subscriberId, $day, $meal, $ingredientsStatus]);
+        $selectMealIntakesStatement->execute([$day, $meal, $subscriberId, $ingredientsStatus]);
         
         return $selectMealIntakesStatement->fetchAll(PDO::FETCH_ASSOC);
     }

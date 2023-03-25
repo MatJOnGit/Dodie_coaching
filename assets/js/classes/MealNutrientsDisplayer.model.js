@@ -69,18 +69,18 @@ class MealNutrientsDisplayer {
         caloriesTdElt.innerText = nutrientsTab['calories'].toFixed(0) + ' calories';
         caloriesTdElt.setAttribute('colspan', 2);
         const proteinsTdElt = document.createElement('td');
-        proteinsTdElt.innerText = nutrientsTab['proteins'].toFixed(0) + 'g protéines';
+        proteinsTdElt.innerText = nutrientsTab['proteins'].toFixed(0) + ' g protéines';
         const carbsTdElt = document.createElement('td');
-        carbsTdElt.innerText = nutrientsTab['carbs'].toFixed(0) + 'g glucides';
+        carbsTdElt.innerText = nutrientsTab['carbs'].toFixed(0) + ' g glucides';
         const fatTdElt = document.createElement('td');
-        fatTdElt.innerText = nutrientsTab['fat'].toFixed(0) + 'g lipides';
+        fatTdElt.innerText = nutrientsTab['fat'].toFixed(0) + ' g lipides';
         
         const sugarTdElt = document.createElement('td');
-        sugarTdElt.innerText = nutrientsTab['sugar'].toFixed(0) + 'g sucre';
+        sugarTdElt.innerText = nutrientsTab['sugar'].toFixed(0) + ' g sucre';
         const fibersTdElt = document.createElement('td');
-        fibersTdElt.innerText = nutrientsTab['fibers'].toFixed(0) + 'g fibres';
+        fibersTdElt.innerText = nutrientsTab['fibers'].toFixed(0) + ' g fibres';
         const sodiumTdElt = document.createElement('td');
-        sodiumTdElt.innerText = nutrientsTab['sodium'].toFixed(0) + 'mg sodium';
+        sodiumTdElt.innerText = nutrientsTab['sodium'].toFixed(0) + ' mg sodium';
         
         firstNutrientsRow.appendChild(caloriesTdElt);
         secondNutrientsRow.appendChild(proteinsTdElt);

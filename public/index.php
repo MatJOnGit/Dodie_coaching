@@ -1117,14 +1117,12 @@ try {
                                         $pdfFileBuilder = new App\Services\PdfFileBuilder;
                                         $pdfFile = $pdfFileBuilder->generateFile($fileContent);
                                         $fileName = $programFile->getFileName($subscriberHeaders);
-                                        
-                                        var_dump($fileContent);
 
+                                        var_dump($fileContent);
                                         // if ($pdfFile & $fileName) {
                                         //     if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
                                         //         $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;
                                                 
-                                        //         echo 'Erreur';
                                         //         $programFile->setProgramFileData($subscriberId, $fileName, 'updated');
                                                 
                                         //         $programUpdateNotifier->sendProgramFileNotification($subscriberHeaders);

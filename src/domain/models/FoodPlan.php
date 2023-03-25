@@ -54,6 +54,7 @@ final class FoodPlan {
         $selectMealDetailsStatement = $db->prepare($selectMealDetailsQuery);
         $selectMealDetailsStatement->execute([$day, $meal, $subscriberId]);
         
+        // var_dump($selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC));
         return $selectMealDetailsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
     

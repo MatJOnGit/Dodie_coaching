@@ -131,7 +131,7 @@ class ProgramDisplayer extends ElementFader {
         this.initNutrientsPerDayEntry();
         
         Object.keys(this.dailyMealsParsedData).forEach(mealKey => {
-            // console.log('Nouveau repas : ' + mealKey);
+            console.log('Nouveau repas : ' + mealKey);
             this.mealKey = mealKey;
             
             let mealData = this.dailyMealsParsedData[this.mealKey];
@@ -144,7 +144,7 @@ class ProgramDisplayer extends ElementFader {
             this.nutrientKey = this.nutrientsList[nutrientKey];
             const rationNutrientValue = this.getNutrientValue(ingredientData);
 
-            // console.log('Nouveau nutriment (' + this.nutrientsList[nutrientKey] + ') : ' + rationNutrientValue);
+            console.log('Nouveau nutriment (' + this.nutrientsList[nutrientKey] + ') : ' + rationNutrientValue);
             
             this.updateNutrientsPerMealData(rationNutrientValue);
             this.updateNutrientsPerDayData(rationNutrientValue);
@@ -155,8 +155,8 @@ class ProgramDisplayer extends ElementFader {
         this.initNutrientsPerMealEntry();
         
         Object.keys(mealData).forEach(ingredientKey => {
-            // console.log('-- Nouvel ingrédient : ' + mealData[ingredientKey]['name'] + ' --');
-            // console.log(mealData[ingredientKey]);
+            console.log('-- Nouvel ingrédient : ' + mealData[ingredientKey]['name'] + ' --');
+            console.log(mealData[ingredientKey]);
             const ingredientData = mealData[ingredientKey];
             
             this.buildIngredientsNutrientsData(ingredientData);
@@ -209,7 +209,7 @@ class ProgramDisplayer extends ElementFader {
         this.dailyProgramItems = document.getElementsByClassName('daily-program-list');
         
         Object.keys(this.dailyProgramItems).forEach(dayKey => {
-            // console.log('Nouveau jour : ' + dayKey);
+            console.log('Nouveau jour : ' + dayKey);
             this.dayKey = dayKey;
             
             this.gatherProgramMealsData();

@@ -59,6 +59,10 @@
                                         {% endif %}
                                         
                                         {{ ingredientItem['ingr_name'] }}
+
+                                        {% if ingredientItem['preparation'] is not null %}
+                                            {{ ingredientItem['preparation'] }}
+                                        {% endif %}
                                         
                                         {% if ingredientItem['recipe'] is not null %}
                                             {{ ingredientItem['recipe'] }}

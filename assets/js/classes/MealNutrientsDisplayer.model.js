@@ -105,7 +105,7 @@ class MealNutrientsDisplayer {
 
     gatherMealData() {
         this.tableItem = document.getElementsByClassName('meal-nutrients-table')[0];
-        this.mealParsedData = this.tableItem.getAttribute('data-daily-program')
+        this.mealParsedData = this.tableItem.getAttribute('data-daily-program');
     }
 
     buildMealNutrientsData(mealData) {
@@ -136,9 +136,8 @@ class MealNutrientsDisplayer {
     getNutrientValue(ingredientData) {
         let isNutrientValueSet = ingredientData[this.nutrientKey] !== '-1';
         let isNutrientInGrams = ingredientData['measure'] === 'grammes';
-        let isBaseValueNotNull = ingredientData['measure_base_value'] !== '0';
         
-        return isNutrientValueSet ? isNutrientInGrams ? isBaseValueNotNull ? ingredientData[this.nutrientKey] / ingredientData['measure_base_value'] * ingredientData['quantity'] : 'Missing data' : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
+        return isNutrientValueSet ? isNutrientInGrams ?  ingredientData[this.nutrientKey] / 100 * ingredientData['quantity'] : ingredientData[this.nutrientKey] * ingredientData['quantity'] : 'Missing data';
     }
 
     updateNutrientsPerMealData(rationNutrientValue) {

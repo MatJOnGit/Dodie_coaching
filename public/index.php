@@ -362,10 +362,9 @@ try {
                                 $meal = new App\Entities\Meal;
                                 
                                 $latestMealStatus = $program->getLatestMealStatus($mealParsedParams['meal'], $mealParsedParams['day'], $subscriberId);
-                                $mealParam = $routing->getParam('meal');
                                 
                                 if ($latestMealStatus === 'confirmed') {
-                                    $subscriberMeal->renderSubscriberMeal($twig, $subscriber, $program, $meal, $subscriberId, $mealParam, $mealParsedParams, $latestMealStatus);
+                                    $subscriberMeal->renderSubscriberMeal($twig, $subscriber, $program, $meal, $subscriberId, $mealParsedParams, $latestMealStatus);
                                 }
                                 
                                 else {

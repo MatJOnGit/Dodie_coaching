@@ -461,6 +461,10 @@ tr:not(:first-child) td:not(:first-child) {
     width: 100%;
 }
 
+.meal-summary:last-child {
+    margin-top: 3vh;
+}
+
 .edit-btns {
     display: flex;
     flex-direction: row;

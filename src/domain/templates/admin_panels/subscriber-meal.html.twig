@@ -5,31 +5,47 @@
         <h3>{{ mealParams['meal'] | capitalize }} du {{ mealParams['day'] | split (' ')[0] | lower }}</h3>
         
         <div class='meal-summary'>
-            {% if mealNutrientsData %}
+            {% if mealsNutrientsData %}
                 <h4 class='meal-edition-header orange-bkgd'>Apports nutritionnels</h4>
                 
-                <table class='meal-nutrients-table' id='meal-nutrients' data-daily-program='{{ mealNutrientsData | json_encode() }}'></table>
+                <table class='meal-nutrients-table' id='meal-nutrients' data-daily-program='{{ mealsNutrientsData | json_encode() }}'></table>
             {% endif %}
         </div>
-
+        
         <div class='meal-summary'>            
-            {% if mealDetails is iterable %}
+            {% if mealsNutrientsData is iterable %}
                 <h4 class='meal-edition-header orange-bkgd'>Liste des ingrédients</h4>
                 
                 <ul class='ingredients-list'>
-                    {% for ingredient in mealDetails %}
+                    {% for mealData in mealsNutrientsData %}
                         <li class='ingredients-list-item'>
                             <p>
-                                {{ ingredient['quantity'] }}
-                                
-                                {% if ingredient['measure'] is not empty %}
-                                    {{ ingredient['measure'] }} de
-                                {% endif %}
-                                
-                                {{ ingredient['ingr_name'] }}
-                                
-                                {% if ingredient['recipe'] is not null %}
-                                    {{ ingredient['recipe'] }}
+                                {% if mealData['item_type'] == 'ingredient' %}
+                                    {{ mealData['quantity'] }}
+                                    
+                                    {% if mealData['measure'] is not empty %}
+                                        {{ mealData['measure'] }} de
+                                    {% endif %}
+                                    
+                                    {{ mealData['ingr_name'] }}
+                                    
+                                    {% if mealData['preparation'] is not null %}
+                                        {{ mealData['preparation'] }}
+                                    {% endif %}
+                                    
+                                    {% if mealData['recipe'] is not null %}
+                                        {{ mealData['recipe'] }}
+                                    {% endif %}
+                                    
+                                {% elseif mealData['item_type'] == 'recipe' %}
+                                    {{ mealData['quantity'] }}
+                                    
+                                    portion{% if mealData['quantity'] >= 2 %}s{% endif %} de
+                                    
+                                    {{ mealData['rec_name'] }}
+                                    
+                                    (recette)
+                                    
                                 {% endif %}
                             </p>
                         </li>

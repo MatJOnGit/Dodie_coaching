@@ -39,7 +39,7 @@ final class Program {
     public function buildMealNutrientsData(string $day, string $meal, int $subscriberId) {
         $foodPlan = new FoodPlan;
         
-        return $foodPlan->selectMealIntakes($day, $meal, $subscriberId, 'confirmed');
+        return $foodPlan->selectConfirmedMealDetails($day, $meal, $subscriberId);
     }
     
     public function buildProgramData(int $subscriberId) {

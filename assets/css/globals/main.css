@@ -21,9 +21,7 @@
 /*        THEMES        */
 /************************/
 
-.circle-btn,
-.tiny-btn,
-.large-btn,
+.btn,
 input[type=submit],
 .dashboard-btn,
 .recipe-btn span {
@@ -164,6 +162,10 @@ a {
     text-decoration: none;
 }
 
+textarea {
+    padding: 1% 2%;
+}
+
 input::placeholder {
     font-style: italic;
 }
@@ -213,7 +215,6 @@ input::placeholder {
 
 button,
 input,
-input::placeholder,
 select {
     border: none;
 }

@@ -13,6 +13,9 @@ input[type=time],
 select {
     background-color: inherit;
     margin: 1.5vh 0;
+}
+
+.centered-input {
     text-align: center;
 }
 
@@ -20,7 +23,7 @@ input[type=email],
 input[type=text],
 input[type=password],
 input[type=number] {
-    padding: 1vh 1% 1vh 1%;
+    padding: 1vh 3% 1vh 3%;
 }
 
 input[type=date] {

@@ -6,7 +6,7 @@ use App\Domain\Interfaces\Dispatcher;
 
 class CostumerPanel implements Dispatcher {
     private const COSTUMER_PANELS_STYLES = [
-        'pages/user-panels',
+        'pages/customer-panels',
         'components/header',
         'components/form',
         'components/footer'

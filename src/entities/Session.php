@@ -20,9 +20,10 @@ final class Session {
         header("location:index.php");
     }
     
-    public function logUser(array $userData): void {
+    public function logUser(array $userData, string $apiKey): void {
         $_SESSION['email'] = $userData['email'];
         $_SESSION['password'] = $userData['password'];
+        $_SESSION['api_token'] = $apiKey;
     }
     
     public function sessionize(array $userData, array $formData) {

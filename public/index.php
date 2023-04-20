@@ -410,7 +410,7 @@ try {
                             // header("location:index.php?page=subscriber-program&id=" . $subscriberId);
                         }
                     }
-
+                    
                     else if ($routing->isRequestMatching($page, 'ingredients-management')) {
                         $ingredientsManagement = new App\Domain\Controllers\AdminPanels\IngredientsManagement;
                         $ingredient = new App\Domain\Models\Ingredient;
@@ -452,8 +452,16 @@ try {
                         
                         if ($account->isAccountExisting($routingData)) {
                             if ($account->updateLoginData($routingData)) {
-                                $session->logUser($routingData);
-                                $authPanel->routeTo('dashboard');
+                                $apiKey = $account->getApiKey($routingData);
+                                
+                                if ($apiKey) {
+                                    $session->logUser($routingData, $apiKey);
+                                    $authPanel->routeTo('dashboard');
+                                }
+                                
+                                else {
+                                    throw new DB_Exception('COULD NOT GET API TOKEN');
+                                }
                             }
                             
                             else {
@@ -489,8 +497,16 @@ try {
                                 $staticData = new App\Entities\StaticData;
                                 
                                 $staticData->createStaticData($routingData);
-                                $session->logUser($routingData);
-                                $authPanel->routeTo('dashboard');
+                                $apiKey = $account->getApiKey($routingData);
+                                
+                                if ($apiKey) {
+                                    $session->logUser($routingData, $apiKey);
+                                    $authPanel->routeTo('dashboard');
+                                }
+                                
+                                else {
+                                    throw new DB_Exception('COULD NOT GET API TOKEN');
+                                }
                             }
                             
                             else {
@@ -529,8 +545,16 @@ try {
                             if ($tokenData) {
                                 if ($token->isLastTokenOld($tokenData)) {
                                     if ($token->eraseToken($userData['email'])) {
-                                        $session->logUser($userData);
-                                        $defaultDisplayer->routeTo('send-token');
+                                        $apiKey = $account->getApiKey($routingData);
+                                
+                                        if ($apiKey) {
+                                            $session->logUser($routingData, $apiKey);
+                                            $defaultDisplayer->routeTo('send-token');
+                                        }
+                                        
+                                        else {
+                                            throw new DB_Exception('COULD NOT GET API TOKEN');
+                                        }
                                     }
                                     
                                     else {
@@ -682,7 +706,7 @@ try {
             if ($session->isUserLogged()) {
                 if ($routing->isRequestMatching($action, 'add-report')) {
                     $progressForm = new App\Entities\ProgressForm;
-
+                    
                     if ($progressForm->areBaseFormDataSet()) {
                         $baseFormData = $progressForm->getBaseFormData();
                         
@@ -731,7 +755,7 @@ try {
                 elseif ($routing->isRequestMatching($action, 'delete-report')) {
                     if ($routing->areParamsSet(['id'])) {
                         $reportId = $routing->getParam('id');
-
+                        
                         if ($progressReport->isReportIdValid($reportId)) {
                             $progressHistory = $progressReport->getHistory();
                             
@@ -769,7 +793,7 @@ try {
             
             if ($session->isUserLogged()) {
                 $meetingBookingForm = new App\Entities\MeetingBookingForm;
-
+                
                 if ($routing->isRequestMatching($action, 'book-appointment')) {
                     $dateData = $meetingBookingForm->getDateData();
                     
@@ -814,7 +838,7 @@ try {
                         if ($meetingData) {
                             $meetingManagement = new App\Domain\Controllers\AdminPanels\MeetingManagement;
                             $meeting = new App\Entities\Meeting;
-
+                            
                             if ($meeting->areDateDataValid($meetingData)) {
                                 if (!$meeting->addMeetingSlot($meetingData)) {
                                     throw new DB_Exception('FAILED TO INSERT A NEW MEETING');
@@ -881,7 +905,7 @@ try {
                 $adminPanel = new App\Domain\Controllers\AdminPanels\AdminPanel;
                 $appliance = new App\Entities\Appliance;
                 $appResponder = new App\Services\ApplianceResponder;
-
+                
                 if ($routing->isRequestMatching($action, 'reject-appliance')) {
                     if ($routing->areParamsSet(['id'])) {
                         $applicantId = intval($routing->getParam('id'));
@@ -1116,7 +1140,7 @@ try {
                                         $pdfFileBuilder = new App\Services\PdfFileBuilder;
                                         $pdfFile = $pdfFileBuilder->generateFile($fileContent);
                                         $fileName = $programFile->getFileName($subscriberHeaders);
-
+                                        
                                         if ($pdfFile & $fileName) {
                                             if ($programFile->savePdf($fileContent, $fileName, $subscriberHeaders)) {
                                                 $programUpdateNotifier = new App\Services\ProgramUpdateNotifier;

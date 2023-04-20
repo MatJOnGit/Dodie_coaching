@@ -21,6 +21,10 @@ footer p {
     color: hsla(0, 0%, 0%, 1);
 }
 
+.input-helper-dismiss-btn {
+    color: hsla(9, 71%, 70%, 1);
+}
+
 .blue-bkgd,
 table,
 footer {
@@ -48,6 +52,27 @@ footer {
     border: 1px solid hsla(0, 0%, 0%, 1);
 }
 
+.wrap-btn {
+    border: 1px solid hsla(0, 1%, 79%, 1);
+}
+
+.appliance-card {
+    border: 1px solid hsla(0, 0%, 50%, 1);
+}
+
+input {
+    border-bottom: 1px solid hsla(0, 0%, 50%, 1);
+}
+
+tr:first-child::after {
+    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+tr:not(:first-child) td:not(:first-child) {
+    border-left: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+/* transformer en input simple ? */
 .date-container > input,
 .program-build-form > input {
     border-bottom: 1px solid hsla(0, 0%, 0%, 1);
@@ -168,7 +193,6 @@ h2 {
 
 .appliance-card {
     align-items: center;
-    border: 1px solid grey;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -385,7 +409,6 @@ tr:first-child {
 }
 
 tr:first-child::after {
-    border-bottom: 1px solid hsla(0, 0%, 100%, 1);
     bottom: 0;
     content: '';
     height: 1px;
@@ -394,17 +417,12 @@ tr:first-child::after {
     width: 70%;
 }
 
-tr:not(:first-child) td:not(:first-child) {
-    border-left: 1px solid hsla(0, 0%, 100%, 1);
-}
-
 .day-data-tab,
 .nutrients-toggle {
     margin-top: 1vh;
 }
 
 .wrap-btn {
-    border: 1px solid hsla(0, 1%, 79%, 1);
     margin-bottom: 2vh;
 }
 
@@ -438,7 +456,6 @@ tr:not(:first-child) td:not(:first-child) {
 
 .input-helper-dismiss-btn {
     border-radius: 50%;
-    color: hsla(9, 71%, 70%, 1);
     height: 30px;
     width: 30px;
 }
@@ -474,4 +491,54 @@ tr:not(:first-child) td:not(:first-child) {
 .meal-edition-header,
 #meal-nutrients {
     margin-bottom: 4%;
+}
+
+/**************************************/
+/*       INGREDIENTS MANAGEMENT       */
+/**************************************/
+
+#search-bar,
+#search-results {
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+}
+
+#search-bar {
+    justify-content: center;
+}
+
+#search-results {
+    flex-direction: column;
+    align-items: center;
+}
+
+#search-bar input {
+    width: 80%;
+}
+
+.ingredient-card {
+    width: 90%;
+    height: 6vh;
+    border: 1px solid hsla(0, 0%, 50%, 1);
+    margin-bottom: 5px;
+    padding: 10px 5%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ingredient-name {
+    font-size: 1.2em;
+    color: hsla(185, 51%, 47%, 1);
+    margin: 0;
+}
+
+.ingredient-card p {
+    font-size: 0.9em;
+}
+
+#create-ingredient-btn {
+    margin-top: 10px;
 }

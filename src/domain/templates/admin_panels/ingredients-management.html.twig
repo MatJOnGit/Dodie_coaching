@@ -4,15 +4,12 @@
     <div class='admin-panel'>
         <h3>Rechercher un ingrédient</h3>
         
-        <form class='admin-form' method='post'>
-            <select name='search-type'>
-                <option value='' disabled selected hidden>Choisissez un type d'ingrédient</option>
-            </select>
-
-            <button class='btn circle-btn blue-bkgd' id='search-ingredient-btn'>
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
+        <div id='search-bar' data-api-token='{{ apiToken }}'>
+            <input type='text' name='ingredient-name' placeholder='ingrédient' id='ingredient-name' required></input>
+        </div>
+        
+        <div id='search-results'>
+        </div>
     </div>
 {% endblock pageContent %}
 

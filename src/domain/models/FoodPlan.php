@@ -29,7 +29,7 @@ final class FoodPlan {
         
         return $selectIngredientsCountStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    
     /******************************************************************
     Builds data of a meal with its nutrients value. Used for subscriber
     program page and subscriber's program file construction
@@ -57,7 +57,7 @@ final class FoodPlan {
             INNER JOIN accounts acc ON fp.user_id = acc.id
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
             LEFT JOIN recipes rec ON fp.recipe_id = rec.recipe_id
-            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
+            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.id
             WHERE fp.day = ?
             AND fp.meal = ?
             AND acc.id = ?
@@ -84,7 +84,7 @@ final class FoodPlan {
                 nut.sugar
             FROM food_plans fp
             LEFT JOIN ingredients ingr ON fp.ingredient_id = ingr.id
-            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.ingredient_id
+            LEFT JOIN nutrients nut ON fp.ingredient_id = nut.id
             WHERE fp.day = ?
             AND fp.meal = ?
             AND fp.user_id = ?

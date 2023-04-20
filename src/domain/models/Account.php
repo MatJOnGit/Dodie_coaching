@@ -4,6 +4,7 @@ namespace App\Domain\Models;
 
 use App\Mixins;
 use PDO;
+use PDOException;
 
 final class Account {
     use Mixins\Database;
@@ -12,12 +13,45 @@ final class Account {
         return $this->connect();
     }
     
-    public function insertAccount(string $email, string $hashedPassword) {
+    /***********************************************************************************
+    Tries to add a new account in accounts table with the email and the hashed password.
+    If successful, also tries to add a new api token for a guest with the same id.
+    If one fails, both requests are reversed.
+    ***********************************************************************************/
+    public function insertAccount(string $email, string $hashedPassword, string $apiKey) {
         $db = $this->dbConnect();
-        $insertAccountQuery = "INSERT INTO accounts (email, password) VALUES (?, ?)";
-        $insertAccountStatement = $db->prepare($insertAccountQuery);
         
-        return $insertAccountStatement->execute([$email, $hashedPassword]);
+        try {
+            $db->beginTransaction();
+            
+            $insertAccountQuery = "INSERT INTO accounts (email, password) VALUES (?, ?)";
+            $insertAccountStatement = $db->prepare($insertAccountQuery);
+            $insertAccountStatement->execute([$email, $hashedPassword]);
+            
+            $accountId = $db->lastInsertId();
+            
+            $insertTokenQuery = "INSERT INTO api_tokens (id, token, api_permissions) VALUES (?, ?, ?)";
+            $insertTokenStatement = $db->prepare($insertTokenQuery);
+            $insertTokenStatement->execute([$accountId, $apiKey, 'guest']);
+            
+            $db->commit();
+            
+            return true;
+        }
+        
+        catch (PDOException $e) {
+            $db->rollBack();
+            return false;
+        }
+    }
+    
+    public function selectApiKey(string $email) {
+        $db = $this->dbConnect();
+        $selectApiKeyQuery = "SELECT apit.token FROM accounts acc INNER JOIN api_tokens apit ON acc.id = apit.id WHERE acc.email = ?";
+        $selectApiKeyStatement = $db->prepare($selectApiKeyQuery);
+        $selectApiKeyStatement->execute([$email]);
+
+        return $selectApiKeyStatement->fetch(PDO::FETCH_ASSOC);
     }
     
     public function selectEmail(string $email) {

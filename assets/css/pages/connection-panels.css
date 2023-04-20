@@ -59,12 +59,13 @@ footer li {
     border: solid 2px hsla(0, 0%, 100%, 1);
 }
 
-input[type=email],
-input[type=text],
-input[type=password],
-input[type=number],
+input,
 select {
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
+}
+
+input::placeholder {
+    text-align: center;
 }
 
 /********************************/

@@ -413,9 +413,14 @@ try {
                     
                     else if ($routing->isRequestMatching($page, 'ingredients-management')) {
                         $ingredientsManagement = new App\Domain\Controllers\AdminPanels\IngredientsManagement;
-                        $ingredient = new App\Domain\Models\Ingredient;
                         
-                        $ingredientsManagement->renderIngredientsManagementPage($twig, $ingredient);
+                        $ingredientsManagement->renderIngredientsManagementPage($twig);
+                    }
+
+                    else if ($routing->isRequestMatching($page, 'recipes-management')) {
+                        $recipesManagement = new App\Domain\Controllers\AdminPanels\RecipesManagement;
+                        
+                        $recipesManagement->renderRecipesManagementPage($twig);
                     }
                 }
                 

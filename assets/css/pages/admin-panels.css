@@ -517,9 +517,8 @@ tr:first-child::after {
     width: 80%;
 }
 
-.ingredient-card {
+.food-card {
     width: 90%;
-    height: 6vh;
     border: 1px solid hsla(0, 0%, 50%, 1);
     margin-bottom: 5px;
     padding: 10px 5%;
@@ -529,16 +528,21 @@ tr:first-child::after {
     justify-content: center;
 }
 
-.ingredient-name {
+.food-name {
     font-size: 1.2em;
     color: hsla(185, 51%, 47%, 1);
     margin: 0;
 }
 
-.ingredient-card p {
+.food-card p {
     font-size: 0.9em;
 }
 
-#create-ingredient-btn {
+.food-card ul {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+#create-food-item-btn {
     margin-top: 10px;
 }

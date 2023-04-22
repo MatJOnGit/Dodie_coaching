@@ -1,1 +1,0 @@
-const ingredientManager = new IngredientManager;

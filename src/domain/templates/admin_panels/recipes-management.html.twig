@@ -1,0 +1,18 @@
+{% extends 'common.html.twig' %}
+
+{% block pageContent %}
+    <div class='admin-panel'>
+        <h3>Rechercher une recette</h3>
+        
+        <div id='search-bar' data-api-token='{{ apiToken }}'>
+            <input type='text' name='recipe-name' placeholder='recette' id='recipe-name' required></input>
+        </div>
+        
+        <div id='search-results'>
+        </div>
+    </div>
+{% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

@@ -29,13 +29,4 @@ final class Ingredient {
         
         return $selectMealsIngredientsStatement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function selectIngredientsTypes() {
-        $db = $this->dbConnect();
-        $selectIngredientsTypesQuery = "SELECT DISTINCT(type) FROM ingredients";
-        $selectIngredientsTypesStatement = $db->prepare($selectIngredientsTypesQuery);
-        $selectIngredientsTypesStatement->execute();
-
-        return $selectIngredientsTypesStatement->fetchAll(PDO::FETCH_ASSOC);
-    }
 }

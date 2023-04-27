@@ -6,6 +6,7 @@ final class RecipesManagement extends AdminPanel {
     private const RECIPES_MANAGEMENT_SCRIPTS = [
         'classes/KitchenManager.model',
         'classes/RecipesManager.model',
+        'classes/RecipeEditor.model.js',
         'recipesManagementApp'
     ];
 

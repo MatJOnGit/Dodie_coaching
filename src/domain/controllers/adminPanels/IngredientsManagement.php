@@ -4,8 +4,11 @@ namespace App\Domain\Controllers\AdminPanels;
 
 final class IngredientsManagement extends AdminPanel {
     private const INGREDIENTS_MANAGEMENT_SCRIPTS = [
+        'classes/ElementFader.model',
         'classes/KitchenManager.model',
         'classes/IngredientsManager.model',
+        'classes/KitchenEditor.model',
+        'classes/IngredientEditor.model',
         'ingredientsManagementApp'
     ];
     

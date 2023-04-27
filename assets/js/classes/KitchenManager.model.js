@@ -4,30 +4,42 @@ class KitchenManager {
     constructor() {
         this._searchResults = document.getElementById('search-results');
         this._apiToken = document.getElementById('search-bar').getAttribute('data-api-token');
-        this._requestOptions = [
+        this._getIngredientDataRequestOptions = [
             {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + this._apiToken
+                    'Authorization': 'Bearer ' + this.apiToken
                 }
             }
         ];
     }
     
-    get requestOptions() {
-        return this._requestOptions;
+    get getIngredientDataRequestOptions() {
+        return this._getIngredientDataRequestOptions;
+    }
+
+    get searchResults() {
+        return this._searchResults;
+    }
+
+    get apiToken() {
+        return this._apiToken;
+    }
+
+    get onlyNumbersRegex() {
+        return this.#onlyNumbersRegex;
     }
     
     showInputError() {
-        let alert = document.createElement('div');
-        alert.innerText = 'Le champ ne peut pas contenir que des chiffres.';
-        alert.style.color = 'red';
-        this._searchResults.appendChild(alert);
+        let errorElt = document.createElement('div');
+        errorElt.innerText = 'Le champ ne peut pas contenir que des chiffres.';
+        errorElt.style.color = 'red';
+        this.searchResults.appendChild(errorElt);
     }
     
     clearSearchResults() {
-        this._searchResults.innerHTML = '';
+        this.searchResults.innerHTML = '';
     }
     
     checkInputValidity(inputValue) {
@@ -39,7 +51,7 @@ class KitchenManager {
             return false;
         }
         
-        if (this.#onlyNumbersRegex.test(inputValue)) {
+        if (this.onlyNumbersRegex.test(inputValue)) {
             return false;
         }
         
@@ -49,12 +61,14 @@ class KitchenManager {
     async sendRequest(endpoint) {
         try {
             let response = await fetch(endpoint, {
-                method: this.requestOptions[0].method,
-                headers: this.requestOptions[0].headers
+                method: this.getIngredientDataRequestOptions[0].method,
+                headers: this.getIngredientDataRequestOptions[0].headers
             });
             
             return response.json();
-        } catch (error) {
+        }
+        
+        catch (error) {
             console.error(error);
         }
     }

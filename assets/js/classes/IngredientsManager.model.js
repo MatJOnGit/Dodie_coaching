@@ -1,6 +1,6 @@
 class IngredientsManager extends KitchenManager {
     #mealFusionBaseUri = 'http://localhost:8080/MealFusion/v1/ingredients?name=';
-
+    
     constructor() {
         super();
         
@@ -39,22 +39,27 @@ class IngredientsManager extends KitchenManager {
     manageApiResponse(response) {
         if (response['status'] === 200 && response['data'].length > 0) {
             Object(response['data']).forEach(ingredient => {
-                this.addIngredientCard(ingredient);
+                this.buildIngredientCard(ingredient);
             });
         }
         
         else {
             let noResults = document.createElement('div');
             noResults.innerText = 'Aucun résultat trouvé';
-            this._searchResults.appendChild(noResults);
+            this.searchResults.appendChild(noResults);
         }
         
         this.addCreateIngredientButton();
     }
     
-    addIngredientCard(ingredient) {
-        let ingredientCard = document.createElement('div');
+    buildIngredientCard(ingredient) {
+        let ingredientCard = document.createElement('button');
         ingredientCard.classList.add('food-card');
+        ingredientCard.id = ingredient.id;
+        ingredientCard.addEventListener('click', () => {
+            let ingredientEditor = new IngredientEditor(this.apiToken, this._getIngredientDataRequestOptions, ingredient.id);
+            ingredientEditor.showIngredientEditionForm();
+        })
         
         let ingredientName = document.createElement('h4');
         ingredientName.classList.add('food-name');

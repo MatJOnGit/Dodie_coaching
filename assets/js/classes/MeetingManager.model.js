@@ -38,11 +38,11 @@ class MeetingManager extends ElementFader {
         this.addMeetingBtn.addEventListener('click', () => {
             this.displayAddMeetingElements();
             this.triggerMeetingAdditionButtons();
-
+            
             if (this.incomingMeetingsTab) {
                 this.addMeetingDayListener();
             }
-
+            
             this.addMeetingSlotSubmitTest();
         })
     }

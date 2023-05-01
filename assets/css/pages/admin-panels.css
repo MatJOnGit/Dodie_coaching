@@ -618,3 +618,8 @@ tr:first-child::after {
 .ingredient-param option {
     font-size: 1.2em;
 }
+
+.search-bar-alert {
+    color: hsla(336, 100%, 29%, 1);
+    margin: 0 0 15%;
+}

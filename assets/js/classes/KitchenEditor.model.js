@@ -1,60 +1,32 @@
-class KitchenEditor extends ElementFader {
-    #onlyNumbersRegex = /^\d+$/;
-
-    constructor(apiToken, itemId) {
-        super();
-
-        this._apiToken = apiToken;
-        this._itemId = itemId;
-        
+class KitchenEditor {
+    constructor(apiKey, itemId) {
         this._adminPanel = document.getElementsByClassName('admin-panel')[0];
-    }
-    
-    get apiToken() {
-        return this._apiToken;
-    }
-
-    get onlyNumbersRegex() {
-        return this.#onlyNumbersRegex;
-    }
-    
-    set apiToken(key) {
-        this._apiToken = key;
-    }
-    
-    get itemId() {
-        return this._itemId;
-    }
-    
-    set itemId(id) {
-        this._itemId = id;
+        this._apiKey = apiKey;
+        this._itemId = itemId;
+        this._onlyNumbersRegex = /^\d+$/;
     }
     
     get adminPanel() {
         return this._adminPanel;
     }
-
-    verifyFormData() {
-        const inputValidationResults = Array.from(document.querySelectorAll("#ingredient-form input"))
-        .map(input => ({
-            value: input.value,
-            expectedType: input.type,
-        }))
-        .every(({ expectedType, value }) => this.validateType(value, expectedType));
-        
-        return inputValidationResults;
+    
+    get apiKey() {
+        return this._apiKey;
     }
     
-    validateType(value, type) {
-        console.log(value);
-        console.log(type);
-        switch (type) {
-            case 'number':
-                return !isNaN(value);
-            case 'text':
-                return isNaN(value) || value === '';
-            default:
-                return false;
-        }
+    get itemId() {
+        return this._itemId;
+    }
+
+    get onlyNumbersRegex() {
+        return this._onlyNumbersRegex;
+    }
+
+    set itemId(itemId) {
+        this._itemId = itemId;
+    }
+    
+    clearPanel() {
+        this.adminPanel.innerHTML = '';
     }
 }

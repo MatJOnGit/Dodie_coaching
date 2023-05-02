@@ -4,17 +4,10 @@ class IngredientEditor extends KitchenEditor {
         
         this._apiBaseUri = 'http://localhost:8080/MealFusion/v1/ingredients?id=';
         this._itemType = 'ingredient';
-        this._getRequestOptions = [
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + this.apiKey
-                }
-            }
-        ];
+        
+        this._apiHandler = new APIHandler(this.apiKey);
     }
-
+    
     get itemType() {
         return this._itemType;
     }
@@ -23,58 +16,46 @@ class IngredientEditor extends KitchenEditor {
         return this._apiBaseUri;
     }
     
-    get getRequestOptions() {
-        return this._getRequestOptions;
+    get apiHandler() {
+        return this._apiHandler;
     }
     
-    get onlyNumbersRegex() {
-        return this._onlyNumbersRegex;
+    get ingredientDataForm() {
+        return this._ingredientDataForm;
     }
     
-    get response() {
-        return this._response;
+    set ingredientDataForm(dataForm) {
+        this._ingredientDataForm = dataForm;
+    }
+    
+    get getRequestResponse() {
+        return this._getRequestResponse;
     }
     
     get ingredientData() {
-        return this._response['data'];
+        return this._getRequestResponse['data'];
     }
     
-    get responseStatus() {
-        return this._response['status'];
+    get getRequestStatus() {
+        return this._getRequestResponse['status'];
     }
     
-    set response(response) {
-        this._response = response;
+    get putRequestResponse() {
+        return this._putRequestResponse;
     }
     
-    async sendIngredientDataRequest(endpoint, method, body = '') {
-        try {
-            const options = {
-                method: method,
-                headers: this.getRequestOptions[0].headers,
-            }
-            
-            if (body) {
-                options.body = body;
-            }
-            
-            const response = await fetch(endpoint, options);
-            return response.json();
-        }
-        
-        catch (error) {
-            console.error(error);
-        }
+    set getRequestResponse(response) {
+        this._getRequestResponse = response;
     }
     
-    verifyApiResponse() {
-        return (this.responseStatus === 200);
+    set putRequestResponse(response) {
+        this._putRequestResponse = response;
     }
     
     async showIngredientEditionForm() {
         this.clearPanel();
-        const endpoint = this.apiBaseUri + this.itemId;
-        this.response = await this.sendIngredientDataRequest(endpoint, 'GET');
+        const endpoint = `${this.apiBaseUri}${this.itemId}`;
+        this.getRequestResponse = await this.apiHandler.sendGetRequest(endpoint);
         
         if (this.verifyApiResponse()) {
             this.addEditionModeTitle();
@@ -84,8 +65,12 @@ class IngredientEditor extends KitchenEditor {
         }
         
         else {
-            this.showError()
+            this.showError('Ressource indisponible')
         }
+    }
+    
+    verifyApiResponse() {
+        return (this.getRequestStatus === 200);
     }
     
     addEditionModeTitle() {
@@ -111,6 +96,7 @@ class IngredientEditor extends KitchenEditor {
         this.ingredientDataForm.appendChild(formValidationBlock);
         
         this.adminPanel.appendChild(this.ingredientDataForm);
+        console.log(this.ingredientDataForm);
     }
     
     buildGeneralParamsSection() {
@@ -236,8 +222,7 @@ class IngredientEditor extends KitchenEditor {
                 id: 'note',
                 label: 'Note',
                 type: 'text',
-                value: this.ingredientData.data_source,
-                required: true
+                value: this.ingredientData.data_source
             },
         };
         
@@ -313,55 +298,33 @@ class IngredientEditor extends KitchenEditor {
         const otherMeasureBlock = document.getElementById('other-measure-block');
         const nutrientsParamsTitle = document.getElementById('nutrients-params-title');
         
-        const updateNutrientsParamsTItle = () => {
-            switch (measureSelect.value) {
-                case 'grams':
-                    nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>100 grammes de ${this.ingredientData.name}`;
-                    break;
-                default :
-                    nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>1 ${this.ingredientData.name}`;
-                    break;
+        const updateNutrientsParamsTitle = () => {
+            if (measureSelect.value === 'grams') {
+                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>100 grammes de ${this.ingredientData.name}`;
+            }
+            else {
+                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>1 ${this.ingredientData.name}`;
             }
         }
         
         const toggleOtherMeasureBlock = () => {
-            switch (measureSelect.value) {
-                case 'others':
-                    otherMeasureBlock.classList.remove('hidden');
-                    break;
-                default:
-                    otherMeasureBlock.classList.add('hidden');
+            if (measureSelect.value === 'others') {
+                otherMeasureBlock.classList.remove('hidden');
+            }
+            else {
+                otherMeasureBlock.classList.add('hidden');
             }
         }
         
         measureSelect.addEventListener('change', () => {
             toggleOtherMeasureBlock()
-            updateNutrientsParamsTItle();
+            updateNutrientsParamsTitle();
         });
-    }
-
-
-
-
-    
-
-    async editIngredientData() {
-        const body = this.buildBodyOption();
-        this.response = await this.sendIngredientDataRequest(this.endpoint, 'PUT', body);
-        
-        if (this.verifyApiResponse()) {
-            
-        }
-        
-        else {
-            this.showError()
-        }
     }
     
     addFormButtonsListener() {
         const saveButton = document.getElementById('save-ingredient-params-btn');
         const deleteButton = document.getElementById('delete-ingredient-btn');
-        console.log(deleteButton);
         const newSearchButton = document.getElementById('new-search-btn');
         const formActionsBlock = document.getElementById('form-actions-block');
         const actionConfirmationBlock = document.getElementById('action-confirmation-block');
@@ -378,11 +341,14 @@ class IngredientEditor extends KitchenEditor {
         addClickListener(cancelDeletionButton, () => this.handleCancelDeletionBtnClick(formActionsBlock, newSearchButton, actionConfirmationBlock));
         addClickListener(confirmDeletionButton, () => this.handleConfirmDeletionBtnClick());
     }
-
-    handleSaveBtnClick() {
+    
+    async handleSaveBtnClick() {
         if (this.verifyFormData()) {
             console.log("les données ont l'air valides");
-            this.editIngredientData();
+            const endpoint = `${this.apiBaseUri}${this.itemId}`;
+            const body = this.buildBodyOption();
+            this.putRequestResponse = await this.apiHandler.sendPutRequest(endpoint, body);
+            this.managePutIngredientResponse(this.putRequestResponse)
         }
         
         else {
@@ -410,6 +376,13 @@ class IngredientEditor extends KitchenEditor {
         // this.sendIngredientDeletionRequest(this.endpoint, 'DELETE');
     }
     
+    managePutIngredientResponse(putRequestResponse) {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+    
     verifyFormData() {
         const inputValidationResults = Array.from(document.querySelectorAll("#ingredient-form input"))
         .map(input => ({
@@ -422,8 +395,6 @@ class IngredientEditor extends KitchenEditor {
     }
     
     validateType(value, type) {
-        console.log(value);
-        console.log(type);
         switch (type) {
             case 'number':
                 return !isNaN(value);
@@ -434,9 +405,9 @@ class IngredientEditor extends KitchenEditor {
         }
     }
     
-    showError() {
+    showError(error) {
         const errorElt = document.createElement('div');
-        errorElt.textContent = 'Ressource indisponible';
+        errorElt.textContent = error;
         
         const backButton = document.createElement('button');
         backButton.textContent = 'Retour';
@@ -447,65 +418,40 @@ class IngredientEditor extends KitchenEditor {
         this.adminPanel.appendChild(errorElt);
         this.adminPanel.appendChild(backButton);
     }
-
-    verifyFormData() {
-        const inputValidationResults = Array.from(document.querySelectorAll("#ingredient-form input"))
-        .map(input => ({
-            value: input.value,
-            expectedType: input.type,
-        }))
-        .every(({ expectedType, value }) => this.validateType(value, expectedType));
-        
-        return inputValidationResults;
-    }
-    
-    validateType(value, type) {
-        console.log(value);
-        console.log(type);
-        switch (type) {
-            case 'number':
-                return !isNaN(value);
-            case 'text':
-                return isNaN(value) || value === '';
-            default:
-                return false;
-        }
-    }
     
     buildBodyOption() {
-        const inputs = Array.from(this.ingredientDataForm.querySelectorAll("#ingredient-form input"));
+        const inputs = Array.from(this.ingredientDataForm.querySelectorAll(".ingredient-param input"));
         const body = {};
+        const measureSelect = this.ingredientDataForm.querySelector('#measure-select');
+        const selectedOption = measureSelect.options[measureSelect.selectedIndex];
+        const selectedValue = selectedOption.value;
         
-        // Gets the true value of each input.
         inputs.forEach(input => {
-            body[input.id] = this.onlyNumbersRegex.test(input.value) ? parseInt(input.value) : input.value;
-        });
-
-        // Replaces empty values of preparation and note keys with a NULL value
-        ["preparation", "note"].forEach(key => {
-            if (body[key] === '') {
-                body[key] = null;
+            let value = input.value;
+            if (this.onlyNumbersRegex.test(value)) {
+                value = parseInt(value);
             }
+            body[input.id] = value;
         });
         
-        // Adds a default value if "other" option is not selected
-        if (!body.hasOwnProperty('measure')) {
-            const select = this.ingredientDataForm.querySelector("#measure-select");
-            const selectedOption = select.options[select.selectedIndex];
-            const selectedValue = selectedOption.value;
-            
-            switch (selectedValue) {
-                case 'grams':
-                    body['measure'] = 'grammes'
-                    break;
-                case 'no-unit':
-                    body['measure'] = null
-                    break;
-                default :
-                    break;
-            }
+        body.preparation = body.preparation || null;
+        body.note = body.note || null;
+        
+        switch (selectedValue) {
+            case 'grams':
+                body.measure = selectedOption.textContent;
+                break;
+            case 'no-unit':
+                body.measure = null;
+                break;
+            default:
+                const otherMeasureInput = this.ingredientDataForm.querySelector('#other-measure');
+                body.measure = otherMeasureInput.value;
+                break;
         }
         
-        return JSON.stringify(body);
+        delete body['other-measure'];
+        
+        return body;
     }
 }

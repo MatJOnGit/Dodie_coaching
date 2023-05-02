@@ -1,13 +1,8 @@
 class KitchenElementsBuilder {
-    static buildIngredientCard(apiKey, ingredient) {
+    static buildIngredientCard(ingredient) {
         const ingredientCard = document.createElement('button');
         ingredientCard.classList.add('food-card');
         ingredientCard.id = ingredient.id;
-        
-        const ingredientEditor = new IngredientEditor(apiKey, ingredient.id);
-        ingredientCard.addEventListener('click', () => {
-            ingredientEditor.showIngredientEditionForm();
-        })
         
         const ingredientName = document.createElement('h4');
         ingredientName.classList = 'food-name';
@@ -42,10 +37,11 @@ class KitchenElementsBuilder {
     }
     
     static buildInputBlock(inputParams, itemType) {
+        const value = inputParams.value ?? '';
         const inputBlock = `
             <div id='${inputParams.id}-block' class='${itemType}-param ${inputParams.hidden && inputParams.hidden === true ? 'hidden' : ''}'>
                 <label>${inputParams.label} :</label>
-                <input type='${inputParams.type}' id='${inputParams.id}' name='${inputParams.type}-${inputParams.id}' value='${inputParams.value}' ${inputParams.required ? ' required' : ''}>
+                <input type='${inputParams.type}' id='${inputParams.id}' name='${inputParams.type}-${inputParams.id}' value='${inputParams.value === null ? '' : inputParams.value}' ${inputParams.required ? ' required' : ''}>
             </div>
         `;
         
@@ -59,7 +55,7 @@ class KitchenElementsBuilder {
         const optionsBlocks = selectParams.options.map(option => {
             return `<option value="${option.value}" ${option.text === defaultOption ? 'selected' : ''}>${option.text}</option>`;
         }).join('');
-      
+        
         const selectBlock = `
             <div class="${itemType}-param">
                 <label for="${selectParams.id}-select">${selectParams.label} :</label>

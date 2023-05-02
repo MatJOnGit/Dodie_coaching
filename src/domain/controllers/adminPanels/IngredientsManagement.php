@@ -4,6 +4,7 @@ namespace App\Domain\Controllers\AdminPanels;
 
 final class IngredientsManagement extends AdminPanel {
     private const INGREDIENTS_MANAGEMENT_SCRIPTS = [
+        'classes/APIHandler.model',
         'classes/KitchenElementsBuilder.model',
         'classes/SearchEngine.model',
         'classes/IngredientsFinder.model',

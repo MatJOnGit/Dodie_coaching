@@ -59,7 +59,7 @@ class IngredientEditor extends KitchenEditor {
         
         if (this.verifyApiResponse()) {
             this.addEditionModeTitle();
-            this.buildEditionForm();
+            this.addEditionForm();
             this.addMeasureSelectListener();
             this.addFormButtonsListener();
         }
@@ -82,21 +82,20 @@ class IngredientEditor extends KitchenEditor {
         this.adminPanel.appendChild(ingredientTitle);
     }
     
-    buildEditionForm() {
+    addEditionForm() {
         this.ingredientDataForm = document.createElement('form');
         this.ingredientDataForm.id = 'ingredient-form';
         this.ingredientDataForm.action = 'javascript:void(0)';
         
+        const confirmDeletionMessage = 'Etes-vous sûr de vouloir supprimer cet ingrédient ?';
+        
         const generalParamsSection = this.buildGeneralParamsSection();
         const nutrientsParamsSection = this.buildNutrientsParamsSection();
-        const formValidationBlock = this.buildFormValidationBlock();
+        const formValidationBlock = KitchenElementsBuilder.buildValidationBlock('ingredient', confirmDeletionMessage);
         
-        this.ingredientDataForm.appendChild(generalParamsSection);
-        this.ingredientDataForm.appendChild(nutrientsParamsSection);
-        this.ingredientDataForm.appendChild(formValidationBlock);
+        this.ingredientDataForm.append(generalParamsSection, nutrientsParamsSection, formValidationBlock);
         
-        this.adminPanel.appendChild(this.ingredientDataForm);
-        console.log(this.ingredientDataForm);
+        this.adminPanel.append(this.ingredientDataForm);
     }
     
     buildGeneralParamsSection() {
@@ -144,7 +143,9 @@ class IngredientEditor extends KitchenEditor {
             }
         };
         
-        const sectionHeader = `<h4 class='ingredient-params-header'>Paramètres généraux</h4>`;
+        const generalSectionTitle = `Paramètres généraux`;
+        
+        const generalSectionHeader = KitchenElementsBuilder.buildSectionHeader('ingredient', generalSectionTitle);
         const nameBlock = KitchenElementsBuilder.buildInputBlock(generalParams.name, this.itemType);
         const preparationBlock = KitchenElementsBuilder.buildInputBlock(generalParams.preparation, this.itemType);
         const typeBlock = KitchenElementsBuilder.buildInputBlock(generalParams.type, this.itemType);
@@ -153,14 +154,7 @@ class IngredientEditor extends KitchenEditor {
         const defaultOption = this.getMeasureDefaultOption();
         const measureSelectionBlock = KitchenElementsBuilder.buildSelectBlock(generalParams.measure, this.itemType, defaultOption);
         
-        generalParamsSection.innerHTML = `
-            ${sectionHeader}
-            ${nameBlock}
-            ${preparationBlock}
-            ${typeBlock}
-            ${measureSelectionBlock}
-            ${otherMeasureBlock}
-        `;
+        generalParamsSection.append(generalSectionHeader, nameBlock, preparationBlock, typeBlock, measureSelectionBlock, otherMeasureBlock);
         
         return generalParamsSection;
     }
@@ -226,13 +220,10 @@ class IngredientEditor extends KitchenEditor {
             },
         };
         
-        const sectionHeader = `
-            <h4 id='nutrients-params-title' class='ingredient-params-header'>
-                Paramètres nutritionnels pour<br>
-                ${this.ingredientData.measure === 'grammes' ? '100 grammes' : `1 ${this.ingredientData.name}`}
-            </h4>
-        `;
+        const nutrientsSectionTitle = `Paramètres nutritionnels pour<br>
+        ${this.ingredientData.measure === 'grammes' ? '100 grammes' : `1 ${this.ingredientData.name}`}`;
         
+        const nutrientsSectionHeader = KitchenElementsBuilder.buildSectionHeader('nutrients', nutrientsSectionTitle);
         const caloriesBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.calories, this.itemType);
         const fatBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.fat, this.itemType);
         const proteinsBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.proteins, this.itemType);
@@ -242,44 +233,9 @@ class IngredientEditor extends KitchenEditor {
         const sugarBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.fibers, this.itemType);
         const noteBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.note, this.itemType);
         
-        nutrientsParamsSection.innerHTML = `
-            ${sectionHeader}
-            ${caloriesBlock}
-            ${fatBlock}
-            ${proteinsBlock}
-            ${carbsBlock}
-            ${sodiumBlock}
-            ${fibersBlock}
-            ${sugarBlock}
-            ${noteBlock}
-        `;
+        nutrientsParamsSection.append(nutrientsSectionHeader, caloriesBlock, fatBlock, proteinsBlock, carbsBlock, sodiumBlock, fibersBlock, sugarBlock, noteBlock);
         
         return nutrientsParamsSection;
-    }
-    
-    buildFormValidationBlock() {
-        const formValidationBlock = document.createElement('div');
-        
-        formValidationBlock.innerHTML = `
-            <div id='form-btns-block'>
-                <div id='form-actions-block'>
-                    <button id='save-ingredient-params-btn' class='btn tiny-btn rounded-btn blue-bkgd'>Enregistrer</button>
-                    <button id='delete-ingredient-btn' class='btn tiny-btn rounded-btn red-bkgd'>Supprimer</button>
-                </div>
-                
-                <button id='new-search-btn' class='btn large-btn rounded-btn blue-bkgd'>Nouvelle recherche</button>
-                
-                <div id='action-confirmation-block' class='hidden'>
-                    <button id='cancel-deletion-btn' class='btn circle-btn blue-bkgd'>Non</button>
-                    <div>
-                        <p>Etes-vous sûr de vouloir supprimer cet ingrédient ?</p>
-                    </div>
-                    <button id='confirm-deletion-btn' class='btn circle-btn red-bkgd'>Oui</button>
-                </div>
-            </div>
-        `;
-        
-        return formValidationBlock.firstElementChild;
     }
     
     getMeasureDefaultOption() {
@@ -372,19 +328,26 @@ class IngredientEditor extends KitchenEditor {
         actionConfirmationBlock.classList.add('hidden');
     }
     
-    handleConfirmDeletionBtnClick() {
-        // this.sendIngredientDeletionRequest(this.endpoint, 'DELETE');
+    async handleConfirmDeletionBtnClick() {
+        const endpoint = `${this.apiBaseUri}${this.itemId}`;
+        this.deleteRequestResponse = await this.apiHandler.sendDeleteRequest(endpoint);
+        this.manageDeleteIngredientResponse(this.deleteRequestResponse);
     }
     
     managePutIngredientResponse(putRequestResponse) {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        console.log(putRequestResponse.status);
+        if (putRequestResponse.status === 200) {
+            this.scrollTop();
+            KitchenElementsBuilder.buildSuccessMessageBlock(`Mise à jour de l'ingrédient réussie`);
+        }
+
+        else {
+            KitchenElementsBuilder.buildErrorMessageBlock(`Echec de la mise à jour de l'ingrédient`);
+        }
     }
     
     verifyFormData() {
-        const inputValidationResults = Array.from(document.querySelectorAll("#ingredient-form input"))
+        const inputValidationResults = Array.from(document.querySelectorAll('#ingredient-form input'))
         .map(input => ({
             value: input.value,
             expectedType: input.type,
@@ -420,7 +383,7 @@ class IngredientEditor extends KitchenEditor {
     }
     
     buildBodyOption() {
-        const inputs = Array.from(this.ingredientDataForm.querySelectorAll(".ingredient-param input"));
+        const inputs = Array.from(this.ingredientDataForm.querySelectorAll('.ingredient-param input'));
         const body = {};
         const measureSelect = this.ingredientDataForm.querySelector('#measure-select');
         const selectedOption = measureSelect.options[measureSelect.selectedIndex];

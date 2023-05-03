@@ -17,16 +17,23 @@ class KitchenEditor {
     get itemId() {
         return this._itemId;
     }
-
+    
     get onlyNumbersRegex() {
         return this._onlyNumbersRegex;
     }
-
+    
     set itemId(itemId) {
         this._itemId = itemId;
     }
     
     clearPanel() {
         this.adminPanel.innerHTML = '';
+    }
+    
+    scrollTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 }

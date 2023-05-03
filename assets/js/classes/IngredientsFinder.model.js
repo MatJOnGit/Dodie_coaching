@@ -39,7 +39,7 @@ class IngredientsFinder extends SearchEngine {
             this.searchResults.appendChild(inputErrorBlock);
         }
         
-        this.searchResults.appendChild(this.newIngredientBtn);
+        this.searchResults.append(this.newIngredientBtn);
     }
     
     /**************************************************************************
@@ -52,17 +52,19 @@ class IngredientsFinder extends SearchEngine {
             for (const ingredient of data) {
                 const ingredientCard = KitchenElementsBuilder.buildIngredientCard(ingredient);
                 this.searchResults.appendChild(ingredientCard);
-                
+            }
+            
+            for (const ingredientCard of this.searchResults.children) {
                 ingredientCard.addEventListener('click', () => {
-                    const ingredientEditor = new IngredientEditor(this.apiKey, ingredient.id);
-                    ingredientEditor.showIngredientEditionForm();
-                })
+                  const ingredientEditor = new IngredientEditor(this.apiKey, ingredientCard.id);
+                  ingredientEditor.showIngredientEditionForm();
+                });
             }
         }
         
         else {
-            const noResultBlock = KitchenElementsBuilder.buildErrorMessage('Aucun résultat trouvé');
-            this.searchResults.appendChild(noResultBlock);
+            const noResultBlock = KitchenElementsBuilder.buildErrorMessageBlock('Aucun résultat trouvé');
+            this.searchResults.append(noResultBlock);
         }
     }
 }

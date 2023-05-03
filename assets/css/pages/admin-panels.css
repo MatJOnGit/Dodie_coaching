@@ -529,6 +529,7 @@ tr:first-child::after {
 }
 
 .food-name {
+    text-align: left;
     font-size: 1.2em;
     color: hsla(185, 51%, 47%, 1);
     margin: 0;
@@ -619,7 +620,11 @@ tr:first-child::after {
     font-size: 1.2em;
 }
 
-.search-bar-alert {
+.error-alert {
     color: hsla(336, 100%, 29%, 1);
+    margin: 0 0 15%;
+}
+
+.success-message {
     margin: 0 0 15%;
 }

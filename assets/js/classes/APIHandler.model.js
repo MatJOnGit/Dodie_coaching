@@ -46,4 +46,19 @@ class APIHandler {
             console.error(error);
         }
     }
+
+    async sendDeleteRequest(endpoint) {
+        try {
+            const response = await fetch(endpoint, {
+                method: 'DELETE',
+                headers: this.headers
+            });
+
+            return response.json();
+        }
+        
+        catch(error) {
+            console.error(error);
+        }
+    }
 }

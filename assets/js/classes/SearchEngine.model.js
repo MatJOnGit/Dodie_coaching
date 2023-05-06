@@ -11,7 +11,7 @@ class SearchEngine {
             }
         }];
 
-        this._onlyNumbersRegex = /^\d+$/;
+        this._numbersRegex = /^[0-9]+([.,][0-9]+)?$/;
     }
     
     get options() {
@@ -26,8 +26,8 @@ class SearchEngine {
         return this._apiKey;
     }
     
-    get onlyNumbersRegex() {
-        return this._onlyNumbersRegex;
+    get numbersRegex() {
+        return this._numbersRegex;
     }
     
     clearSearchResults() {
@@ -47,7 +47,7 @@ class SearchEngine {
             return false;
         }
         
-        if (this.onlyNumbersRegex.test(inputValue)) {
+        if (this.numbersRegex.test(inputValue)) {
             return false;
         }
         

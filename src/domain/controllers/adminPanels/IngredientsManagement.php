@@ -8,8 +8,9 @@ final class IngredientsManagement extends AdminPanel {
         'classes/KitchenElementsBuilder.model',
         'classes/SearchEngine.model',
         'classes/IngredientsFinder.model',
-        'classes/KitchenEditor.model',
+        'classes/KitchenManager.model',
         'classes/IngredientEditor.model',
+        'classes/IngredientCreator.model',
         'ingredientsManagementApp'
     ];
     

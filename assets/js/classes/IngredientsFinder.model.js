@@ -4,8 +4,8 @@ class IngredientsFinder extends SearchEngine {
         
         this._apiBaseUri = 'http://localhost:8080/MealFusion/v1/ingredients?name=';
         this._inputElt = document.getElementById('ingredient-search-bar');
+        this.addNewIngredientBtnListener();
         this.inputElt.addEventListener('input', this.searchIngredients.bind(this));
-        this._newIngredientBtn = KitchenElementsBuilder.buildCreateItemButton('ingrédient');
     }
     
     get inputElt() {
@@ -14,10 +14,6 @@ class IngredientsFinder extends SearchEngine {
     
     get apiBaseUri() {
         return this._apiBaseUri;
-    }
-    
-    get newIngredientBtn() {
-        return this._newIngredientBtn;
     }
     
     /***************************************************************************
@@ -30,7 +26,7 @@ class IngredientsFinder extends SearchEngine {
         if (this.checkInputValidity(this.inputElt.value)) {
             const apiHandler = new APIHandler(this.apiKey);
             const endpoint = `${this.apiBaseUri}${this.inputElt.value}`;
-            const responseData = await apiHandler.sendGetRequest(endpoint);
+            const responseData = await apiHandler.sendRequest(endpoint, 'GET');
             this.manageGetIngredientsResponse(responseData);
         }
         
@@ -39,7 +35,19 @@ class IngredientsFinder extends SearchEngine {
             this.searchResults.appendChild(inputErrorBlock);
         }
         
-        this.searchResults.append(this.newIngredientBtn);
+        const newIngredientBtn = KitchenElementsBuilder.buildCreateItemButton('ingrédient');
+        this.searchResults.appendChild(newIngredientBtn);
+        
+        this.addNewIngredientBtnListener();
+    }
+    
+    addNewIngredientBtnListener() {
+        const newIngredientBtn = document.getElementById('create-item-btn');
+        
+        newIngredientBtn.addEventListener('click', () => {
+            const ingredientCreator = new IngredientCreator(this.apiKey);
+            ingredientCreator.showIngredientCreationForm();
+        })
     }
     
     /**************************************************************************
@@ -56,8 +64,8 @@ class IngredientsFinder extends SearchEngine {
             
             for (const ingredientCard of this.searchResults.children) {
                 ingredientCard.addEventListener('click', () => {
-                  const ingredientEditor = new IngredientEditor(this.apiKey, ingredientCard.id);
-                  ingredientEditor.showIngredientEditionForm();
+                    const ingredientEditor = new IngredientEditor(this.apiKey, ingredientCard.id);
+                    ingredientEditor.showIngredientEditionForm();
                 });
             }
         }

@@ -1,24 +1,23 @@
-class IngredientEditor extends KitchenManager {    
-    constructor(apiKey, ingredientId) {
+class IngredientCreator extends KitchenManager {
+    constructor(apiKey) {
         super(apiKey);
         
-        this._endpoint = `http://localhost:8080/MealFusion/v1/ingredients?id=${ingredientId}`;
+        this._endpoint = 'http://localhost:8080/MealFusion/v1/ingredients';
         this._itemType = 'ingredient';
-        this._itemId = ingredientId;
         
         this._apiHandler = new APIHandler(this.apiKey);
     }
     
+    showIngredientCreationForm() {
+        this.clearPanel();
+        this.addCreationModeTitle();
+        this.addCreationForm();
+        this.addMeasureSelectListener();
+        this.addFormButtonsListener();
+    }
+    
     get itemType() {
         return this._itemType;
-    }
-    
-    get itemId() {
-        return this._itemId;
-    }
-    
-    set itemId(itemId) {
-        this._itemId = itemId;
     }
     
     get endpoint() {
@@ -29,72 +28,33 @@ class IngredientEditor extends KitchenManager {
         return this._apiHandler;
     }
     
-    get getRequestResponse() {
-        return this._getRequestResponse;
+    get putRequestResponse() {
+        return this._putRequestResponse;
     }
     
-    get ingredientData() {
-        return this._getRequestResponse['data'];
+    set putRequestResponse(response) {
+        this._putRequestResponse = response;
     }
     
-    get getRequestStatus() {
-        return this._getRequestResponse['status'];
-    }
-    
-    get postRequestResponse() {
-        return this._postRequestResponse;
-    }
-    
-    set getRequestResponse(response) {
-        this._getRequestResponse = response;
-    }
-    
-    set postRequestResponse(response) {
-        this._postRequestResponse = response;
-    }
-    
-    async showIngredientEditionForm() {
-        this.clearPanel();
-        this.getRequestResponse = await this.apiHandler.sendRequest(this.endpoint, 'GET');
+    addCreationModeTitle() {
+        const genericTitle = `Ajouter un ingrédient`;
+        const createIngredientTitle = KitchenElementsBuilder.buildPageTitle(genericTitle);
         
-        if (this.verifyApiResponse()) {
-            this.addEditionModeTitle();
-            this.addEditionForm();
-            this.addMeasureSelectListener();
-            this.addFormButtonsListener();
-        }
-        
-        else {
-            this.showError('Ressource indisponible')
-        }
+        this.adminPanel.appendChild(createIngredientTitle);
     }
     
-    verifyApiResponse() {
-        return (this.getRequestStatus === 200);
-    }
-    
-    addEditionModeTitle() {
-        const ingredientItem = `${this.ingredientData.name} ${this.ingredientData.preparation ? ' ' + this.ingredientData.preparation : ''}`;
-        const genericTitle = `Editer un ingrédient :`;
-        const editIngredientTitle = KitchenElementsBuilder.buildPageTitle(genericTitle, ingredientItem);
-        
-        this.adminPanel.appendChild(editIngredientTitle);
-    }
-    
-    addEditionForm() {
-        this.kitchenDataForm = document.createElement('form');
-        this.kitchenDataForm.id = 'ingredient-form';
-        this.kitchenDataForm.action = 'javascript:void(0)';
-        
-        const confirmDeletionMessage = 'Etes-vous sûr de vouloir supprimer cet ingrédient ?';
+    addCreationForm() {
+        this.ingredientDataForm = document.createElement('form');
+        this.ingredientDataForm.id = 'ingredient-form';
+        this.ingredientDataForm.action = 'javascript:void(0)';
         
         const generalParamsSection = this.buildGeneralParamsSection();
         const nutrientsParamsSection = this.buildNutrientsParamsSection();
-        const formValidationBlock = KitchenElementsBuilder.buildEditionValidationBlock('ingredient', confirmDeletionMessage);
+        const creationFormValidationBlock = KitchenElementsBuilder.buildCreationFormValidationBlock('ingredient');
         
-        this.kitchenDataForm.append(generalParamsSection, nutrientsParamsSection, formValidationBlock);
+        this.ingredientDataForm.append(generalParamsSection, nutrientsParamsSection, creationFormValidationBlock);
         
-        this.adminPanel.append(this.kitchenDataForm);
+        this.adminPanel.append(this.ingredientDataForm);
     }
     
     buildGeneralParamsSection() {
@@ -105,30 +65,30 @@ class IngredientEditor extends KitchenManager {
                 id: 'name',
                 label: 'Nom',
                 type: 'text',
-                value: this.ingredientData.name,
+                value: '',
                 required: true
             },
             preparation: {
                 id: 'preparation',
                 label: 'Préparation',
                 type: 'text',
-                value: this.ingredientData.preparation === null ? 'aucune' : this.ingredientData.preparation,
+                value: '',
                 required: false
             },
             type: {
                 id: 'type',
                 label: 'Type',
                 type: 'text',
-                value: this.ingredientData.type,
+                value: '',
                 required: true
             },
             otherMeasure: {
                 id: 'other-measure',
                 label: 'Autre mesure',
                 type: 'text',
-                value: this.ingredientData.measure,
+                value: '',
                 required: true,
-                hidden: this.ingredientData.measure === 'grammes' || this.ingredientData.measure === null
+                hidden: true
             },
             measure: {
                 id: 'measure',
@@ -150,8 +110,7 @@ class IngredientEditor extends KitchenManager {
         const typeBlock = KitchenElementsBuilder.buildInputBlock(generalParams.type, this.itemType);
         const otherMeasureBlock = KitchenElementsBuilder.buildInputBlock(generalParams.otherMeasure, this.itemType);
         
-        const defaultOption = this.getMeasureDefaultOption();
-        const measureSelectionBlock = KitchenElementsBuilder.buildSelectBlock(generalParams.measure, this.itemType, defaultOption);
+        const measureSelectionBlock = KitchenElementsBuilder.buildSelectBlock(generalParams.measure, this.itemType, 'grams');
         
         generalParamsSection.append(generalSectionHeader, nameBlock, preparationBlock, typeBlock, measureSelectionBlock, otherMeasureBlock);
         
@@ -166,61 +125,60 @@ class IngredientEditor extends KitchenManager {
                 id: 'calories',
                 label: 'Calories',
                 type: 'number',
-                value: this.ingredientData.calories,
+                value: '',
                 required: true
             },
             fat: {
                 id: 'fat',
                 label: 'Lipides',
                 type: 'number',
-                value: this.ingredientData.fat,
+                value: '',
                 required: true
             },
             proteins: {
                 id: 'proteins',
                 label: 'Protéines',
                 type: 'number',
-                value: this.ingredientData.proteins,
+                value: '',
                 required: true
             },
             carbs: {
                 id: 'carbs',
                 label: 'Glucides',
                 type: 'number',
-                value: this.ingredientData.carbs,
+                value: '',
                 required: true
             },
             sodium: {
                 id: 'sodium',
                 label: 'Sodium',
                 type: 'number',
-                value: this.ingredientData.sodium,
+                value: '',
                 required: true
             },
             sugar: {
                 id: 'sugar',
                 label: 'Sucre',
                 type: 'number',
-                value: this.ingredientData.sugar,
+                value: '',
                 required: true
             },
             fibers: {
                 id: 'fibers',
                 label: 'Fibres',
                 type: 'number',
-                value: this.ingredientData.fibers,
+                value: '',
                 required: true
             },
             note: {
                 id: 'note',
                 label: 'Note',
                 type: 'text',
-                value: this.ingredientData.data_source
+                value: '',
             },
         };
         
-        const nutrientsSectionTitle = `Paramètres nutritionnels pour<br>
-        ${this.ingredientData.measure === 'grammes' ? '100 grammes' : `1 ${this.ingredientData.name}`}`;
+        const nutrientsSectionTitle = `Paramètres nutritionnels pour <br>100 grammes`;
         
         const nutrientsSectionHeader = KitchenElementsBuilder.buildSectionHeader('nutrients', nutrientsSectionTitle);
         const caloriesBlock = KitchenElementsBuilder.buildInputBlock(nutrientsParams.calories, this.itemType);
@@ -237,17 +195,6 @@ class IngredientEditor extends KitchenManager {
         return nutrientsParamsSection;
     }
     
-    getMeasureDefaultOption() {
-        const DEFAULT_OPTIONS = {
-            'grammes': 'grammes',
-            null: 'aucune unité',
-            default: 'autres'
-        };
-        
-        const measure = this.ingredientData.measure;
-        return DEFAULT_OPTIONS[measure] || DEFAULT_OPTIONS.default;
-    }
-    
     addMeasureSelectListener() {
         const measureSelect = document.getElementById('measure-select');
         const otherMeasureBlock = document.getElementById('other-measure-block');
@@ -256,11 +203,11 @@ class IngredientEditor extends KitchenManager {
         
         const updateNutrientsParamsTitle = () => {
             if (measureSelect.value === 'grams') {
-                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>100 grammes de ${this.ingredientData.name}`;
+                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>100 grammes`;
             }
             
             else {
-                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>1 ${this.ingredientData.name}`;
+                nutrientsParamsTitle.innerHTML = `Paramètres nutritionnels pour<br>1 unité`;
             }
         }
         
@@ -284,31 +231,24 @@ class IngredientEditor extends KitchenManager {
     
     addFormButtonsListener() {
         const saveButton = document.getElementById('save-ingredient-params-btn');
-        const deleteButton = document.getElementById('delete-ingredient-btn');
         const newSearchButton = document.getElementById('new-search-btn');
-        const formActionsBlock = document.getElementById('form-actions-block');
-        const actionConfirmationBlock = document.getElementById('action-confirmation-block');
-        const cancelDeletionButton = document.getElementById('cancel-deletion-btn');
-        const confirmDeletionButton = document.getElementById('confirm-deletion-btn');
+        const resetButton = document.getElementById('reset-ingredient-btn');
         
         const addClickListener = (button, handler) => {
             button.addEventListener('click', handler);
         }
         
         addClickListener(saveButton, (e) => this.handleSaveBtnClick(e));
-        addClickListener(deleteButton, (e) => this.handleDeleteBtnClick(e, formActionsBlock, newSearchButton, actionConfirmationBlock));
         addClickListener(newSearchButton, (e) => this.handleNewSearchBtnClick(e));
-        addClickListener(cancelDeletionButton, (e) => this.handleCancelDeletionBtnClick(e, formActionsBlock, newSearchButton, actionConfirmationBlock));
-        addClickListener(confirmDeletionButton, (e) => this.handleConfirmDeletionBtnClick(e));
+        addClickListener(resetButton, (e) => this.handleResetFormBtnClick(e));
     }
     
     async handleSaveBtnClick(e) {
         e.preventDefault();
         if (this.verifyFormData()) {
             const body = this.buildIngredientBodyOption();
-            console.log(body);
-            this.postRequestResponse = await this.apiHandler.sendRequest(this.endpoint, 'POST', body);
-            this.managePostIngredientResponse(this.postRequestResponse);
+            this.putRequestResponse = await this.apiHandler.sendRequest(this.endpoint, 'PUT', body);
+            this.managePutIngredientResponse(this.putRequestResponse);
         }
         
         else {
@@ -318,52 +258,29 @@ class IngredientEditor extends KitchenManager {
         }
     }
     
-    handleDeleteBtnClick(e, formActionsBlock, newSearchBtn, actionConfirmationBlock) {
+    handleResetFormBtnClick(e) {
         e.preventDefault();
-        formActionsBlock.classList.add('hidden');
-        newSearchBtn.classList.add('hidden');
-        actionConfirmationBlock.classList.remove('hidden');
+        const inputs = document.querySelectorAll('#ingredient-form input');
+        inputs.forEach(input => input.value = '');
+        
+        const measureSelect = document.querySelector('#measure-select');
+        measureSelect.value = 'grams';
     }
     
-    handleCancelDeletionBtnClick(e, formActionsBlock, newSearchBtn, actionConfirmationBlock) {
-        e.preventDefault();
-        formActionsBlock.classList.remove('hidden');
-        newSearchBtn.classList.remove('hidden');
-        actionConfirmationBlock.classList.add('hidden');
-    }
-    
-    async handleConfirmDeletionBtnClick(e) {
-        e.preventDefault();
-        this.deleteRequestResponse = await this.apiHandler.sendDeleteRequest(this.endpoint, 'DELETE');
-        this.manageDeleteIngredientResponse(this.deleteRequestResponse);
-    }
-    
-    managePostIngredientResponse(postRequestResponse) {
-        if (postRequestResponse.status === 200) {
+    managePutIngredientResponse(putRequestResponse) {
+        if (putRequestResponse.status === 200) {
             this.scrollTop();
-            console.log("Mise à jour de l'ingrédient réussie")
-            const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Mise à jour de l'ingrédient réussie`);
+            const ingredientEditor = new IngredientEditor(this.apiKey, putRequestResponse.data.ingredientId);
+            ingredientEditor.showIngredientEditionForm();
+            console.log("Ajout de l'ingrédient réussie");
+            const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Ajout de l'ingrédient réussie`);
             this.showTemporaryAlert(successMessageBlock);
         }
         
         else {
             this.scrollTop();
-            const errorMessage = KitchenElementsBuilder.buildErrorMessageBlock(`Echec de la mise à jour de l'ingrédient`);
-            this.showTemporaryAlert(errorMessage);
+            const errorMessageBlock = KitchenElementsBuilder.buildErrorMessageBlock(`Echec de l'ajout de l'ingrédient`);
+            this.showTemporaryAlert(errorMessageBlock);
         }
-    }
-    
-    showError(error) {
-        const errorElt = document.createElement('div');
-        errorElt.textContent = error;
-        
-        const backButton = document.createElement('button');
-        backButton.textContent = 'Retour';
-        backButton.addEventListener('click', () => {
-            location.reload();
-        });
-        
-        this.adminPanel.appendChild(errorElt);
-        this.adminPanel.appendChild(backButton);
     }
 }

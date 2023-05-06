@@ -16,49 +16,18 @@ class APIHandler {
         return this._headers
     }
     
-    async sendGetRequest(endpoint) {
-        try {
-            const response = await fetch(endpoint, {
-                method: 'GET',
-                headers: this.headers
-            });
-            
-            return response.json();
+    async sendRequest(endpoint, method, body = null) {
+        const options = {
+            method: method,
+            headers: this.headers,
+        };
+        
+        if (body !== null) {
+            options.body = JSON.stringify(body);
         }
         
-        catch(error) {
-            console.error(error);
-        }
-    }
-    
-    async sendPutRequest(endpoint, body) {
-        try {
-            const response = await fetch(endpoint, {
-                method: 'PUT',
-                headers: this.headers,
-                body: JSON.stringify(body)
-            });
-            
-            return response.json();
-        }
-        
-        catch(error) {
-            console.error(error);
-        }
-    }
-
-    async sendDeleteRequest(endpoint) {
-        try {
-            const response = await fetch(endpoint, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-
-            return response.json();
-        }
-        
-        catch(error) {
-            console.error(error);
-        }
+        const response = await fetch(endpoint, options);
+        const data = await response.json();
+        return data;
     }
 }

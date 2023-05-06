@@ -620,11 +620,30 @@ tr:first-child::after {
     font-size: 1.2em;
 }
 
-.error-alert {
+#error-alert {
     color: hsla(336, 100%, 29%, 1);
     margin: 0 0 15%;
 }
 
-.success-message {
-    margin: 0 0 15%;
+.fixed-alert {
+    position: fixed;
+    bottom: 10%;
+    left: 5%;
+    right: 5%;
+    border-radius: 8px;
+    border: 1px solid hsla(0, 0%, 0%, 1);
+}
+
+.fixed-alert p {
+    padding: 2vh 5%;
+    text-align: center;
+    color: hsla(0, 0%, 100%, 1);
+}
+
+.success-alert {
+    background-color: hsla(225, 73%, 57%, 1);
+}
+
+.error-alert {
+    background-color: hsla(10, 100%, 50%, 1);
 }

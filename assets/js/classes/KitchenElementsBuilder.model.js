@@ -7,6 +7,15 @@ class KitchenElementsBuilder {
         return templateFragment;
     }
     
+    static buildPageTitle(genericTitle, itemDesignation = '') {
+        const titleCompletion = itemDesignation ? `<br>${itemDesignation}` : '';
+        const pageTitleTemplate = `
+            <h3>${genericTitle}${titleCompletion}</h3>
+        `;
+        
+        return this.buildNodeFromTemplate(pageTitleTemplate);
+    }
+    
     static buildIngredientCard(ingredient) {
         const ingredientCardTemplate = `
             <button id=${ingredient.id} class='food-card'>
@@ -20,9 +29,9 @@ class KitchenElementsBuilder {
     
     static buildCreateItemButton(itemType) {
         const createItemButtonTemplate = `
-            <a href='' id='create-item-btn' class='btn large-btn admin-link blue-bkgd'>
+            <button id='create-item-btn' class='btn large-btn admin-link blue-bkgd'>
                 Nouvel ${itemType}
-            </a>
+            </button>
         `;
         
         return this.buildNodeFromTemplate(createItemButtonTemplate);
@@ -41,16 +50,16 @@ class KitchenElementsBuilder {
     static buildInputBlock(inputParams, itemType) {
         const inputBlockTemplate = `
             <div id='${inputParams.id}-block' class='${itemType}-param ${inputParams.hidden && inputParams.hidden === true ? 'hidden' : ''}'>
-                <label>${inputParams.label} :</label>
-                <input type='${inputParams.type}' id='${inputParams.id}' name='${inputParams.type}-${inputParams.id}' value='${inputParams.value === null ? '' : inputParams.value}' ${inputParams.required ? ' required' : ''}>
+                <label for='${itemType}-${inputParams.id}'>${inputParams.label} :</label>
+                <input type='${inputParams.type}' id='${inputParams.id}' name='${itemType}-${inputParams.id}' value='${inputParams.value === null ? '' : inputParams.value}' ${inputParams.required ? ' required' : ''}>
             </div>
         `;
         
         return this.buildNodeFromTemplate(inputBlockTemplate);
     }
     
-    static buildValidationBlock(itemType, message) {
-        const validationBlockTemplate = `
+    static buildEditionValidationBlock(itemType, message) {
+        const editionvalidationBlockTemplate = `
             <div id='form-btns-block'>
                 <div id='form-actions-block'>
                     <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded-btn blue-bkgd'>Enregistrer</button>
@@ -69,18 +78,33 @@ class KitchenElementsBuilder {
             </div>
         `;
         
-        return this.buildNodeFromTemplate(validationBlockTemplate);
+        return this.buildNodeFromTemplate(editionvalidationBlockTemplate);
+    }
+    
+    static buildCreationFormValidationBlock(itemType) {
+        const creationFormValidationBlockTemplate = `
+            <div id='form-btns-block'>
+                <div id='form-actions-block'>
+                    <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded-btn blue-bkgd'>Enregistrer</button>
+                    <button id='reset-${itemType}-btn' class='btn tiny-btn rounded-btn red-bkgd'>Réinitialiser</button>
+                </div>
+                
+                <button id='new-search-btn' class='btn large-btn rounded-btn blue-bkgd'>Nouvelle recherche</button>
+            </div>
+        `;
+        
+        return this.buildNodeFromTemplate(creationFormValidationBlockTemplate);
     }
     
     static buildSelectBlock(selectParams, itemType, defaultOption) {
         const optionsTemplate = selectParams.options.map(option => {
-            return `<option value="${option.value}" ${option.text === defaultOption ? 'selected' : ''}>${option.text}</option>`;
+            return `<option value='${option.value}' ${option.text === defaultOption ? 'selected' : ''}>${option.text}</option>`;
         }).join('');
         
         const selectTemplate = `
-            <div class="${itemType}-param">
-                <label for="${selectParams.id}-select">${selectParams.label} :</label>
-                <select id="${selectParams.id}-select" name="${selectParams.type}-${selectParams.id}">
+            <div class='${itemType}-param'>
+                <label for='${selectParams.id}-select'>${selectParams.label} :</label>
+                <select id='${selectParams.id}-select' name='${selectParams.type}-${selectParams.id}'>
                     ${optionsTemplate}
                 </select>
             </div>
@@ -91,8 +115,8 @@ class KitchenElementsBuilder {
     
     static buildSuccessMessageBlock(successMessage) {
         const successMessageTemplate = `
-            <div>
-                <p class="success-message">${successMessage}</p>
+            <div class='success-alert fixed-alert'>
+                <p>${successMessage}</p>
             </div>
         `;
         
@@ -101,8 +125,8 @@ class KitchenElementsBuilder {
     
     static buildErrorMessageBlock(errorMessage) {
         const errorMessageTemplate = `
-            <div>
-                <p class="error-alert">${errorMessage}</p>
+            <div class='error-alert fixed-alert'>
+                <p>${errorMessage}</p>
             </div>
         `;
         

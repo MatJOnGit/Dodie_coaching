@@ -131,5 +131,15 @@ class KitchenElementsBuilder {
         `;
         
         return this.buildNodeFromTemplate(errorMessageTemplate);
-      }
+    }
+    
+    static buildSearchHelper(message) {
+        const searchHelperTemplate = `
+            <div class='entry-helper fixed-alert'>
+                <p>${message}</p>
+            </div>
+        `;
+
+        return this.buildNodeFromTemplate(searchHelperTemplate);
+    }
 }

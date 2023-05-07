@@ -1,10 +1,13 @@
-class IngredientsFinder extends SearchEngine {
+class IngredientsFinder extends KitchenManager {
     constructor() {
-        super();
-        
+        super(document.getElementById('search-bar').getAttribute('data-api-token'));
+
+        this._searchResults = document.getElementById('search-results');
         this._apiBaseUri = 'http://localhost:8080/MealFusion/v1/ingredients?name=';
         this._inputElt = document.getElementById('ingredient-search-bar');
+
         this.addNewIngredientBtnListener();
+        this.showPreviousAlert();
         this.inputElt.addEventListener('input', this.searchIngredients.bind(this));
     }
     
@@ -14,6 +17,35 @@ class IngredientsFinder extends SearchEngine {
     
     get apiBaseUri() {
         return this._apiBaseUri;
+    }
+    
+    get searchResults() {
+        return this._searchResults;
+    }
+    
+    clearSearchResults() {
+        this.searchResults.innerHTML = '';
+    }
+    
+    checkInputValidity(inputValue) {
+        if (!inputValue.trim()) {
+            return false;
+        }
+        
+        if (inputValue.length > 44) {
+            return false;
+        }
+        
+        if (this.numbersRegex.test(inputValue)) {
+            return false;
+        }
+        
+        const escapedInputValue = inputValue.replace(/[&<>"]/g, '');
+        if (escapedInputValue !== inputValue) {
+            return false;
+        }
+        
+        return true;
     }
     
     /***************************************************************************
@@ -31,7 +63,7 @@ class IngredientsFinder extends SearchEngine {
         }
         
         else if (this.inputElt.value.length > 1) {
-            const inputErrorBlock = KitchenElementsBuilder.buildErrorMessage('Entrée invalide');
+            const inputErrorBlock = KitchenElementsBuilder.buildSearchHelper('Entrée invalide');
             this.searchResults.appendChild(inputErrorBlock);
         }
         
@@ -71,8 +103,16 @@ class IngredientsFinder extends SearchEngine {
         }
         
         else {
-            const noResultBlock = KitchenElementsBuilder.buildErrorMessageBlock('Aucun résultat trouvé');
+            const noResultBlock = KitchenElementsBuilder.buildSearchHelper('Aucun résultat trouvé');
             this.searchResults.append(noResultBlock);
+        }
+    }
+
+    showPreviousAlert() {
+        if (sessionStorage.getItem('IsLastIngredientDeleted') === 'true') {
+            const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Mise à jour de l'ingrédient réussie`);
+            this.showTemporaryAlert(successMessageBlock);
+            sessionStorage.removeItem('IsLastIngredientDeleted');
         }
     }
 }

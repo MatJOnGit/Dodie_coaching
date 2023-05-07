@@ -130,42 +130,42 @@ class IngredientCreator extends KitchenManager {
             },
             fat: {
                 id: 'fat',
-                label: 'Lipides',
+                label: 'Lipides (g)',
                 type: 'number',
                 value: '',
                 required: true
             },
             proteins: {
                 id: 'proteins',
-                label: 'Protéines',
+                label: 'Protéines (g)',
                 type: 'number',
                 value: '',
                 required: true
             },
             carbs: {
                 id: 'carbs',
-                label: 'Glucides',
+                label: 'Glucides (g)',
                 type: 'number',
                 value: '',
                 required: true
             },
             sodium: {
                 id: 'sodium',
-                label: 'Sodium',
+                label: 'Sodium (mg)',
                 type: 'number',
                 value: '',
                 required: true
             },
             sugar: {
                 id: 'sugar',
-                label: 'Sucre',
+                label: 'Sucre (g)',
                 type: 'number',
                 value: '',
                 required: true
             },
             fibers: {
                 id: 'fibers',
-                label: 'Fibres',
+                label: 'Fibres (g)',
                 type: 'number',
                 value: '',
                 required: true
@@ -272,7 +272,6 @@ class IngredientCreator extends KitchenManager {
             this.scrollTop();
             const ingredientEditor = new IngredientEditor(this.apiKey, putRequestResponse.data.ingredientId);
             ingredientEditor.showIngredientEditionForm();
-            console.log("Ajout de l'ingrédient réussie");
             const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Ajout de l'ingrédient réussie`);
             this.showTemporaryAlert(successMessageBlock);
         }

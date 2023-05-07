@@ -620,11 +620,6 @@ tr:first-child::after {
     font-size: 1.2em;
 }
 
-#error-alert {
-    color: hsla(336, 100%, 29%, 1);
-    margin: 0 0 15%;
-}
-
 .fixed-alert {
     position: fixed;
     bottom: 10%;
@@ -634,7 +629,8 @@ tr:first-child::after {
     border: 1px solid hsla(0, 0%, 0%, 1);
 }
 
-.fixed-alert p {
+.success-alert p,
+.error-alert p {
     padding: 2vh 5%;
     text-align: center;
     color: hsla(0, 0%, 100%, 1);
@@ -646,4 +642,10 @@ tr:first-child::after {
 
 .error-alert {
     background-color: hsla(10, 100%, 50%, 1);
+}
+
+.entry-helper p {
+    padding: 2vh 5%;
+    text-align: center;
+    color: hsla(336, 100%, 29%, 1);
 }

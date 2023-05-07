@@ -171,42 +171,42 @@ class IngredientEditor extends KitchenManager {
             },
             fat: {
                 id: 'fat',
-                label: 'Lipides',
+                label: 'Lipides (g)',
                 type: 'number',
                 value: this.ingredientData.fat,
                 required: true
             },
             proteins: {
                 id: 'proteins',
-                label: 'Protéines',
+                label: 'Protéines (g)',
                 type: 'number',
                 value: this.ingredientData.proteins,
                 required: true
             },
             carbs: {
                 id: 'carbs',
-                label: 'Glucides',
+                label: 'Glucides (g)',
                 type: 'number',
                 value: this.ingredientData.carbs,
                 required: true
             },
             sodium: {
                 id: 'sodium',
-                label: 'Sodium',
+                label: 'Sodium (mg)',
                 type: 'number',
                 value: this.ingredientData.sodium,
                 required: true
             },
             sugar: {
                 id: 'sugar',
-                label: 'Sucre',
+                label: 'Sucre (g)',
                 type: 'number',
                 value: this.ingredientData.sugar,
                 required: true
             },
             fibers: {
                 id: 'fibers',
-                label: 'Fibres',
+                label: 'Fibres (g)',
                 type: 'number',
                 value: this.ingredientData.fibers,
                 required: true
@@ -334,14 +334,26 @@ class IngredientEditor extends KitchenManager {
     
     async handleConfirmDeletionBtnClick(e) {
         e.preventDefault();
-        this.deleteRequestResponse = await this.apiHandler.sendDeleteRequest(this.endpoint, 'DELETE');
+        this.deleteRequestResponse = await this.apiHandler.sendRequest(this.endpoint, 'DELETE');
         this.manageDeleteIngredientResponse(this.deleteRequestResponse);
+    }
+    
+    manageDeleteIngredientResponse(deleteRequestResponse) {
+        if (deleteRequestResponse.status === 200) {
+            sessionStorage.setItem('IsLastIngredientDeleted', 'true');
+            location.reload();
+        }
+        
+        else {
+            this.scrollTop();
+            const errorMessage = KitchenElementsBuilder.buildErrorMessageBlock(`Echec de la suppression de l'ingrédient`);
+            this.showTemporaryAlert(errorMessage);
+        }
     }
     
     managePostIngredientResponse(postRequestResponse) {
         if (postRequestResponse.status === 200) {
             this.scrollTop();
-            console.log("Mise à jour de l'ingrédient réussie")
             const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Mise à jour de l'ingrédient réussie`);
             this.showTemporaryAlert(successMessageBlock);
         }

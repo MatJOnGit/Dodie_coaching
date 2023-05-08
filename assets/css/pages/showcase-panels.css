@@ -43,8 +43,8 @@ footer li {
     margin: 27vh 0 70px 0;
 }
 
-.showcase-panel span i {
-    font-size: 7vmin;
+.showcase-panel a {
+    font-size: 4.5vmin;
 }
 
 .speech-container p {
@@ -96,7 +96,7 @@ footer li {
 /*******************************/
 
 .programs-list > li {
-    min-height: calc((100vh - 11vh - 16vh - 70px) / 3);
+    min-height: calc((73vh - 70px) / 3);
     position: relative;
 }
 
@@ -154,8 +154,8 @@ h2 {
 
 .program-description {
     border-radius: 15px;
-    margin: 20px 20px 25px 20px;
-    padding: 15px 20px;
+    margin: 2vmin 5% 2vmin 5%;
+    padding: 5vmin 6%;
 }
 
 .program-details a:last-child {
@@ -242,7 +242,7 @@ h2 {
 
 .dynamic-menu a {
     display: block;
-    font-size: 1.4em;
+    font-size: 6vmin;
     padding: 2vh 0;
 }
 
@@ -252,3 +252,66 @@ h2 {
     height: 4px;
     width: 50%;
 }
+
+/*************************************
+            Tablets design
+*************************************/
+@media (min-width: 768px) {
+    .speech-container p {
+        margin: 10px 8%;
+    }
+
+    .speech-container img {
+        height: 210px;
+    }
+
+    .showcase-panel a {
+        font-size: 3vmin;
+    }
+
+    .speech-container .btn {
+        margin-top: 4vh;
+        margin-bottom: 4vh;
+    }
+
+    .speech-container p:first-child {
+        margin-top: 3vh;
+    }
+
+    .showcase-panel {
+        margin: 24vh 0 110px 0;
+    }
+
+    .programs-list > li {
+        min-height: calc((76vh - 110px) / 3);
+    }
+
+    h2 {
+        font-size: 6vmin;
+    }
+
+    .program-headers p {
+        font-size: 2.8vmin;
+    }
+
+    .showcase-panel i {
+        margin-right: 15px;
+    }
+
+    .program-description p {
+        font-size: 2.8vmin;
+    }
+
+    .program-details {
+        min-height: calc(76vh - 110px);
+    }
+
+    .program-description {
+        margin: 2vh 5% 2vh 5%;
+        padding: 3vh 5%;
+    }
+}
+
+/*************************************
+            Desktop design
+*************************************/

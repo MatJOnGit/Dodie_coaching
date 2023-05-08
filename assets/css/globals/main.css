@@ -116,11 +116,6 @@ html, body {
     font-family: 'source sans pro';
 }
 
-h1 {
-    font-family: 'julius sans one';
-    font-size: 6vmin;
-}
-
 #title-layer i {
     font-size: 10vmin;
 }
@@ -191,9 +186,9 @@ input::placeholder {
     align-items: center;
     border-radius: 32px;
     display: flex;
-    height: 64px;
+    height: 15vmin;
     justify-content: center;
-    width: 64px;
+    width: 15vmin;
 }
 
 #input-helper-container {
@@ -217,4 +212,16 @@ button,
 input,
 select {
     border: none;
+}
+
+@media (min-width: 768px) {
+    .btn {
+        padding: 3vmin 5%;
+    }
+
+    .circle-btn {
+        border-radius: 55px;
+        height: 11vmin;
+        width: 11vmin;
+    }
 }

@@ -13,6 +13,7 @@ header {
 }
 
 #title-layer a {
+    align-items: center;
     display: flex;
     flex-direction: row;
     margin-left: 20px;
@@ -24,6 +25,8 @@ header {
 }
 
 h1 {
+    font-family: 'julius sans one';
+    font-size: 6vmin;
     font-weight: 800;
     margin: 0;
     width: 40%;
@@ -73,4 +76,44 @@ h1 {
     display: flex;
     height: 100%;
     justify-content: center;
+}
+
+@media (min-width: 768px) {
+    #title-layer {
+        height: 10vh;
+    }
+
+    #logo {
+        width: 90px;
+        height: 90px;
+    }
+
+    h1 {
+        font-size: 5vmin;
+    }
+
+    #title-layer i {
+        font-size: 8vmin;
+    }
+
+    #static-menu,
+    #page-name-cnn {
+        height: 14vh;
+    }
+
+    #static-menu ul, #page-name-cnn > div {
+        height: 70px;
+    }
+
+    #static-menu a {
+        font-size: 2.8vmin;
+    }
+
+    p {
+        font-size: 3vmin;
+    }
+
+    .fa-plus {
+        font-size: 4vmin;
+    }
 }

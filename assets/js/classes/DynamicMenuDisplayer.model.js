@@ -5,9 +5,19 @@ class DynamicMenuDisplayer extends ElementFader {
         this._menuTriggerBtn = document.getElementById('dynamic-menu-button');
         this._bodyElt = document.getElementsByTagName('body')[0];
         
-        this._dynamicMenuContainer;
-        this._closeDynamicMenuLayer;
-        this._dynamicMenu;
+        this._dynamicMenuWidthPerDevice = {
+            'mobile': 225,
+            'tablet': 500,
+            'others': 700
+        }
+    }
+
+    get dynamicMenuWidth() {
+        return this._dynamicMenuWidth;
+    }
+
+    get dynamicMenuWidthPerDevice() {
+        return this._dynamicMenuWidthPerDevice;
     }
     
     get bodyElt() {
@@ -40,6 +50,24 @@ class DynamicMenuDisplayer extends ElementFader {
     
     set dynamicMenuContainer(item) {
         this._dynamicMenuContainer = item;
+    }
+
+    set dynamicMenuWidth(width) {
+        this._dynamicMenuWidth = width;
+    }
+
+    setDynamicMenuWidth() {
+        const windowScreenSize = window.innerWidth;
+        
+        if (windowScreenSize < 768) {
+            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.mobile
+        }
+        else if (windowScreenSize < 1024) {
+            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.tablet
+        }
+        else {
+            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.others
+        }
     }
     
     addCloseMenuEltsListener() {
@@ -122,15 +150,12 @@ class DynamicMenuDisplayer extends ElementFader {
     
     addMenuTriggerBtnListener() {
         this.menuTriggerBtn.addEventListener('click', () => {
+            this.setDynamicMenuWidth();
             this.setDynamicLayer();
             this.setCloseMenuLayer();
             this.triggerCorrectMenuButtons();
             this.addCloseMenuEltsListener();
-        })
-    }
-    
-    init() {
-        this.addMenuTriggerBtnListener();
+        });
     }
     
     setCloseMenuLayer() {
@@ -145,6 +170,7 @@ class DynamicMenuDisplayer extends ElementFader {
     }
     
     setDynamicLayer() {
+        const animationDuration = 200;
         const dynamicMenuContainer = document.createElement('div');
         const blurryLayer = document.createElement('div');
         const dynamicMenuLayer = document.createElement('div');
@@ -158,28 +184,35 @@ class DynamicMenuDisplayer extends ElementFader {
         closeDynamicMenuLayer.classList.add('close-menu-layer');
         dynamicMenu.classList.add('dynamic-menu');
         
-        this.closeDynamicMenuLayer = dynamicMenuLayer.appendChild(closeDynamicMenuLayer);
         this.dynamicMenu = dynamicMenuLayer.appendChild(dynamicMenu);
         dynamicMenuContainer.appendChild(blurryLayer);
         dynamicMenuContainer.appendChild(dynamicMenuLayer);
         this.dynamicMenuContainer = this.bodyElt.appendChild(dynamicMenuContainer);
         
         this.fadeInItem(blurryLayer, 3000, 0.8);
-        this.slideInItem(dynamicMenuLayer, 2000);
+        this.slideInMenu(dynamicMenuLayer, animationDuration);
+        
+        this.closeDynamicMenuLayer = dynamicMenuLayer.appendChild(closeDynamicMenuLayer);
     }
     
-    slideInItem(item, timer) {
+    slideInMenu(item, duration) {
+        const stepCount = Math.round(duration / 16);
+        const increment = this.dynamicMenuWidth / stepCount;
+        
+        let step = 0;
+        
         let intervalId = setInterval(() => {
-            let itemWidth = item.getBoundingClientRect().width;
-            
-            if (item.getBoundingClientRect().width < 225) {
-                item.style.width = (itemWidth + 5 + 'px');
-            }
-            else {
+            if (step >= stepCount) {
                 clearInterval(intervalId);
             }
             
-        }, timer/1000);
+            else {
+                const itemWidth = item.getBoundingClientRect().width;
+                const newWidth = Math.min(itemWidth + increment, this.dynamicMenuWidth);
+                item.style.width = newWidth + 'px';
+                step++;
+            }
+        }, 16);
     }
     
     triggerCorrectMenuButtons() {

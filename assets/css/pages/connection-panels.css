@@ -2,6 +2,7 @@
 /*             THEME             */
 /*********************************/
 
+/***** Text *****/
 .homepage-link i,
 footer p {
     color: hsla(261, 48%, 40%, 1);
@@ -9,10 +10,6 @@ footer p {
 
 .input-helper-dismiss-btn {
     color: hsla(46, 92%, 35%, 1);
-}
-
-#input-helper-container {
-    background-color: hsla(45, 95%, 92%, 1);
 }
 
 h2,
@@ -24,6 +21,11 @@ select,
 #token-signing-form p,
 footer i {
     color: hsla(0, 0%, 100%, 1);
+}
+
+/****** Backgrounds ******/
+#input-helper-container {
+    background-color: hsla(45, 95%, 92%, 1);
 }
 
 footer {
@@ -51,6 +53,7 @@ footer li {
     );
 }
 
+/***** Border *****/
 .input-helper-dismiss-btn {
     border: 1px solid hsla(46, 92%, 35%, 1);
 }
@@ -62,10 +65,6 @@ footer li {
 input,
 select {
     border-bottom: 1px solid hsla(0, 0%, 100%, 1);
-}
-
-input::placeholder {
-    text-align: center;
 }
 
 /********************************/
@@ -88,6 +87,10 @@ form {
     padding: 3vh 0;
 }
 
+input::placeholder {
+    text-align: center;
+}
+
 #input-helper-container {
     position: absolute;
     top: 10px;
@@ -102,6 +105,14 @@ form {
 .input-helper-dismiss-btn,
 .show-input-helper-btn {
     border-radius: 50%;
+}
+
+.input-helper-dismiss-btn {
+    align-items: center;
+    display: flex;
+    height: 35px;
+    justify-content: center;
+    width: 35px;
 }
 
 h2 {
@@ -136,8 +147,8 @@ select {
 }
 
 .input-helper {
-    margin: 0 0 1vh 3%;
     font-size: 6vmin;
+    margin: 0 0 1vh 3%;
 }
 
 .form-links {
@@ -145,8 +156,8 @@ select {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
     height: 17vh;
+    justify-content: space-between;
     margin-top: 1.5vh;
     padding: 0;
     width: 90%;
@@ -181,4 +192,25 @@ input[type=submit] {
 
 #token-signing-form p {
     margin: 2vh 10% 2vh 10%;
+}
+
+/*************************************
+            Tablets design
+*************************************/
+@media (min-width: 768px) {
+    .connection-panel {
+        height: calc(100vh - 10vh - 110px);
+        margin: 10vh 0 110px 0;
+    }
+
+    .show-input-helper-btn,
+    .input-helper {
+        height: 6vmin;
+        width: 6vmin;
+    }
+
+    .form-links {
+        margin-top: 3vh;
+        font-size: 2.5vmin;
+    }
 }

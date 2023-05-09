@@ -129,12 +129,12 @@ input[type=submit] {
     padding: 3vh;
 }
 
-.progress-graph-cnn,
+.progress-graph-container,
 #user-progress-graph {
     height: 15vh;
 }
 
-.progress-graph-cnn {
+.progress-graph-container {
     position: relative;
     width: 80%;
 }

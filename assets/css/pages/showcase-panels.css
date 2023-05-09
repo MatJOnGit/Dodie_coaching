@@ -43,12 +43,16 @@ footer li {
     margin: 27vh 0 70px 0;
 }
 
+.speech-container {
+    padding: 2.5vmin 0 0;
+}
+
 .showcase-panel a {
     font-size: 4.5vmin;
 }
 
 .speech-container p {
-    margin: 10px 5%;
+    margin: 1.5vmin 5%;
 }
 
 .speech-container img {
@@ -183,8 +187,8 @@ h2 {
 
 .blurry-layer {
     height: 100%;
-    position: fixed;
     left: 0;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 98;
@@ -197,7 +201,7 @@ h2 {
     position: fixed;
     right: 0;
     top: 0;
-    width: 0px;
+    width: 0;
     z-index: 99;
 }
 
@@ -249,7 +253,7 @@ h2 {
 .menu-splitter {
     align-self: center;
     border-radius: 2px;
-    height: 4px;
+    height: 0.5vmin;
     width: 50%;
 }
 
@@ -272,10 +276,6 @@ h2 {
     .speech-container .btn {
         margin-top: 4vh;
         margin-bottom: 4vh;
-    }
-
-    .speech-container p:first-child {
-        margin-top: 3vh;
     }
 
     .showcase-panel {

@@ -1,2 +1,2 @@
 dynamicMenuDisplayer = new DynamicMenuDisplayer;
-dynamicMenuDisplayer.init();
+dynamicMenuDisplayer.addMenuTriggerBtnListener();

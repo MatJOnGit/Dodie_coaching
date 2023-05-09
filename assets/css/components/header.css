@@ -49,7 +49,7 @@ h1 {
 }
 
 #static-menu,
-#page-name-cnn {
+#page-name-container {
     background: url('./../../../public/img/header-banner.jpg');
     background-position-y: center;
     background-repeat: no-repeat;
@@ -62,7 +62,7 @@ h1 {
 }
 
 #static-menu ul,
-#page-name-cnn > div {
+#page-name-container > div {
     display: flex;
     height: 50px;
 }
@@ -78,14 +78,17 @@ h1 {
     justify-content: center;
 }
 
+/*************************************
+            Tablets design
+*************************************/
 @media (min-width: 768px) {
     #title-layer {
         height: 10vh;
     }
 
     #logo {
-        width: 90px;
         height: 90px;
+        width: 90px;
     }
 
     h1 {
@@ -97,11 +100,11 @@ h1 {
     }
 
     #static-menu,
-    #page-name-cnn {
+    #page-name-container {
         height: 14vh;
     }
 
-    #static-menu ul, #page-name-cnn > div {
+    #static-menu ul, #page-name-container > div {
         height: 70px;
     }
 
@@ -117,3 +120,7 @@ h1 {
         font-size: 4vmin;
     }
 }
+
+/*************************************
+            Desktop design
+*************************************/

@@ -17,9 +17,19 @@
     src: url('../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf');
 }
 
+html, body {
+    font-family: 'source sans pro';
+}
+
+li, a, input, select {
+    font-family: 'archivo narrow';
+}
+
 /************************/
 /*        THEMES        */
 /************************/
+
+/***** Text *****/
 
 .btn,
 input[type=submit],
@@ -36,7 +46,7 @@ figcaption {
 }
 
 th {
-    color: 	hsla(240, 100%, 50%, 1);
+    color: hsla(240, 100%, 50%, 1);
 }
 
 .wrong {
@@ -46,6 +56,8 @@ th {
 .correct {
     color: hsla(120, 100%, 24.9%, 1);
 }
+
+/****** Backgrounds ******/
 
 header,
 .white-bkgd,
@@ -93,8 +105,9 @@ button {
     background-color: inherit;
 }
 
+/***** Box-shadows *****/
+
 .btn {
-    border: none;
     box-shadow: 5px 5px 5px 0px hsla(0, 0%, 0%, .65);
 }
 
@@ -110,10 +123,6 @@ footer li {
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-html, body {
-    font-family: 'source sans pro';
 }
 
 #title-layer i {
@@ -133,10 +142,6 @@ html, body {
     position: absolute;
     top: 0;
     width: 51px;
-}
-
-li, a, input, select {
-    font-family: 'archivo narrow';
 }
 
 ul {
@@ -167,6 +172,7 @@ input::placeholder {
 
 .btn {
     padding: 17px 25px;
+    border: none;
 }
 
 .rounded-btn {
@@ -193,15 +199,14 @@ input::placeholder {
 
 #input-helper-container {
     align-items: center;
-    border-radius: 3px;
+    border-radius: 8px;
     display: flex;
     flex-direction: row;
-    font-weight: 600;
     font-size: 4vmin;
+    font-weight: 600;
     justify-content: space-between;
     opacity: 0;
-    padding: 4px 20px;
-    border-radius: 8px;
+    padding: 2.5vmin 4%;
 }
 
 .hidden {
@@ -214,14 +219,21 @@ select {
     border: none;
 }
 
+/*************************************
+            Tablets design
+*************************************/
 @media (min-width: 768px) {
     .btn {
         padding: 3vmin 5%;
     }
-
+    
     .circle-btn {
         border-radius: 55px;
         height: 11vmin;
         width: 11vmin;
     }
 }
+
+/*************************************
+            Desktop design
+*************************************/

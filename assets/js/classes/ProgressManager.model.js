@@ -5,7 +5,7 @@ class ProgressManager extends ElementFader {
         this._weightRegex = /^(?!0*[.,]0*$|[.,]0*$|0*$)\d+[,.]?\d{0,3}$/;
         
         this._dateTypeSelect = document.getElementById('date-selector');
-        this._formFields = document.getElementsByClassName('form-fields')[0];
+        this._progressFormInputs = document.getElementsByClassName('progress-form-inputs')[0];
         this._submitButton = document.getElementById('submit-btn');
         this._weightInput = document.getElementById('user-weight');
     }
@@ -14,8 +14,8 @@ class ProgressManager extends ElementFader {
         return this._dateTypeSelect;
     }
     
-    get formFields() {
-        return this._formFields;
+    get progressFormInputs() {
+        return this._progressFormInputs;
     }
     
     get selectedOptionValue() {
@@ -73,7 +73,7 @@ class ProgressManager extends ElementFader {
         
         let cancelReportDeletionButton = document.createElement('a');
         cancelReportDeletionButton.href = 'index.php?page=progress';
-        cancelReportDeletionButton.classList = 'btn circle-btn purple-bkgd'
+        cancelReportDeletionButton.classList = 'btn small-circle-btn purple-bkgd'
         cancelReportDeletionButton.textContent = 'Non';
         
         let reportDeletionMessage = document.createElement('div');
@@ -82,7 +82,7 @@ class ProgressManager extends ElementFader {
         
         let confirmReportDeletionButton = document.createElement('a');
         confirmReportDeletionButton.href = `index.php?action=delete-report&id=${selectedReport.id}`;
-        confirmReportDeletionButton.classList = 'btn circle-btn red-bkgd';
+        confirmReportDeletionButton.classList = 'btn small-circle-btn red-bkgd';
         confirmReportDeletionButton.textContent = 'Oui';
         
         selectedReport.innerHTML = '';
@@ -98,14 +98,15 @@ class ProgressManager extends ElementFader {
         let reportDate = document.getElementsByClassName('report-day')[0];
         let reportTime = document.getElementsByClassName('report-time')[0];
         
-        this.formFields.classList.remove('full-length-fields');
-        this.formFields.classList.add('sided-fields');
+        // this.formFields.classList.remove('full-length-fields');
+        // this.formFields.classList.add('sided-fields');
         
-        this.formFields.removeChild(reportDate);
-        this.formFields.removeChild(reportTime);
+        this.progressFormInputs.removeChild(reportDate);
+        this.progressFormInputs.removeChild(reportTime);
     }
     
-    init() {
+    addProgressFormEvents() {
+        console.log(this.progressFormInputs);
         this.addSelectListener();
         this.addDeleteReportListeners();
         this.addSubmitButtonListener();
@@ -125,10 +126,10 @@ class ProgressManager extends ElementFader {
         reportTime.name = 'report-time';
         reportTime.setAttribute('required', '');
         
-        this.formFields.classList.remove('sided-fields');
-        this.formFields.classList.add('full-length-fields');
+        // this.formFields.classList.remove('sided-fields');
+        // this.formFields.classList.add('full-length-fields');
         
-        this.formFields.appendChild(reportDate);
-        this.formFields.appendChild(reportTime);
+        this.progressFormInputs.appendChild(reportDate);
+        this.progressFormInputs.appendChild(reportTime);
     }
 }

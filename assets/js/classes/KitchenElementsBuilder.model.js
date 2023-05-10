@@ -69,11 +69,11 @@ class KitchenElementsBuilder {
                 <button id='new-search-btn' class='btn large-btn rounded-btn blue-bkgd'>Nouvelle recherche</button>
                 
                 <div id='action-confirmation-block' class='hidden'>
-                    <button id='cancel-deletion-btn' class='btn circle-btn blue-bkgd'>Non</button>
+                    <button id='cancel-deletion-btn' class='btn small-circle-btn blue-bkgd'>Non</button>
                     <div>
                         <p>${message}</p>
                     </div>
-                    <button id='confirm-deletion-btn' class='btn circle-btn red-bkgd'>Oui</button>
+                    <button id='confirm-deletion-btn' class='btn small-circle-btn red-bkgd'>Oui</button>
                 </div>
             </div>
         `;

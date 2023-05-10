@@ -65,11 +65,6 @@ select::-ms-select-placeholder {
             Tablets design
 *************************************/
 @media (min-width: 768px) {
-    h2 {
-        font-size: 5vmin;
-        margin: 0 2% 3vh;
-    }
-
     input::placeholder {
         font-size: 2.5vmin;
     }
@@ -79,5 +74,9 @@ select::-ms-select-placeholder {
     input[type=password],
     input[type=number] {
         padding: 2vh 3% 2vh 3%;
+    }
+    
+    select {
+        padding: 1vh 1% 1.8vh 1%;
     }
 }

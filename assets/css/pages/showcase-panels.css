@@ -125,10 +125,13 @@ h2 {
     margin: 5px 20px;
 }
 
-.program-summary span {
+.big-circle-btn {
     bottom: 30px;
     position: absolute;
     right: 30px;
+    border-radius: 7vmin;
+    height: 14vmin;
+    width: 14vmin;
 }
 
 .programs-list span i {
@@ -309,6 +312,12 @@ h2 {
     .program-description {
         margin: 2vh 5% 2vh 5%;
         padding: 3vh 5%;
+    }
+    
+    .big-circle-btn {
+        border-radius: 7vmin;
+        height: 10vmin;
+        width: 10vmin;
     }
 }
 

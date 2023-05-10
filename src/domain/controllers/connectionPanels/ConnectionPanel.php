@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Controllers\AuthPanels;
+namespace App\Domain\Controllers\ConnectionPanels;
 
 use App\Domain\Interfaces\Dispatcher;
 
-class AuthPanel implements Dispatcher {
+class ConnectionPanel implements Dispatcher {
     private const AUTH_PANELS_STYLES = [
         'pages/connection-panels',
         'components/header',
@@ -33,7 +33,7 @@ class AuthPanel implements Dispatcher {
         header("location:{$this->getRoutingURL($page)}");
     }
     
-    protected function _getAuthPanelsStyles(): array {
+    protected function _getConnectionPanelsStyles(): array {
         return self::AUTH_PANELS_STYLES;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Controllers\AuthPanels;
+namespace App\Domain\Controllers\ConnectionPanels;
 
-final class Registering extends AuthPanel {
+final class Registering extends ConnectionPanel {
     private const REGISTERING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',
@@ -12,7 +12,7 @@ final class Registering extends AuthPanel {
     
     public function renderRegisteringPage(object $twig): void {
         echo $twig->render('connection_panels/registering.html.twig', [
-            'stylePaths' => $this->_getAuthPanelsStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'création de compte',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_getRegisteringPanelScripts()

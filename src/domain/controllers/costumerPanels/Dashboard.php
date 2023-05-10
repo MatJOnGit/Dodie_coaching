@@ -19,10 +19,10 @@ class Dashboard extends CostumerPanel {
             'frenchTitle' => 'Rendez-vous',
             'link' => 'meetings-booking'
         ],
-        'subscription' => [
-            'icon' => 'fa-star',
-            'frenchTitle' => 'Abonnement',
-            'link' => 'subscription'
+        'customer-profile' => [
+            'icon' => 'fa-user',
+            'frenchTitle' => 'Profil utilisateur',
+            'link' => 'customer-profile'
         ]
     ];
     

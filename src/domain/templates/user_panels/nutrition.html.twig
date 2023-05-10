@@ -9,8 +9,13 @@
                 <ul class='nutrition-days-list'>
                     {% for dayKey, day in nextDays %}
                         <li>
-                            <h4>{{ day['frenchFullDate'] }}</h4>
-                            
+                            <div class="day-name">
+                                <div class="day-name-content">
+                                    <h4>{{ day['frenchFullDate'] }}</h4>
+                                    <div class="day-name-underline"></div>
+                                </div>
+                            </div>
+
                             <ul class='meals-list'>
                                 {% for mealKey in meals | keys %}
                                     {% set englishMeal = meals[mealKey] %}
@@ -40,9 +45,10 @@
                     </a>
                     
                     {% if programFilePath is not empty %}
-                        <a href='{{ programFilePath }}' class='btn rounded-btn purple-bkgd'  download="mon_plan_nutrition.pdf">
+                        <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded-btn purple-bkgd'  download="mon_plan_nutrition.pdf">
                             <i class="fa-solid fa-download"></i>
                         </a>
+                        
                     {% else %}
                         <a role='link' class='btn rounded-btn grey-bkgd' aria-disabled='true'>
                             <i class="fa-solid fa-download"></i>
@@ -61,3 +67,7 @@
         {% endif %}
     </div>
 {% endblock pageContent %}
+
+{% block scripts %}
+    {% include 'components/scripts.html.twig' %}
+{% endblock scripts %}

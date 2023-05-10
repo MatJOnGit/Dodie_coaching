@@ -28,6 +28,7 @@ final class ProgramFile {
         $programFile = new ProgramFileModel;
         
         $programFileStatus = $programFile->selectFileStatus($subscriberId);
+        
         return $programFileStatus ? $programFileStatus['file_status'] : NULL;
     }
     

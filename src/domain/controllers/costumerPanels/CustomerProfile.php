@@ -2,11 +2,11 @@
 
 namespace App\Domain\Controllers\CostumerPanels;
 
-final class Subscription extends CostumerPanel {
-    public function renderSubscriptionPage(object $twig): void {
+final class CustomerProfile extends CostumerPanel {
+    public function renderCustomerProfilePage(object $twig): void {
         echo $twig->render('user_panels/subscriptions.html.twig', [
             'stylePaths' => $this->_getCostumerPanelsStyles(),
-            'frenchTitle' => 'abonnements',
+            'frenchTitle' => 'Profil utilisateur',
             'appSection' => 'userPanels',
             'prevPanel' => ['dashboard', 'Tableau de bord']
         ]);

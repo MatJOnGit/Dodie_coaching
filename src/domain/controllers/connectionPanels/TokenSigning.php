@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Domain\Controllers\AuthPanels;
+namespace App\Domain\Controllers\ConnectionPanels;
 
 use App\Domain\Models\ResetToken;
 
-final class TokenSigning extends AuthPanel {
+final class TokenSigning extends ConnectionPanel {
     private const TOKEN_SIGNING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',
@@ -14,7 +14,7 @@ final class TokenSigning extends AuthPanel {
     
     public function renderTokenSigningPage(object $twig): void {
         echo $twig->render('connection_panels/token-signing.html.twig', [
-            'stylePaths' => $this->_getAuthPanelsStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'réinitialisation de mot de passe',
             'appSection' => 'connectionPanels',
             'remainingAttempts' => $this->_getTokenSigningRemainingAttempts(),

@@ -1,28 +1,24 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='user-panel dashboard-panel'>
-        <a href='' class='settings-btn'>
-            <i class="fa-solid fa-gear"></i>
-        </a>
-        
-        <div class='progress-graph-container'>
-            <canvas id="user-progress-graph"></canvas>
-            <figcaption>Objectif de poids : 86 kg</figcaption>
-        </div>
-        
+    {{ app.session.get('name') }}
+    <div class='user-panel dashboard-panel'>        
         <nav class='dashboard-menu'>
             <ul>
                 {% for dashboardMenuItem in dashboardMenuItems %}
                 <li>
                     <a href='index.php?page={{ dashboardMenuItem.link }}' class='dashboard-btn rounded-btn'>
-                        <span class='btn menu-icon circle-btn purple-bkgd'><i class="fa-solid {{ dashboardMenuItem.icon }}"></i></span>
-                        <p class='menu-item-name'>{{ dashboardMenuItem.frenchTitle }}</p>
-                        <span class='btn rounded-btn purple-bkgd'><i class="fa-solid fa-chevron-right"></i></span>
+                        <i class="fa-solid {{ dashboardMenuItem.icon }}"></i>
+                        <h3 class='menu-item-name'>{{ dashboardMenuItem.frenchTitle }}</h3>
                     </a>
                 </li>
                 {% endfor %}
             </ul>
         </nav>
+        
+        <div class='progress-graph-container'>
+            <canvas id="user-progress-graph"></canvas>
+            <figcaption>Objectif de poids : 86 kg</figcaption>
+        </div>
     </div>
 {% endblock pageContent %}

@@ -186,7 +186,7 @@ class MeetingBooker extends ElementFader {
     displayCancelMeetingConfirmation() {
         let cancelMeetingCancelationButton = document.createElement('a');
         cancelMeetingCancelationButton.href = 'index.php?page=meetings';
-        cancelMeetingCancelationButton.classList = 'btn circle-btn purple-bkgd';
+        cancelMeetingCancelationButton.classList = 'btn small-circle-btn purple-bkgd';
         cancelMeetingCancelationButton.textContent = 'Non';
         
         let meetingConcelationMessage = document.createElement('div');
@@ -195,7 +195,7 @@ class MeetingBooker extends ElementFader {
         
         let confirmMeetingCancelationLink = document.createElement('a');
         confirmMeetingCancelationLink.href = 'index.php?action=cancel-appointment';
-        confirmMeetingCancelationLink.classList = 'btn circle-btn red-bkgd';
+        confirmMeetingCancelationLink.classList = 'btn small-circle-btn red-bkgd';
         confirmMeetingCancelationLink.textContent = 'Oui';
         
         this.cancelMeetingButtonContainer.innerHTML = '';

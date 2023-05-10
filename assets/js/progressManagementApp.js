@@ -1,2 +1,2 @@
 const progressManager = new ProgressManager;
-progressManager.init();
+progressManager.addProgressFormEvents();

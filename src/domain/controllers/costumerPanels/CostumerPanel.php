@@ -17,7 +17,7 @@ class CostumerPanel implements Dispatcher {
         'meetingsBooking' => 'index.php?page=meetings-booking',
         'nutrition' => 'index.php?page=nutrition',
         'progress' => 'index.php?page=progress',
-        'subscription' => 'index.php?page=subscription',
+        'customerProfile' => 'index.php?page=customer-profile',
     ];
     
     public function getRoutingURL(string $panel): string {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Controllers\AuthPanels;
+namespace App\Domain\Controllers\ConnectionPanels;
 
-final class PasswordEditing extends AuthPanel {
+final class PasswordEditing extends ConnectionPanel {
     private const PASSWORD_EDITING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',
@@ -12,7 +12,7 @@ final class PasswordEditing extends AuthPanel {
     
     public function renderPasswordEditingPage(object $twig): void {
         echo $twig->render('connection_panels/password-edition.html.twig', [
-            'stylePaths' => $this->_getAuthPanelsStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'Edition de votre mot de passe',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_getPasswordEditingPanelScripts('pwdEditing')

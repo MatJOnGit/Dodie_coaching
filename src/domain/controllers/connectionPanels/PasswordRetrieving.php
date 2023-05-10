@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Controllers\AuthPanels;
+namespace App\Domain\Controllers\ConnectionPanels;
 
-final class PasswordRetrieving extends AuthPanel {
+final class PasswordRetrieving extends ConnectionPanel {
     private const PASSWORD_RETRIEVING_PANEL_SCRIPTS = [
         'classes/ElementFader.model',
         'classes/ConnectionHelper.model',
@@ -12,7 +12,7 @@ final class PasswordRetrieving extends AuthPanel {
     
     public function renderPasswordRetrievingPage(object $twig): void {
         echo $twig->render('connection_panels/password-retrieving.html.twig', [
-            'stylePaths' => $this->_getAuthPanelsStyles(),
+            'stylePaths' => $this->_getConnectionPanelsStyles(),
             'frenchTitle' => 'mot de passe perdu',
             'appSection' => 'connectionPanels',
             'pageScripts' => $this->_getPasswordRetrievingPanelScripts('pwdRetrieving')

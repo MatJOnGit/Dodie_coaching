@@ -188,13 +188,20 @@ input::placeholder {
     width: 100%;
 }
 
-.circle-btn {
+.small-circle-btn,
+.big-circle-btn {
     align-items: center;
     border-radius: 32px;
     display: flex;
     height: 15vmin;
     justify-content: center;
     width: 15vmin;
+}
+
+.small-circle-btn {
+    border-radius: 6vmin;
+    height: 12vmin;
+    width: 12vmin;
 }
 
 #input-helper-container {
@@ -223,6 +230,11 @@ select {
             Tablets design
 *************************************/
 @media (min-width: 768px) {
+    .prev-page-btn {
+        height: 70px;
+        width: 70px;
+    }
+
     .btn {
         padding: 3vmin 5%;
     }
@@ -231,6 +243,16 @@ select {
         border-radius: 55px;
         height: 11vmin;
         width: 11vmin;
+    }
+
+    .small-circle-btn {
+        border-radius: 4vmin;
+        height: 8vmin;
+        width: 8vmin;
+    }
+
+    h2 {
+        font-size: 5vmin;
     }
 }
 

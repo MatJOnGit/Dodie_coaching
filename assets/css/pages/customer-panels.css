@@ -22,10 +22,11 @@ footer p {
 }
 
 .menu-item-name {
-    display: block;
-    width: 40%;
-    text-align: left;
     color: hsla(0, 0%, 0%, 1);
+    margin: 2vh 0 0 0;
+    text-align: center;
+    font-size: 4.3vmin;
+    font-weight: lighter;
 }
 
 .red-bkgd {
@@ -56,7 +57,8 @@ h2 {
     font-size: 3.8vmin;
     font-weight: 600;
     font-style: italic;
-    margin: 0 0 0 65px;
+    margin: 0 0 0 50px;
+    padding-left: 15px;
 }
 
 .user-panel {
@@ -64,19 +66,14 @@ h2 {
     display: flex;
     flex-direction: column;
     margin: 27vh 0 70px 0;
-    padding: 3vh 7%;
+    padding: 3vh 5%;
     position: relative;
     width: 100%;
 }
 
 h3 {
     font-size: 5vmin;
-    margin: 0 0 2.5vh;
-}
-
-.btn span,
-.dashboard-btn i {
-    margin: auto;
+    margin: 0 0 1.5vh;
 }
 
 form {
@@ -100,11 +97,6 @@ input[type=submit] {
     width: 40%;
 }
 
-#cancel-btn-container button,
-.user-panel input[type=submit] {
-    height: 64px;
-}
-
 .user-panel form {
     margin-bottom: 5vh;
 }
@@ -115,7 +107,6 @@ input[type=submit] {
 
 .dashboard-panel {
     height: calc(73vh - 70px);
-    justify-content: center;
 }
 
 .settings-btn {
@@ -125,57 +116,51 @@ input[type=submit] {
 }
 
 .settings-btn i {
-    font-size: 9vmin;
-    padding: 3vh;
-}
-
-.progress-graph-container,
-#user-progress-graph {
-    height: 15vh;
-}
-
-.progress-graph-container {
-    position: relative;
-    width: 80%;
-}
-
-#user-progress-graph {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-figcaption {
-    position: absolute;
-    text-align: center;
-    top: 0;
-    width: 100%;
-}
-
-.dashboard-menu {
-    display: flex;
-    flex-direction: column;
-    height: calc(39vh - 70px);
-    justify-content: center;
-    width: 90%;
+    font-size: 12vmin;
+    padding: 1vh;
 }
 
 .dashboard-menu ul {
     display: flex;
-    flex-direction: column;
-    height: 22vh;
-    justify-content: space-between;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
 }
 
 .dashboard-menu li {
     align-items: center;
     display: flex;
-    flex-direction: row;
     justify-content: center;
+    width: 40%;
+    height: 15vh;
+    background-color: hsla(261, 48%, 51%, 0.2);
+    box-shadow: 3px 3px 3px 0 hsla(0, 0%, 0%, 0.6);
+    margin: 0 5% 2vh 5%;
+    border-radius: 8px;
+}
+
+.dashboard-menu li a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    margin-bottom: 2vh;
+    height: 100%;
+    padding: 1vh 5%;
+}
+
+.section-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.dashboard-menu li i {
+    color: hsla(30, 100%, 50%, 1);
 }
 
 .dashboard-btn {
@@ -194,35 +179,77 @@ figcaption {
     font-size: 6vmin;
 }
 
+.progress-graph-container,
+#user-progress-graph {
+    height: 22vh;
+}
+
+.progress-graph-container {
+    position: relative;
+    width: 90%;
+    margin-top: 2vh;
+}
+
+#user-progress-graph {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+figcaption {
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+
 /*****************************************/
 /*           NUTRITION (MENU)            */
 /*****************************************/
 
 .meals-list-panel {
-    padding: 30px 0;
+    padding: 2vh 0 3vh;
 }
 
 .nutrition-days-list {
-    width: 100%;
+    width: 90%;
 }
 
-.meals-list-panel h4 {
+.day-name {
+    width: 100%;
+    position: relative;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+}
+
+.day-name-content {
+    display: flex;
+    align-items: center;
+}
+
+.day-name-underline {
+    flex-grow: 1;
+    height: 1px;
+    background-color: hsla(0, 0%, 0%, 1);
+    margin-left: 10px;
+}
+
+.day-name h4 {
     font-size: 4.5vmin;
-    margin: 0 0 2vh 5%;
+    margin: 0;
 }
 
 .nutrition-days-list > li {
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
     width: 100%;
 }
 
 .meals-list {
-    align-content: space-between;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
     width: 100%;
+    overflow-x: scroll;
 }
 
 .meals-list li {
@@ -231,7 +258,7 @@ figcaption {
     height: 12vh;
     margin: 2px 1% 2px 1%;
     position: relative;
-    width: 48%;
+    min-width: 130px;
 }
 
 .breakfast-list-item {
@@ -263,7 +290,7 @@ figcaption {
 }
 
 .meals-list h5 {
-    font-size: 6.5vmin;
+    font-size: 6vmin;
     margin: 0 0 0 10px;
     position: absolute;
     top: 5px;
@@ -273,13 +300,9 @@ figcaption {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 3vh;
+    margin: 1vh 0 0;
     padding: 0 5%;
     width: 100%;
-}
-
-.nutrition-requests a {
-    padding: 17px;
 }
 
 .no-program-block {
@@ -297,6 +320,7 @@ figcaption {
 /*****************************************/
 
 .portions-list {
+    list-style: square inside;
     width: 100%;
 }
 
@@ -305,15 +329,9 @@ figcaption {
     flex-direction: row;
 }
 
-.portions-list-item,
-.recipe-btn {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    height: 35px;
-    margin: 8px 0;
-    padding: 0;
-    width: 100%;
+.portions-list-item {
+    display: list-item;
+    padding: 2vh 4% 0;
 }
 
 .recipe-btn span {
@@ -325,12 +343,20 @@ figcaption {
 /*           SHOPPING LIST            */
 /**************************************/
 
+.shopping-list {
+    width: 100%;
+}
+
 .shopping-list li {
-    margin: 1vh 0;
+    margin: 1.5vh 0 0.5vh;
 }
 
 .shopping-list label {
     margin-left: 10px;
+}
+
+input[type=checkbox] {
+    transform: scale(1.3);
 }
 
 /*********************************/
@@ -342,14 +368,6 @@ figcaption {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.sided-fields {
-    width: 145px;
-}
-
-.full-length-fields {
-    width: 100%;
 }
 
 .user-weight-input {
@@ -364,13 +382,9 @@ figcaption {
     width: 75px;
 }
 
-.report-weight {
-    width: 45%;
-}
-
 .progression-logs {
     padding: 0;
-    width: 100%;
+    width: 90%;
 }
 
 .progress-item {
@@ -380,6 +394,21 @@ figcaption {
     justify-content: space-between;
     padding: 1vh 0;
     text-align: center;
+    position: relative;
+}
+
+.progress-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 1px;
+    background-color: black;
+}
+
+.fa-ban {
+    font-size: 3vmin;
 }
 
 /*********************************/
@@ -491,4 +520,130 @@ figcaption {
     height: 100%;
     width: 100%;
     border-radius: 1.5vh;
+}
+
+/*************************************
+            Tablets design
+*************************************/
+@media (min-width: 768px) {
+    .user-panel {
+        margin: 24vh 0 110px 0;
+    }
+    
+    .dashboard-panel {
+        height: calc(76vh - 110px);
+    }
+    
+    
+    h2 {
+        font-size: 3vmin;
+        margin: 0 0 0 70px;
+        padding-left: 3%;
+    }
+    
+    .progress-graph-container {
+        width: 60%;
+    }
+    .dashboard-menu {
+        width: 100%;
+    }
+    
+    .dashboard-menu ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: 30vh;
+        width: 100%;
+    }
+    
+    .dashboard-menu li {
+        width: 35%;
+        height: 12vh;
+    }
+    
+    .menu-item-name {
+        margin: 1vh 0 0 0;
+        font-size: 2.4vmin;
+        font-weight: 400;
+    }
+    
+    .progress-graph-container {
+        width: 80%;
+    }
+    
+    figcaption {
+        font-size: 2.5vmin;
+    }
+    
+    h3 {
+        font-size: 4vmin;
+    }
+    
+    .meals-list-panel h4 {
+        font-size: 3.2vmin;
+        margin: 0;
+    }
+    
+    .nutrition-days-list > li {
+        margin-bottom: 3vh;
+    }
+    
+    .day-name-content {
+        margin: 0 10%;
+    }
+    
+    .meals-list {
+        width: 80%;
+        margin: 0 10%;
+    }
+    
+    .meals-list li {
+        height: 13vh;
+        margin: 4px 1% 4px 1%;
+        width: 48%;
+    }
+    
+    .meals-list h5 {
+        font-size: 4vmin;
+        margin: 1.5vmin 5%;
+    }
+    
+    .nutrition-requests {
+        margin: 0vh 0 5vh;
+        justify-content: flex-end;
+        padding: 0 11% 0 11%;
+    }
+    
+    .nutrition-requests a {
+        font-size: 2.8vmin;
+    }
+    
+    #download-program-btn {
+        width: 75px;
+        margin-left: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .portions-list-item {
+        font-size: 2.5vmin;
+    }
+
+    #progress-form {
+        margin-bottom: 3vh;
+    }
+
+    .progress-form-inputs {
+        display: flex;
+    }
+
+    .progress-form-inputs input,
+    .progress-form-inputs select {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .user-weight-input {
+        width: 70px;
+    }
 }

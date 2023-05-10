@@ -95,32 +95,32 @@ try {
         elseif (in_array($page, $routing::URLS['pages']['authentification'])) {
             if (!$session->isUserLogged()) {
                 if ($routing->isRequestMatching($page, 'login')) {
-                    $login = new App\Domain\Controllers\AuthPanels\Login;
+                    $login = new App\Domain\Controllers\ConnectionPanels\Login;
                     $login->renderLoginPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'registering')) {
-                    $registering = new App\Domain\Controllers\AuthPanels\Registering;
+                    $registering = new App\Domain\Controllers\ConnectionPanels\Registering;
                     $registering->renderRegisteringPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'password-retrieving')) {
-                    $passwordRetrieving = new App\Domain\Controllers\AuthPanels\PasswordRetrieving;
+                    $passwordRetrieving = new App\Domain\Controllers\ConnectionPanels\PasswordRetrieving;
                     $passwordRetrieving->renderPasswordRetrievingPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'password-editing')) {
-                    $passwordEditing = new App\Domain\Controllers\AuthPanels\PasswordEditing;
+                    $passwordEditing = new App\Domain\Controllers\ConnectionPanels\PasswordEditing;
                     $passwordEditing->renderPasswordEditingPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'mail-notification')) {
-                    $passwordNotification = new App\Domain\Controllers\AuthPanels\PasswordNotification;
+                    $passwordNotification = new App\Domain\Controllers\ConnectionPanels\PasswordNotification;
                     $passwordNotification->renderMailNotificationPage($twig);
                 }
                 
                 elseif ($routing->isRequestMatching($page, 'token-signing')) {
-                    $tokenSigning = new App\Domain\Controllers\AuthPanels\TokenSigning;
+                    $tokenSigning = new App\Domain\Controllers\connectionPanels\TokenSigning;
                     $tokenSigning->renderTokenSigningPage($twig);
                 }
             }
@@ -147,12 +147,12 @@ try {
                         $meal = new App\Entities\Meal;
                         
                         if ($program->isMenuRequested()) {
-                            $programMenu = new App\Domain\Controllers\CostumerPanels\ProgramMenu;
+                            $nutritionMenu = new App\Domain\Controllers\CostumerPanels\NutritionMenu;
                             $programFile = new App\Entities\ProgramFile;
                             $program = new App\Entities\Program;
                             
                             $subscriberId = intval($routing->getUserId()['id']);
-                            $programMenu->renderNutritionMenuPage($twig, $program, $meal, $programFile, $subscriberId);
+                            $nutritionMenu->renderNutritionMenuPage($twig, $program, $meal, $programFile, $subscriberId);
                         }
                         
                         elseif ($program->isMealRequested()) {
@@ -201,9 +201,9 @@ try {
                         $meetingBooking->renderMeetingsBookingPage($twig);
                     }
                     
-                    elseif ($routing->isRequestMatching($page, 'subscription')) {
-                        $subscription = new \App\Domain\Controllers\CostumerPanels\Subscription;
-                        $subscription->renderSubscriptionPage($twig);
+                    elseif ($routing->isRequestMatching($page, 'customer-profile')) {
+                        $subscription = new \App\Domain\Controllers\CostumerPanels\CustomerProfile;
+                        $subscription->renderCustomerProfilePage($twig);
                     }
                     
                     else {
@@ -445,7 +445,7 @@ try {
         $action = $routing->getParam('action');
         
         if (in_array($action, $routing::URLS['actions']['authentification'])) {
-            $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
+            $authPanel = new App\Domain\Controllers\ConnectionPanels\ConnectionPanel;
             $authForm = new App\Entities\AuthForm;
             
             if ($routing->isRequestMatching($action, 'log-account') && !$session->isUserLogged()) {
@@ -574,7 +574,7 @@ try {
                             }
                             
                             else {
-                                $passwordRetrieving = new App\Domain\Controllers\AuthPanels\PasswordRetrieving;
+                                $passwordRetrieving = new App\Domain\Controllers\ConnectionPanels\PasswordRetrieving;
                                 
                                 $session->sessionize($userData, ['email']);
                                 $passwordRetrieving->routeTo('send-token');
@@ -602,7 +602,7 @@ try {
                         }
                         
                         else {
-                            $passwordNotification = new App\Domain\Controllers\AuthPanels\PasswordNotification;
+                            $passwordNotification = new App\Domain\Controllers\ConnectionPanels\PasswordNotification;
                             $passwordNotification->routeTo('mail-notification');
                         }
                     }
@@ -624,7 +624,7 @@ try {
                     $routingData = $authForm->getData(['token']);
                     
                     if ($authForm->areDataValid($routingData)) {
-                        $authPanel = new App\Domain\Controllers\AuthPanels\AuthPanel;
+                        $authPanel = new App\Domain\Controllers\ConnectionPanels\ConnectionPanel;
                         
                         if ($token->isTokenMatching()) {
                             $session->sessionize($routingData, ['token']);

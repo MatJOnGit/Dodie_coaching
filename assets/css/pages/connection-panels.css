@@ -135,7 +135,8 @@ div[class$='-input-container'] {
 }
 
 .show-input-helper-btn {
-    margin: 0 3% 2vh 0;
+    margin: auto;
+    margin-right: 3%;
 }
 
 input[type=email],
@@ -199,8 +200,12 @@ input[type=submit] {
 *************************************/
 @media (min-width: 768px) {
     .connection-panel {
-        height: calc(100vh - 10vh - 110px);
-        margin: 10vh 0 110px 0;
+        height: calc(100vh - 10vh - 90px);
+        margin: 10vh 0 90px 0;
+    }
+
+    .connection-panel input {
+        text-align: center;
     }
 
     .show-input-helper-btn,

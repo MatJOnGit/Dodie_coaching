@@ -177,6 +177,7 @@ input::placeholder {
 
 .rounded-btn {
     border-radius: 2vh;
+    font-size: 1em;
 }
 
 .tiny-btn,
@@ -234,7 +235,7 @@ select {
         height: 70px;
         width: 70px;
     }
-
+    
     .btn {
         padding: 3vmin 5%;
     }
@@ -244,13 +245,13 @@ select {
         height: 11vmin;
         width: 11vmin;
     }
-
+    
     .small-circle-btn {
-        border-radius: 4vmin;
-        height: 8vmin;
-        width: 8vmin;
+        border-radius: 4.5vmin;
+        height: 9vmin;
+        width: 9vmin;
     }
-
+    
     h2 {
         font-size: 5vmin;
     }

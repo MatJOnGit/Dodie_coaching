@@ -1,4 +1,4 @@
-class MeetingManager extends ElementFader {
+class MeetingCreator extends ElementFader {
     constructor() {
         super();
         

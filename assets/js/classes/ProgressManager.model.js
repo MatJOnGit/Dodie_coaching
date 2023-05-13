@@ -61,7 +61,7 @@ class ProgressManager extends ElementFader {
     addSubmitButtonListener() {
         this.submitButton.addEventListener('click', (e) => {
             let isWeightValueValid = this.weightRegex.test(this.weightInput.value);
-
+            
             if (!isWeightValueValid || this.selectedOptionValue === '') {
                 e.preventDefault();
             }
@@ -98,15 +98,11 @@ class ProgressManager extends ElementFader {
         let reportDate = document.getElementsByClassName('report-day')[0];
         let reportTime = document.getElementsByClassName('report-time')[0];
         
-        // this.formFields.classList.remove('full-length-fields');
-        // this.formFields.classList.add('sided-fields');
-        
         this.progressFormInputs.removeChild(reportDate);
         this.progressFormInputs.removeChild(reportTime);
     }
     
     addProgressFormEvents() {
-        console.log(this.progressFormInputs);
         this.addSelectListener();
         this.addDeleteReportListeners();
         this.addSubmitButtonListener();
@@ -125,9 +121,6 @@ class ProgressManager extends ElementFader {
         reportTime.classList = 'report-time';
         reportTime.name = 'report-time';
         reportTime.setAttribute('required', '');
-        
-        // this.formFields.classList.remove('sided-fields');
-        // this.formFields.classList.add('full-length-fields');
         
         this.progressFormInputs.appendChild(reportDate);
         this.progressFormInputs.appendChild(reportTime);

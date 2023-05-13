@@ -1,2 +1,2 @@
-const meetingManager = new MeetingManager;
-meetingManager.init();
+const meetingCreator = new MeetingCreator;
+meetingCreator.init();

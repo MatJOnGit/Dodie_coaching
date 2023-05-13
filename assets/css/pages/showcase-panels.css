@@ -282,11 +282,11 @@ h2 {
     }
 
     .showcase-panel {
-        margin: 24vh 0 110px 0;
+        margin: 24vh 0 90px 0;
     }
 
     .programs-list > li {
-        min-height: calc((76vh - 110px) / 3);
+        min-height: calc((76vh - 90px) / 3);
     }
 
     h2 {
@@ -306,7 +306,7 @@ h2 {
     }
 
     .program-details {
-        min-height: calc(76vh - 110px);
+        min-height: calc(76vh - 90px);
     }
 
     .program-description {

@@ -6,10 +6,10 @@ use App\Domain\Interfaces\Dispatcher;
 
 class CostumerPanel implements Dispatcher {
     private const COSTUMER_PANELS_STYLES = [
-        'pages/customer-panels',
         'components/header',
         'components/form',
-        'components/footer'
+        'components/footer',
+        'pages/customer-panels'
     ];
     
     private const ROUTING_URLS = [

@@ -7,7 +7,7 @@ use App\Domain\Models\MeetingSlot;
 final class MeetingManagement extends AdminPanel {
     private const MEETING_MANAGEMENT_SCRIPTS = [
         'classes/ElementFader.model',
-        'classes/MeetingManager.model',
+        'classes/MeetingCreator.model',
         'meetingManagementApp'
     ];
     

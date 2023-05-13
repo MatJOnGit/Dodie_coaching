@@ -4,38 +4,20 @@ form {
     flex-direction: column;
 }
 
-input[type=email],
-input[type=text],
-input[type=password],
-input[type=number],
-input[type=date],
-input[type=time],
+input:not([type="submit"]),
 select {
     background-color: inherit;
-    margin: 1.5vh 0;
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
 }
 
 .centered-input {
     text-align: center;
 }
 
-input[type=email],
-input[type=text],
-input[type=password],
-input[type=number] {
-    padding: 1vh 3% 1vh 3%;
-}
-
-input[type=date] {
-    padding: 1vh 1% .9vh 1%;
-}
-
-input[type=time] {
-    padding: 1vh 1% .8vh 1%;
-}
-
+input,
 select {
-    padding: 1vh 1% .7vh 1%;
+    padding: 1vh 1%;
 }
 
 input::placeholder,
@@ -65,18 +47,11 @@ select::-ms-select-placeholder {
             Tablets design
 *************************************/
 @media (min-width: 768px) {
-    input::placeholder {
+    input {
         font-size: 2.5vmin;
     }
 
-    input[type=email],
-    input[type=text],
-    input[type=password],
-    input[type=number] {
-        padding: 2vh 3% 2vh 3%;
-    }
-    
-    select {
-        padding: 1vh 1% 1.8vh 1%;
+    input::placeholder {
+        font-size: 2.5vmin;
     }
 }

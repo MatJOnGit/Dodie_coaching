@@ -9,8 +9,8 @@ footer i {
     color: hsla(261, 48%, 51%, 1);
 }
 
-.previous-days-btn,
-.next-days-btn,
+#previous-days-btn,
+#next-days-btn,
 #cancel-btn-container button,
 .user-panel input[type=submit],
 .nutrition-requests a,
@@ -78,10 +78,6 @@ h3 {
 
 form {
     width: 100%;
-}
-
-select {
-    width: 90px;
 }
 
 input[type=submit] {
@@ -363,23 +359,21 @@ input[type=checkbox] {
 /*           PROGRESS            */
 /*********************************/
 
-.form-fields {
-    align-self: flex-start;
+.progress-form-inputs {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+}
+
+input,
+select {
+    margin-left: 1%;
+    margin-right: 1%;
 }
 
 .user-weight-input {
-    width: 50px;
-}
-
-.report-day {
-    width: 105px;
-}
-
-.report-time {
-    width: 75px;
+    width: 15%;
+    min-width: 45px;
 }
 
 .progression-logs {
@@ -415,76 +409,67 @@ input[type=checkbox] {
 /*           MEETINGS            */
 /*********************************/
 
-#user-next-meeting {
-    margin-top: 0;
-    padding-top: 0;
+.scheduled-meeting-date {
+    display: inline-block;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 
-#cancel-btn-container {
+#cancel-appointment-btn-container {
     align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 5vh;
-    padding-top: 3vh;
+    margin-top: 1vh;
+    width: 100%;
 }
 
-#cancel-btn-container > div {
+#cancel-appointment-btn-container > div {
     align-items: center;
     display: flex;
     height: 64px;
     justify-content: center;
+    margin: 0 5%;
     width: 40%;
 }
 
 .cancelation-alert p {
     text-align: center;
+    margin: 0 5%;
 }
 
-.appointment-block {
+#user-next-meeting {
+    text-align: center;
+}
+
+.appointment-block { /* planning */
     display: flex;
     flex-direction: row;
     width: 100%;
+    justify-content: center;
 }
 
-.appointment-days {
+#meetings-day-list {
     display: flex;
     justify-content: center;
     padding: 0;
-    width: 100%;
+    width: calc(100% - 24vmin);
 }
 
-.appointment-days::-webkit-scrollbar {
+#meetings-day-list::-webkit-scrollbar {
     display: none;
 }
 
 .schedule-days-nav {
     display: flex;
     flex-direction: row;
-    width: calc((100% - 200px) / 2);
+    width: 12vmin;
 }
 
-.previous-days-nav {
-    justify-content: flex-start;
-}
-
-.next-days-nav {
-    justify-content: flex-end;
-}
-
-.previous-days-btn,
-.next-days-btn {
-    border-radius: 50%;
-    height: 40px;
-    padding: 10px;
-    width: 40px;
-}
-
-.next-days-btn {
-    justify-self: flex-end;
-}
-
-.appointment-days > li {
+#meetings-day-list > li {
     margin: 0 3%;
     min-width: 100px;
     text-align: center;
@@ -522,21 +507,24 @@ input[type=checkbox] {
     border-radius: 1.5vh;
 }
 
+#no-available-meeting-message {
+    margin-top: 2vh;
+}
+
 /*************************************
             Tablets design
 *************************************/
 @media (min-width: 768px) {
     .user-panel {
-        margin: 24vh 0 110px 0;
+        margin: 24vh 0 90px 0;
     }
     
     .dashboard-panel {
-        height: calc(76vh - 110px);
+        height: calc(76vh - 90px);
     }
     
-    
     h2 {
-        font-size: 3vmin;
+        font-size: 2.6vmin;
         margin: 0 0 0 70px;
         padding-left: 3%;
     }
@@ -628,22 +616,49 @@ input[type=checkbox] {
     .portions-list-item {
         font-size: 2.5vmin;
     }
-
+    
     #progress-form {
         margin-bottom: 3vh;
     }
-
+    
     .progress-form-inputs {
         display: flex;
     }
-
-    .progress-form-inputs input,
-    .progress-form-inputs select {
+    
+    input,
+    select {
         margin-left: 2%;
         margin-right: 2%;
     }
-
+    
     .user-weight-input {
-        width: 70px;
+        width: 20%;
+    }
+    
+    .progress-item:not(:last-child)::after {
+        left: 22%;
+        width: 60%;
+    }
+
+    #meetings-day-list > li {
+        width: 20%;
+    }
+
+    .meeting-day {
+        font-size: 2.5vmin;
+    }
+
+    #previous-days-nav
+    #next-days-nav {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    #previous-days-nav {
+        justify-content: flex-start;
+    }
+
+    #next-days-nav {
+        justify-content: flex-end;
     }
 }

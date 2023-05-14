@@ -4,20 +4,22 @@
 
 #title-layer i,
 .wrap-btn,
+.food-name,
 .selected,
 footer i {
     color: hsla(185, 51%, 47%, 1);
 }
 
+.admin-panel-header,
 .day-list li,
+.ingredient-params-header,
 .notes-list h4,
 table,
 footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-.meal-header,
-.ingredient-params-header {
+.meal-header {
     color: hsla(0, 0%, 0%, 1);
 }
 
@@ -56,7 +58,8 @@ footer {
     border: 1px solid hsla(0, 1%, 79%, 1);
 }
 
-.appliance-card {
+.appliance-card,
+.food-card {
     border: 1px solid hsla(0, 0%, 50%, 1);
 }
 
@@ -87,7 +90,7 @@ tr:not(:first-child) td:not(:first-child) {
     border: 2px solid hsla(9, 71%, 70%, 1);
 }
 
-.edit-icon {
+.edit-note-sign {
     box-shadow: 3px 3px 8px hsla(0, 0%, 0%, 1);
 }
 
@@ -116,7 +119,7 @@ h2 {
 
 .admin-form,
 .admin-form > textarea,
-.edit-note,
+.edit-note-btn,
 #meeting-slots {
     width: 100%;
 }
@@ -134,7 +137,7 @@ h2 {
 
 #add-note-btn,
 #add-meeting-btn {
-    bottom: 85px;
+    bottom: 10vh;
     left: 4%;
     position: fixed;
 }
@@ -158,7 +161,9 @@ h2 {
     margin: 0 0 10px;
 }
 
-.admin-panel > h3 {
+h3 {
+    font-size: 5vmin;
+    margin-top: 0;
     text-align: center;
 }
 
@@ -170,21 +175,27 @@ h2 {
     list-style: circle;
 }
 
-.admin-panel li {
+.subscriber-data-list li,
+.daily-meetings-list li {
     margin-bottom: 1vh;
 }
 
-.admin-link {
-    border-radius: 2.5vh;
-    padding: 2.5vh;
-}
-
-.profile-panel ul,
+.subscriber-data-list,
 .day-list,
 .day-list li,
 .notes-list,
 .notes-list li {
     width: 100%;
+}
+
+.subscriber-data-list {
+    margin-top: 1vh;
+}
+
+#kitchen-links-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 /**********************************/
@@ -242,7 +253,7 @@ h2 {
     width: 100%;
 }
 
-.section-header {
+.admin-panel-header {
     margin: 0 0 1vh;
     padding: 2vh 0 ;
     text-align: center;
@@ -259,35 +270,37 @@ h2 {
     text-align: center;
 }
 
-.edit-note {
+.edit-note-btn {
     margin: 0 0 2vh;
     padding: 0;
     position: relative;
 }
 
 .note-entry {
+    margin-top: 1vh;
     overflow-wrap: break-word;
-    padding-bottom: 45px;
+    padding-bottom: 13vmin;
     text-align: left;
 }
 
-.note-textarea {
+#note-message {
+    margin-top: 1vh;
     height: 15vh;
 }
 
-.edit-icon {
+.edit-note-sign {
     align-items: center;
-    border-radius: 20px;
+    border-radius: 6vmin;
     bottom: 0;
     display: flex;
-    height: 40px;
+    height: 12vmin;
     justify-content: center;
     position: absolute;
     right: 0;
-    width: 40px;
+    width: 12vmin;
 }
 
-.edit-icon i {
+.edit-note-sign i {
     font-size: 5vmin;
 }
 
@@ -303,7 +316,8 @@ h2 {
     align-items: center;
     display: flex;
     flex-direction: column;
-    padding: 0 10%;
+    margin-top: 1vh;
+    padding: 0 15%;
 }
 
 .meeting-item {
@@ -379,14 +393,12 @@ h2 {
     padding: 0 20%;
 }
 
-.day-header,
-.meal-header,
-.meal-edition-header {
+.admin-panel-header,
+.meal-header {
     margin: 0;
-    padding: 1vh 0 ;
+    padding: 1vh 0;
     text-align: center;
     text-transform: uppercase;
-    width: 100%;
 }
 
 .meal-header {
@@ -478,19 +490,16 @@ tr:first-child::after {
     width: 100%;
 }
 
-.meal-summary:last-child {
-    margin-top: 3vh;
+.meal-nutrients-table,
+.ingredients-list {
+    margin: 1vh 0;
 }
 
 .edit-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.meal-edition-header,
-#meal-nutrients {
-    margin-bottom: 4%;
+    margin-top: 3vh;
 }
 
 /**************************************/
@@ -519,7 +528,6 @@ tr:first-child::after {
 
 .food-card {
     width: 90%;
-    border: 1px solid hsla(0, 0%, 50%, 1);
     margin-bottom: 5px;
     padding: 10px 5%;
     border-radius: 8px;
@@ -531,7 +539,6 @@ tr:first-child::after {
 .food-name {
     text-align: left;
     font-size: 1.2em;
-    color: hsla(185, 51%, 47%, 1);
     margin: 0;
 }
 
@@ -560,8 +567,6 @@ tr:first-child::after {
 
 .ingredient-params-header {
     padding: 10px 5%;
-    background-color:hsla(185, 51%, 47%, 1);
-    color: hsla(0, 0%, 100%, 1);
     text-align: center;
     margin: 2% 0;
 }
@@ -574,13 +579,22 @@ tr:first-child::after {
     margin-bottom: 2%;
 }
 
-.ingredient-param label {
-    font-size: .8em;
+section .ingredient-param:first-of-type {
+    margin-top: 1vh;
+}
+
+section .ingredient-param:last-of-type {
+    margin-bottom: 2vh;
+}
+
+#ingredient-search-bar,
+.ingredient-param > *,
+.food-card > * {
+    font-size: 4vmin;
 }
 
 .ingredient-param input {
     font-style: italic;
-    font-size: .8em;
 }
 
 .ingredient-param input[type=text],
@@ -610,9 +624,7 @@ tr:first-child::after {
 }
 
 .ingredient-param select {
-    margin: 0;
     padding: 0;
-    font-size: .9em;
     margin: 1% 0;
 }
 
@@ -627,6 +639,10 @@ tr:first-child::after {
     right: 5%;
     border-radius: 8px;
     border: 1px solid hsla(0, 0%, 0%, 1);
+}
+
+#action-confirmation-block p {
+    margin: 0 2%;
 }
 
 .success-alert p,
@@ -648,4 +664,80 @@ tr:first-child::after {
     padding: 2vh 5%;
     text-align: center;
     color: hsla(336, 100%, 29%, 1);
+}
+
+/*************************************
+            Tablets design
+*************************************/
+@media (min-width: 768px) {
+    .admin-panel {
+        max-width: 80%;
+        margin: 24vh auto 100px;
+    }
+
+    h2 {
+        font-size: 2.6vmin;
+        margin: 0 0 0 70px;
+        padding-left: 3%;
+    }
+
+    h3 {
+        font-size: 4vmin;
+        margin: 0 0 1.5vh;
+    }
+
+    #kitchen-links-block {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #kitchen-links-block a {
+        margin: 0 2%;
+    }
+
+    .appliance-details {
+        padding: 3vh 0;
+    }
+
+    .appliance-decision-box a {
+        font-size: 2.5vmin;
+        width: fit-content;
+    }
+
+    .meal-header {
+        font-size: 2.8vmin;
+    }
+
+    .edit-note-sign i {
+        font-size: 3vmin;
+    }
+    
+    #add-note-btn, #add-meeting-btn {
+        bottom: 15vh;
+        left: 3%;
+    }
+
+    .fa-plus {
+        font-size: 3vmin;
+    }
+
+    .note-entry {
+        padding-bottom: 9vmin;
+    }
+    
+    .edit-note-sign {
+        border-radius: 4vmin;
+        height: 8vmin;
+        width: 8vmin;
+    }
+
+    .daily-meetings-list {
+        padding: 0 10%;
+    }
+
+    #ingredient-search-bar,
+    .ingredient-param > *,
+    .food-card > * {
+        font-size: 2.5vmin;
+    }
 }

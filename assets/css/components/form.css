@@ -36,7 +36,6 @@ select::-ms-select-placeholder {
 
 .tiny-btn {
     width: 48%;
-    padding: 1vh 5%;
 }
 
 .tiny-btn p {
@@ -50,7 +49,7 @@ select::-ms-select-placeholder {
     input {
         font-size: 2.5vmin;
     }
-
+    
     input::placeholder {
         font-size: 2.5vmin;
     }

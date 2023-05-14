@@ -9,26 +9,28 @@
                 {% for mealItem in mealItems %}
                     {% if mealItem['item_type'] == 'ingredient' %}
                         <li class='portions-list-item'>
-                            {{ mealItem['quantity'] }}
-                            
-                            {% if mealItem['measure'] is not null %}
-                                {% if mealItem['ingr_name'] | first in ['a', 'à', 'e', 'é', 'è', 'h', 'i', 'o', 'u', 'y'] %}
-                                    {{ mealItem['measure'] }} d'
-                                {% else %}
-                                    {{ mealItem['measure'] }} de
+                            <div class='portions-list-item-content'>
+                                {{ mealItem['quantity'] }}
+                                
+                                {% if mealItem['measure'] is not null %}
+                                    {% if mealItem['ingr_name'] | first in ['a', 'à', 'e', 'é', 'è', 'h', 'i', 'o', 'u', 'y'] %}
+                                        {{ mealItem['measure'] }} d'
+                                    {% else %}
+                                        {{ mealItem['measure'] }} de
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            
-                            {{ mealItem['ingr_name'] }}
-                            
-                            {% if mealItem['preparation'] is not null %}
-                                {{ mealItem['preparation'] }}
-                            {% endif %}
+                                
+                                {{ mealItem['ingr_name'] }}
+                                
+                                {% if mealItem['preparation'] is not null %}
+                                    {{ mealItem['preparation'] }}
+                                {% endif %}
+                            </div>
                         </li>
                         
                     {% elseif mealItem['item_type'] == 'recipe' %}
                         <li class='portions-list-item'>
-                            <button class='recipe-btn'>
+                            <div class='portions-list-item-content'>
                                 {{ mealItem['quantity'] }}
                                     
                                 {% if mealItem['quantity'] >= 2 %}
@@ -38,7 +40,9 @@
                                 {% endif %}
                                 
                                 de {{ mealItem['rec_name'] }}
-                                <span><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <button class='recipe-btn'>
+                                <i class="fa fa-question-circle"></i>
                             </button>
                         </li>
                     {% endif %}

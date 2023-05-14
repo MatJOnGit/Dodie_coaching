@@ -90,7 +90,7 @@ class RecipesManager extends KitchenManager {
     
     addCreateRecipeButton() {
         let createRecipeBtn = document.createElement('a');
-        createRecipeBtn.classList.add('btn', 'large-btn', 'admin-link', 'blue-bkgd');
+        createRecipeBtn.classList.add('btn', 'rounded-btn', 'large-btn', 'blue-bkgd');
         createRecipeBtn.id = 'create-food-item-btn';
         createRecipeBtn.innerText = 'Nouvel ingrédient';
         

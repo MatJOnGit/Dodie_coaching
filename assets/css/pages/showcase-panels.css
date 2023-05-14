@@ -47,10 +47,6 @@ footer li {
     padding: 2.5vmin 0 0;
 }
 
-.showcase-panel a {
-    font-size: 4.5vmin;
-}
-
 .speech-container p {
     margin: 1.5vmin 5%;
 }
@@ -282,11 +278,11 @@ h2 {
     }
 
     .showcase-panel {
-        margin: 24vh 0 90px 0;
+        margin: 24vh 0 100px 0;
     }
 
     .programs-list > li {
-        min-height: calc((76vh - 90px) / 3);
+        min-height: calc((76vh - 100px) / 3);
     }
 
     h2 {
@@ -306,7 +302,7 @@ h2 {
     }
 
     .program-details {
-        min-height: calc(76vh - 90px);
+        min-height: calc(76vh - 100px);
     }
 
     .program-description {

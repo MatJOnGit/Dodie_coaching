@@ -172,7 +172,7 @@ class MeetingCreator extends ElementFader {
             
             meetingDateListItem.classList.add('daily-data');
             meetingDateTitle.textContent = incomingMeetingData[0];
-            meetingDateTitle.classList.add('section-header', 'orange-bkgd');
+            meetingDateTitle.classList.add('admin-panel-header', 'orange-bkgd');
             dailyMeetingsBtnsList.classList.add('daily-meetings-list');
             
             meetingDateListItem.appendChild(meetingDateTitle);

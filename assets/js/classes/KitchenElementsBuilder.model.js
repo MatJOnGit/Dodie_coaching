@@ -29,7 +29,7 @@ class KitchenElementsBuilder {
     
     static buildCreateItemButton(itemType) {
         const createItemButtonTemplate = `
-            <button id='create-item-btn' class='btn large-btn admin-link blue-bkgd'>
+            <button id='create-item-btn' class='btn rounded-btn blue-bkgd'>
                 Nouvel ${itemType}
             </button>
         `;
@@ -39,7 +39,7 @@ class KitchenElementsBuilder {
     
     static buildSectionHeader(sectionType, sectionTitle) {
         const sectionHeaderTemplate = `
-            <h4 id='${sectionType}-params-title' class='ingredient-params-header'>
+            <h4 id='${sectionType}-params-title' class='admin-panel-header blue-bkgd'>
                 ${sectionTitle}
             </h4>
         `;
@@ -49,7 +49,7 @@ class KitchenElementsBuilder {
     
     static buildInputBlock(inputParams, itemType) {
         const inputBlockTemplate = `
-            <div id='${inputParams.id}-block' class='${itemType}-param ${inputParams.hidden && inputParams.hidden === true ? 'hidden' : ''}'>
+            <div id='${inputParams.id}-block' class='${itemType}-param${inputParams.hidden && inputParams.hidden === true ? ' hidden' : ''}'>
                 <label for='${itemType}-${inputParams.id}'>${inputParams.label} :</label>
                 <input type='${inputParams.type}' id='${inputParams.id}' name='${itemType}-${inputParams.id}' value='${inputParams.value === null ? '' : inputParams.value}' ${inputParams.required ? ' required' : ''}>
             </div>
@@ -139,7 +139,7 @@ class KitchenElementsBuilder {
                 <p>${message}</p>
             </div>
         `;
-
+        
         return this.buildNodeFromTemplate(searchHelperTemplate);
     }
 }

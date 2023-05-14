@@ -103,14 +103,15 @@ final class MeetingSlot {
         $db = $this->dbConnect();
         $selectNextMeetingsQuery =
             "SELECT
-                DATE_FORMAT(slot_date, '%d/%m/%Y') AS 'day',
+                DATE_FORMAT(ms.slot_date, '%d/%m/%Y') AS 'day',
                 DATE_FORMAT(ms.slot_date, '%H\h%i') AS 'starting_time',
                 CONCAT(acc.first_name, ' ', UPPER(acc.last_name)) as 'name',
                 slot_id
             FROM meeting_slots ms
             LEFT JOIN accounts acc
             ON ms.user_id = acc.id
-            WHERE ms.slot_date > CURRENT_TIMESTAMP";
+            WHERE ms.slot_date > CURRENT_TIMESTAMP
+            ORDER by day, starting_time";
         $selectNextMeetingsStatement = $db->prepare($selectNextMeetingsQuery);
         $selectNextMeetingsStatement->execute();
         

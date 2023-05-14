@@ -6,7 +6,7 @@
         
         <div class='meal-summary'>
             {% if mealsNutrientsData %}
-                <h4 class='meal-edition-header orange-bkgd'>Apports nutritionnels</h4>
+                <h4 class='admin-panel-header orange-bkgd'>Apports nutritionnels</h4>
                 
                 <table class='meal-nutrients-table' id='meal-nutrients' data-daily-program='{{ mealsNutrientsData | json_encode() }}'></table>
             {% endif %}
@@ -14,7 +14,7 @@
         
         <div class='meal-summary'>            
             {% if mealsNutrientsData is iterable %}
-                <h4 class='meal-edition-header orange-bkgd'>Liste des ingrédients</h4>
+                <h4 class='admin-panel-header orange-bkgd'>Liste des ingrédients</h4>
                 
                 <ul class='ingredients-list'>
                     {% for mealData in mealsNutrientsData %}

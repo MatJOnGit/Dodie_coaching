@@ -4,7 +4,7 @@ class NoteManager extends ElementFader {
         
         this._addNoteBtn = document.getElementById('add-note-btn');
         this._attendedMeetingsSpanElt = document.querySelectorAll('[data-attended-slots]')[0];
-        this._editNoteBtns = document.querySelectorAll('.edit-note');
+        this._editNoteBtns = document.querySelectorAll('.edit-note-btn');
         this._profilePanel = document.getElementsByClassName('profile-panel')[0];
         this._prevPageBtn = document.getElementsByClassName('prev-page-btn')[0];
         
@@ -130,7 +130,7 @@ class NoteManager extends ElementFader {
     option, so the admin can associate the note to a specific attended meeting.
     *********************************************************************************/
     buildEditNoteForm(clickedListItem, noteData) {
-        const clickedBtn = clickedListItem.getElementsByClassName('edit-note')[0];
+        const clickedBtn = clickedListItem.getElementsByClassName('edit-note-btn')[0];
         
         const editNoteContainer = document.createElement('div');
         const editNoteForm = document.createElement('form');
@@ -142,7 +142,7 @@ class NoteManager extends ElementFader {
         const confirmEditionBtn = document.createElement('input');
         const deleteNoteBtn = document.createElement('a');
         
-        editNoteContainer.classList.add('edit-note');
+        editNoteContainer.classList.add('edit-note-btn');
         editNoteContainer.style.opacity = 0;
         
         editNoteTextarea.value = noteData.content.slice(0, -1).slice(1);
@@ -151,7 +151,7 @@ class NoteManager extends ElementFader {
         editNoteTextarea.classList.add('note-textarea');
         editNoteTextarea.required = true;
         
-        editNoteTitle.classList.add('section-header', 'orange-bkgd');
+        editNoteTitle.classList.add('admin-panel-header', 'orange-bkgd');
         editNoteTitle.textContent = noteData.title;
         
         editNoteForm.classList.add('admin-form');
@@ -227,8 +227,8 @@ class NoteManager extends ElementFader {
     buildNoteData(clickedListItem) {
         const noteEntryElt = clickedListItem.getElementsByClassName('note-entry')[0];
         const titleElt = clickedListItem.getElementsByTagName('h4')[0];
-        const clickedBtn = clickedListItem.getElementsByClassName('edit-note')[0];
-        const editNoteBtns = document.querySelectorAll('.edit-note');
+        const clickedBtn = clickedListItem.getElementsByClassName('edit-note-btn')[0];
+        const editNoteBtns = document.querySelectorAll('.edit-note-btn');
         const clickedBtnIndex = Array.from(editNoteBtns).indexOf(clickedBtn);
         
         let noteData = {

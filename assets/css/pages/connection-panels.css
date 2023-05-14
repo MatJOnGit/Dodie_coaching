@@ -200,8 +200,8 @@ input[type=submit] {
 *************************************/
 @media (min-width: 768px) {
     .connection-panel {
-        height: calc(100vh - 10vh - 90px);
-        margin: 10vh 0 90px 0;
+        height: calc(100vh - 10vh - 100px);
+        margin: 10vh 0 100px 0;
     }
 
     .connection-panel input {

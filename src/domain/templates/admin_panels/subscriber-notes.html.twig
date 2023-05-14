@@ -8,8 +8,8 @@
             <ul class='notes-list'>
                 {% for note in notes %}
                     <li>
-                        <button data-id='{{ note['id'] }}' class='edit-note'>
-                            <h4 class='section-header orange-bkgd'>
+                        <button data-id='{{ note['id'] }}' class='edit-note-btn'>
+                            <h4 class='admin-panel-header orange-bkgd'>
                                 {% if note['attached_to_meeting'] %}
                                     rdv du {{ note['date'] | date('d/m/Y') }}
                                 {% else %}
@@ -19,7 +19,7 @@
                             
                             <p class='note-entry'>"{{ note['note_entry'] | nl2br }}"</p>
                             
-                            <span class='edit-icon'>
+                            <span class='edit-note-sign'>
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </span>
                         </button>

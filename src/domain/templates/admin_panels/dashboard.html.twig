@@ -6,7 +6,7 @@
             <div class='dashboard-card'>
                 <h3>Mes demandes de coaching</h3>
                 <p>Vous avez {{ appliancesCount['appliancesCount'] }} demandes en attente.</p>
-                <a href='index.php?page=appliances-list' class='btn large-btn admin-link blue-bkgd'>Gérer vos demandes de suivi</a>
+                <a href='index.php?page=appliances-list' class='btn rounded-btn large-btn blue-bkgd'>Gérer vos demandes de suivi</a>
             </div>
         {% endif %}
         
@@ -14,7 +14,7 @@
             <div class='dashboard-card'>
                 <h3>Mes coaching en cours</h3>
                 <p>Vous suivez actuellement {{ subscribersCount['subscribersCount'] }} abonné(s).</p>
-                <a href='index.php?page=subscribers-list' class='btn large-btn admin-link blue-bkgd'>Gérer vos profils d'abonnés</a>
+                <a href='index.php?page=subscribers-list' class='btn rounded-btn large-btn blue-bkgd'>Gérer vos profils d'abonnés</a>
             </div>
         {% endif %}
         
@@ -37,14 +37,17 @@
                     <p>Vous allez enfin pouvoir vous détendre !</p>
                 {% endif %}
                 
-                <a href='index.php?page=meetings-management' class='btn large-btn admin-link blue-bkgd'>Gérer vos rendez-vous</a>
+                <a href='index.php?page=meetings-management' class='btn rounded-btn large-btn blue-bkgd'>Gérer vos rendez-vous</a>
             </div>
         {% endif %}
 
         <div class='dashboard-card'>
             <h3>Ma cuisine</h3>
-            <a href='index.php?page=ingredients-management' class='btn large-btn admin-link blue-bkgd'>Gérer mes ingrédients</a>
-            <a href='index.php?page=recipes-management' class='btn large-btn admin-link blue-bkgd'>Gérer mes recettes</a>
+            <p>Gérez vos collections de recettes et d'ingrédients</p>
+            <div id='kitchen-links-block'>
+                <a href='index.php?page=ingredients-management' class='btn rounded-btn large-btn blue-bkgd'>Gérer mes ingrédients</a>
+                <a href='index.php?page=recipes-management' class='btn rounded-btn large-btn blue-bkgd'>Gérer mes recettes</a>
+            </div>
         </div>
     </div>
 {% endblock pageContent %}

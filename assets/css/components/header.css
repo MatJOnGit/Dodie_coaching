@@ -78,6 +78,10 @@ h1 {
     justify-content: center;
 }
 
+.prev-page-btn i {
+    font-size: 4.8vmin;
+}
+
 /*************************************
             Tablets design
 *************************************/
@@ -112,12 +116,8 @@ h1 {
         font-size: 2.8vmin;
     }
 
-    p {
-        font-size: 2.5vmin;
-    }
-
-    .fa-plus {
-        font-size: 4vmin;
+    .prev-page-btn i {
+        font-size: 3.4vmin;
     }
 }
 

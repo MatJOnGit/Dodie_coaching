@@ -321,18 +321,18 @@ figcaption {
 }
 
 .recipe-btn {
-    display: flex;
-    flex-direction: row;
+    display: inline-block;
 }
 
 .portions-list-item {
-    display: list-item;
+    list-style-type: square;
     padding: 2vh 4% 0;
 }
 
-.recipe-btn span {
-    font-size: 1.2em;
-    margin-left: 10px;
+.portions-list-item-content {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 4.9vmin;
 }
 
 /**************************************/
@@ -516,11 +516,11 @@ select {
 *************************************/
 @media (min-width: 768px) {
     .user-panel {
-        margin: 24vh 0 90px 0;
+        margin: 24vh 0 100px 0;
     }
     
     .dashboard-panel {
-        height: calc(76vh - 90px);
+        height: calc(76vh - 100px);
     }
     
     h2 {
@@ -613,8 +613,8 @@ select {
         align-items: center;
     }
     
-    .portions-list-item {
-        font-size: 2.5vmin;
+    .portions-list-item-content {
+        font-size: 3.3vmin;
     }
     
     #progress-form {

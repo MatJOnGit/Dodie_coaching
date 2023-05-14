@@ -1,11 +1,11 @@
 class IngredientsFinder extends KitchenManager {
     constructor() {
         super(document.getElementById('search-bar').getAttribute('data-api-token'));
-
+        
         this._searchResults = document.getElementById('search-results');
         this._apiBaseUri = 'http://localhost:8080/MealFusion/v1/ingredients?name=';
         this._inputElt = document.getElementById('ingredient-search-bar');
-
+        
         this.addNewIngredientBtnListener();
         this.showPreviousAlert();
         this.inputElt.addEventListener('input', this.searchIngredients.bind(this));
@@ -107,10 +107,10 @@ class IngredientsFinder extends KitchenManager {
             this.searchResults.append(noResultBlock);
         }
     }
-
+    
     showPreviousAlert() {
         if (sessionStorage.getItem('IsLastIngredientDeleted') === 'true') {
-            const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Mise à jour de l'ingrédient réussie`);
+            const successMessageBlock = KitchenElementsBuilder.buildSuccessMessageBlock(`Suppression de l'ingrédient réussie`);
             this.showTemporaryAlert(successMessageBlock);
             sessionStorage.removeItem('IsLastIngredientDeleted');
         }

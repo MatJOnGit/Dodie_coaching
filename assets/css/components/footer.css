@@ -41,7 +41,7 @@ footer p  {
     footer {
         align-items: center;
         display: flex;
-        height: 90px;
+        height: 100px;
         justify-content: space-between;
         padding: 0 5%;
     }

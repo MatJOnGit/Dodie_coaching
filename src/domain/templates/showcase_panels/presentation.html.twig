@@ -1,22 +1,28 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='showcase-panel speech-container'>
-        <p>Vous avez déjà testé ces régimes dont on vous vante les mérites sur Internet ?</p>
+    <div class='showcase-panel showcase-content'>
+        <div id='speech-container'>
+            <p>Vous avez déjà testé ces régimes dont on vous vante les mérites sur Internet ?</p>
         
-        <p>Nous sommes d'accord : ça ne marche jamais bien longtemps. Vous reprenez très souvent le poids que vous avez perdu, vous ne vous sentez pas dans votre assiette, vous sentez des baisses de moral ...</p>
+            <p>Nous sommes d'accord : ça ne marche jamais bien longtemps. Vous reprenez très souvent le poids que vous avez perdu, vous ne vous sentez pas dans votre assiette, vous sentez des baisses de moral ...</p>
+            
+            <p>En bref : votre corps vous fait savoir qu'il n'apprécie pas du tout ce que vous lui infligez !</p>
+            
+            <img src='http://localhost:8080/Dodie_Coaching/public/img/showcase_pictures/desperate-man.jpg' alt='desperate man picture' />
+            
+            <p>Et si je vous disais qu'il existe des méthodes bien plus saines pour arriver à vos fins, et sans vous affamer ?</p>
+            
+            <p>C'est ce que je vous propose de découvrir au travers de séances de coaching à distance.</p>
+        </div>
+
+        <div id='read-more-container'>
+            <img src='http://localhost:8080/Dodie_Coaching/public/img/showcase_pictures/desperate-man.jpg' alt='desperate man picture' />
         
-        <p>En bref : votre corps vous fait savoir qu'il n'apprécie pas du tout ce que vous lui infligez !</p>
-        
-        <img src='http://localhost:8080/Dodie_Coaching/public/img/showcase_pictures/desperate-man.jpg' alt='desperate man picture' />
-        
-        <p>Et si je vous disais qu'il existe des méthodes bien plus saines pour arriver à vos fins, et sans vous affamer ?</p>
-        
-        <p>C'est ce que je vous propose de découvrir au travers de séances de coaching en appel visio.</p>
-        
-        <a href='index.php?page=coaching' class='btn rounded-btn blue-bkgd'>
-            <span>Découvrez le coaching nutritionnel</span>
-        </a>
+            <a href='index.php?page=coaching' id='next-showcase-page-link' class='btn rounded-btn blue-bkgd'>
+                Découvrez le coaching nutritionnel
+            </a>
+        </div>
     </div>
 {% endblock pageContent %}
 

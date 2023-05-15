@@ -1,5 +1,8 @@
 header {
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     top: 0;
     width: 100%;
     z-index: 2;
@@ -10,13 +13,14 @@ header {
     display: flex;
     height: 11vh;
     justify-content: space-between;
+    width: 90%;
 }
 
 #title-layer a {
     align-items: center;
     display: flex;
     flex-direction: row;
-    margin-left: 20px;
+    width: 160px
 }
 
 #logo {
@@ -32,8 +36,11 @@ h1 {
     width: 40%;
 }
 
+#others-features-menu {
+    display: none;
+}
+
 #dynamic-menu-button {
-    margin-right: 20px;
     padding: 20px;
 }
 
@@ -48,7 +55,7 @@ h1 {
     width: 6.5vh;
 }
 
-#static-menu,
+#showcase-menu,
 #page-name-container {
     background: url('./../../../public/img/header-banner.jpg');
     background-position-y: center;
@@ -61,21 +68,23 @@ h1 {
     width: 100%;
 }
 
-#static-menu ul,
-#page-name-container > div {
+#showcase-menu {
     display: flex;
-    height: 50px;
+    flex-direction: row;
+    align-items: flex-end;
 }
 
-#static-menu li {
-    width: 33.3%;
-}
-
-#static-menu a {
+#showcase-menu a {
     align-items: center;
     display: flex;
-    height: 100%;
+    height: 50px;
     justify-content: center;
+    width: calc(100% / 3);
+}
+
+.cloudy-bkgd {
+    background-color: hsla(0, 0%, 100%, .6);
+    color: hsla(0, 0%, 0%, 1);
 }
 
 .prev-page-btn i {
@@ -103,16 +112,17 @@ h1 {
         font-size: 8vmin;
     }
 
-    #static-menu,
+    #showcase-menu,
     #page-name-container {
         height: 14vh;
     }
 
-    #static-menu ul, #page-name-container > div {
+    #showcase-menu ul,
+    #page-name-container > div {
         height: 70px;
     }
 
-    #static-menu a {
+    showcase-menu a {
         font-size: 2.8vmin;
     }
 
@@ -124,3 +134,110 @@ h1 {
 /*************************************
             Desktop design
 *************************************/
+@media (min-width: 1024px) {
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;    
+        margin: 0 auto
+    }
+
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        height: 14vh;
+        max-width: 2200px;
+    }
+
+    #title-layer {
+        height: 12vh;
+        max-width: 250px;
+    }
+
+    #logo {
+        height: 70px;
+        width: 70px;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 500;
+    }
+
+    #dynamic-menu-button {
+        display: none;
+    }
+
+    #showcase-menu,
+    #page-name-container {
+        height: 6vh;
+    }
+
+    #showcase-menu {
+        background: none;
+        align-items: center;
+        width: 440px;
+        justify-content: center;
+    }
+    
+    #showcase-menu a {
+        border-radius: 15px;
+        margin: 0;
+        position: relative;
+        padding: 0 4%;
+        width: unset;
+        font-size: 18px;
+    }
+
+    #showcase-menu > .blue-bkgd {
+        background-color: inherit;
+        color: hsla(0, 0%, 0%, 1);
+        position: relative;
+    }
+
+    #showcase-menu > .blue-bkgd::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        width: 60%;
+        height: 2px;
+        background-color: hsla(188, 87%, 30%, 1);
+    }
+
+    #others-features-menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 250px;
+    }
+
+    #others-features-menu a:not(:last-child)::after,
+    #showcase-menu a:not(:last-child)::after {
+        content: "";
+        border-right: 1px solid hsla(0, 0%, 0%, 1);
+        position: absolute;
+        right: 0;
+        height: 30%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #others-features-menu a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 70px;
+        padding: 0 1%;
+        position: relative;
+    }
+
+    .other-features-link i {
+        font-size: 2.2vmin;
+    }
+}

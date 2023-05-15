@@ -24,7 +24,15 @@ footer li {
     width: 26px;
 }
 
-footer li i {
+footer a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer i {
     font-size: 3.5vmin;
 }
 
@@ -62,3 +70,21 @@ footer p  {
 /*************************************
             Desktop design
 *************************************/
+@media (min-width: 1024px) {
+    footer {
+        height: 90px;
+    }
+    
+    footer li {
+        height: 40px;
+        width: 40px;
+    }
+
+    footer i {
+        font-size: 22px;
+    }
+
+    footer p {
+        font-size: 16px;
+    }
+}

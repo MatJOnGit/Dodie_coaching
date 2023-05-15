@@ -1,27 +1,31 @@
 {% if appSection == 'showcasePanels' %}
-    <nav id='static-menu'>
+    <nav id='showcase-menu'>
         {% if frenchTitle != '404' %}
-            <ul>
-                <li class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                    <a href='{{ showcasePanels['presentation'] }}'>Présentation</a>
-                </li>
-                
-                <li class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                    <a href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
-                </li>
-                
-                <li class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}'>
-                    <a href='{{ showcasePanels['programs-list'] }}'>Formules</a>
-                </li>
-            </ul>
+            <a class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['presentation'] }}'>Présentation</a>
+            <a class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
+            <a class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['programs-list'] }}'>Formules</a>
         {% endif %}
     </nav>
+    
+    <nav id='others-features-menu'>
+        {% if isUserLogged %}
+            <a class='other-features-link' href=''><i class='fa-solid fa-user'></i></a>
+            <a class='other-features-link' href=''><i class='fa-solid fa-envelope'></i></a>
+            <a class='other-features-link' href=''><i class='fa-solid fa-right-from-bracket'></i></a>
+
+        {% else %}
+            <a class='other-features-link' href='index.php?page=login'>Connexion</a>
+            <a href="mailto:contact@dodie-coaching.com" class='other-features-link'>Contact</a>
+
+        {% endif %}
+    </nav>
+
 {% elseif appSection == 'userPanels' %}
     <div id='page-name-container'>
         <div id='subtitle-layer' class='cloudy-bkgd'>
             {% if (prevPanel is defined) %}
                 <a href='index.php?page={{ prevPanel[0] }}' class='prev-page-btn white-bkgd'>
-                    <i class="fa-solid fa-arrow-left"></i>
+                    <i class='fa-solid fa-arrow-left'></i>
                 </a>
                 <h2>{{ prevPanel[1] }} > {{ frenchTitle | capitalize }}</h2>
             {% else %}

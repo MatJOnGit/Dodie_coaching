@@ -7,8 +7,7 @@ class DynamicMenuDisplayer extends ElementFader {
         
         this._dynamicMenuWidthPerDevice = {
             'mobile': 225,
-            'tablet': 500,
-            'others': 700
+            'tablet': 500
         }
     }
 
@@ -62,11 +61,8 @@ class DynamicMenuDisplayer extends ElementFader {
         if (windowScreenSize < 768) {
             this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.mobile
         }
-        else if (windowScreenSize < 1024) {
-            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.tablet
-        }
         else {
-            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.others
+            this.dynamicMenuWidth = this.dynamicMenuWidthPerDevice.tablet
         }
     }
     
@@ -98,7 +94,7 @@ class DynamicMenuDisplayer extends ElementFader {
         loginLink.textContent = 'Connexion';
         loginLink.href = 'index.php?page=login';
         contactLink.textContent = 'Contact';
-        contactLink.href = 'index.php';
+        contactLink.href = 'mailto:contact@dodie-coaching.com';
         loginSpan.classList.add('menu-splitter');
         contactSpan.classList.add('menu-splitter');
         

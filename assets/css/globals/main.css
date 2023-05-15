@@ -17,7 +17,7 @@
     src: url('../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf');
 }
 
-html, body {
+* {
     font-family: 'source sans pro';
 }
 
@@ -40,7 +40,6 @@ input[type=submit],
 
 #title-layer > a:visited,
 #title-layer > a:active,
-.cloudy-bkgd a,
 figcaption {
     color: hsla(0, 0%, 0%, 1);
 }
@@ -76,10 +75,6 @@ footer li {
 
 .grey-bkgd {
     background-color: hsla(0, 1%, 79%, 1);
-}
-
-.cloudy-bkgd {
-    background-color: hsla(0, 0%, 100%, .6);
 }
 
 .dark-shaded-bkgd {
@@ -258,7 +253,7 @@ select {
     
     p,
     li {
-        font-size: 2.5vmin;
+        font-size: 1.3em;
     }
     
     .rounded-btn {
@@ -270,3 +265,13 @@ select {
 /*************************************
             Desktop design
 *************************************/
+@media (min-width: 1024px) {
+    .btn {
+        padding: 20px 5%;
+    }
+
+    p,
+    li {
+        font-size: 18px;
+    }
+}

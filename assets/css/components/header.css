@@ -100,12 +100,12 @@ h1 {
     }
 
     #logo {
-        height: 90px;
-        width: 90px;
+        height: 80px;
+        width: 80px;
     }
 
     h1 {
-        font-size: 5vmin;
+        font-size: 4vmin;
     }
 
     #title-layer i {

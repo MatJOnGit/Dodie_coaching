@@ -9,13 +9,13 @@
     
     <nav id='others-features-menu'>
         {% if isUserLogged %}
-            <a class='other-features-link' href=''><i class='fa-solid fa-user'></i></a>
-            <a class='other-features-link' href=''><i class='fa-solid fa-envelope'></i></a>
-            <a class='other-features-link' href=''><i class='fa-solid fa-right-from-bracket'></i></a>
+            <a class='other-features-link' href='index.php?page=dashboard'><i class='fa-solid fa-user'></i></a>
+            <a class='other-features-link' href='mailto:contact@dodie-coaching.com'><i class='fa-solid fa-envelope'></i></a>
+            <a class='other-features-link' href='index.php?action=logout'><i class='fa-solid fa-right-from-bracket'></i></a>
 
         {% else %}
             <a class='other-features-link' href='index.php?page=login'>Connexion</a>
-            <a href="mailto:contact@dodie-coaching.com" class='other-features-link'>Contact</a>
+            <a href='mailto:contact@dodie-coaching.com' class='other-features-link'>Contact</a>
 
         {% endif %}
     </nav>

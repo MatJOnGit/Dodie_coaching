@@ -1,22 +1,28 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div id='speech-container' class='showcase-panel'>
-        <p class='showcase-question'>Question : A qui s'adresse mes programmes ?</p>
+    <div class='showcase-panel'>
+        <div id='speech-container'>
+            <p class='showcase-question'>Question : A qui s'adresse mes programmes ?</p>
+            
+            <p>Simplement ... à tout le monde. La visio nous permet d'échanger en toute simplicité où que vous soyez.</p>
+            
+            <img src='./../public/img/showcase_pictures/coffee-break.jpg' alt='coffee picture' />
+            
+            <p class='showcase-question'>Question : Comment ça marche ?</p>
+            
+            <p>Après vous être inscrit(e) sur le site, il vous suffit de compléter le formulaire sur votre espace afin d'être recontacter.<br/>Nous conviendrons alors de la date de notre premier suivi au cours duquel nous évaluerons ensemble votre objectif et votre besoin.</p>
+            
+            <p class='showcase-speech'>Par la suite, un programme nutritionnel personnalisé vous sera envoyé.<br/>A chaque nouvelle séance, celui-ci sera révisé afin de convenir au mieux à vos progrès.</p>
+        </div>
+
+        <div id='read-more-container'>
+            <img src='./../public/img/showcase_pictures/coffee-break.jpg' alt='coffee picture' />
         
-        <p>Simplement ... à tout le monde. La visio nous permet d'échanger en toute simplicité où que vous soyez.</p>
-        
-        <img src='./../public/img/showcase_pictures/coffee-break.jpg' alt='coffee picture' />
-        
-        <p class='showcase-question'>Question : Comment ça marche ?</p>
-        
-        <p>Après vous être inscrit(e) sur le site, il vous suffit de compléter le formulaire sur votre espace afin d'être recontacter.<br/>Nous conviendrons alors de la date de notre premier suivi au cours duquel nous évaluerons ensemble votre objectif et votre besoin.</p>
-        
-        <p class='showcase-speech'>Par la suite, un programme nutritionnel personnalisé vous sera envoyé.<br/>A chaque nouvelle séance, celui-ci sera révisé afin de convenir au mieux à vos progrès.</p>
-        
-        <a href='index.php?page=programs-list' id='next-showcase-page-link' class='btn rounded-btn blue-bkgd'>
-            Mes programmes de suivi
-        </a>
+            <a href='index.php?page=programs-list' id='next-showcase-page-link' class='btn rounded-btn blue-bkgd'>
+                Mes programmes de suivi
+            </a>
+        </div>
     </div>
 {% endblock %}
 

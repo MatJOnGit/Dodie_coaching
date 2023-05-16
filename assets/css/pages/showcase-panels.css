@@ -98,7 +98,7 @@ footer li {
     background-image: url('./../../../public/img/program_backgrounds/halfyearly-sub.jpg');
 }
 
-.showcase-panel i {
+.program-summary p i {
     margin-right: 5px;
 }
 
@@ -110,9 +110,9 @@ footer li {
     height: 90px;
 }
 
-/*******************************/
-/*     PROGRAMS LIST LAYER     */
-/*******************************/
+/*************************/
+/*     PROGRAMS LIST     */
+/*************************/
 
 .programs-list > li {
     min-height: calc((73vh - 70px) / 3);
@@ -129,10 +129,15 @@ footer li {
 }
 
 h2 {
-    font-size: 8vmin;
+    font-size: 24px;
+    display: none;
 }
 
-.program-summary h2 {
+h3 {
+    font-size: 40px;
+}
+
+.program-summary h3 {
     margin: 20px 20px;
 }
 
@@ -145,12 +150,13 @@ h2 {
     position: absolute;
     right: 30px;
     border-radius: 7vmin;
-    height: 14vmin;
-    width: 14vmin;
+    height: 50px;
+    width: 50px;
 }
 
-.programs-list span i {
+.big-circle-btn i {
     margin: 0;
+    font-size: 20px;
 }
 
 /*********************************/
@@ -296,6 +302,10 @@ h2 {
         margin-bottom: 4vh;
     }
 
+    #read-more-container {
+        padding: 0 0 14vh;
+    }
+
     .showcase-panel {
         margin: 24vh 0 100px 0;
     }
@@ -312,7 +322,7 @@ h2 {
         font-size: 2.8vmin;
     }
 
-    .showcase-panel i {
+    .program-summary p i {
         margin-right: 15px;
     }
 
@@ -330,13 +340,13 @@ h2 {
     }
     
     .big-circle-btn {
-        border-radius: 7vmin;
-        height: 10vmin;
-        width: 10vmin;
+        border-radius: 40px;
+        height: 80px;
+        width: 80px;
     }
 
-    .dynamic-menu a {
-        font-size: 4vmin;
+    .big-circle-btn i {
+        font-size: 30px;
     }
 }
 
@@ -378,6 +388,8 @@ h2 {
     #read-more-container {
         width: 25%;
         height: unset;
+        margin: 0;
+        padding: 0;
     }
 
     #read-more-container img {
@@ -395,5 +407,33 @@ h2 {
         margin-top: 2vh;
         width: 100%;
         font-size: 18px;
+    }
+
+    .programs-list {
+        background: none;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .programs-list li,
+    .programs-list a {
+        border-radius: 50px;
+    }
+
+    .programs-list li {
+        width: 290px;
+        margin: 0 20px;
+        height: 60vmin;
+        max-height: 500px;
+    }
+    
+    .big-circle-btn {
+        border-radius: 40px;
+        height: 80px;
+        width: 80px;
+    }
+
+    .big-circle-btn i {
+        font-size: 40px;
     }
 }

@@ -143,7 +143,7 @@ class MeetingCreator extends ElementFader {
         meetingTimeInput.name = 'meeting-time';
         meetingTimeInput.required = true;
         
-        cancelBtn.classList.add('btn', 'rounded-btn', 'large-btn', 'red-bkgd');
+        cancelBtn.classList.add('btn', 'rounded', 'large-btn', 'red-bkgd');
         cancelBtn.id = 'cancel-btn';
         cancelBtn.href = 'index.php?page=meetings-management';
         cancelBtn.textContent = 'Annuler';
@@ -151,7 +151,7 @@ class MeetingCreator extends ElementFader {
         saveMeetingBtn.value = 'Enregistrer';
         saveMeetingBtn.id = 'submit-meeting-btn';
         saveMeetingBtn.type = 'submit';
-        saveMeetingBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
+        saveMeetingBtn.classList.add('btn', 'rounded', 'tiny-btn', 'blue-bkgd');
         
         dateContainer.appendChild(meetingDayLabel);
         dateContainer.appendChild(meetingDayInput);
@@ -191,10 +191,10 @@ class MeetingCreator extends ElementFader {
                 meetingBtn.classList.add('btn', 'large-btn', 'edit-meeting', 'blue-bkgd');
                 meetingBtn.textContent = incomingMeetingData['starting_time'] + ' : ';
                 meetingBtn.textContent += bookedMeeting ? incomingMeetingData['name'] : 'disponible';
-                cancelEditionBtn.classList.add('btn', 'rounded-btn', 'blue-bkgd', 'hidden');
+                cancelEditionBtn.classList.add('btn', 'rounded', 'blue-bkgd', 'hidden');
                 cancelEditionBtn.textContent = 'Annuler';
                 cancelEditionBtn.href = 'index.php?page=meetings-management';
-                deleteMeetingBtn.classList.add('btn', 'rounded-btn', 'red-bkgd', 'hidden');
+                deleteMeetingBtn.classList.add('btn', 'rounded', 'red-bkgd', 'hidden');
                 deleteMeetingBtn.textContent = bookedMeeting ? 'Supprimer le rendez-vous' : 'Supprimer le créneau';
                 deleteMeetingBtn.href = 'index.php?action=delete-meeting&id=' + incomingMeetingData['slot_id'];
                 

@@ -1,32 +1,30 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='showcase-panel program-details-container {{ program.name }}-program'>
-        <div class='program-details dark-shaded-bkgd'>
-            <a href='{{ showcasePanels['programs-list'] }}' class='btn rounded-btn blue-bkgd'>
-                <i class="fa-solid fa-arrow-left-long"></i>
-                
-                <span>Retour aux formules</span>
-            </a>
+    <div class='showcase-panel program-details {{ program.name }}-program'>
+        <a id='back-to-programs-list-btn' href='{{ showcasePanels['programs-list'] }}' class='btn rounded blue-bkgd'>
+            <i class="fa-solid fa-arrow-left-long"></i>
             
-            <div class='program-headers'>
-                <h2>{{ program.frenchTitle }}</h2>
-                
-                <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
-                
-                <p>{{ program.subscriptionPrice }} €</p>
-            </div>
+            <span>Retour aux formules</span>
+        </a>
+        
+        <div class='program-headers'>
+            <h2>{{ program.frenchTitle }}</h2>
             
-            {% if program.description != NULL %}
-                <div class='program-description'>
-                    <p>{{ program.description | raw }}</p>
-                </div>
-            {% endif %}
+            <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
             
-            <a href='index.php?page=login' class='btn rounded-btn blue-bkgd'>
-                <span>Je m'inscris !</span>
-            </a>
+            <p>{{ program.subscriptionPrice }} €</p>
         </div>
+        
+        {% if program.description != NULL %}
+            <div class='program-description'>
+                <p>{{ program.description | raw }}</p>
+            </div>
+        {% endif %}
+        
+        <a id='go-to-loggin-btn' href='index.php?page=login' class='btn rounded blue-bkgd'>
+            Je m'inscris !
+        </a>
     </div>
 {% endblock %}
 

@@ -40,17 +40,17 @@
                 </ul>
                 
                 <div class='nutrition-requests'>
-                    <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded-btn purple-bkgd'>
+                    <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded purple-bkgd'>
                         Voir la liste de courses
                     </a>
                     
                     {% if programFilePath is not empty %}
-                        <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded-btn purple-bkgd'  download="mon_plan_nutrition.pdf">
+                        <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded purple-bkgd'  download="mon_plan_nutrition.pdf">
                             <i class="fa-solid fa-download"></i>
                         </a>
                         
                     {% else %}
-                        <a role='link' class='btn rounded-btn grey-bkgd' aria-disabled='true'>
+                        <a role='link' class='btn rounded grey-bkgd' aria-disabled='true'>
                             <i class="fa-solid fa-download"></i>
                         </a>
                     {% endif %}
@@ -63,7 +63,7 @@
                 <p>Vous serez notifié(e) par email dès que celui-ci sera finalisé.</p>
             </div>
             
-            <a href='index.php?page=dashboard' class='btn rounded-btn tiny-btn purple-bkgd'>Retour au menu</a>
+            <a href='index.php?page=dashboard' class='btn rounded tiny-btn purple-bkgd'>Retour au menu</a>
         {% endif %}
     </div>
 {% endblock pageContent %}

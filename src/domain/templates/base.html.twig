@@ -38,7 +38,7 @@
 
 <body>
     <header>
-        <div id='title-layer'>
+        <div id='title-layer'{% if appSection == 'connectionPanels' %} class='connection-layer'{% endif %}>
             <a href='index.php?page=presentation'>
                 <img src='./../public/img/logo.jpg' id='logo' />
                 <h1>Dodie<br>Coaching</h1>

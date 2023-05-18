@@ -10,7 +10,7 @@ footer i {
 
 #close-menu-button,
 .programs-list a,
-.program-details-container,
+.program-details,
 .blue-bkgd,
 .blue-bkgd a,
 footer p {
@@ -81,24 +81,40 @@ footer li {
 }
 
 .programs-list li,
-.program-details-container {
+.program-details {
     background-position: 50%;
     background-size: cover;
 }
 
 .monthly-program {
-    background-image: url('./../../../public/img/program_backgrounds/monthly-sub.jpg');
+    background-image: linear-gradient(
+        135deg,
+        hsla(0, 0%, 0%, 1) 0%,
+        hsla(200, 40%, 70%, .3) 45%,
+        hsla(0, 0%, 50%, 0) 100%),
+        url('./../../../public/img/program_backgrounds/monthly-sub.jpg');
 }
 
+
 .quarterly-program {
-    background-image: url('./../../../public/img/program_backgrounds/quarterly-sub.jpg');
+    background-image: linear-gradient(
+        135deg,
+        hsla(0, 0%, 0%, 1) 0%,
+        hsla(200, 40%, 70%, .3) 45%,
+        hsla(0, 0%, 50%, 0) 100%),
+        url('./../../../public/img/program_backgrounds/quarterly-sub.jpg');
 }
 
 .halfyearly-program {
-    background-image: url('./../../../public/img/program_backgrounds/halfyearly-sub.jpg');
+    background-image: linear-gradient(
+        135deg,
+        hsla(0, 0%, 0%, 1) 0%,
+        hsla(200, 40%, 70%, .3) 45%,
+        hsla(0, 0%, 50%, 0) 100%),
+        url('./../../../public/img/program_backgrounds/halfyearly-sub.jpg');
 }
 
-.program-summary p i {
+.fa-clock {
     margin-right: 5px;
 }
 
@@ -128,16 +144,17 @@ footer li {
     width: 100%;
 }
 
-h2 {
-    font-size: 24px;
-    display: none;
+.program-summary p,
+.program-details p {
+    font-size: 16px;
 }
 
-h3 {
+h2 {
     font-size: 40px;
 }
 
-.program-summary h3 {
+.program-summary h2,
+.program-details h2 {
     margin: 20px 20px;
 }
 
@@ -159,9 +176,9 @@ h3 {
     font-size: 20px;
 }
 
-/*********************************/
-/*     PROGRAM DETAILS LAYER     */
-/*********************************/
+/***************************/
+/*     PROGRAM DETAILS     */
+/***************************/
 
 .program-details {
     align-items: flex-start;
@@ -169,7 +186,7 @@ h3 {
     flex-direction: column;
     justify-content: space-between;
     min-height: calc(73vh - 70px);
-    padding: 20px;
+    padding: 4vmin 5%;
 }
 
 .program-headers h2 {
@@ -177,13 +194,12 @@ h3 {
 }
 
 .program-headers p {
-    margin: 5px 0;
+    margin: 1vh 0;
 }
 
 .program-description {
     border-radius: 15px;
-    margin: 2vmin 5% 2vmin 5%;
-    padding: 5vmin 6%;
+    padding: 4vmin 8%;
 }
 
 .program-details a:last-child {
@@ -240,13 +256,15 @@ h3 {
 }
 
 .close-menu-layer button {
-    margin-right: 20px;
+    height: 11vh;
+    width: 11vh;
+    font-size: 40px;
     padding: 20px;
 }
 
 #close-menu-button {
     color: white;
-    font-size: 12vmin;
+    font-size: 45px;
 }
 
 .dynamic-menu {
@@ -293,10 +311,6 @@ h3 {
         height: 210px;
     }
 
-    .showcase-panel a {
-        font-size: 3vmin;
-    }
-
     #speech-container .btn {
         margin-top: 4vh;
         margin-bottom: 4vh;
@@ -315,11 +329,12 @@ h3 {
     }
 
     h2 {
-        font-size: 6vmin;
+        font-size: 5vmin;
     }
 
+    .program-summary p,
     .program-headers p {
-        font-size: 2.8vmin;
+        font-size: 2.5vmin;
     }
 
     .program-summary p i {
@@ -327,7 +342,7 @@ h3 {
     }
 
     .program-description p {
-        font-size: 2.8vmin;
+        font-size: 20px;
     }
 
     .program-details {
@@ -335,8 +350,9 @@ h3 {
     }
 
     .program-description {
-        margin: 2vh 5% 2vh 5%;
+        margin: 2vh 0;
         padding: 3vh 5%;
+        border-radius: 30px;
     }
     
     .big-circle-btn {
@@ -348,35 +364,43 @@ h3 {
     .big-circle-btn i {
         font-size: 30px;
     }
+
+    .close-menu-layer button {
+        height: 10vh;
+        width: 10vh;
+    }
 }
 
 /*************************************
             Desktop design
 *************************************/
 @media (min-width: 1024px) {
-    
-
     .showcase-panel {
-        background: linear-gradient(
-            hsla(0, 0%, 100%, 1), hsla(0, 0%, 100%, 0)),
-            url('./../../../public/img/header-banner.jpg');
         background-position-y: center;
         background-repeat: no-repeat;
         background-size: cover;
-        margin: 12vh auto 90px;
+        margin: 14vh auto 90px;
+        width: 100%;
         max-width: 1400px;
-        height: calc(88vh - 90px);
+        height: calc(86vh - 90px);
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        position: relative;
         border-left: 1px solid hsla(0, 0%, 0%, .65);
         border-right: 1px solid hsla(0, 0%, 0%, .65);
+    }
+
+    .intro-panels {
+        background: linear-gradient(
+            hsla(0, 0%, 100%, 1), hsla(0, 0%, 100%, 0)),
+            url('./../../../public/img/header-banner.jpg');
     }
 
     #speech-container {
         width: 50%;
         border-radius: 50px;
-        margin-right: 10%;
+        margin-right: 8%;
         padding: 3.5vmin;
         box-shadow: 5px 5px 5px 0px hsla(0, 0%, 0%, .3);
     }
@@ -386,7 +410,7 @@ h3 {
     }
 
     #read-more-container {
-        width: 25%;
+        width: 30%;
         height: unset;
         margin: 0;
         padding: 0;
@@ -412,19 +436,41 @@ h3 {
     .programs-list {
         background: none;
         flex-direction: row;
-        width: 100%;
-    }
-
-    .programs-list li,
-    .programs-list a {
-        border-radius: 50px;
     }
 
     .programs-list li {
-        width: 290px;
-        margin: 0 20px;
-        height: 60vmin;
-        max-height: 500px;
+        width: calc(100%/3);
+        height: 100%;
+        border: 1px solid hsla(0, 0%, 0%, .65);
+    }
+
+    .program-summary {
+        text-align: center;
+    }
+    
+    .program-summary h2 {
+        font-size: 2.7rem;
+        margin: 20px 20px;
+    }
+
+    .first-word {
+        display: flex;
+        justify-content: center;
+    }
+
+    .first-word::after {
+        content: '\A';
+        white-space: pre;
+        display: block;
+    }
+    
+    .program-summary p,
+    .program-headers p {
+        font-size: 2.2vmin;
+    }
+
+    .program-summary p {
+        font-size: 1.2rem;
     }
     
     .big-circle-btn {
@@ -435,5 +481,15 @@ h3 {
 
     .big-circle-btn i {
         font-size: 40px;
+    }
+    
+    .program-description p {
+        font-size: 20px;
+    }
+
+    .program-details {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
     }
 }

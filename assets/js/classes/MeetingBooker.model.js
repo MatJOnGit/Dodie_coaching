@@ -172,7 +172,7 @@ class MeetingBooker extends ElementFader {
           
             for (const slot of meetingSlots) {
                 const meetingItem = document.createElement('li');
-                meetingItem.classList.add('rounded-btn');
+                meetingItem.classList.add('rounded');
                 const meetingButton = document.createElement('button');
                 meetingButton.classList.add('purple-bkgd', 'meeting-slot-btn');
                 meetingButton.textContent = this.convertTimeToFrenchTimeString(slot);

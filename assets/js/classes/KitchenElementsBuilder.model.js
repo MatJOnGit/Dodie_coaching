@@ -29,7 +29,7 @@ class KitchenElementsBuilder {
     
     static buildCreateItemButton(itemType) {
         const createItemButtonTemplate = `
-            <button id='create-item-btn' class='btn rounded-btn blue-bkgd'>
+            <button id='create-item-btn' class='btn rounded blue-bkgd'>
                 Nouvel ${itemType}
             </button>
         `;
@@ -62,11 +62,11 @@ class KitchenElementsBuilder {
         const editionvalidationBlockTemplate = `
             <div id='form-btns-block'>
                 <div id='form-actions-block'>
-                    <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded-btn blue-bkgd'>Enregistrer</button>
-                    <button id='delete-${itemType}-btn' class='btn tiny-btn rounded-btn red-bkgd'>Supprimer</button>
+                    <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded blue-bkgd'>Enregistrer</button>
+                    <button id='delete-${itemType}-btn' class='btn tiny-btn rounded red-bkgd'>Supprimer</button>
                 </div>
                 
-                <button id='new-search-btn' class='btn large-btn rounded-btn blue-bkgd'>Nouvelle recherche</button>
+                <button id='new-search-btn' class='btn large-btn rounded blue-bkgd'>Nouvelle recherche</button>
                 
                 <div id='action-confirmation-block' class='hidden'>
                     <button id='cancel-deletion-btn' class='btn small-circle-btn blue-bkgd'>Non</button>
@@ -85,11 +85,11 @@ class KitchenElementsBuilder {
         const creationFormValidationBlockTemplate = `
             <div id='form-btns-block'>
                 <div id='form-actions-block'>
-                    <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded-btn blue-bkgd'>Enregistrer</button>
-                    <button id='reset-${itemType}-btn' class='btn tiny-btn rounded-btn red-bkgd'>Réinitialiser</button>
+                    <button id='save-${itemType}-params-btn' class='btn tiny-btn rounded blue-bkgd'>Enregistrer</button>
+                    <button id='reset-${itemType}-btn' class='btn tiny-btn rounded red-bkgd'>Réinitialiser</button>
                 </div>
                 
-                <button id='new-search-btn' class='btn large-btn rounded-btn blue-bkgd'>Nouvelle recherche</button>
+                <button id='new-search-btn' class='btn large-btn rounded blue-bkgd'>Nouvelle recherche</button>
             </div>
         `;
         

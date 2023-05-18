@@ -99,12 +99,12 @@ class NoteManager extends ElementFader {
         
         cancelNoteBtn.href = 'index.php?page=subscriber-notes&id=' + this.subscriberId;
         cancelNoteBtn.textContent = 'Annuler';
-        cancelNoteBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'red-bkgd');
+        cancelNoteBtn.classList.add('btn', 'rounded', 'tiny-btn', 'red-bkgd');
         
         saveNoteBtn.value = 'Enregistrer';
         saveNoteBtn.type = 'submit';
         saveNoteBtn.id = 'save-note-btn';
-        saveNoteBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
+        saveNoteBtn.classList.add('btn', 'rounded', 'tiny-btn', 'blue-bkgd');
         
         addNoteForm.appendChild(addNoteTextarea);
         attachedMeetingSelect.appendChild(defaultMeetingOption);
@@ -165,15 +165,15 @@ class NoteManager extends ElementFader {
         
         cancelEditionBtn.href = 'index.php?page=subscriber-notes&id=' + this.subscriberId;
         cancelEditionBtn.textContent = 'Annuler';
-        cancelEditionBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
+        cancelEditionBtn.classList.add('btn', 'rounded', 'tiny-btn', 'blue-bkgd');
         
         deleteNoteBtn.href = 'index.php?action=delete-note&id=' + this.subscriberId + '&note-id=' + noteData.id;
         deleteNoteBtn.textContent = 'Supprimer';
-        deleteNoteBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'red-bkgd');
+        deleteNoteBtn.classList.add('btn', 'rounded', 'tiny-btn', 'red-bkgd');
         
         confirmEditionBtn.value = 'Enregistrer';
         confirmEditionBtn.type = 'submit';
-        confirmEditionBtn.classList.add('btn', 'rounded-btn', 'large-btn', 'blue-bkgd', 'save-note-btn');
+        confirmEditionBtn.classList.add('btn', 'rounded', 'large-btn', 'blue-bkgd', 'save-note-btn');
         
         editNoteForm.appendChild(editNoteTitle);
         editNoteForm.appendChild(editNoteTextarea);

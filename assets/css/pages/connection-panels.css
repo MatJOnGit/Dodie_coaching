@@ -125,7 +125,7 @@ div[class$='-input-container'] {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 80%;
+    width: 90%;
 }
 
 .show-input-helper-btn,
@@ -135,8 +135,9 @@ div[class$='-input-container'] {
 }
 
 .show-input-helper-btn {
-    margin: auto;
+    margin: 0;
     margin-right: 3%;
+    margin-bottom: 1.5vh;
 }
 
 input[type=email],
@@ -148,8 +149,13 @@ select {
 }
 
 .input-helper {
-    font-size: 6vmin;
-    margin: 0 0 1vh 3%;
+    font-size: 8vmin;
+    margin: 0;
+    margin-left: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .form-links {
@@ -200,7 +206,7 @@ input[type=submit] {
 *************************************/
 @media (min-width: 768px) {
     .connection-panel {
-        height: calc(100vh - 10vh - 100px);
+        height: calc(90vh - 100px);
         margin: 10vh 0 100px 0;
     }
 
@@ -210,12 +216,83 @@ input[type=submit] {
 
     .show-input-helper-btn,
     .input-helper {
-        height: 6vmin;
         width: 6vmin;
+    }
+
+    .show-input-helper-btn {
+        height: 6vmin;
+    }
+
+    .input-helper {
+        /* height: 100%; */
+        font-size: 6vmin;
     }
 
     .form-links {
         margin-top: 3vh;
         font-size: 2.5vmin;
+    }
+}
+
+/*************************************
+            Desktop design
+*************************************/
+@media (min-width: 1024px) {
+    .connection-panel {
+        height: calc(86vh - 90px);
+        margin: 14vh 0 90px 0;
+        width: 100%;
+    }
+
+    form {
+        padding: 3vh 20px;
+    }
+
+    .connection-panel h2 {
+        font-size: 34px;
+        margin: 0 2% 20px;
+    }
+
+    div[class$='-input-container'] {
+        width: 100%;
+    }
+
+    .show-input-helper-btn, .input-helper {
+        width: 40px;
+    }
+    
+    .show-input-helper-btn {
+        height: 40px;
+        margin-bottom: 1.2vmin;
+        margin-right: 7%;
+    }
+
+    .input-helper {
+        font-size: 4vmin;
+        margin: 0;
+        margin-left: 7%;
+    }
+
+    .form-links {
+        margin-top: 20px;
+        width: 100%;
+        height: unset;
+    }
+
+    .form-links a:last-child {
+        margin-top: 4%;
+    }
+
+    #input-helper-container {
+        width: 40%;
+        max-width: 600px;
+    }
+
+    #input-helper-container p {
+        font-size: 1.7vmin;
+    }
+    
+    .input-helper-dismiss-btn {
+        font-size: 22px;
     }
 }

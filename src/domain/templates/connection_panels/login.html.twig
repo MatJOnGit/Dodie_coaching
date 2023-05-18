@@ -2,7 +2,7 @@
 
 {% block pageContent %}
     <div class='connection-panel light-to-dark-purple-bkgd'>
-        <form action='index.php?action=log-account' method='post' class='purple-to-blue-bkgd'>
+        <form action='index.php?action=log-account' method='post' class='rounded purple-to-blue-bkgd'>
             <h2>Connexion</h2>
             <div class='email-input-container'>
                 <button class='show-input-helper-btn'>
@@ -11,8 +11,7 @@
                 
                 <input type='email' name='email' placeholder='adresse e-mail' id='user-email' required />
                 
-                <div class='input-helper'>
-                </div>
+                <div class='input-helper'></div>
             </div>
             <div class='password-input-container'>
                 <button class='show-input-helper-btn'>
@@ -26,12 +25,12 @@
             </div>
             
             <div class='form-links'>
-                <a href='index.php?page=password-retrieving' class='btn tiny-btn purple-bkgd'>
-                    <span>Mot de passe oublié ?</span>
+                <a href='index.php?page=password-retrieving' class='btn rounded tiny-btn purple-bkgd'>
+                    Mot de passe oublié ?
                 </a>
-                <input type='submit' value='Connexion' id='submit-btn' class='btn tiny-btn purple-bkgd' />
-                <a href='index.php?page=registering' class='btn large-btn purple-bkgd'>
-                    <span>Créer mon compte</span>
+                <input type='submit' value='Connexion' id='submit-btn' class='btn rounded tiny-btn purple-bkgd' />
+                <a href='index.php?page=registering' class='btn rounded large-btn purple-bkgd'>
+                    Créer mon compte
                 </a>
             </div>
         </form>

@@ -77,15 +77,6 @@ footer li {
     background-color: hsla(0, 1%, 79%, 1);
 }
 
-.dark-shaded-bkgd {
-    background: linear-gradient(
-        135deg,
-        hsla(0, 0%, 0%, 1) 0%,
-        hsla(200, 40%, 70%, .3) 45%,
-        hsla(0, 0%, 50%, 0) 100%
-    );
-}
-
 .light-shaded-bkgd {
     background: linear-gradient(
         162deg,
@@ -118,10 +109,6 @@ footer li {
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-#title-layer i {
-    font-size: 10vmin;
 }
 
 #subtitle-layer {
@@ -170,7 +157,7 @@ input::placeholder {
     border: none;
 }
 
-.rounded-btn {
+.rounded {
     border-radius: 2vh;
     font-size: 3.8vmin;
 }
@@ -253,12 +240,12 @@ select {
     
     p,
     li {
-        font-size: 1.3em;
+        font-size: 20px;
     }
     
-    .rounded-btn {
+    .rounded {
         border-radius: 2vh;
-        font-size: 2.2vmin;
+        font-size: 20px;
     }
 }
 
@@ -267,11 +254,16 @@ select {
 *************************************/
 @media (min-width: 1024px) {
     .btn {
-        padding: 20px 5%;
+        padding: 10px 5%;
     }
 
     p,
     li {
         font-size: 18px;
+    }
+
+    .rounded {
+        border-radius: 2vh;
+        font-size: 70%;
     }
 }

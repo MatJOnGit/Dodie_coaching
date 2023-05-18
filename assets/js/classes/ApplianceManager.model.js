@@ -54,11 +54,11 @@ class ApplianceManager extends ElementFader {
         
         reloadBtn.innerText = 'Annuler';
         reloadBtn.href = `index.php?page=appliance-details&id=${this.applianceId}`;
-        reloadBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'blue-bkgd');
+        reloadBtn.classList.add('btn', 'rounded', 'tiny-btn', 'blue-bkgd');
         
         confirmRejectionBtn.value = 'Confirmer';
         confirmRejectionBtn.type = 'submit';
-        confirmRejectionBtn.classList.add('btn', 'rounded-btn', 'tiny-btn', 'red-bkgd');
+        confirmRejectionBtn.classList.add('btn', 'rounded', 'tiny-btn', 'red-bkgd');
         
         rejectApplianceForm.appendChild(rejectionMessage);
         rejectApplianceForm.appendChild(reloadBtn);

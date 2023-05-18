@@ -4,8 +4,15 @@
     <ul class='showcase-panel programs-list'>
         {% for program in programs %}
             <li class='{{ program.name }}-program'>
-                <a href='index.php?page=program-details&program={{ program.name }}' class='program-summary dark-shaded-bkgd'>
-                    <h3>{{ program.frenchTitle }}</h3>
+                <a href='index.php?page=program-details&program={{ program.name }}' class='program-summary'>
+                    {% set titleWords = program.frenchTitle|split(' ') %}
+                    {% set firstWord = titleWords[0] %}
+                    {% set remainingWords = titleWords|slice(1) %}
+                    
+                    <h2>
+                        <span class="first-word">{{ firstWord }}</span>
+                        {{ remainingWords|join(' ') }}
+                    </h2>
                     
                     <p><i class="fa-solid fa-clock"></i>{{ program.duration }} jours</p>
                     

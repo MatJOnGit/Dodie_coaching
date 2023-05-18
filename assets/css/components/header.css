@@ -1,8 +1,8 @@
 header {
-    position: fixed;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 2;
@@ -13,27 +13,28 @@ header {
     display: flex;
     height: 11vh;
     justify-content: space-between;
-    width: 90%;
+    width: 100%;
 }
 
 #title-layer a {
     align-items: center;
     display: flex;
     flex-direction: row;
-    width: 160px
+    /* width: fit-content;
+    height: 100%; */
 }
 
 #logo {
-    width: 50px;
     height: 50px;
+    width: 50px;
+    margin-left: 20px;
 }
 
 h1 {
     font-family: 'julius sans one';
     font-size: 6vmin;
-    font-weight: 800;
+    font-weight: 600;
     margin: 0;
-    width: 40%;
 }
 
 #others-features-menu {
@@ -42,17 +43,23 @@ h1 {
 
 #dynamic-menu-button {
     padding: 20px;
+    height: 11vh;
+    width: 11vh;
+    font-size: 40px;
 }
 
 .homepage-link {
     align-items: center;
     border-radius: 50%;
     display: flex;
-    height: 6.5vh;
     justify-content: center;
-    margin-right: 20px;
-    padding: 2vh;
-    width: 6.5vh;
+    padding: 20px;
+    width: 11vh;
+    height: 11vh;
+}
+
+.homepage-link i {
+    font-size: 40px;
 }
 
 #showcase-menu,
@@ -98,34 +105,46 @@ h1 {
     #title-layer {
         height: 10vh;
     }
-
+    
     #logo {
         height: 80px;
         width: 80px;
     }
-
+    
     h1 {
         font-size: 4vmin;
     }
-
+    
     #title-layer i {
-        font-size: 8vmin;
+        font-size: 50px;
     }
 
+    #dynamic-menu-button {
+        padding: 20px;
+        height: 10vh;
+        width: 10vh;
+    }
+
+    #logo {
+        height: 70px;
+        width: 70px;
+    }
+    
     #showcase-menu,
     #page-name-container {
         height: 14vh;
     }
-
+    
     #showcase-menu ul,
     #page-name-container > div {
         height: 70px;
     }
-
-    showcase-menu a {
-        font-size: 2.8vmin;
+    
+    #showcase-menu a {
+        font-size: 20px;
+        height: 60px;
     }
-
+    
     .prev-page-btn i {
         font-size: 3.4vmin;
     }
@@ -141,7 +160,7 @@ h1 {
         align-items: center;    
         margin: 0 auto
     }
-
+    
     header {
         display: flex;
         flex-direction: row;
@@ -151,31 +170,32 @@ h1 {
         height: 14vh;
         max-width: 2200px;
     }
-
+    
     #title-layer {
-        height: 12vh;
+        height: 14vh;
         max-width: 250px;
     }
-
+    
     #logo {
         height: 70px;
         width: 70px;
+        margin-left: 20px;
     }
-
+    
     h1 {
         font-size: 28px;
         font-weight: 500;
     }
-
+    
     #dynamic-menu-button {
         display: none;
     }
-
+    
     #showcase-menu,
     #page-name-container {
         height: 6vh;
     }
-
+    
     #showcase-menu {
         background: none;
         align-items: center;
@@ -189,15 +209,14 @@ h1 {
         position: relative;
         padding: 0 4%;
         width: unset;
-        font-size: 18px;
     }
-
+    
     #showcase-menu > .blue-bkgd {
         background-color: inherit;
         color: hsla(0, 0%, 0%, 1);
         position: relative;
     }
-
+    
     #showcase-menu > .blue-bkgd::before {
         content: "";
         position: absolute;
@@ -207,15 +226,15 @@ h1 {
         height: 2px;
         background-color: hsla(188, 87%, 30%, 1);
     }
-
+    
     #others-features-menu {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
-        width: 250px;
+        width: fit-content;
     }
-
+    
     #others-features-menu a:not(:last-child)::after,
     #showcase-menu a:not(:last-child)::after {
         content: "";
@@ -226,7 +245,7 @@ h1 {
         display: inline-block;
         vertical-align: middle;
     }
-
+    
     #others-features-menu a {
         display: flex;
         justify-content: center;
@@ -236,8 +255,22 @@ h1 {
         padding: 0 1%;
         position: relative;
     }
-
+    
     .other-features-link i {
-        font-size: 2.2vmin;
+        font-size: 24px;
+    }
+
+    #title-layer.connection-layer {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .homepage-link {
+        height: 14vh;
+        width: 14vh;
+    }
+
+    .homepage-link i {
+        font-size: 16px;
     }
 }

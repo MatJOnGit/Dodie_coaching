@@ -54,3 +54,31 @@ select::-ms-select-placeholder {
         font-size: 2.5vmin;
     }
 }
+
+/*************************************
+            Desktop design
+*************************************/
+@media (min-width: 1024px) {
+    form {
+        width: 40%;
+        max-width: 700px;
+    }
+
+    input {
+        font-size: 18px;
+    }
+
+    input:not([type="submit"]),
+    select {
+        margin-top: 1.2vmin;
+        margin-bottom: 1.2vmin;
+    }
+
+    input::placeholder {
+        font-size: 1.6vmin;
+    }
+
+    #input-helper-container {
+        padding: 1vmin 2%;
+    }
+}

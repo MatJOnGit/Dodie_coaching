@@ -373,6 +373,10 @@ h2 {
         height: 10vh;
         width: 10vh;
     }
+
+    .dynamic-menu a {
+        font-size: 5vmin;
+    }
 }
 
 /*************************************
@@ -484,10 +488,6 @@ h2 {
 
     .big-circle-btn i {
         font-size: 40px;
-    }
-    
-    .program-description p {
-        font-size: 20px;
     }
 
     .program-details {

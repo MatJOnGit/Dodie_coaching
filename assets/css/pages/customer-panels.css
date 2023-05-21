@@ -403,10 +403,6 @@ select {
     background-color: black;
 }
 
-.fa-ban {
-    font-size: 3vmin;
-}
-
 /*********************************/
 /*           MEETINGS            */
 /*********************************/
@@ -506,7 +502,6 @@ select {
 .daily-slots button {
     height: 100%;
     width: 100%;
-    border-radius: 1.5vh;
 }
 
 #no-available-meeting-message {
@@ -720,7 +715,9 @@ select {
     }
     
     h3 {
-        font-size: 32px;
+        font-size: 28px;
+        margin: 0;
+        margin-bottom: 35px;
     }
 
     .meals-list-panel h4 {
@@ -729,5 +726,22 @@ select {
 
     .meals-list h5 {
         font-size: 26px;
+    }
+
+    .progression-logs {
+        width: 50%;
+    }
+
+    .user-weight-input {
+        width: 25%;
+    }
+
+    #cancel-appointment-btn-container > div {
+        margin: 0 2%;
+        width: 30%;
+    }
+
+    .meeting-day {
+        font-size: 20px;
     }
 }

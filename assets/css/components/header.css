@@ -20,8 +20,6 @@ header {
     align-items: center;
     display: flex;
     flex-direction: row;
-    /* width: fit-content;
-    height: 100%; */
 }
 
 #logo {

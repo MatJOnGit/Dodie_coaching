@@ -15,9 +15,12 @@ class MeetingBooker extends ElementFader {
             desktop: 5
         };
         
-        this.convertMeetingsDataToArray(JSON.parse(this.meetingsDayList.dataset.meetings));
-        this.setMaxDisplayedDays();
-        this.buildPlanning();
+        if (this.meetingsDayList) {
+            this.convertMeetingsDataToArray(JSON.parse(this.meetingsDayList.dataset.meetings));
+            this.setMaxDisplayedDays();
+            this.buildPlanning();
+        }
+        
         this.addEventsListener();
     }
     
@@ -86,16 +89,21 @@ class MeetingBooker extends ElementFader {
     }
     
     addEventsListener() {
+        const buttons = [
+            { element: this.cancelAppointmentButton, handler: () => this.displayCancelMeetingConfirmation() },
+            { element: this.prevDaysButton, handler: (e) => this.handlePrevButtonClick(e) },
+            { element: this.nextDaysButton, handler: (e) => this.handleNextButtonClick(e) }
+        ];
+        
         const addClickListener = (button, handler) => {
             button.addEventListener('click', handler);
-        }
+        };
         
-        if (this.cancelAppointmentButton) {
-            addClickListener(this.cancelAppointmentButton, () => this.displayCancelMeetingConfirmation())
-        }
-        
-        addClickListener(this.prevDaysButton, (e) => this.handlePrevButtonClick(e));
-        addClickListener(this.nextDaysButton, (e) => this.handleNextButtonClick(e));
+        buttons.forEach(({ element, handler }) => {
+            if (element) {
+                addClickListener(element, handler);
+            }
+        });
     }
     
     displayCancelMeetingConfirmation() {
@@ -174,7 +182,7 @@ class MeetingBooker extends ElementFader {
                 const meetingItem = document.createElement('li');
                 meetingItem.classList.add('rounded');
                 const meetingButton = document.createElement('button');
-                meetingButton.classList.add('purple-bkgd', 'meeting-slot-btn');
+                meetingButton.classList.add('purple-bkgd', 'rounded', 'meeting-slot-btn');
                 meetingButton.textContent = this.convertTimeToFrenchTimeString(slot);
                 meetingItem.appendChild(meetingButton);
                 dailySlots.appendChild(meetingItem);

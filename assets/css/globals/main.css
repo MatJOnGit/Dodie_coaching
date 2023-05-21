@@ -2,20 +2,7 @@
 /*        FONTS        */
 /***********************/
 
-@font-face {
-    font-family: 'julius sans one';
-    src: url('../fonts/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('ttf');
-}
-
-@font-face {
-    font-family: 'archivo narrow';
-    src: url('../fonts/Archivo_Narrow/ArchivoNarrow-VariableFont_wght.ttf') format('ttf');
-}
-
-@font-face {
-    font-family: 'source sans pro';
-    src: url('../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf');
-}
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&family=Julius+Sans+One&family=Source+Sans+Pro&display=swap');
 
 * {
     font-family: 'source sans pro';
@@ -227,7 +214,7 @@ select {
     }
     
     .btn {
-        padding: 3vmin 5%;
+        padding: 2vmin 5%;
     }
     
     .circle-btn {
@@ -253,7 +240,7 @@ select {
     
     .rounded {
         border-radius: 2vh;
-        font-size: 20px;
+        font-size: 18px;
     }
 }
 
@@ -273,5 +260,14 @@ select {
 
     .rounded {
         border-radius: 2vh;
+        font-size: 16px;
+    }
+
+    .small-circle-btn {
+        width: 70px;
+        height: 70px;
+        padding: 25px;
+        font-size: 16px;
+        border-radius: 35px;
     }
 }

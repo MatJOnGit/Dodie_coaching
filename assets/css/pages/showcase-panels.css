@@ -189,6 +189,10 @@ h2 {
     padding: 4vmin 5%;
 }
 
+#back-to-programs-list-btn i {
+    margin-right: 10px;
+}
+
 .program-headers h2 {
     margin: 17px 0;
 }
@@ -430,7 +434,6 @@ h2 {
         margin: 0;
         margin-top: 2vh;
         width: 100%;
-        font-size: 18px;
     }
 
     .programs-list {

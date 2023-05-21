@@ -87,10 +87,6 @@ form {
     padding: 3vh 0;
 }
 
-input::placeholder {
-    text-align: center;
-}
-
 #input-helper-container {
     position: absolute;
     top: 10px;
@@ -163,17 +159,11 @@ select {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 17vh;
+    height: 16vh;
     justify-content: space-between;
     margin-top: 1.5vh;
     padding: 0;
     width: 90%;
-}
-
-.tiny-btn,
-.large-btn,
-input[type=submit] {
-    height: 7vh;
 }
 
 /*******************************/
@@ -231,6 +221,7 @@ input[type=submit] {
     .form-links {
         margin-top: 3vh;
         font-size: 2.5vmin;
+        height: 14vh;
     }
 }
 
@@ -294,5 +285,9 @@ input[type=submit] {
     
     .input-helper-dismiss-btn {
         font-size: 22px;
+    }
+
+    .tiny-btn, .large-btn, input[type=submit] {
+        height: 60px;
     }
 }

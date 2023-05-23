@@ -1,53 +1,45 @@
 {% extends 'common.html.twig' %}
 
 {% block pageContent %}
-    <div class='admin-panel'>
-        {% if (appliancesCount is defined) and (appliancesCount != false) %}
-            <div class='dashboard-card'>
-                <h3>Mes demandes de coaching</h3>
-                <p>Vous avez {{ appliancesCount['appliancesCount'] }} demandes en attente.</p>
-                <a href='index.php?page=appliances-list' class='btn rounded large-btn blue-bkgd'>Gérer vos demandes de suivi</a>
-            </div>
-        {% endif %}
-        
-        {% if subscribersCount is defined %}
-            <div class='dashboard-card'>
-                <h3>Mes coaching en cours</h3>
-                <p>Vous suivez actuellement {{ subscribersCount['subscribersCount'] }} abonné(s).</p>
-                <a href='index.php?page=subscribers-list' class='btn rounded large-btn blue-bkgd'>Gérer vos profils d'abonnés</a>
-            </div>
-        {% endif %}
-        
-        {% if todayMeetingsData is defined %}
-            <div class='dashboard-card'>
-                <h3>Mes rendez-vous</h3>
-                
-                {% if todayMeetingsData %}
-                    <p>Aujourd'hui, vous avez {{ todayMeetingsData | length }} rendez-vous  :</p>
-                    <ul>
-                        {% for meetingData in todayMeetingsData %}
-                            <li>
-                                à {{ meetingData['meetingTime'] }}
-                                : {{ meetingData['costumerName'] }}
-                            </li> 
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>Vous n'avez aucun rendez-vous aujourd'hui.</p>
-                    <p>Vous allez enfin pouvoir vous détendre !</p>
-                {% endif %}
-                
-                <a href='index.php?page=meetings-management' class='btn rounded large-btn blue-bkgd'>Gérer vos rendez-vous</a>
-            </div>
-        {% endif %}
+    <div class='admin-panel dashboard-panel'>
+        <nav class='dashboard-menu'>
+            <ul>
+                <li class='dashboard-card'>
+                    <a href='index.php?page=appliances-list' class='dashboard-card-content rounded'>
+                        <i class='fa-solid fa-person-circle-plus'></i>
+                        <h3 class='dashboard-menu-title'>Mes demandes de coaching ({{ appliancesCount['appliancesCount'] }})</h3>
+                    </a>
+                </li>
+            
+                <li class='dashboard-card'>
+                    <a href='index.php?page=subscribers-list' class='dashboard-card-content rounded'>
+                        <i class='fa-solid fa-chalkboard-user'></i>
+                        <h3 class='dashboard-menu-title'>Mes coaching en cours ({{ subscribersCount['subscribersCount'] }})</h3>
+                    </a>
+                </li>
 
-        <div class='dashboard-card'>
-            <h3>Ma cuisine</h3>
-            <p>Gérez vos collections de recettes et d'ingrédients</p>
-            <div id='kitchen-links-block'>
-                <a href='index.php?page=ingredients-management' class='btn rounded large-btn blue-bkgd'>Gérer mes ingrédients</a>
-                <a href='index.php?page=recipes-management' class='btn rounded large-btn blue-bkgd'>Gérer mes recettes</a>
-            </div>
-        </div>
+                <li class='dashboard-card'>
+                    <a href='index.php?page=meetings-management' class='dashboard-card-content rounded'>
+                        <i class='fa-solid fa-calendar-days'></i>
+                        <h3 class='dashboard-menu-title'>Mes rendez-vous</h3>
+                        {% if todayMeetingsData %}
+                            <p>{{ todayMeetingsData | length }} rendez-vous  aujourd'hui.</p>
+                        {% else %}
+                            <p>Aucun rendez-vous aujourd'hui.</p>
+                        {% endif %}
+                    </a>
+                </li>
+                
+                <li id='kitchen-management'>
+                    <a href='index.php?page=ingredients-management' class='btn rounded large-btn'>
+                        <i class='fa-solid fa-wheat-awn'></i>Mes ingrédients
+                    </a>
+                    
+                    <a href='index.php?page=recipes-management' class='btn rounded large-btn'>
+                        <i class='fa-solid fa-plate-wheat'></i></i>Mes recettes
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 {% endblock pageContent %}

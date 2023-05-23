@@ -6,10 +6,10 @@ use App\Domain\Interfaces\Dispatcher;
 
 class AdminPanel implements Dispatcher {
     private const ADMIN_PANELS_STYLES = [
-        'pages/admin-panels',
         'components/header',
         'components/form',
-        'components/footer'
+        'components/footer',
+        'pages/admin-panels'
     ];
     
     private const ROUTING_URLS = [

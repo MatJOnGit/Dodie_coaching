@@ -321,7 +321,7 @@ h2 {
     }
 
     #read-more-container {
-        padding: 0 0 14vh;
+        padding: 0 0 11vh;
     }
 
     .showcase-panel {
@@ -403,6 +403,9 @@ h2 {
         background: linear-gradient(
             hsla(0, 0%, 100%, 1), hsla(0, 0%, 100%, 0)),
             url('./../../../public/img/header-banner.jpg');
+        background-position-y: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     #speech-container {

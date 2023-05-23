@@ -70,7 +70,6 @@ select::-ms-select-placeholder {
 @media (min-width: 1024px) {
     form {
         width: 40%;
-        max-width: 700px;
     }
     
     input:not([type="submit"]),

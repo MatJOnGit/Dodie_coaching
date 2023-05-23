@@ -133,6 +133,7 @@ input {
 
 p {
     margin : 0;
+    text-align: justify;
 }
 
 a {
@@ -141,6 +142,7 @@ a {
 
 textarea {
     padding: 1% 2%;
+    border: 1px solid hsla(0, 0%, 25%, 1);
 }
 
 input::placeholder {
@@ -269,5 +271,11 @@ select {
         padding: 25px;
         font-size: 16px;
         border-radius: 35px;
+    }
+
+    .prev-page-btn {
+        background: inherit;
+        color: hsla(0, 0%, 100%, 1);
+        border-right: 1px solid hsla(0, 0%, 100%, 1);
     }
 }

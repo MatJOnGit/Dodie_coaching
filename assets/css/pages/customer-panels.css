@@ -21,7 +21,7 @@ footer p {
     color: hsla(0, 0%, 100%, 1);
 }
 
-.menu-item-name {
+.dashboard-menu-title {
     color: hsla(0, 0%, 0%, 1);
     margin: 2vh 0 0 0;
     text-align: center;
@@ -65,6 +65,7 @@ h2 {
     align-items: center;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     margin: 27vh 0 70px 0;
     padding: 3vh 5%;
     position: relative;
@@ -102,18 +103,7 @@ input[type=submit] {
 /**********************************/
 
 .dashboard-panel {
-    height: calc(73vh - 70px);
-}
-
-.settings-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.settings-btn i {
-    font-size: 12vmin;
-    padding: 1vh;
+    height: calc(100vh - 11vh - 16vh - 70px);
 }
 
 .dashboard-menu ul {
@@ -136,42 +126,18 @@ input[type=submit] {
     border-radius: 8px;
 }
 
-.dashboard-menu li a {
+.dashboard-btn {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 1vh 5%;
-}
-
-.section-icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    padding: 1vh 8%;
 }
 
 .dashboard-menu li i {
     color: hsla(30, 100%, 50%, 1);
-}
-
-.dashboard-btn {
-    align-content: center;
-    display: flex;
-    flex-direction: row;
-    height: 60px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2px 0;
-    text-align: center;
-    width: 100%;
-}
-
-.dashboard-btn i {
     font-size: 6vmin;
 }
 
@@ -517,7 +483,7 @@ select {
     }
     
     .dashboard-panel {
-        height: calc(76vh - 100px);
+        height: calc(100vh - 14vh - 10vh - 100px);
     }
     
     h2 {
@@ -530,6 +496,7 @@ select {
     .progress-graph-container {
         width: 60%;
     }
+
     .dashboard-menu {
         width: 100%;
     }
@@ -545,8 +512,13 @@ select {
         width: 35%;
         height: 12vh;
     }
+
+    .dashboard-menu li i {
+        color: hsla(30, 100%, 50%, 1);
+        font-size: 4vmin;
+    }
     
-    .menu-item-name {
+    .dashboard-menu-title {
         margin: 1vh 0 0 0;
         font-size: 2.4vmin;
         font-weight: 400;
@@ -671,6 +643,7 @@ select {
     }
 
     #page-name-container {
+        background: none;
         border: 1px solid lightgrey;
         height: 72px;
     }
@@ -682,12 +655,12 @@ select {
     }
 
     .user-panel {
+        margin: calc(14vh + 70px) 0 90px 0;
         max-width: 1400px;
     }
 
     .dashboard-panel {
-        height: calc(100vh - (14vh + 72px) - 90px);
-        margin: calc(14vh + 72px) 0 90px 0;
+        height: calc(100vh - 14vh - 70px - 90px);
         justify-content: space-around;
         align-items: center;
     }
@@ -706,7 +679,7 @@ select {
         font-size: 4vmin;
     }
 
-    .menu-item-name {
+    .dashboard-menu-title {
         font-size: 22px;
     }
 

@@ -49,7 +49,6 @@ footer {
     background-color: hsla(45, 95%, 92%, 1);
 }
 
-.dashboard-card,
 .alert-box {
     border: 1px solid hsla(0, 0%, 0%, 1);
 }
@@ -75,7 +74,6 @@ tr:not(:first-child) td:not(:first-child) {
     border-left: 1px solid hsla(0, 0%, 100%, 1);
 }
 
-/* transformer en input simple ? */
 .date-container > input,
 .program-build-form > input {
     border-bottom: 1px solid hsla(0, 0%, 0%, 1);
@@ -98,6 +96,10 @@ tr:not(:first-child) td:not(:first-child) {
 /*           GLOBALS            */
 /********************************/
 
+.dashboard-panel {
+    height: calc(100vh - 11vh - 16vh - 70px);
+}
+
 h2 {
     align-items: center;
     display: flex;
@@ -111,10 +113,15 @@ h2 {
     align-items: center;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     margin: 27vh 0 70px 0;
-    padding: 2vh 7%;
+    padding: 3vh 5%;
     position: relative;
     width: 100%;
+}
+
+h3 {
+    text-align: center;
 }
 
 .admin-form,
@@ -146,33 +153,82 @@ h2 {
 /*           DASHBOARD            */
 /**********************************/
 
-.dashboard-card {
-    align-items: center;
-    border-radius: 20px;
+.dashboard-menu ul {
     display: flex;
-    flex-direction: column;
-    margin: 0 0 1vh;
-    padding: 1.5vh 5% 10px;
-    text-align: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
 }
 
-.dashboard-card * {
-    margin: 0 0 10px;
-}
-
-h3 {
-    font-size: 5vmin;
-    margin-top: 0;
-    text-align: center;
-}
-
-.dashboard-card ul {
-    align-content: flex-start;
+.dashboard-card {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    list-style: circle;
+    justify-content: center;
+    width: 40%;
+    height: 25vh;
+    background-color: hsla(185, 51%, 47%, 0.2);
+    box-shadow: 3px 3px 3px 0 hsla(0, 0%, 0%, 0.6);
+    margin: 0 5% 2vh 5%;
+    border-radius: 8px;
+}
+
+#kitchen-management {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 25vh;
+    width: 40%;
+    margin: 0 5% 2vh 5%;
+}
+
+#kitchen-management a {
+    width: 100%;
+    height: 46%;
+    background-color: hsla(185, 51%, 47%, 0.2);
+    color: hsla(0, 0%, 0%, 1);
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboard-card-content {
+    height: 45%;
+    padding: 1vh 15%;
+}
+
+.dashboard-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1vh 8%;
+}
+
+.dashboard-menu li i {
+    color: hsla(30, 100%, 50%, 1);
+    font-size: 6vmin;
+}
+
+.dashboard-menu-title,
+.dashboard-card-content p {
+    color: hsla(0, 0%, 0%, 1);
+    margin: 0;
+    margin-top: 2vh;
+    text-align: center;
+    font-size: 4.3vmin;
+    font-weight: lighter;
+}
+
+#kitchen-management i {
+    margin-bottom: 1vh;
+}
+
+.dashboard-card-content p {
+    font-style: italic;
+    font-size: 3.5vmin;
 }
 
 .subscriber-data-list li,
@@ -286,6 +342,19 @@ h3 {
 #note-message {
     margin-top: 1vh;
     height: 15vh;
+    border: 1px solid black;
+}
+
+.note-form-actions-block {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.note-form-actions-block input,
+.note-form-actions-block a {
+    width: 47%;
 }
 
 .edit-note-sign {
@@ -393,12 +462,22 @@ h3 {
     padding: 0 20%;
 }
 
+.day-data-tab,
+.meal-data-tab {
+    height: fit-content;
+    padding: 10px 25px;
+}
+
 .admin-panel-header,
 .meal-header {
     margin: 0;
     padding: 1vh 0;
     text-align: center;
     text-transform: uppercase;
+}
+
+table td:first-child {
+    padding-top: 0;
 }
 
 .meal-header {
@@ -432,6 +511,7 @@ tr:first-child::after {
 .day-data-tab,
 .nutrients-toggle {
     margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 
 .wrap-btn {
@@ -671,8 +751,11 @@ section .ingredient-param:last-of-type {
 *************************************/
 @media (min-width: 768px) {
     .admin-panel {
-        max-width: 80%;
         margin: 24vh auto 100px;
+    }
+
+    .dashboard-panel {
+        height: calc(100vh - 14vh - 10vh - 100px);
     }
 
     h2 {
@@ -681,18 +764,34 @@ section .ingredient-param:last-of-type {
         padding-left: 3%;
     }
 
+    .dashboard-menu {
+        width: 100%;
+    }
+
+    .dashboard-card,
+    #kitchen-management {
+        width: 35%;
+    }
+
+    .dashboard-menu li i {
+        font-size: 4vmin;
+    }
+
+    .dashboard-card {
+        height: 25vh;
+    }
+
     h3 {
         font-size: 4vmin;
         margin: 0 0 1.5vh;
     }
 
-    #kitchen-links-block {
-        display: flex;
-        flex-direction: row;
+    .dashboard-menu-title {
+        font-size: 2.4vmin;
     }
 
-    #kitchen-links-block a {
-        margin: 0 2%;
+    .dashboard-card-content p {
+        font-size: 2vmin;
     }
 
     .appliance-details {
@@ -712,7 +811,8 @@ section .ingredient-param:last-of-type {
         font-size: 3vmin;
     }
     
-    #add-note-btn, #add-meeting-btn {
+    #add-note-btn,
+    #add-meeting-btn {
         bottom: 15vh;
         left: 3%;
     }
@@ -739,5 +839,94 @@ section .ingredient-param:last-of-type {
     .ingredient-param > *,
     .food-card > * {
         font-size: 2.5vmin;
+    }
+}
+
+/*************************************
+            Desktop design
+*************************************/
+@media (min-width: 1024px) {
+    header {
+        flex-direction: column;
+        height: calc(14vh + 72px);
+    }
+
+    #title-layer {
+        max-width: unset;
+    }
+
+    #page-name-container {
+        background: none;
+        background-color: hsla(185, 51%, 47%, 1);
+        border: 1px solid lightgrey;
+        height: 72px;
+    }
+
+    .cloudy-bkgd {
+        background: none;
+    }
+
+    h2 {
+        font-size: 22px;
+        margin: 0;
+        margin-left: 50px;
+        color: hsla(0, 0%, 100%, 1);
+    }
+    
+    .admin-panel {
+        margin: calc(14vh + 70px) 0 90px 0;
+        max-width: 1400px;
+    }
+
+    .dashboard-panel {
+        height: calc(100vh - 14vh - 70px - 90px);
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .dashboard-card, #kitchen-management {
+        width: 30%;
+        margin: 1vh 3% 1vh 3%;
+        height: 30vh;
+    }
+
+    .dashboard-menu-title {
+        font-size: 22px;
+    }
+
+    h3 {
+        font-size: 28px;
+        margin: 0;
+        margin-bottom: 35px;
+    }
+    
+    .dashboard-card-content p {
+        font-size: 18px;
+    }
+
+    .appliance-card {
+        width: 50%;
+    }
+
+    .appliance-card li:first-child {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .day-list h4,
+    .daily-data h4,
+    .meal-item h5 {
+        font-size: 24px;
+    }
+
+    .day-list td,
+    .daily-data button {
+        font-size: 20px;
+    }
+
+    #ingredient-search-bar,
+    .ingredient-param > *,
+    .food-card > * {
+        font-size: 20px;
     }
 }

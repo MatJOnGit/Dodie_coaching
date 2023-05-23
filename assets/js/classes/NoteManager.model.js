@@ -78,6 +78,7 @@ class NoteManager extends ElementFader {
         const addNoteTextarea = document.createElement('textarea');
         const attachedMeetingSelect = document.createElement('select');
         const defaultMeetingOption = document.createElement('option');
+        const noteFormActionsBlock = document.createElement('div');
         const cancelNoteBtn = document.createElement('a');
         const saveNoteBtn = document.createElement('input');
         
@@ -96,6 +97,8 @@ class NoteManager extends ElementFader {
         
         defaultMeetingOption.value = '';
         defaultMeetingOption.innerText = 'Associer à un rendez-vous (optionnelle)';
+
+        noteFormActionsBlock.classList.add('note-form-actions-block');
         
         cancelNoteBtn.href = 'index.php?page=subscriber-notes&id=' + this.subscriberId;
         cancelNoteBtn.textContent = 'Annuler';
@@ -109,8 +112,9 @@ class NoteManager extends ElementFader {
         addNoteForm.appendChild(addNoteTextarea);
         attachedMeetingSelect.appendChild(defaultMeetingOption);
         addNoteForm.appendChild(attachedMeetingSelect);
-        addNoteForm.appendChild(cancelNoteBtn);
-        addNoteForm.appendChild(saveNoteBtn);
+        noteFormActionsBlock.appendChild(saveNoteBtn);
+        noteFormActionsBlock.appendChild(cancelNoteBtn);
+        addNoteForm.appendChild(noteFormActionsBlock);
         
         this.mappedAttendedMeetings.forEach((attendedMeeting, index) => {
             let attendedMeetingsOption = document.createElement('option');
@@ -163,6 +167,7 @@ class NoteManager extends ElementFader {
         editMeetingDefaultDateOption.value = '';
         editMeetingDefaultDateOption.innerText = 'Associer à un rendez-vous (optionnelle)';
         
+
         cancelEditionBtn.href = 'index.php?page=subscriber-notes&id=' + this.subscriberId;
         cancelEditionBtn.textContent = 'Annuler';
         cancelEditionBtn.classList.add('btn', 'rounded', 'tiny-btn', 'blue-bkgd');

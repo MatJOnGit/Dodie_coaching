@@ -200,6 +200,11 @@ h1 {
         width: 440px;
         justify-content: center;
     }
+
+    .prev-page-btn i {
+        font-size: 4.8vmin;
+        color: hsla(0, 0%, 100%, 1);
+    }
     
     #showcase-menu a {
         border-radius: 15px;

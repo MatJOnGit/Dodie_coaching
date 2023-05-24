@@ -273,6 +273,10 @@ h3 {
     margin: 0 0 10px;
 }
 
+.appliance-card li:first-child {
+    font-weight: bold;
+}
+
 #appliance-decision-box {
     display: flex;
     flex-direction: row;
@@ -280,17 +284,17 @@ h3 {
     width: 100%;
 }
 
-.appliance-form textarea {
-    margin-bottom: 2vh;
-}
-
 /************************************/
 /*       APPLIANCE DETAILS        */
 /************************************/
 
 .appliance-details {
-    padding: 0 10%;
     width: 100%;
+}
+
+.appliance-form textarea {
+    margin-bottom: 2vh;
+    margin-top: 2vh;
 }
 
 #appliance-decision-box {
@@ -795,7 +799,7 @@ section .ingredient-param:last-of-type {
     }
 
     .appliance-details {
-        padding: 3vh 0;
+        padding-top: 3vh;
     }
 
     .appliance-decision-box a {
@@ -899,6 +903,11 @@ section .ingredient-param:last-of-type {
         margin: 0;
         margin-bottom: 35px;
     }
+
+    .appliance-details,
+    #appliance-decision-box {
+        width: 50%;
+    }
     
     .dashboard-card-content p {
         font-size: 18px;
@@ -909,7 +918,6 @@ section .ingredient-param:last-of-type {
     }
 
     .appliance-card li:first-child {
-        font-weight: bold;
         font-size: 24px;
     }
 

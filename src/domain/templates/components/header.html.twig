@@ -1,5 +1,5 @@
 {% if appSection == 'showcasePanels' %}
-    <button id='dynamic-menu-button'>
+    <button id='dynamic-menu-button' aria-label='Ouvrir le menu dynamique'>
         <i class='fas fa-bars'
             {% if isUserLogged %}
                 id='logged'
@@ -8,12 +8,12 @@
     </button>
 
 {% elseif appSection == 'connectionPanels' %}
-    <a href='index.php' class='homepage-link'>
+    <a href='index.php' class='homepage-link' aria-label="Revenir à l'écran d'accueil">
         <i class="fa-solid fa-house-chimney"></i>
     </a>
 
 {% elseif appSection == 'userPanels' %}
-    <a href='index.php?action=logout' class='homepage-link'>
+    <a href='index.php?action=logout' class='homepage-link' aria-label="Se déconnecter et revenir à l'écran d'accueil">
         <i class="fa-solid fa-right-from-bracket"></i>
     </a>
     

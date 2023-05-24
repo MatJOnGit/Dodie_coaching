@@ -6,15 +6,15 @@
         
         <form id='progress-form' action='index.php?action=add-report' method='post'>
             <div class='progress-form-inputs'>
-                <input type='number' step='.01' name='weight' placeholder='Poids' class='user-weight-input' id='user-weight' required />
+                <input type='number' step='.01' name='weight' placeholder='Poids' class='user-weight-input' id='user-weight' aria-label='Entrer une valeur de poid pour le relevé' required />
                 
-                <select name='date-type' id='date-selector' required>
+                <select name='date-type' id='date-selector' aria-label='Sélectionner une option de date de relevé' required>
                     <option value=''>Date</option>
                     <option value='current-weight'>A l'instant</option>
                     <option value='old-weight'>Autre date</option>
                 </select>
             </div>
-            <input type='submit' value='Ajouter' class='btn rounded purple-bkgd' id='submit-btn' />
+            <input type='submit' value='Ajouter' class='btn rounded purple-bkgd' id='submit-btn' aria-label='Ajouter un relevé de poids' />
         </form>
         
         <h3>Vos derniers relevés</h3>
@@ -32,7 +32,7 @@
                             {{ progressHistoryItem.weight }} kg
                         </p>
                         
-                        <button class='btn small-circle-btn purple-bkgd'>
+                        <button class='btn small-circle-btn purple-bkgd' aria-label='Supprimer le relevé'>
                             <i class="fa-solid fa-ban"></i>
                         </button>
                     </li>

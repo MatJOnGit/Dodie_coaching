@@ -92,8 +92,10 @@ class DynamicMenuDisplayer extends ElementFader {
         const contactSpan = document.createElement('span');
         
         loginLink.textContent = 'Connexion';
+        loginLink.setAttribute('aria-label', 'Accéder au formulaire de connexion');
         loginLink.href = 'index.php?page=login';
         contactLink.textContent = 'Contact';
+        contactLink.setAttribute('aria-label', 'Prendre contact par email');
         contactLink.href = 'mailto:contact@dodie-coaching.com';
         loginSpan.classList.add('menu-splitter');
         contactSpan.classList.add('menu-splitter');
@@ -123,10 +125,13 @@ class DynamicMenuDisplayer extends ElementFader {
         contactListItem.classList.add('dynamic-menu-item');
         logoutListItem.classList.add('dynamic-menu-item');
         dashboardLink.textContent = 'Tableau de bord';
+        dashboardLink.setAttribute('aria-label', 'Accéder au tableau de bord');
         dashboardLink.href = 'index.php?page=dashboard';
         contactLink.textContent = 'Contact';
+        contactLink.setAttribute('aria-label', 'Prendre contact par email');
         contactLink.href = 'index.php';
         logoutLink.textContent = 'Déconnexion';
+        logoutLink.setAttribute('aria-label', 'Déconnecter ma session');
         logoutLink.href = 'index.php?action=logout';
         dashboardSpan.classList.add('menu-splitter');
         contactSpan.classList.add('menu-splitter');
@@ -157,6 +162,8 @@ class DynamicMenuDisplayer extends ElementFader {
     setCloseMenuLayer() {
         const closeMenuBtn = document.createElement('button');
         const closeMenuIcon = document.createElement('i');
+
+        closeMenuBtn.setAttribute('aria-label', 'Fermer le menu dynamique');
         
         closeMenuIcon.classList.add('fa-solid', 'fa-xmark');
         closeMenuIcon.id = 'close-menu-button';

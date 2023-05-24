@@ -2,7 +2,7 @@
 
 {% block pageContent %}
     <div class='showcase-panel program-details {{ program.name }}-program'>
-        <a id='back-to-programs-list-btn' href='{{ showcasePanels['programs-list'] }}' class='btn rounded blue-bkgd'>
+        <a id='back-to-programs-list-btn' href='{{ showcasePanels['programs-list'] }}' class='btn rounded blue-bkgd' aria-label='Revenir à la page des formules'>
             <i class="fa-solid fa-arrow-left-long"></i>
             Retour aux formules
         </a>
@@ -21,7 +21,7 @@
             </div>
         {% endif %}
         
-        <a id='go-to-loggin-btn' href='index.php?page=login' class='btn rounded blue-bkgd'>
+        <a id='go-to-loggin-btn' href='index.php?page=login' class='btn rounded blue-bkgd' aria-label="Accéder à l'espace de connexion">
             Je m'inscris !
         </a>
     </div>

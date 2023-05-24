@@ -29,7 +29,7 @@
                                             {% endif %}
                                         {% endfor %}
                                         
-                                        <a href='index.php?page=nutrition&meal={{ day['englishWeekDay'] }}-{{ shortEnglishMeal }}' class='light-shaded-bkgd'>
+                                        <a href='index.php?page=nutrition&meal={{ day['englishWeekDay'] }}-{{ shortEnglishMeal }}' class='light-shaded-bkgd' aria-label='Accéder au détail des ingrédients pour ce repas'>
                                             <h5>{{ frenchMeal }}</h5>
                                         </a>
                                     </li>
@@ -40,12 +40,12 @@
                 </ul>
                 
                 <div class='nutrition-requests'>
-                    <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded purple-bkgd'>
+                    <a href='index.php?page=nutrition&request=shopping-list' class='btn rounded purple-bkgd' aria-label='Accéder à ma liste des courses'>
                         Voir la liste de courses
                     </a>
                     
                     {% if programFilePath is not empty %}
-                        <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded purple-bkgd'  download="mon_plan_nutrition.pdf">
+                        <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded purple-bkgd'  download='mon_plan_nutrition.pdf' aria-label='Télécharger mon programme hebdomadaire en version PDF'>
                             <i class="fa-solid fa-download"></i>
                         </a>
                         

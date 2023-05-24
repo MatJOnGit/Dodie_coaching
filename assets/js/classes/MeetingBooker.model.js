@@ -112,6 +112,7 @@ class MeetingBooker extends ElementFader {
         const cancelMeetingCancelationButton = document.createElement('a');
         cancelMeetingCancelationButton.href = 'index.php?page=meetings-booking';
         cancelMeetingCancelationButton.classList = 'btn small-circle-btn purple-bkgd';
+        cancelMeetingCancelationButton.setAttribute('aria-label', "Annuler l'annulation de rendez-vous");
         cancelMeetingCancelationButton.textContent = 'Non';
         
         const meetingConcelationMessage = document.createElement('div');
@@ -121,6 +122,7 @@ class MeetingBooker extends ElementFader {
         const confirmMeetingCancelationLink = document.createElement('a');
         confirmMeetingCancelationLink.href = 'index.php?action=cancel-appointment';
         confirmMeetingCancelationLink.classList = 'btn small-circle-btn red-bkgd';
+        confirmMeetingCancelationLink.setAttribute('aria-label', "Confirmer l'annulation de rendez-vous");
         confirmMeetingCancelationLink.textContent = 'Oui';
         
         cancelMeetingButtonContainer.innerHTML = '';
@@ -183,6 +185,7 @@ class MeetingBooker extends ElementFader {
                 meetingItem.classList.add('rounded');
                 const meetingButton = document.createElement('button');
                 meetingButton.classList.add('purple-bkgd', 'rounded', 'meeting-slot-btn');
+                meetingButton.setAttribute('aria-label', 'Sélectionner le créneau horaire');
                 meetingButton.textContent = this.convertTimeToFrenchTimeString(slot);
                 meetingItem.appendChild(meetingButton);
                 dailySlots.appendChild(meetingItem);

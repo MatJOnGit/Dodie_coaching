@@ -6,7 +6,7 @@
             <ul>
                 {% for dashboardMenuItem in dashboardMenuItems %}
                     <li>
-                        <a href='index.php?page={{ dashboardMenuItem.link }}' class='dashboard-btn rounded'>
+                        <a href='index.php?page={{ dashboardMenuItem.link }}' class='dashboard-btn rounded' aria-label='Accéder à la fonctionnalité'>
                             <i class="fa-solid {{ dashboardMenuItem.icon }}"></i>
                             <h3 class='dashboard-menu-title'>{{ dashboardMenuItem.frenchTitle }}</h3>
                         </a>

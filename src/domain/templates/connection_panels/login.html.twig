@@ -5,7 +5,7 @@
         <form action='index.php?action=log-account' method='post' class='rounded purple-to-blue-bkgd'>
             <h2>Connexion</h2>
             <div class='email-input-container'>
-                <button class='show-input-helper-btn'>
+                <button class='show-input-helper-btn' aria-label="Afficher l'aide à la saisie du champs email">
                     <i class="fa-solid fa-question"></i>
                 </button>
                 
@@ -14,7 +14,7 @@
                 <div class='input-helper'></div>
             </div>
             <div class='password-input-container'>
-                <button class='show-input-helper-btn'>
+                <button class='show-input-helper-btn' aria-label="Afficher l'aide à la saisie du champs mot de passe">
                     <i class="fa-solid fa-question"></i>
                 </button>
                 
@@ -25,11 +25,11 @@
             </div>
             
             <div class='form-links'>
-                <a href='index.php?page=password-retrieving' class='btn rounded tiny-btn purple-bkgd'>
+                <a href='index.php?page=password-retrieving' class='btn rounded tiny-btn purple-bkgd' aria-label='Accéder au formulaire de récupération de mot de passe'>
                     Mot de passe oublié ?
                 </a>
-                <input type='submit' value='Connexion' id='submit-btn' class='btn rounded tiny-btn purple-bkgd' />
-                <a href='index.php?page=registering' class='btn rounded large-btn purple-bkgd'>
+                <input type='submit' value='Connexion' id='submit-btn' class='btn rounded tiny-btn purple-bkgd'  aria-label="Valider le formulaire et se connecter" />
+                <a href='index.php?page=registering' class='btn rounded large-btn purple-bkgd' aria-label='Accéder au formulaire de création de compte'>
                     Créer mon compte
                 </a>
             </div>

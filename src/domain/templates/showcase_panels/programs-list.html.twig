@@ -4,7 +4,7 @@
     <ul class='showcase-panel programs-list'>
         {% for program in programs %}
             <li class='{{ program.name }}-program'>
-                <a href='index.php?page=program-details&program={{ program.name }}' class='program-summary'>
+                <a href='index.php?page=program-details&program={{ program.name }}' class='program-summary' aria-label='Accéder aux détails de la formule'>
                     {% set titleWords = program.frenchTitle|split(' ') %}
                     {% set firstWord = titleWords[0] %}
                     {% set remainingWords = titleWords|slice(1) %}

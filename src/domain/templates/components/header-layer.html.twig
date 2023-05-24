@@ -1,21 +1,21 @@
 {% if appSection == 'showcasePanels' %}
     <nav id='showcase-menu'>
         {% if frenchTitle != '404' %}
-            <a class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['presentation'] }}'>Présentation</a>
-            <a class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['coaching'] }}'>Coaching nutrition</a>
-            <a class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['programs-list'] }}'>Formules</a>
+            <a class='{{ frenchTitle == 'présentation' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['presentation'] }}' aria-label='Accéder à la page de présentation'>Présentation</a>
+            <a class='{{ frenchTitle == 'coaching' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['coaching'] }}' aria-label="Accéder à la page d'information sur le coaching nutritionnel">Coaching nutrition</a>
+            <a class='{{ frenchTitle == 'programmes' ? 'blue-bkgd' : 'cloudy-bkgd' }}' href='{{ showcasePanels['programs-list'] }}' aria-label='Accéder à la liste des formules'>Formules</a>
         {% endif %}
     </nav>
     
     <nav id='others-features-menu'>
         {% if isUserLogged %}
-            <a class='other-features-link' href='index.php?page=dashboard'><i class='fa-solid fa-user'></i></a>
-            <a class='other-features-link' href='mailto:contact@dodie-coaching.com'><i class='fa-solid fa-envelope'></i></a>
-            <a class='other-features-link' href='index.php?action=logout'><i class='fa-solid fa-right-from-bracket'></i></a>
+            <a class='other-features-link' href='index.php?page=dashboard' aria-label='Accéder à mon tableau de bord'><i class='fa-solid fa-user'></i></a>
+            <a class='other-features-link' href='mailto:contact@dodie-coaching.com' aria-label='Prendre contact par email'><i class='fa-solid fa-envelope'></i></a>
+            <a class='other-features-link' href='index.php?action=logout' aria-label='Déconnecter ma session'><i class='fa-solid fa-right-from-bracket'></i></a>
 
         {% else %}
-            <a class='other-features-link' href='index.php?page=login'><i class='fa-solid fa-user'></i></a>
-            <a href='mailto:contact@dodie-coaching.com' class='other-features-link'><i class='fa-solid fa-envelope'></i></a>
+            <a class='other-features-link' href='index.php?page=login' aria-label='Accéder au formulaire de connexion'><i class='fa-solid fa-user'></i></a>
+            <a href='mailto:contact@dodie-coaching.com' class='other-features-link' aria-label='Prendre contact par email'><i class='fa-solid fa-envelope'></i></a>
 
         {% endif %}
     </nav>
@@ -24,7 +24,7 @@
     <div id='page-name-container'>
         <div id='subtitle-layer' class='cloudy-bkgd'>
             {% if (prevPanel is defined) %}
-                <a href='index.php?page={{ prevPanel[0] }}' class='prev-page-btn white-bkgd'>
+                <a href='index.php?page={{ prevPanel[0] }}' class='prev-page-btn white-bkgd' aria-label='Revenir à la page précédente'>
                     <i class='fa-solid fa-arrow-left'></i>
                 </a>
                 <h2>{{ prevPanel[1] }} > {{ frenchTitle | capitalize }}</h2>

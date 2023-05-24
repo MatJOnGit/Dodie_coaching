@@ -11,7 +11,8 @@ class Mailer_Exception extends Exception { }
 class PdfGenerator_Exception extends Exception { }
 
 try {
-    require_once ('./../vendor/autoload.php');
+    require_once ('../vendor/autoload.php');
+    require_once ('./../config.php');
     
     $loader = new \Twig\Loader\FilesystemLoader('./../src/domain/templates/');
     $twig = new Twig\Environment($loader, [
@@ -19,6 +20,7 @@ try {
         'debug' => true
     ]);
     
+    $twig->addGlobal('env', $env);
     $twig->addExtension(new \Twig\Extension\DebugExtension());
     
     $routing = new App\Entities\Routing;

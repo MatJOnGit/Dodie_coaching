@@ -92,7 +92,7 @@ footer li {
         hsla(0, 0%, 0%, 1) 0%,
         hsla(200, 40%, 70%, .3) 45%,
         hsla(0, 0%, 50%, 0) 100%),
-        url('./../../../public/img/program_backgrounds/monthly-sub_640.jpg');
+        url('./../../../../public/img/program_backgrounds/monthly-sub_640.jpg');
 }
 
 
@@ -102,7 +102,7 @@ footer li {
         hsla(0, 0%, 0%, 1) 0%,
         hsla(200, 40%, 70%, .3) 45%,
         hsla(0, 0%, 50%, 0) 100%),
-        url('./../../../public/img/program_backgrounds/quarterly-sub_640.jpg');
+        url('./../../../../public/img/program_backgrounds/quarterly-sub_640.jpg');
 }
 
 .halfyearly-program {
@@ -111,7 +111,7 @@ footer li {
         hsla(0, 0%, 0%, 1) 0%,
         hsla(200, 40%, 70%, .3) 45%,
         hsla(0, 0%, 50%, 0) 100%),
-        url('./../../../public/img/program_backgrounds/halfyearly-sub_640.jpg');
+        url('./../../../../public/img/program_backgrounds/halfyearly-sub_640.jpg');
 }
 
 .fa-clock {
@@ -317,7 +317,7 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/monthly-sub_1280.jpg');
+            url('./../../../../public/img/program_backgrounds/monthly-sub_1280.jpg');
     }
     
     
@@ -327,7 +327,7 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/quarterly-sub_1280.jpg');
+            url('./../../../../public/img/program_backgrounds/quarterly-sub_1280.jpg');
     }
     
     .halfyearly-program {
@@ -336,7 +336,7 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/halfyearly-sub_1280.jpg');
+            url('./../../../../public/img/program_backgrounds/halfyearly-sub_1280.jpg');
     }
 
     #speech-container img {
@@ -433,7 +433,7 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/monthly-sub_1920.jpg');
+            url('./../../../../public/img/program_backgrounds/monthly-sub_1920.jpg');
     }
     
     
@@ -443,7 +443,7 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/quarterly-sub_1920.jpg');
+            url('./../../../../public/img/program_backgrounds/quarterly-sub_1920.jpg');
     }
     
     .halfyearly-program {
@@ -452,13 +452,13 @@ h2 {
             hsla(0, 0%, 0%, 1) 0%,
             hsla(200, 40%, 70%, .3) 45%,
             hsla(0, 0%, 50%, 0) 100%),
-            url('./../../../public/img/program_backgrounds/halfyearly-sub_1920.jpg');
+            url('./../../../../public/img/program_backgrounds/halfyearly-sub_1920.jpg');
     }
     
     .intro-panels {
         background: linear-gradient(
             hsla(0, 0%, 100%, 1), hsla(0, 0%, 100%, 0)),
-            url('./../../../public/img/header-banner_1920w.jpg');
+            url('./../../../../public/img/header-banner_1920w.jpg');
         background-position-y: center;
         background-repeat: no-repeat;
         background-size: cover;

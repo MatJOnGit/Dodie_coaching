@@ -1,0 +1,30 @@
+{
+  "name": "dodie_coaching",
+  "version": "1.0.0",
+  "description": "Web app for nutrition coaching",
+  "main": "public/index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatJOnGit/Dodie_coaching.git"
+  },
+  "keywords": [
+    "dodie",
+    "coaching",
+    "nutrition",
+    "program"
+  ],
+  "author": "Mathieu Jourdan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatJOnGit/Dodie_coaching/issues"
+  },
+  "homepage": "https://github.com/MatJOnGit/Dodie_coaching#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "uglifycss": "^0.0.29"
+  }
+}

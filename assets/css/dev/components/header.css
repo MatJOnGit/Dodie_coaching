@@ -62,7 +62,7 @@ h1 {
 
 #showcase-menu,
 #page-name-container {
-    background: url('./../../../public/img/header-banner-640w.jpg');
+    background: url('./../../../../public/img/header-banner_640w.jpg');
     background-position-y: center;
     background-repeat: no-repeat;
     background-size: cover;

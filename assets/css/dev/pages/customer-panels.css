@@ -224,23 +224,23 @@ figcaption {
 }
 
 .breakfast-list-item {
-    background-image: url('./../../../public/img/meals_pictures/breakfast.jpg');
+    background-image: url('./../../../../public/img/meals_pictures/breakfast.jpg');
 }
 
 .lunch-list-item {
-    background-image: url('./../../../public/img/meals_pictures/lunch.jpg');
+    background-image: url('./../../../../public/img/meals_pictures/lunch.jpg');
 }
 
 .diner-list-item {
-    background-image: url('./../../../public/img/meals_pictures/diner.jpg');
+    background-image: url('./../../../../public/img/meals_pictures/diner.jpg');
 }
 
 .snack_1-list-item {
-    background-image: url('./../../../public/img/meals_pictures/snack_1.jpg');
+    background-image: url('./../../../../public/img/meals_pictures/snack_1.jpg');
 }
 
 .snack_2-list-item {
-    background-image: url('./../../../public/img/meals_pictures/snack_2.jpg');
+    background-image: url('./../../../../public/img/meals_pictures/snack_2.jpg');
 }
 
 .meals-list a {

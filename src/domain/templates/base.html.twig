@@ -30,7 +30,12 @@
     
     <!-- global CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css'>
-    <link rel='stylesheet' href='./../assets/css/globals/main.css' type='text/css'>
+
+    {% if env == 'prod' %}
+        <link rel="stylesheet" href="./../assets/css/minified/globals/main.min.css" type="text/css">
+    {% else %}
+        <link rel="stylesheet" href="./../assets/css/dev/globals/main.css" type="text/css">
+    {% endif %}
     
     <!-- custom CSS -->
     {% block styles %}{% endblock styles %}

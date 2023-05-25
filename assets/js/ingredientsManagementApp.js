@@ -1,1 +1,0 @@
-const ingredientsFinder = new IngredientsFinder;

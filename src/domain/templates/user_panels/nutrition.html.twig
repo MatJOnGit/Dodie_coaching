@@ -9,10 +9,10 @@
                 <ul class='nutrition-days-list'>
                     {% for dayKey, day in nextDays %}
                         <li>
-                            <div class="day-name">
-                                <div class="day-name-content">
+                            <div class='day-name'>
+                                <div class='day-name-content'>
                                     <h4>{{ day['frenchFullDate'] }}</h4>
-                                    <div class="day-name-underline"></div>
+                                    <div class='day-name-underline'></div>
                                 </div>
                             </div>
 
@@ -46,12 +46,12 @@
                     
                     {% if programFilePath is not empty %}
                         <a href='{{ programFilePath }}' id='download-program-btn' class='btn rounded purple-bkgd'  download='mon_plan_nutrition.pdf' aria-label='Télécharger mon programme hebdomadaire en version PDF'>
-                            <i class="fa-solid fa-download"></i>
+                            <i class='fa-solid fa-download'></i>
                         </a>
                         
                     {% else %}
                         <a role='link' class='btn rounded grey-bkgd' aria-disabled='true'>
-                            <i class="fa-solid fa-download"></i>
+                            <i class='fa-solid fa-download'></i>
                         </a>
                     {% endif %}
                 </div>

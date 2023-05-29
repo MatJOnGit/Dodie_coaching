@@ -5,11 +5,10 @@
         <h3>Liste de courses</h3>
         
         {% if shoppingList is iterable %}
-            {# {{ dump(mealItems) }} #}
             <ul class='shopping-list'>
                 {% for shoppingListItem in shoppingList %}
                     <li>
-                        <input type='checkbox' id={{ shoppingListItem['ingr_name'] }} />
+                        <input type='checkbox' id={{ shoppingListItem['ingr_name'] }}>
                         
                         <label>
                             {{ shoppingListItem['name'] }}

@@ -276,6 +276,6 @@ select {
     .prev-page-btn {
         background: inherit;
         color: hsla(0, 0%, 100%, 1);
-        border-right: 1px solid hsla(0, 0%, 100%, 1);
+        border-right: 1px solid hsla(0,0%,83%,1);
     }
 }

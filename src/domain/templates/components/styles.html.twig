@@ -1,7 +1,7 @@
 {% for stylePath in stylePaths %}
     {% if env == 'prod' %}
-        <link rel="stylesheet" href="./../assets/css/minified/{{ stylePath }}.min.css" type="text/css">
+        <link rel="stylesheet" href="./assets/css/minified/{{ stylePath }}.min.css" type="text/css">
     {% else %}
-        <link rel="stylesheet" href="./../assets/css/dev/{{ stylePath }}.css" type="text/css">
+        <link rel="stylesheet" href="./assets/css/dev/{{ stylePath }}.css" type="text/css">
     {% endif %}
 {% endfor %}

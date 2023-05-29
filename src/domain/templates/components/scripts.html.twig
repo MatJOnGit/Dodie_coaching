@@ -1,9 +1,9 @@
 {% if pageScripts is iterable %}
     {% for pageScript in pageScripts %}
         {% if env == 'prod' %}
-            <script src='./../assets/js/minified/{{ pageScript }}.min.js' defer></script>
+            <script src='./assets/js/minified/{{ pageScript }}.min.js' defer></script>
         {% else %}
-            <script src='./../assets/js/dev/{{ pageScript }}.js' defer></script>
+            <script src='./assets/js/dev/{{ pageScript }}.js' defer></script>
         {% endif %}
     {% endfor %}
 {% endif %}

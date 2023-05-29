@@ -204,6 +204,7 @@ h1 {
     .prev-page-btn i {
         font-size: 4.8vmin;
         color: hsla(0, 0%, 100%, 1);
+        font-size: 28px;
     }
     
     #showcase-menu a {
@@ -271,9 +272,5 @@ h1 {
     .homepage-link {
         height: 14vh;
         width: 14vh;
-    }
-
-    .prev-page-btn i {
-        font-size: 28px;
     }
 }

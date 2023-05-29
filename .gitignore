@@ -1,2 +1,9 @@
 var
 vendor
+node_modules
+package-lock.json
+assets/css/dev
+assets/js/compiled
+assets/js/dev
+.babelrc
+uglify.conf.js

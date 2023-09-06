@@ -3,6 +3,9 @@ version: '3'
 services:
     php-apache:
         build: '.'
+        depends_on:
+            - database
+            - adminer
         env_file:
             - .env
         ports:
@@ -14,6 +17,7 @@ services:
             
     database:
         image: mysql:5.7
+        platform: linux/amd64
         ports:
             - '3306:3306'
         env_file:

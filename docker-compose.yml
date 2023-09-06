@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    php-apache:
+        build: '.'
+        env_file:
+            - .env
+        ports:
+            - '80:80'
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./:/var/www/html
+            
+    database:
+        image: mysql:5.7
+        ports:
+            - '3306:3306'
+        env_file:
+            - .env
+        volumes: 
+            - data:/var/lib/mysql
+
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
+volumes:
+    app:
+    data:

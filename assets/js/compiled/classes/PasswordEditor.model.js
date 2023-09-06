@@ -1,0 +1,85 @@
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var PasswordEditor = /*#__PURE__*/function (_ConnectionHelper) {
+  _inherits(PasswordEditor, _ConnectionHelper);
+  var _super = _createSuper(PasswordEditor);
+  function PasswordEditor() {
+    var _this;
+    _classCallCheck(this, PasswordEditor);
+    _this = _super.call(this);
+    _this._confirmationPasswordInputElt = document.getElementById('user-confirmation-password');
+    _this._passwordInputElt = document.getElementById('user-password');
+    _this._inputElts = [_this._passwordInputElt, _this._confirmationPasswordInputElt];
+    _this._arePasswordIdentical = false;
+    _this._isConfirmationPasswordValid = false;
+    _this._isPasswordValid = false;
+    return _this;
+  }
+  _createClass(PasswordEditor, [{
+    key: "arePasswordIdentical",
+    get: function get() {
+      return this._arePasswordIdentical;
+    },
+    set: function set(_boolean) {
+      this._arePasswordIdentical = _boolean;
+    }
+  }, {
+    key: "isConfirmationPasswordValid",
+    get: function get() {
+      return this._isConfirmationPasswordValid;
+    },
+    set: function set(_boolean2) {
+      this._isConfirmationPasswordValid = _boolean2;
+    }
+  }, {
+    key: "isPasswordValid",
+    get: function get() {
+      return this._isPasswordValid;
+    },
+    set: function set(_boolean3) {
+      this._isPasswordValid = _boolean3;
+    }
+  }, {
+    key: "addSubmitButtonListener",
+    value: function addSubmitButtonListener() {
+      var _this2 = this;
+      this._form.addEventListener('submit', function (e) {
+        if (!_this2.isPasswordValid || !_this2.isConfirmationPasswordValid || !_this2.arePasswordIdentical) {
+          e.preventDefault();
+        }
+      });
+    }
+  }, {
+    key: "isBlurredInputValid",
+    value: function isBlurredInputValid(inputElt) {
+      var inputValue = inputElt.value;
+      var inputName = inputElt.name;
+      var passwordValue = document.getElementById('user-password').value;
+      var confirmationPasswordValue = document.getElementById('user-confirmation-password').value;
+      var isBlurredInputValid;
+      if (inputName === 'password') {
+        this.isPasswordValid = this.passwordRegex.test(inputValue);
+        isBlurredInputValid = this.isPasswordValid;
+      } else if (inputName === 'confirmation-password') {
+        this.isConfirmationPasswordValid = this.passwordRegex.test(inputValue);
+        isBlurredInputValid = this.isConfirmationPasswordValid;
+      }
+      this.arePasswordIdentical = passwordValue === confirmationPasswordValue;
+      return isBlurredInputValid;
+    }
+  }]);
+  return PasswordEditor;
+}(ConnectionHelper);

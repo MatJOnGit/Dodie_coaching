@@ -1,0 +1,1 @@
+const meetingBooker = new MeetingBooker;

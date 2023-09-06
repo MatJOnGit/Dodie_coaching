@@ -1,0 +1,1 @@
+const recipesManager = new RecipesManager;

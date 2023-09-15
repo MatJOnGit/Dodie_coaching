@@ -361,11 +361,12 @@ try {
                                     $session->logUser($routingData, $apiKey);
                                     $authPanel->routeTo('dashboard');
                                 } else {
-                                    throw new DB_Exception('COULD NOT GET API TOKEN');
+                                    // throw new DB_Exception('COULD NOT GET API TOKEN');
+                                    $authPanel->routeTo('login');
                                 }
                             } else {
-                                throw new DB_Exception('FAILED TO UPDATE LOGGING DATE');
-                                // $authPanel->routeTo('login');
+                                // throw new DB_Exception('FAILED TO UPDATE LOGGING DATE');
+                                $authPanel->routeTo('login');
                             }
                         } else {
                             $authPanel->routeTo('login');
@@ -394,11 +395,12 @@ try {
                                     $session->logUser($routingData, $apiKey);
                                     $authPanel->routeTo('dashboard');
                                 } else {
-                                    throw new DB_Exception('COULD NOT GET API TOKEN');
+                                    // throw new DB_Exception('COULD NOT GET API TOKEN');
+                                    $authPanel->routeTo('login');
                                 }
                             } else {
-                                throw new DB_Exception('FAILED TO REGISTER ACCOUNT');
-                                // $authPanel->routeTo('registering');
+                                // throw new DB_Exception('FAILED TO REGISTER ACCOUNT');
+                                $authPanel->routeTo('registering');
                             }
                         } else {
                             $authPanel->routeTo('registering');
